@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mod-it Tests
+Bundle-SymbolicName: org.mypsycho.emf.modit.tests
+Bundle-Version: 0.1.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.junit,
+ org.mypsycho.emf.modit.dummy-model,
+ org.mypsycho.emf.modit,
+ org.eclipse.emf.codegen.ecore,
+ org.eclipse.emf.ecore.xmi
+Bundle-Vendor: mypsycho
+

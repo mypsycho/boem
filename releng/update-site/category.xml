@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.mypsycho.emf.modit.feature_1.0.0.qualifier.jar" id="org.mypsycho.emf.modit.feature" version="1.0.0.qualifier">
+      <category name="emf.modit"/>
+   </feature>
+   <category-def name="emf.modit" label="Emf ModIt"/>
+</site>

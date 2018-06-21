@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<groupId>org.mypsycho.emf.modit</groupId>
+	<artifactId>parent</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Mod-it Parent</name>
+
+	<properties>
+	    <tpd.groupId>${project.groupId}</tpd.groupId>
+	    <tpd.version>${project.version}</tpd.version>
+        <tpd.classifier>platform</tpd.classifier>
+        <tpd.path>${tpd.classifier}</tpd.path>
+
+		<tycho.version>1.2.0</tycho.version>
+		<xtend.version>2.14.0</xtend.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- supported: warning|error|ignore -->
+        <jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+		
+	</properties>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+		    <!-- All inheriting projects are eclipse project. -->
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            
+            <!-- Only for this pom -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>${tpd.path}.tpd</file>
+									<type>tpd</type>
+									<classifier>${tpd.classifier}</classifier>
+								</artifact>
+								<artifact>
+                                    <file>${tpd.path}.target</file>
+                                    <type>target</type>
+                                    <classifier>${tpd.path}</classifier>
+                                </artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<inherited>false</inherited>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement> 
+			<plugins>
+				<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+                <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.6.1</version>
+				</plugin>
+				<plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<resolver>p2</resolver>
+						<environments>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+						<target>
+							<artifact>
+								<groupId>${tpd.groupId}</groupId>
+								<artifactId>parent</artifactId>
+								<version>${tpd.version}</version>
+								<classifier>${tpd.path}</classifier>
+							</artifact>
+						</target>
+					</configuration>
+				</plugin>
+
+
+				<!-- Force the timespan of each build to use the UTC of the last commit
+					on the repo -->
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.tycho.extras</groupId>
+							<artifactId>tycho-buildtimestamp-jgit</artifactId>
+							<version>${tycho.version}</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<strictBinIncludes>false</strictBinIncludes>
+						<!-- 'v' prefix in commun usage in eclipse -->
+						<format>'v'yyyyMMdd-HHmm</format>
+						<timestampProvider>jgit</timestampProvider>
+						 <!-- No expression supported for jgit.dirtyWorkingTree; Use property. -->
+                         <jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
+						<jgit.ignore>
+						</jgit.ignore>
+					</configuration>
+				</plugin>
+
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-source-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                </plugin>
+
+
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-surefire-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<systemProperties> <!-- not sure why. Possibly: as a test write output file, default encoding -->
+                            <file.encoding>${project.build.sourceEncoding}</file.encoding>
+                        </systemProperties>
+					</configuration>
+				</plugin>
+				
+				<plugin>
+                    <groupId>org.eclipse.xtend</groupId>
+                    <artifactId>xtend-maven-plugin</artifactId>
+                    <version>${xtend.version}</version>
+                </plugin>
+                        
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	 <profiles>
+        <profile>
+            <id>tycho-source</id>
+            <activation>
+                <file><!-- Active for bundle and tests, neither feature, site nor product -->
+                    <exists>META-INF/MANIFEST.MF</exists>
+                </file>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-source-plugin</artifactId>
+                        <executions>
+                        <!-- 
+                        Bug ? Default binding in doc seems missing in 0.26.0
+                        http://www.eclipse.org/tycho/sitedocs/tycho-source-plugin/plugin-source-mojo.html
+                         -->
+	                        <execution>
+	                            <phase>prepare-package</phase>
+	                            <goals>
+	                                <goal>plugin-source</goal>
+	                            </goals>
+	                        </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <profile>
+            <id>xtend-nature</id>
+            <activation>
+                <file>
+                    <exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
+                </file>
+            </activation>
+
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.xtend</groupId>
+                        <artifactId>xtend-maven-plugin</artifactId>
+
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+	
+</project>
+

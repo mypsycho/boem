@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test model
+Bundle-SymbolicName: org.mypsycho.emf.modit.dummy-model;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: mypsycho
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: fr.ibp.odv.boem.mm.test.BoemTest,
+ fr.ibp.odv.boem.mm.test.BoemTest.impl,
+ fr.ibp.odv.boem.mm.test.BoemTest.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
+Bundle-ActivationPolicy: lazy
+
