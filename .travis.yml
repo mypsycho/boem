@@ -6,4 +6,4 @@ install: true
 jobs:
   include:
   - stage: head
-    script: mvn verify  
+    script: mvn -B verify  
