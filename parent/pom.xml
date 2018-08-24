@@ -244,6 +244,7 @@
                         <artifactId>xtend-maven-plugin</artifactId>
 
                         <executions>
+							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
                             <execution>
                                 <goals>
                                     <goal>compile</goal>
@@ -270,8 +271,10 @@
 							</dependency>
 						</dependencies>
 					
+					
+					
                     </plugin>
-
+					
                 </plugins>
             </build>
         </profile>
