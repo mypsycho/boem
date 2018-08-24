@@ -1,13 +1,9 @@
-*.class
-bin/
 target
 *~
 *.rej
 *.bak
 .DS_Store
 .directory
-
-xtend-gen/*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
