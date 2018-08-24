@@ -6,4 +6,4 @@ install: true
 jobs:
   include:
   - stage: head
-    script: mvn -B verify  
+    script: mvn -B verify ; cat tests/modit-tests/target/surefire.properties
