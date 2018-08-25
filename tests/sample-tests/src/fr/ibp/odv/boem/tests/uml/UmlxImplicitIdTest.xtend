@@ -11,7 +11,7 @@ class UmlxImplicitIdTest extends UmlTestContext {
 
 	@Test
 	def void testImplicitId() {
-		val modelAccessor = Model.create [
+		val it = Model.create [
 			name = "myUmlModel"
 			packagedElements += #{
 				Interface.create [
@@ -20,7 +20,7 @@ class UmlxImplicitIdTest extends UmlTestContext {
 				Interface.create [
 					name = "it2"
 					generalizations += Generalization.create [
-						specific = Interface << "it2"
+						// specific = Interface << "it2" // reverse linked must not be set
 						general = Interface << "it3"
 					]
 				],
@@ -30,8 +30,8 @@ class UmlxImplicitIdTest extends UmlTestContext {
 			}
 		].assemble
 
-		val it2 = modelAccessor.access(Interface, "it2")
-		assertEquals("it3" => modelAccessor, it2.generalizations.get(0).general)
+		val it2 = access(Interface, "it2")
+		assertEquals(access("it3"), it2.generalizations.get(0).general)
 	}
 
 }

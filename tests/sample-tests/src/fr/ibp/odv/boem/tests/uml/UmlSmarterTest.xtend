@@ -1,7 +1,5 @@
 package fr.ibp.odv.boem.tests.uml
 
-import fr.ibp.odv.boem.tests.uml.text.UmlSimpleSyntax
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.Model
 import org.eclipse.uml2.uml.Operation
@@ -12,8 +10,10 @@ import static org.junit.Assert.*
 
 class UmlSmarterTest extends UmlTestContext {
 
-
-
+	// UmlTestContext hides most of non-business statements.
+	// A Content provider allows to write TypedElement and Classifiers in
+	 
+	
 	@Test
 	def void nominal() {
 		val it = Model.create("myUmlModel") [

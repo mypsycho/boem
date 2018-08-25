@@ -18,9 +18,9 @@ import static org.junit.Assert.*
 class RefTest extends ModItTestContext {
 
 	extension EModIt factory = EModIt.using(BoemTestPackage.eINSTANCE)
-    def <T extends EObject> T >>(String id, T it) { return factory.alias(id, it) }
-    def <T extends EObject> T <<(Class<T> it, String id) { return factory.ref(it, id) }
-    def static EObject =>(String id, ModItPool<EObject, ?> pool) { return pool.access(id) }
+    def <T extends EObject> T >>(String id, T it) { factory.alias(id, it) }
+    def <T extends EObject> T <<(Class<T> it, String id) { factory.ref(it, id) }
+    def static EObject =>(String id, ModItPool<EObject, ?> pool) { pool.access(id) }
     
     
 	/**
@@ -130,11 +130,14 @@ class RefTest extends ModItTestContext {
 	def void testSimpleRef_IncompatibleType() {
 		A.create [
 			name = "AName"
-			autoContainementA += #{"id0" >> B.create [
-				referenceNodeA = Node.ref("id1")
-			], "id1" >> B.create [
-				name = "BName"
-			]}
+			autoContainementA += #{
+				"id0" >> B.create [
+					referenceNodeA = Node.ref("id1")
+				], 
+				"id1" >> B.create [
+					name = "BName"
+				]
+			}
 		].assemble
 	}
 

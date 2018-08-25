@@ -71,9 +71,9 @@ class EModIt extends ModIt<EObject> {
         val rules = new HashMap<Class<? extends EObject>, ()=>EObject>()
     
         /**
-         * Create a factory with immutable strategy.
+         * Provide adapter for EMF.
          * 
-         * @param descr of the factory
+         * @param context of implementation
          */
         new(ModIt<EObject> context) {
             super(context)
@@ -91,12 +91,6 @@ class EModIt extends ModIt<EObject> {
                 ]
         }
     
-        /**
-         * Builds an {@link EObject} and initializes it.
-         *
-         * @param type of EObject to build
-         * @throw IllegalArgumentException if type is not handled by the factory.
-         */
         override <T extends EObject> T create(Class<T> type) {
             val rule = rules.get(type);
             if (rule === null) {
@@ -105,31 +99,19 @@ class EModIt extends ModIt<EObject> {
             type.cast(rule.apply)
         }
     
-        /**
-         * Returns true if it is an proxy.
-         */
         override isProxy(EObject it) {
             if (it instanceof InternalEObject) (eProxyURI !== null && PROXY_URI_SCHEME == eProxyURI.scheme)
             else false
         }
-    
 
         override getProxyId(EObject it) {
             URI.decode((it as InternalEObject).eProxyURI.opaquePart)
         }
         
-
         override getProxyPath(EObject it) {
             PiType.path.unbind(it)
         }
         
-        /**
-         * Init it as a proxy with provided id.
-         * 
-         * @param it to initialise
-         * @param id of root reference
-         * @param path to reference for root
-         */
         override <R extends EObject> initProxyId(EObject it, String id, (EObject)=>R path) {
             (it as InternalEObject).eSetProxyURI(URI.createGenericURI(PROXY_URI_SCHEME, URI.encodeOpaquePart(id, false), null))
             if (path !== null) PiType.path.bind(it, path)
@@ -143,19 +125,13 @@ class EModIt extends ModIt<EObject> {
             else Collections.singleton(it as InternalEObject)
         }
      
-       /**
-         * Creator of element and content.
-         *
-         * @param value to iterate
-         * @return an EObject iterator
-         */
-        override allContent(EObject value) { [ value.eAllContents ] as Iterable<EObject> }
+        override contentOf(EObject value) { value.eContents }
         
         override allReferences(EObject container) {
             container.eClass.EAllReferences.filter[ !isDerived && !containment ]
         }
     
-        override container(EObject it) { eContainer }
+        override containerOf(EObject it) { eContainer }
         
         override typeName(EObject it) { eClass.name }
     
@@ -165,15 +141,6 @@ class EModIt extends ModIt<EObject> {
     
         override assignableTo(EObject value, EReference prop) { prop.EType.isInstance(value) }
     
-        /**
-         * Replaces the old value in the object's feature with the new value .
-         * This method prevents the resolution of EList when replacing a value.
-         *
-         * @param container the object holding the values.
-         * @param feature the feature of the object holding the values.
-         * @param oldValue the value to replace.
-         * @param newValue the replacement value.
-         */
         override replaceResolved(EObject container, EReference feature, 
                 EObject oldValue, EObject newValue) {
             if (FeatureMapUtil.isMany(container, feature)) {
@@ -187,7 +154,7 @@ class EModIt extends ModIt<EObject> {
             }
         }
         
-        override bindAlias(String id, EObject it) {
+        override bindAlias(EObject it, String id) {
             PiType.alias.bind(it, id)
         }
     
@@ -195,14 +162,21 @@ class EModIt extends ModIt<EObject> {
             PiType.alias.unbind(it)
         }
         
-        override bindContent(String id, EObject it) {
+        override bindContent(EObject it, String id) {
             PiType.content.bind(it, id)
         }
     
         override unbindContent(EObject it) {
             PiType.content.unbind(it)
         }
-        
+                
+        override <R extends EObject> bindInit(R it, (R)=>void init) {
+            PiType.init.bind(it, init)
+        }
+    
+        override <R extends EObject> unbindInit(EObject it) {
+            PiType.init.unbind(it)
+        }
     }
    
 }

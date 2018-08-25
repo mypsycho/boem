@@ -25,7 +25,7 @@ class ModItRegistry<T> {
 
 	def String getQName(T it) {
 		(explicits.entrySet.findFirst[m|m.value === it]?.key) // Find name
-		?: (if (container !== null) container.QName + "." else "") // else use parent qname
+		?: (if (containerOf(it) !== null) containerOf(it).QName + "." else "") // else use parent qname
 		+ '|' + typeName + '|' // and type
 	}
 

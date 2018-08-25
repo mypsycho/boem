@@ -26,9 +26,9 @@ class UmlTestContext {
     ]
     
     // TODO remove legacy syntax
-    def <T extends EObject> T >>(String id, T it) { return factory.alias(id, it) }
-    def <T extends EObject> T <<(Class<T> it, String id) { return factory.ref(it, id) }
-    def static EObject =>(String id, ModItPool<EObject, ?> pool) { return pool.access(id) }
+    def <T extends EObject> T >>(String id, T it) { factory.alias(id, it) }
+    def <T extends EObject> T <<(Class<T> it, String id) { factory.ref(it, id) }
+    def static EObject =>(String id, ModItPool<EObject, ?> pool) { pool.access(id) }
     
     // A generic syntax. Should be in an abstraction of UML
     val syntax = new UmlSimpleSyntax(factory)

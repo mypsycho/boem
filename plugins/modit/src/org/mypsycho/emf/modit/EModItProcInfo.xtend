@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 class EModItProcInfo extends AdapterImpl {
     
     enum PiType { 
-        alias, path, content
+        alias, path, content, init
     }
     
     val Object value

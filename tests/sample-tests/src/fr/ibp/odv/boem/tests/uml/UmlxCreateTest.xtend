@@ -15,9 +15,9 @@ class UmlxCreateTest extends UmlTestContext {
 	def void testSimpleCreation() {
 
 		val model = Model.create [ // Simple creation
-			it.name = "myUmlModel" // Simple set  
+			name = "myUmlModel" // Simple set  
 			visibility = VisibilityKind.PUBLIC_LITERAL // it keyword is not necessary
-		]
+		].assemble.root
 
 		assertEquals("myUmlModel", model.name)
 		assertEquals(VisibilityKind.PUBLIC_LITERAL, model.visibility)
@@ -35,7 +35,7 @@ class UmlxCreateTest extends UmlTestContext {
 					name = "myOperation"
 				]
 			]
-		]
+		].assemble.root
 
 		assertEquals("myInterface", model.packagedElements.get(0).name)
 		assertEquals("myOperation", (model.packagedElements.get(0) as Interface).operations.get(0).name)

@@ -1,11 +1,12 @@
 package org.mypsycho.modit
 
-import java.util.Collections
+import java.util.Collection
+import java.util.LinkedList
 import java.util.List
 import java.util.NoSuchElementException
 
 /**
- * 
+ * This class wraps the construction of elements together.
  */
 class ModItAssembler<T, F> {
 
@@ -14,6 +15,8 @@ class ModItAssembler<T, F> {
 	extension val ModItImplementation<T, F> implementation
 
 	protected val ModItRegistry<T> registry
+	
+	protected val onFlies = new LinkedList<T>
 
 	new(ModItImplementation<T, F> impl, ModItRegistry<T> reg) {
 		implementation = impl
@@ -35,42 +38,70 @@ class ModItAssembler<T, F> {
 		try {
 			CURRENT_RUN.set(this)
 
-			// Fill with content and the registry (+check for duplications)
-			val iInclusive = [ Collections.singleton(it) + allContent ]
-			values.map(iInclusive).flatten.forEach [
-				// Fill element
-				val content = unbindContent
-				if (content !== null) context.description.contentProvider.accept(content, it)
+			// Builds all contents
+			val stack = new LinkedList<T>(values)
+			while (!stack.empty || !onFlies.empty) {
+				if (!stack.empty) {
+					stack.applyPopAll[ 
+						val content = unbindContent
+						if (content !== null) {
+							context.description.contentProvider.accept(content, it)	
+						}
+						unbindInit?.apply(it)
+						onFlies.remove(it) // if already attached
+					]
+				} else {
+					stack += onFlies.filter[ containedBy(it, values)  ]
+					onFlies.clear
+				}
+			}
 
-				//
-				var String id = unbindAlias ?: context.description.idProvider?.apply(it)
-				if (id !== null) {
-					val registered = registry.get(id)
-					if (registered !== null && registered !== it) {
-						throw new IllegalStateException("Duplicated id '" + id + "'");
-					}
-					if (registered === null) { // Already done, how could we skip it ?
+			// Builds all IDs
+			stack += values
+			while (!stack.empty) {
+				stack.applyPopAll[ 
+					var String id = unbindAlias ?: context.description.idProvider?.apply(it)
+					if (id !== null) {
+						val registered = registry.get(id)
+						if ((registered !== null) && (registered !== it)) {
+							throw new IllegalStateException("Duplicated id '" + id + "'")
+						}
 						registry.put(id, it)
 					}
-				}
-			]
+				]
+			}
 
-			// Resolve all references using the registry
-			values.map(iInclusive).flatten.forEach [ value |
-				allReferences(value).forEach[value.updateRef(it)]
-			]
+			stack += values
+			while (!stack.empty) {
+				stack.applyPopAll[ 
+					allReferences(it).forEach[ ref | updateRef(ref) ]
+				]
+			} 
+			
 
 		} finally {
+			onFlies.clear
 			CURRENT_RUN.remove
 		}
-
+		
 		this
 	}
+	
+	private def void applyPopAll(LinkedList<T> it, (T)=>void action) {
+		val head = pop
+		if (!contains(head)) { // Ensure uniqueness of work
+			action.apply(head)
+			addAll(0, implementation.contentOf(head))
+		}
+	}
 
-	static def <T> isDirectApply(ModIt<T> context) {
-		val ModItAssembler<?, ?> run = ModItAssembler.CURRENT_RUN.get
-		return run !== null // not assembling
-			&& run.implementation.context === context // Strange case : several facory, which user case ?            
+	private def boolean containedBy(T it, Collection<?> pool) {
+		(it !== null) && (pool.contains(it) || containedBy(implementation.containerOf(it), pool))
+	}
+	
+
+	package static def <T> void candidate(T element) {
+		(ModItAssembler.CURRENT_RUN.get as ModItAssembler<T, ?>)?.onFlies?.add(element)
 	}
 
 	def updateRef(T container, F prop) {
@@ -82,13 +113,19 @@ class ModItAssembler<T, F> {
 
 			var targetValue = registry.get(proxyId);
 			if (targetValue === null) { // assert found
-				throw new NoSuchElementException('''Unknown «proxyId» for «prop.propName» of «registry.getQName(container)»''')
+				throw new NoSuchElementException(
+'''Unknown «proxyId» for «prop.propName»«««
+ of «registry.getQName(container)»'''
+ 				)
 			}
 			targetValue = (getProxyPath?.apply(targetValue)) ?: targetValue
 
 			if (!targetValue.assignableTo(prop)) {
 				throw new ClassCastException(
-                    '''At «registry.getQName(container)».«prop.propName», «proxyId» targets a «targetValue.typeName» incompatible with «prop.refTypeName»''')
+'''At «registry.getQName(container)».«prop.propName», «««
+«proxyId» targets a «targetValue.typeName» «««
+incompatible with «prop.refTypeName»'''
+				)
 			}
 
 			container.replaceResolved(prop, it, targetValue)

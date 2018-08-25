@@ -43,15 +43,6 @@ class ModItPool<T, R extends T> {
 	}
 
 	/**
-	 * Gets a list of semantic elements registered against the given ids.
-	 * 
-	 * @param id the id of the element
-	 */
-	def List<T> access(List<String> ids) {
-		ids.map[context.registry.get(it)]
-	}
-
-	/**
 	 * Gets the semantic element registered against the given id or null.
 	 * 
 	 * @param id of the element

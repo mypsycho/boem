@@ -11,41 +11,42 @@ import static org.junit.Assert.*
 class UmlxUpdateTest extends UmlTestContext {
 
 
-    
-
 	@Test
 	def void testUsingIds() {
 
-		val modelAccessor = Model.create [
+		val it = Model.create [
 			name = "myUmlModel"
 			visibility = VisibilityKind.PUBLIC_LITERAL
-			packagedElements += #{"umlInterface" >> Interface.create [
-				name = "myInterface"
-			], "umlInterface2" >> Interface.create [
-				name = "myInterface2"
-				generalizations += "umlGen" >> Generalization.create [
-					general = ref(Interface, "umlInterface") // Builds reference to elements built in the same models
-					specific = Interface << "umlInterface2" // Simplified notation
+			packagedElements += #{
+				"umlInterface" >> Interface.create [
+					name = "myInterface"
+				], 
+				"umlInterface2" >> Interface.create [
+					name = "myInterface2"
+					generalizations += "umlGen" >> Generalization.create [
+						// Builds reference to elements built in the same models
+						general = ref(Interface, "umlInterface")
+					]
 				]
-			]}
+			}
 
 		].assemble
 
-		val umlgen = modelAccessor.access(Generalization, "umlGen")
-		assertEquals(("umlInterface" => modelAccessor), umlgen.targets.get(0))
-		assertEquals(("umlInterface2" => modelAccessor), umlgen.sources.get(0))
+		val umlgen = access(Generalization, "umlGen")
+		assertEquals(access("umlInterface"), umlgen.targets.head)
+		assertEquals(access("umlInterface2"), umlgen.sources.head)
 
 		// Adds a new interface
-		modelAccessor.update [
-			packagedElements += "umlInterface3" >> Interface.create[]
+		update [
+			packagedElements += "umlInterface3" >> Interface.create
 		]
 
 		// Modify the generalization
-		modelAccessor.update(Generalization, "umlGen") [
+		update(Generalization, "umlGen") [
 			general = Interface << "umlInterface3"
 		]
 
-		assertEquals(("umlInterface3" => modelAccessor), umlgen.targets.get(0))
+		assertEquals(access("umlInterface3"), umlgen.targets.get(0))
 
 	}
 }

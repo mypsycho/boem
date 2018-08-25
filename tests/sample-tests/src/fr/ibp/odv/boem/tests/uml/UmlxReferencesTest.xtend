@@ -38,37 +38,38 @@ class UmlxReferencesTest extends UmlTestContext {
 			name = "myInterface"
 		]
 
-		val classAccessor = Class.create [
+		val it = Class.create [
 			name = "myUmlClass"
 			ownedAttributes += Property.create [
 				type =  umlInterface
 			]
 		].assemble
 
-		assertEquals(umlInterface, classAccessor.root.ownedAttributes.get(0).type)
+		assertEquals(umlInterface, root.ownedAttributes.get(0).type)
 	}
 
 	@Test
 	def void useIds() {
-
-		val modelAccessor = Model.create [
+		val it = Model.create [
 			name = "myUmlModel"
 			visibility = VisibilityKind.PUBLIC_LITERAL
-			packagedElements += #{"umlInterface" >> Interface.create [
-				name = "myInterface"
-			], "umlInterface2" >> Interface.create [
-				name = "myInterface2"
-				generalizations += "umlGen" >> Generalization.create [
-					general = ref(Interface, "umlInterface") // Builds reference to elements built in the same models
-					specific = Interface << "umlInterface2" // Simplified notation
+			packagedElements += #{
+				"umlInterface" >> Interface.create [
+					name = "myInterface"
+				], 
+				"umlInterface2" >> Interface.create [
+					name = "myInterface2"
+					generalizations += "umlGen" >> Generalization.create [
+						 // Builds reference to elements built in the same models
+						general = ref(Interface, "umlInterface")
+					]
 				]
-			]}
-
+			}
 		].assemble
 
-		val umlgen = modelAccessor.access(Generalization, "umlGen")
-		assertEquals(("umlInterface" => modelAccessor), umlgen.targets.get(0))
-		assertEquals(("umlInterface2" => modelAccessor), umlgen.sources.get(0))
+		val umlgen = access(Generalization, "umlGen")
+		assertEquals(access("umlInterface"), umlgen.targets.get(0))
+		assertEquals(access("umlInterface2"), umlgen.sources.get(0))
 
 	}
 }

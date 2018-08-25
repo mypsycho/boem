@@ -24,7 +24,7 @@ class UmlSimpleSyntax {
     }
 
     def dispatch provideContent(String content, EObject it) {
-        throw new UnsupportedOperationException('''«eClass.name» cannot handle content '«content»' ''')
+        throw new UnsupportedOperationException('''«eClass.name» cannot handle content '«content»'.''')
     }
     
     def dispatch provideContent(String content, NamedElement it) {
@@ -32,27 +32,26 @@ class UmlSimpleSyntax {
     }
     
     def dispatch provideContent(String content, Generalization it) {
-        specific = owner as Classifier
         general = Interface.ref(content)
     }
 
     def dispatch provideContent(String content, Classifier target) {
         ":>".token(content) => [ 
-            key._provideContent(target as NamedElement)
+            target.name = key
             if (value !== null) target.generalizations += Generalization.create(value)
         ]
     }
     
     def dispatch provideContent(String content, TypedElement target) {
         ":".token(content) => [ 
-            key._provideContent(target as NamedElement)
+            target.name = key
             if (value !== null) target.type = Interface.create(value)
         ]
     }
         
     def dispatch provideContent(String content, Operation target) {
         ":".token(content) => [ 
-            key._provideContent(target as NamedElement)
+            target.name = key
             if (value !== null) target.type = Interface.create(value)
         ]
     }

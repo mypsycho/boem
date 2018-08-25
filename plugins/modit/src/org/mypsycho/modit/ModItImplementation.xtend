@@ -1,6 +1,7 @@
 package org.mypsycho.modit
 
 import org.eclipse.emf.ecore.EObject
+import java.util.Collection
 
 /**
  * Factory of EObject.
@@ -75,7 +76,7 @@ abstract class ModItImplementation<T, F> {
      */
 	def <R extends T> void initProxyId(T it, String id, (T)=>R path)
 
-	def T container(T it)
+	def T containerOf(T it)
 
 	def String typeName(T it)
 
@@ -91,15 +92,17 @@ abstract class ModItImplementation<T, F> {
 	 * @param value to iterate
 	 * @return an EObject iterator
 	 */
-	def Iterable<T> allContent(T value)
+	def Collection<T> contentOf(T value)
 
 	def Iterable<F> allReferences(T container)
 
 	def Iterable<? extends T> getValues(T container, F property)
 
 	/**
-	 * Replaces the old value in the object's feature with the new value .
+	 * Replaces the old value in the object's feature with the new value.
+	 * <p>
 	 * This method prevents the resolution of EList when replacing a value.
+	 * </p>
 	 * 
 	 * @param container the object holding the values.
 	 * @param feature the feature of the object holding the values.
@@ -111,33 +114,49 @@ abstract class ModItImplementation<T, F> {
 	/**
 	 * Attaches an id on the given value.
 	 * 
-	 * @param value to attach
+	 * @param it to attach
 	 * @param id of value
 	 */
-	def void bindAlias(String id, T value)
+	def void bindAlias(T it, String id)
 
 	/**
-	 * Detach any id from the object and returns it.
+	 * Detaches any id from the object and returns it.
 	 * 
 	 * @param value the targeted EObject
 	 * @return attached id or null
 	 */
-	def String unbindAlias(T value)
+	def String unbindAlias(T it)
 
 	/**
 	 * Attaches an content on the given value.
 	 * 
-	 * @param value to attach
+	 * @param it to attach
 	 * @param content of value
 	 */
-	def void bindContent(String content, T value)
+	def void bindContent(T it, String content)
 
 	/**
-	 * Detach any id from the object and returns it.
+	 * Detaches any id from the object and returns it.
 	 * 
-	 * @param value the targeted EObject
+	 * @param it the targeted EObject
 	 * @return attached value or null
 	 */
-	def String unbindContent(T value)
+	def String unbindContent(T it)
 
+	/**
+	 * Attaches an content on the given value.
+	 * 
+	 * @param <R> type of it
+	 * @param it to attach
+	 * @param init action to perform 
+	 */
+	def <R extends T> void bindInit(R it, (R)=>void content)
+
+	/**
+	 * Detaches any id from the object and returns it.
+	 * 
+	 * @param it the targeted EObject
+	 * @return initializer
+	 */
+	def <R extends T> (R)=>void unbindInit(T it)
 }

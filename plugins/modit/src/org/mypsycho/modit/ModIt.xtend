@@ -4,6 +4,7 @@ import java.util.Collection
 import java.util.Collections
 import java.util.List
 import org.eclipse.emf.ecore.EObject
+import java.util.ArrayList
 
 /**
  * Utility class that contains the Mod-it abstraction.
@@ -41,27 +42,26 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds an {@link EObject} and initializes it.
+	 * Creates an {@link EObject} and describes its content.
 	 * 
 	 * @param type of EObject to build
-	 * @param content parsed by content provider
-	 * @param initializer of the given {@link EObject}
+	 * @param descr parsed by content provider
+	 * @param init of the given {@link EObject}
 	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
-	def <R extends T> R create(Class<R> type, String content, (R)=>void initializer) {
+	def <R extends T> R create(Class<R> type, String descr, (R)=>void init) {
 		val it = impl.create(type)
-		if (content !== null) {
+		if (descr !== null) {
 			if (description.contentProvider === null) {
 				throw new UnsupportedOperationException("Content cannot be provide as contentProvider is null")
 			}
-
-			if (ModItAssembler.isDirectApply(this)) {
-				description.contentProvider.accept(content, it)
-			} else {
-				impl.bindContent(content, it)
-			}
+			impl.bindContent(it, descr)			
 		}
-		initializer?.apply(it)
+		if (init !== null) {
+			impl.bindInit(it, init)
+		}
+		ModItAssembler.candidate(it)
+		
 		it
 	}
 
@@ -137,7 +137,7 @@ class ModIt<T> {
 	 * @param id of alias
 	 */
 	def <R extends T> alias(String id, R it) {
-		impl.bindAlias(id, it)
+		impl.bindAlias(it, id)
 		it
 	}
 
@@ -169,7 +169,7 @@ class ModIt<T> {
 	 * @throw IllegalStateException if a id defined used more than once
 	 */
 	def <R extends T> assemble(Collection<R> values) {
-		val builts = values.toList /* isolate source and Fix order */
+		val builts = new ArrayList(values) /* isolate source and Fix order */
 		createPool(builts, createAssembler().perform(builts))
 	}
 
