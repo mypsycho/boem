@@ -132,7 +132,7 @@ class «name» implements Callable<EObject> {
 	context.extras
 	}
 
-	«IF shortcut != null »
+	«IF shortcut !== null »
 	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
 		context.at(values, key) as T // Xtend inference fails?
 	}
@@ -189,7 +189,7 @@ class «mainClass.name» {
 		this
 	}
 
-	«IF shortcut != null »
+	«IF shortcut !== null »
 	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
 		values.findFirst[ «shortcut.name» == key ]
 	}
@@ -201,7 +201,7 @@ class «mainClass.name» {
 
 	def String templateCreate(EObject it, Map<Class<?>, Boolean> importeds) {
 		val split = splits.get(it)
-		if (split == null) templateInnerCreate(
+		if (split === null) templateInnerCreate(
 			importeds) else '''new «IF mainClass.pack != split.pack»«split.pack».«ENDIF»«split.name»(this).call'''
 	}
 
@@ -237,7 +237,7 @@ ENDFOR»«ENDFOR»
 	}
 
 	def prefix(Pair<Pair<EObject, ? extends Class<?>>, String> path) {
-		if (path.value != null) (0 ..< (path.value.split(" as ").length - 1)).map["("].join else ""
+		if (path.value !== null) (0 ..< (path.value.split(" as ").length - 1)).map["("].join else ""
 	}
 
 	def toUsedType(EObject it, Map<Class<?>, Boolean> importeds) {
@@ -255,7 +255,7 @@ ENDFOR»«ENDFOR»
 		val rootTypeText = path.key.key.toUsedType(importeds)
 		val src = path.key.key
 
-		val expectedType = if (alias != null) eClass.getInstanceClass() else using
+		val expectedType = if (alias !== null) eClass.getInstanceClass() else using
 		var cast = if (!expectedType.isAssignableFrom(path.key.value)) {
 				val typeText = if (importeds.get(eClass.instanceClass) ?: false) eClass.instanceClass.
 						simpleName else eClass.instanceClass.name
@@ -263,7 +263,7 @@ ENDFOR»«ENDFOR»
 			} else
 				"" -> ""
 
-		if (alias != null)
+		if (alias !== null)
 			'''«refTypeText».ref("«alias»")«
 IF !path.value.empty
 »[ «cast.key»«path.prefix»(it as «rootTypeText»)«path.value»«cast.value» ]«
@@ -271,7 +271,7 @@ ENDIF
 »'''
 		else if (explicitExtras.containsKey(src))
 			'''«cast.key»«path.prefix»extras.get(«explicitExtras.get(src).toJava»)«path.value»«cast.value»'''
-		else if (src.eResource != null)
+		else if (src.eResource !== null)
 			'''«cast.key»«path.prefix»extras.get("«extras.computeIfAbsent(src) [ "$"+extras.size ]»")«path.value»«cast.value»'''
 		else
 			null // Headless
@@ -288,7 +288,7 @@ ENDIF
 		Map<Class<?>, Boolean> importeds) {
 		if (splits.containsKey(it) || roots.containsKey(it)) return it -> eClass.instanceClass -> ""
 
-		if (eContainer == null // To extras
+		if (eContainer === null // To extras
 		|| (all && explicitExtras.containsKey(it))) return it -> EObject -> ""
 
 		val feat = eContainingFeature as EReference
@@ -299,7 +299,7 @@ ENDIF
 			else {
 				val siblings = cont.eGet(feat) as Collection<EObject>
 				if (siblings.size == 1) ".head"
-				else if (shortcut?.containerClass != null && shortcut.containerClass.isAssignableFrom(feat.EType.instanceClass))
+				else if (shortcut?.containerClass !== null && shortcut.containerClass.isAssignableFrom(feat.EType.instanceClass))
 					".at(" + eGet(shortcut).toJava + ")"
 				else ".get(" + siblings.toList.indexOf(it) + ")"
 			}
@@ -355,7 +355,7 @@ ENDIF
 
 	def isReference(EReference it) {
 		!isContainment && !derived && (
-			(EOpposite == null) //
+			(EOpposite === null) //
 			|| EOpposite.isContainment //
 			|| (!many && EOpposite.many) // TODO here we should consider if value is in extras or not
 			|| (name > EOpposite.name) // here, we should make a systematic choice.

@@ -48,7 +48,7 @@ class EModItProcInfo extends AdapterImpl {
      * @param it to test
      */
     static def void isBound(PiType type, EObject it) {
-        EcoreUtil.getAdapter(eAdapters, type) != null
+        EcoreUtil.getAdapter(eAdapters, type) !== null
     }
     
     /**
@@ -60,7 +60,7 @@ class EModItProcInfo extends AdapterImpl {
      */
      static def <S> S unbind(PiType type, EObject it) {
         val previous = EcoreUtil.getAdapter(eAdapters, type) as EModItProcInfo
-        if (previous == null) return null
+        if (previous === null) return null
         eAdapters.remove(previous)
         previous.value as S
     }

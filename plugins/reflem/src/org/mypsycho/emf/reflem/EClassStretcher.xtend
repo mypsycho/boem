@@ -20,13 +20,13 @@ class EClassStretcher {
         this.source = source
         val parentAspect = context.getAspect(source.EPackage)
         // No aspect for extras
-        this.aspect = if(parentAspect != null) 
+        this.aspect = if(parentAspect !== null) 
                 new EmfAspect.Specific(source, parentAspect) 
             else new EmfAspect.Default(source)
     }
     
     def isReady() {
-        inheritances != null
+        inheritances !== null
     }
     
     def void compute() {
@@ -90,7 +90,7 @@ class EClassStretcher {
 
     protected def <V> superInheritances(Class<? extends EObject> from) {
         val eClass = inheritances.findFirst[ instanceClass == from ]
-        if (eClass == null) throw new IllegalAccessException(source.name + ' is not typed by ' + from.name)
+        if (eClass === null) throw new IllegalAccessException(source.name + ' is not typed by ' + from.name)
         inheritances.subList(inheritances.indexOf(from),  inheritances.length)
     }
             

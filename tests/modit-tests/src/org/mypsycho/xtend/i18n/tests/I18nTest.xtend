@@ -16,18 +16,19 @@ class I18nTest {
     
     
 	public val ()=>String menu = [ 
-	'''«Meal.label»«
-	IF Meal.getLabel('comment') != null
-	»(«Meal.getLabel('comment')»)«
-	ENDIF
-	»:«
-	FOR f : Meal.values SEPARATOR ','
-	»«f.label»«
-	ENDFOR
-	»''' ]
+'''«Meal.label»«
+IF Meal.getLabel('comment') !== null
+»(«Meal.getLabel('comment')»)«
+ENDIF
+»:«
+FOR f : Meal.values SEPARATOR ','
+»«f.label»«
+ENDFOR
+»''' 
+	]
     
     def allCases(Locale locale) {
-        i18n = if (locale != null) I18n.get(Messages, locale) else LABELS
+        i18n = if (locale !== null) I18n.get(Messages, locale) else LABELS
         #[
         	greetingAll.apply, // Test references
         	greetingYou.apply("Joe"), // Test parameter

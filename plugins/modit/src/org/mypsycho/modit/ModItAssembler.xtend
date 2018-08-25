@@ -36,7 +36,7 @@ class ModItAssembler<T, F> {
 			CURRENT_RUN.set(this)
 
 			// Fill with content and the registry (+check for duplications)
-			val iInclusive = [Collections.singleton(it) + allContent]
+			val iInclusive = [ Collections.singleton(it) + allContent ]
 			values.map(iInclusive).flatten.forEach [
 				// Fill element
 				val content = unbindContent
@@ -70,7 +70,7 @@ class ModItAssembler<T, F> {
 	static def <T> isDirectApply(ModIt<T> context) {
 		val ModItAssembler<?, ?> run = ModItAssembler.CURRENT_RUN.get
 		return run !== null // not assembling
-		&& run.implementation.context === context // Strange case : several facory, which user case ?            
+			&& run.implementation.context === context // Strange case : several facory, which user case ?            
 	}
 
 	def updateRef(T container, F prop) {

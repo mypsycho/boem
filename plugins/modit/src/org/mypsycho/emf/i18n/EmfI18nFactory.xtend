@@ -26,7 +26,8 @@ class EmfI18nFactory {
 
 	// XXX Improper approach for OSGI ?
 	def EmfI18n get(EPackage it, Locale locale) {
-		instances.computeIfAbsent(it -> locale)[create(key, locale, key.class.classLoader)] as EmfI18n
+		instances.computeIfAbsent(it -> locale) 
+			[ create(key, locale, key.class.classLoader) ]
 	}
 
 	def EmfI18n create(EPackage it, Locale locale, ClassLoader loader) {
@@ -34,10 +35,10 @@ class EmfI18nFactory {
 
 		val byDefault = defaultValues.computeIfAbsent(it) [
 			// default labels
-			val byDefault = new EmfI18n(it, Locale.ROOT, EClassifiers.toMap[instanceClass])
+			val byDefault = new EmfI18n(it, Locale.ROOT, EClassifiers.toMap[ instanceClass ])
 			byDefault.setLabel(it, toDefaultLabel)
 			EClassifiers // we dont want to iterate on sub-packages
-				.map[eAllContents.toIterable + Collections.singletonList(it)]
+				.map[ eAllContents.toIterable + Collections.singletonList(it) ]
 				.flatten.filter(ENamedElement)
 				.forEach [ byDefault.setLabel(it, toDefaultLabel) ]
 			
@@ -65,7 +66,7 @@ class EmfI18nFactory {
 	}
 
 	protected def toJavaname(EPackage it) {
-		val javaname = class.interfaces.findFirst[interfaces.contains(EPackage)].name
+		val javaname = class.interfaces.findFirst[ interfaces.contains(EPackage) ].name
 		if (javaname.endsWith(JAVAEXTENSION)) 
 			javaname.substring(0, javaname.length - JAVAEXTENSION.length) 
 		else javaname
@@ -77,35 +78,35 @@ class EmfI18nFactory {
 	}
 
 	static def toText(String it, boolean startUp) { // public for test purpose
-		if (it == null) {
-			return null;
+		if (it === null) {
+			return null
 		}
 		if (it.isEmpty()) {
-			return it;
+			return it
 		}
 
-		val list = new ArrayList<String>
-		var int tokenStart = 0;
-		var int currentType = Character.getType(charAt(tokenStart));
-		for (var int pos = tokenStart + 1; pos < length; pos++) {
+		val words = new ArrayList<String>
+		var int tokenStart = 0
+		var int currentType = Character.getType(charAt(tokenStart))
+		for (var pos = tokenStart + 1; pos < length; pos++) {
 			val type = Character.getType(charAt(pos))
 			if (type != currentType) {
 				if (type == Character.LOWERCASE_LETTER && currentType == Character.UPPERCASE_LETTER) {
 					val newTokenStart = pos - 1
 					if (newTokenStart != tokenStart) {
-						list += substring(tokenStart, newTokenStart)
+						words += substring(tokenStart, newTokenStart)
 						tokenStart = newTokenStart
 					}
 				} else {
-					list += substring(tokenStart, pos)
+					words += substring(tokenStart, pos)
 					tokenStart = pos
 				}
-				currentType = type;
+				currentType = type
 			}
 		}
-		list += substring(tokenStart, length)
+		words += substring(tokenStart, length)
 
-		return list.join(" ")
+		words.join(" ")
 	}
 
 }

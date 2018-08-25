@@ -41,7 +41,7 @@ class SmarterModItTest {
             if (it instanceof NamedElement) {
                 // and its path is available
                 val parentId = if (eContainer !== null) descr.idProvider.apply(eContainer) else ""
-                if ((name != null) && (parentId !== null)) parentId + "/" + name 
+                if ((name !== null) && (parentId !== null)) parentId + "/" + name 
             }
         ]        
 	]

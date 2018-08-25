@@ -74,7 +74,7 @@ class EmfI18n {
 
 	private def toEClass(Class<? extends EObject> it) {
 		val result = classMap.get(it)
-		if(result != null) result
+		if(result !== null) result
 		else throw new NoSuchElementException("Class " + name + " is undefined for " + source.name)
 	}
 

@@ -99,14 +99,14 @@ abstract class EmfAspect<E extends ENamedElement> {
     
     def toEClass(Class<? extends EObject> it) { // Can work only if value is a package
         val target = value.eAllContents.filter(EClassifier).findFirst[ c | c.instanceClass == it ]
-        if (target == null) {
+        if (target === null) {
             throw new IllegalArgumentException(name + " do not belong to " + value.name)
         }
         target
     }
     
     def static boolean isAncestor(EObject it, EObject value) {
-        value != null && (it == value || isAncestor(value.eContainer))
+        value !== null && (it == value || isAncestor(value.eContainer))
     }
         
     def static <E extends ENamedElement> assertAncestor(ENamedElement it, E value) {
@@ -152,12 +152,12 @@ abstract class EmfAspect<E extends ENamedElement> {
         
         override is(ENamedElement it, Object option) {
             val specific = specifics.get(it)
-            if (specific != null) specific.containsKey(option) else false
+            if (specific !== null) specific.containsKey(option) else false
         }
         
         override remove(ENamedElement it, Iterable<?> options) {
             val specific = specifics.get(it)
-            if (specific != null) options.forEach[ specific.remove(it) ]
+            if (specific !== null) options.forEach[ specific.remove(it) ]
         }
 
     }

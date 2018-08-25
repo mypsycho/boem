@@ -72,7 +72,7 @@ class EmfStretcher {
     }
     
     def EmfStretcher initialize() {
-        if (contents != null) {
+        if (contents !== null) {
             return this // already done
         }
         extensions.forEach[ initialize ]
@@ -93,13 +93,13 @@ class EmfStretcher {
     
     def onClass(Class<? extends EObject> it) {
         val eClass = (contents.keySet + extras.keySet).findFirst[ t | t.instanceClass == it]
-        if (eClass == null) throw new IllegalArgumentException(name + ' is not defined in this context.')
+        if (eClass === null) throw new IllegalArgumentException(name + ' is not defined in this context.')
         eClass.onClass
     }
     
     def onClass(EClass it) {
         val result = tryOnClass
-        if (result == null) throw new IllegalArgumentException(name + ' is not defined in this context.')
+        if (result === null) throw new IllegalArgumentException(name + ' is not defined in this context.')
         result
     }
     

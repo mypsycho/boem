@@ -48,15 +48,15 @@ abstract class I18n {
     def dispatch getLabel(String it, String hint) { it }
     		
 	def dispatch String getLabel(Enum<?> it, String hint) {
-		statics.get(staticKey(hint)) ?: if (hint == null) name
+		statics.get(staticKey(hint)) ?: if (hint === null) name
 	}
 		
 	def dispatch String getLabel(Class<?> it, String hint) {
-		statics.get(staticKey(hint)) ?: if (hint == null) simpleName
+		statics.get(staticKey(hint)) ?: if (hint === null) simpleName
 	}
     
     def dispatch getLabel(Date it, String hint) {
-        (if (hint == null) 
+        (if (hint === null) 
             DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale) 
         else 
             new SimpleDateFormat(hint, locale)
@@ -64,7 +64,7 @@ abstract class I18n {
     }
     
     def dispatch getLabel(Number it, String hint) {
-        if (hint == null) String.valueOf(it)
+        if (hint === null) String.valueOf(it)
         else (INTEGER_FORMATS.findFirst[ hint == pattern ] ?: INTEGER_FORMATS.get(0))
             .provider.apply(hint, locale).format(it)
     }
@@ -79,7 +79,7 @@ abstract class I18n {
     
     def void setLabel(Enum<?> it, String hint, String value) { statics.put(staticKey(hint), value) }
 
-	private def static staticKey(Object it, String hint) { if (hint == null) it else Pair.of(it, hint) }
+	private def static staticKey(Object it, String hint) { if (hint === null) it else Pair.of(it, hint) }
     
     // We could offer a printf approach for date and number
 	
@@ -92,7 +92,7 @@ abstract class I18n {
 		INSTANCES.computeIfAbsent(type->locale) [
 		    // ResourceBundle wraps the system class loader. I dont know why.
 		    /*
-			if (System.getSecurityManager() == null) 
+			if (System.getSecurityManager() === null) 
 				create(type, locale)
 			else 
 				AccessController.doPrivileged(
@@ -123,7 +123,7 @@ abstract class I18n {
             + if (variant.empty) "" else '_' + variant
 		try {
 		    // it is more fast to test existence or catch an exception
-		    // if (loader.getResource(fullname.replace('.', '/') + '.java') != null)
+		    // if (loader.getResource(fullname.replace('.', '/') + '.java') !== null)
             loader.loadClass(fullname).newInstance
 		} catch(ClassNotFoundException e) {
 			null

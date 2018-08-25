@@ -132,7 +132,7 @@ class EModIt extends ModIt<EObject> {
          */
         override <R extends EObject> initProxyId(EObject it, String id, (EObject)=>R path) {
             (it as InternalEObject).eSetProxyURI(URI.createGenericURI(PROXY_URI_SCHEME, URI.encodeOpaquePart(id, false), null))
-            if (path != null) PiType.path.bind(it, path)
+            if (path !== null) PiType.path.bind(it, path)
 
         }
     
