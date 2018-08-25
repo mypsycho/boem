@@ -1,31 +1,38 @@
 package org.mypsycho.modit
 
-import org.eclipse.emf.ecore.EObject
 import java.util.Collection
 
 /**
- * Factory of EObject.
+ * Mapping for Mod-it factory and an implementation which provides container and reference.
+ * 
+ * @param <T> Common abstraction for all model elements.
+ * @param <F> type for property descriptors.
  */
 abstract class ModItImplementation<T, F> {
 
-	/** Context of the factory */
+	/** Context sing the mapping */
 	protected val ModIt<T> context
 
 	/**
-	 * Create a factory with immutable strategy.
+	 * An implementation for provided factory.
 	 * 
-	 * @param descr of the factory
+	 * @param context of the factory
 	 */
 	new(ModIt<T> context) {
 		this.context = context
 	}
 
+	/**
+	 * Method called when the factory is described but not used.
+	 * 
+	 * @param descr of the factory
+	 */
 	def void init(ModItDescriptor<T> descr) {}
 
 	/**
-	 * Builds an {@link EObject} and initializes it.
+	 * Instantiate an {@link T} object.
 	 * 
-	 * @param type of EObject to build
+	 * @param type of object to create
 	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
 	def <R extends T> R create(Class<R> type)
@@ -45,6 +52,7 @@ abstract class ModItImplementation<T, F> {
 
 	/**
 	 * Returns true if it is proxy.
+	 * 
 	 * @return true if proxy.
 	 */
 	def boolean isProxy(T it)
@@ -52,7 +60,7 @@ abstract class ModItImplementation<T, F> {
 	/**
 	 * Returns the id stored in it.
 	 * <p>
-	 * It must be proxy created by this implementation.
+	 * It must be a proxy created by this implementation.
 	 * </p>
 	 * @param it storing an proxy id.
 	 * @return id of root target
@@ -76,27 +84,85 @@ abstract class ModItImplementation<T, F> {
      */
 	def <R extends T> void initProxyId(T it, String id, (T)=>R path)
 
+	/**
+	 * Returns the container of it.
+	 * <p>
+	 * It must be consistent with {@link #containerOf(T) }.
+	 * </p>
+	 * <p>
+	 * The method returns null if it has no container.
+	 * </p>
+	 * 
+	 * @param it child element
+	 * @return container or null
+	 */
 	def T containerOf(T it)
 
+	/**
+	 * Returns a collection of all elements contained by it.
+	 * <p>
+	 * It must be consistent with {@link #containerOf(T) }.
+	 * </p>
+	 * 
+	 * @param it containing elements
+	 * @return a collection
+	 */
+	def Collection<T> contentOf(T it)
+	
+	/**
+	 * Returns a printable name of type of it.
+	 * 
+	 * @param it to name
+	 * @return type name
+	 */
 	def String typeName(T it)
 
+	/**
+	 * Returns a printable name of property.
+	 * 
+	 * @param it property
+	 * @return property name
+	 */
 	def String propName(F it)
 
+	/**
+	 * Returns a printable name of type of property.
+	 * 
+	 * @param it property
+	 * @return type name
+	 */
 	def String refTypeName(F it)
 
-	def boolean assignableTo(T value, F prop)
 
 	/**
-	 * Creator of element and content.
+	 * Returns true if it can be assign using the property.
 	 * 
-	 * @param value to iterate
+	 * @param it value to assign
+	 * @param property to assign with
+	 * @return true if its type complies
+	 */
+	def boolean assignableTo(T it, F property)
+
+
+	/**
+	 * Returns a collection of all features containing references.
+	 * 
+	 * @param ir to iterate
 	 * @return an EObject iterator
 	 */
-	def Collection<T> contentOf(T value)
+	def Iterable<F> allReferences(T it)
 
-	def Iterable<F> allReferences(T container)
-
-	def Iterable<? extends T> getValues(T container, F property)
+	/**
+	 * Returns a collection of elements for property of it.
+	 * <p>
+	 * Only property from {@link #allReferences(T) } must be used.
+	 * </p>
+	 * 
+	 * @param it containing property
+	 * @param property applicable to it
+	 * @return an EObject iterator
+	 */
+	 def Iterable<? extends T> getValues(T it, F property)
 
 	/**
 	 * Replaces the old value in the object's feature with the new value.

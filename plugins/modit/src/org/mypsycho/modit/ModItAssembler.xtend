@@ -10,6 +10,7 @@ import java.util.NoSuchElementException
  */
 class ModItAssembler<T, F> {
 
+	/**  */
 	protected static val ThreadLocal<ModItAssembler<?, ?>> CURRENT_RUN = new ThreadLocal()
 
 	extension val ModItImplementation<T, F> implementation

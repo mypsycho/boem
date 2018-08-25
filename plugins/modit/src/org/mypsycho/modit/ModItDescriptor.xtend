@@ -2,6 +2,9 @@ package org.mypsycho.modit
 
 import java.util.function.BiConsumer
 
+/**
+ * Class describing specific behavior of an factory.
+ */
 class ModItDescriptor<T> implements Cloneable {
 
 	/** Fill a created element with provided content. */
@@ -14,11 +17,8 @@ class ModItDescriptor<T> implements Cloneable {
 	public var (ModItRegistry<T>, String)=>T getter = null
 
 	override ModItDescriptor<T> clone() {
-		try {
-			super.clone() as ModItDescriptor<T>
-		} catch (CloneNotSupportedException cnse) {
-			throw new InstantiationError("ModItDescriptor could  not be clone").initCause(cnse) as InstantiationError
-		}
+		// safe implementation to used when creating a factory
+		super.clone() as ModItDescriptor<T>
 	}
 
 }

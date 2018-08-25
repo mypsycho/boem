@@ -12,14 +12,7 @@ import java.util.ArrayList
  * This class must be associated to an implementation of model.
  * </p>
  * <p>
- * Fork to test new features:
- * <ul>
- *   <li>Build tree of several roots,</li>
- *   <li>Add a content provider mechanism,</li>
- *   <li>Suppress Guava usage,</li>
- *   <li>More detailed messages and exceptions,</li>
- *   <li>Special URI characters supported (#, ?) in id.</li>
- * </ul>
+ * Mod-it frees developers from sequential description constraints and eases reference declarations.
  * </p>
  */
 class ModIt<T> {
@@ -31,7 +24,7 @@ class ModIt<T> {
 	protected val ModItDescriptor<T> description
 
 	/**
-	 * Create a factory with immutable strategy.
+	 * A factory with immutable strategy.
 	 * 
 	 * @param descr of the factory
 	 */
@@ -42,7 +35,7 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Creates an {@link EObject} and describes its content.
+	 * Creates an {@link EObject} and initializes it when assembling.
 	 * 
 	 * @param type of EObject to build
 	 * @param descr parsed by content provider
@@ -66,7 +59,7 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds an {@link EObject} and initializes it.
+	 * Creates an {@link EObject} and initializes it when assembling.
 	 * 
 	 * @param type of EObject to build
 	 * @param content parsed parsed by content provider
@@ -76,7 +69,7 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds an {@link EObject} and initializes it.
+	 * Creates an {@link EObject} and initializes it.
 	 * 
 	 * @param type of EObject to build
 	 * @param initializer of the given {@link EObject}
@@ -127,7 +120,7 @@ class ModIt<T> {
 	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
 	def <R extends T> List<R> ref(Class<R> type, String... ids) {
-		ids.map[impl.ref(type, it, null)].toList
+		ids.map[ impl.ref(type, it, null) ].toList
 	}
 
 	/**
@@ -142,10 +135,9 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds the containment tree.
+	 * Assembles the content tree of the value.
 	 * <p>
-	 * This methods gathers all IDs that have been set using ">>" (aka buildRef) method. <br/>
-	 * It also evaluates unmapped value with the id provider.
+	 * Shortcut for singleton of {@link #assemble(Collection) }.
 	 * </p>
 	 * @param value to assemble
 	 * @return a new pool of elements
@@ -158,10 +150,19 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds the containment tree.
+	 * Assembles the content tree of provided values.
 	 * <p>
-	 * This methods gathers all IDs that have been set using ">>" (aka buildRef) method. <br/>
+	 * The value should have been created with factory:
+	 * <ul>
+	 *   <li>descriptions are parsed and applied,</li>
+	 *   <li>initializations are performed,</li>
+	 *   <li>references are resolved</li>
+	 * </ul>
 	 * </p>
+	 * <p>
+	 * Do not call this method in a initialization.
+	 * </p>
+	 * 
 	 * @param values to assemble
 	 * @return a new pool of elements
 	 * @throw NoSuchElementException if a reference cannot be found
@@ -173,14 +174,31 @@ class ModIt<T> {
 		createPool(builts, createAssembler().perform(builts))
 	}
 
+	/**
+	 * Creates a basic assembler with handle construction phases.
+	 * 
+	 * @return new assembler instance
+	 */
 	protected def <S> createAssembler() {
 		new ModItAssembler(impl as ModItImplementation<T, S>, createRegistry)
 	}
 
-	protected def <R extends T> createPool(List<R> values, ModItAssembler<T, ?> assembler) {
-		new ModItPool(values, assembler)
+	/**
+	 * Create a pool from assembled elements.
+	 * 
+	 * @param root elements of pool
+	 * @param assembler of root elements
+	 * @return new pool instance
+	 */
+	protected def <R extends T> createPool(List<R> root, ModItAssembler<T, ?> assembler) {
+		new ModItPool(root, assembler)
 	}
 
+	/**
+	 * Creates a basic registry for pool.
+	 * 
+	 * @return new registry instance
+	 */
 	protected def createRegistry() {
 		new ModItRegistry<T>(impl, description.getter)
 	}
