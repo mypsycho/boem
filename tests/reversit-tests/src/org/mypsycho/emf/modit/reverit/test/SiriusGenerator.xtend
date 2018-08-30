@@ -116,7 +116,7 @@ class SiriusGenerator {
             name = source.name + '_' + tab + '_Page'
             labelExpression = tab.name
             domainClass = source.EPackage.name + "." + source.name
-            preconditionExpression = '''aql:self.oclIsTypeOf(«source.EPackage.name»::«source.name»)'''
+            preconditionExpression = '''aql:self.oclIsTypeOf(Â«source.EPackage.nameÂ»::Â«source.nameÂ»)'''
             groups += parts
         ]
     }
@@ -126,7 +126,7 @@ class SiriusGenerator {
         if (atts.empty) null
         else GroupDescription.create [
             val eClass = source
-            name = '''«eClass.name»_«tab»_Group'''
+            name = '''Â«eClass.nameÂ»_Â«tabÂ»_Group'''
             domainClass = eClass.EPackage.name + "." + eClass.name
             controls += atts.map[ toControl ]
             style = GroupStyle.create[
@@ -141,7 +141,7 @@ class SiriusGenerator {
     
     def toControl(EStructuralFeature att) {
         val it = createControl(att)
-        name = '''«att.EContainingClass.name»_«att.name»_«name»'''
+        name = '''Â«att.EContainingClass.nameÂ»_Â«att.nameÂ»_Â«nameÂ»'''
         labelExpression = att.name // TODO l10n
         
         helpExpression = att.aspect.get(Ext.help, null) // Gen model reap the doc off !!
@@ -179,7 +179,7 @@ class SiriusGenerator {
             style = initStyle(SelectWidgetStyle.create, att)
 
             val enumType = att.EAttributeType
-            candidatesExpression = '''aql:«enumType.EPackage.name»::«enumType.name».eLiterals->collect(e|e.instance)'''
+            candidatesExpression = '''aql:Â«enumType.EPackage.nameÂ»::Â«enumType.nameÂ».eLiterals->collect(e|e.instance)'''
             candidateDisplayExpression = "aql:candidate.toString()" // XXX Should be label provider
         ]
     }
@@ -276,7 +276,7 @@ class SiriusGenerator {
     
     static val rs = new ResourceSetImpl()
     static def  getColor(String name) {
-        val id = URI.createURI("environment:/viewpoint#//@systemColors/@entries[name='"+name+"']")
+        val id = URI.createURI("environment:/viewpoint#//@systemColors/@entries[ name='"+name+"' ]")
         rs.getEObject(id, true) as ColorDescription
     } 
     

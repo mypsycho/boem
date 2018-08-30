@@ -53,12 +53,12 @@ class EqxDesignReversTest extends ReversItTestContext {
     val location = "/fr.ibp.odv.xad2.rcp/description/model.odesign"
     val resource = new ResourceSetImpl().getResource(URI.createPlatformPluginURI(location, true), true)
     val siriusGroup = resource.contents.get(0) as Group
-    val codeCharset = Charset.forName("windows-1252")
+    val codeCharset = Charset.forName("UTF-8")
     
 	/**
 	 * Tests that an element registered against an id can be accessed with its id within the tree
 	 */
-	@Test @Ignore
+	@Test
 	def void testPlainReverse() {
 
         val pack = 'fr.ibp.odv.xad2.rcp'
@@ -91,9 +91,7 @@ class EqxDesignReversTest extends ReversItTestContext {
         
         rv.perform
     }
-    
-
-    
+        
     enum Tab{ Conception, Documentation, Affichage, Generation }
     
    	val expecteds = new ArrayList<ControlDescription>
@@ -142,7 +140,7 @@ class EqxDesignReversTest extends ReversItTestContext {
         	.forEach[ key, list |
 				val tabs = new ArrayList(list.map[ value ])
         		if (tabs != new ArrayList(tabs).sort) { // order of page by tab 
-        			println('''>>>> «key» wrong Page order «tabs»''')
+        			println('''>>>> Â«keyÂ» wrong Page order Â«tabsÂ»''')
 				}
         	] // Note : no instance
  
@@ -160,7 +158,7 @@ class EqxDesignReversTest extends ReversItTestContext {
     }
 	
 	def checkOrder(EClass it) {
-		orders.get(it)?.forEach[tab, orderByUsage |
+		orders.get(it)?.forEach[ tab, orderByUsage |
 			val useds = orderByUsage.values.toSet
 			if (useds.size != 1) {
 				println(">>>> Irregular order " 
@@ -211,7 +209,7 @@ class EqxDesignReversTest extends ReversItTestContext {
     }
     
     def toTabbedClass(PageDescription it) {
-    	val tab = Tab.values.findFirst[t| 
+    	val tab = Tab.values.findFirst[ t| 
 			name.endsWith('_' + t.name + '_Page')
 		]
 		if (tab == null) {
@@ -237,25 +235,25 @@ class EqxDesignReversTest extends ReversItTestContext {
         targetPath.resolve(classId.toPath).toFile[
 '''package fr.ibp.odv.xad2.rcp.model
 
-import static «EmfExtensions.name».Ext.*
+import static Â«EmfExtensions.nameÂ».Ext.*
 
-import «EqxModelExtensions.name».Tab
-import «EmfContribution.name»
-import «EmfStretcher.name»
-import fr.ibp.odv.xad2.model.«name».«name.toFirstUpper»Package
+import Â«EqxModelExtensions.nameÂ».Tab
+import Â«EmfContribution.nameÂ»
+import Â«EmfStretcher.nameÂ»
+import fr.ibp.odv.xad2.model.Â«nameÂ».Â«name.toFirstUpperÂ»Package
 
-class «classId.name» extends «EmfContribution.simpleName» {
+class Â«classId.nameÂ» extends Â«EmfContribution.simpleNameÂ» {
     
-    static val extension «name.toFirstUpper»Package target = «name.toFirstUpper»Package.eINSTANCE
+    static val extension Â«name.toFirstUpperÂ»Package target = Â«name.toFirstUpperÂ»Package.eINSTANCE
     
-    new(«EmfStretcher.simpleName» it) {
+    new(Â«EmfStretcher.simpleNameÂ» it) {
         super(it, target)
     }
     
     override run() {
-    «FOR line : options.filterNull »
-        «line»
-    «ENDFOR»
+    Â«FOR line : options.filterNull Â»
+        Â«lineÂ»
+    Â«ENDFORÂ»
     }
 }
 ''' 
@@ -263,7 +261,7 @@ class «classId.name» extends «EmfContribution.simpleName» {
     }
     
     def extractUsage(GroupDescription it) {
-        val tab = Tab.values.findFirst[t| 
+        val tab = Tab.values.findFirst[ t| 
 			name.endsWith('_' + t.name + '_Reference_Group')
 		]
 		if (tab == null) {
@@ -354,14 +352,14 @@ class «classId.name» extends «EmfContribution.simpleName» {
 	    		if (forced.equals(natural)) {
 	    			null
 	    		} else {
-	    			'''// «key.name».order=«FOR f : forced SEPARATOR ',' »«f.name»«ENDFOR»'''
+	    			'''// Â«key.nameÂ».order=Â«FOR f : forced SEPARATOR ',' Â»Â«f.nameÂ»Â«ENDFORÂ»'''
 	    		}
 	    	].filterNull
     }
     
     def toOptions(EStructuralFeature it) {
         val control = findControl
-        val left = '''  «EContainingClass.toXtend»_«name.toFirstUpper» += '''
+        val left = '''  Â«EContainingClass.toXtendÂ»_Â«name.toFirstUpperÂ» += '''
         if (control == null) {
             return left + Ext.hidden.name
         }
