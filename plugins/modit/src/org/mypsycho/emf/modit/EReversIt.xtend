@@ -43,34 +43,33 @@ class EReversIt {
 	public var EAttribute shortcut = null
 
 	new(String classname, Path dir, Resource... rSet) {
-		this(new ClassId(classname), dir, rSet.map[it -> new ClassId(new ClassId(classname), URI)])
+		this(new ClassId(classname), dir, rSet.map[ it -> new ClassId(new ClassId(classname), URI) ])
 	}
 
 	new(ClassId definition, Path dir, Pair<? extends Notifier, ClassId>... values) {
-		this.mainClass = definition
-		this.target = dir
-		orderedRoots = values.map[key.toEObject]
-		this.roots = if (values.size == 1) #{ values.head.key.toEObject -> definition }
-		else values.toMap( [key.toEObject], [value] )
+		mainClass = definition
+		target = dir
+		orderedRoots = values.map[ key.toEObject ]
+		roots = if (values.size == 1) #{ values.head.key.toEObject -> definition }
+			else values.toMap( [ key.toEObject ], [ value ] )
 	}
 
 	static def toEObject(Notifier it) {
-		if (it instanceof EObject)
-			it
-		else if (it instanceof Resource) it.toContent else throw new IllegalArgumentException("Unsupported type of " +
-			it)
+		if (it instanceof EObject) it
+		else if (it instanceof Resource) toContent 
+		else throw new IllegalArgumentException("Unsupported type of " + it)
 	}
 
 	def perform() throws IOException {
 		extras.clear
 
-		val illegalSplits = splits.filter[it, id|!roots.containsKey(toRoot)].values
+		val illegalSplits = splits.filter[ it, id|!roots.containsKey(toRoot) ].values
 		if (!illegalSplits.empty) {
 			throw new IllegalArgumentException(
 				"Split values " + illegalSplits + " must be contained by reversed resource. Use aliases."
 			)
 		}
-		val illegalAliases = explicitExtras.filter[it, id|roots.containsKey(toRoot)].values
+		val illegalAliases = explicitExtras.filter[ it, id|roots.containsKey(toRoot) ].values
 		if (!illegalAliases.empty) {
 			throw new IllegalArgumentException(
 				"Aliases " + illegalAliases + " must not be contained by reversed resource. Use splits."
@@ -83,14 +82,17 @@ class EReversIt {
 			]
 		]
 
-		var ()=>String doTemplate = if (roots.size == 1) [ templateSimpleMain ]
+		var doTemplate = 
+			if (roots.size == 1) [| templateSimpleMain ]
 			else {
 				// Write class of each elements
 				orderedRoots.forEach [
 					val id = roots.get(it)
-					target.resolve(id.toPath).toFile[ | templatePart(id, it).toString ]
+					target.resolve(id.toPath).toFile[ 
+						templatePart(id, it).toString
+					]
 				]
-				[ templateComposedMain ]
+				[| templateComposedMain ]
 			}
 		// Write main class
 		target.resolve(mainClass.toPath).toFile(doTemplate)
@@ -98,10 +100,14 @@ class EReversIt {
 
 	def templateComposedMain() {
 		templateMain(
-			MAIN_IMPORTS.toInvertedMap[Boolean.TRUE],
+			MAIN_IMPORTS.toInvertedMap[ Boolean.TRUE ],
 			orderedRoots.usedPackages,
 			'''#[
-	«FOR p : orderedRoots.map[ roots.get(it) ] SEPARATOR ',\n'»new «p.qName»(this).call«ENDFOR»
+	«
+FOR p : orderedRoots.map[ roots.get(it) ] SEPARATOR ',\n'
+»new «p.qName»(this).call«
+ENDFOR
+»
 ].assemble'''
 		)
 	}
@@ -125,24 +131,25 @@ class «name» implements Callable<EObject> {
 	}
 
 	override call() {
-	"«name»".alias(«content.templateInnerCreate(importedClasses)»)
+		"«name»".alias(«content.templateInnerCreate(importedClasses)»)
 	}
 
-	def getExtras() {
-	context.extras
-	}
-
-	«IF shortcut !== null »
+	def getExtras() { context.extras }
+	«
+IF shortcut !== null 
+»
+	
 	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
 		context.at(values, key) as T // Xtend inference fails?
-	}
-	«ENDIF»
+	}«
+ENDIF
+»
 
 }
 '''
 	}
 
-	val MAIN_IMPORTS = #{HashMap, EObject, EModIt, ResourceSetImpl, URI}
+	val MAIN_IMPORTS = #{ HashMap, EObject, EModIt, ResourceSetImpl, URI }
 
 	def templateSimpleMain() {
 		val it = orderedRoots.head
@@ -150,7 +157,7 @@ class «name» implements Callable<EObject> {
 
 		templateMain(
 			importeds,
-			#[it].usedPackages,
+			#[ it ].usedPackages,
 			'''"«mainClass.name»".alias(«templateCreate(importeds)»
 ).assemble'''
 		)
@@ -161,7 +168,7 @@ class «name» implements Callable<EObject> {
 		Iterable<Class<?>> packages,
 		String content
 	) {
-		val extrasByName = extras.entrySet.map[value -> key].toList.sortBy[key]
+		val extrasByName = extras.entrySet.map[ value -> key ].toList.sortBy[ key ]
 
 		'''package «mainClass.pack»
 
@@ -185,11 +192,9 @@ class «mainClass.name» {
 		«content»
 	}
 
-	def context() {
-		this
-	}
-
-	«IF shortcut !== null »
+	def context() { this }
+	«IF shortcut !== null»
+	
 	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
 		values.findFirst[ «shortcut.name» == key ]
 	}
@@ -208,27 +213,25 @@ class «mainClass.name» {
 	def String templateInnerCreate(EObject it, Map<Class<?>, Boolean> importeds) {
 		// Find setted attributes, references, <>references
 		val content = #[
-			eClass.EAllAttributes.filter [ a |
-				eIsSet(a) && a.defaultValue != eGet(a)
-			] -> [Object it, Class<?> using|toJava],
-			eClass.EAllReferences.filter [ r |
-				eIsSet(r) && r.isReference
-			] -> [Object it, Class<?> using|(it as EObject).templateRef(using, importeds)],
-			eClass.EAllReferences.filter [ r |
-				eIsSet(r) && r.isContainment
-			] -> [Object it, Class<?> using|(it as EObject).templateCreate(importeds)]
-		]
-		val hasContent = content.map[key].flatten.exists[f|eIsSet(f)]
-
+			eClass.EAllAttributes.filter[ a | eIsSet(a) && a.defaultValue != eGet(a) ]
+				-> [ Object it, Class<?> using | toJava ],
+			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isReference ]
+				-> [ Object it, Class<?> using | (it as EObject).templateRef(using, importeds) ],
+			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isContainment ]
+				-> [ Object it, Class<?> using | (it as EObject).templateCreate(importeds) ]
+		].map[ (key as Iterable<EStructuralFeature>).map[ f | f -> value ] ].flatten.toList
+		
 		'''«templateClass(importeds)».create«
-IF hasContent
-»[«
-FOR c : content»«FOR f : c.key
+IF content.exists[ f | eIsSet(f.key) ]
+»[
+	«
+FOR c : content SEPARATOR '\n' 
+»«templateProperty(c.key, c.value)»«
+ENDFOR
 »
-	«templateProperty(f, c.value)»«
-ENDFOR»«ENDFOR»
-]«ENDIF»'''
-
+]«
+ENDIF
+»'''
 	}
 
 	def String templateAlias(EObject it, Map<Class<?>, Boolean> importeds) {
@@ -237,7 +240,7 @@ ENDFOR»«ENDFOR»
 	}
 
 	def prefix(Pair<Pair<EObject, ? extends Class<?>>, String> path) {
-		if (path.value !== null) (0 ..< (path.value.split(" as ").length - 1)).map["("].join else ""
+		if (path.value !== null) (0 ..< (path.value.split(" as ").length - 1)).map[ "(" ].join else ""
 	}
 
 	def toUsedType(EObject it, Map<Class<?>, Boolean> importeds) {
@@ -324,11 +327,11 @@ ENDIF
 			val values = (element.eGet(it) as Collection<?>)
 			if (values.isEmpty) return ""
 			// Surround when several values are present
-			val valueTexts = values.map[encoding.apply(it, usingType)].toList
-			val displayeds = valueTexts.filter[it !== null].toList
+			val valueTexts = values.map[ encoding.apply(it, usingType) ].toList
+			val displayeds = valueTexts.filter[ it !== null ].toList
 
 			/* Xtend fails to infer on multi inheritance : Pretty collections fails
-			 * val container = if (ordered) '['->']' else '{'->'}'
+			 * val container = if (ordered) '[ '->' ]' else '{'->'}'
 			 * if (displayeds.empty) {
 			 * '''// «safename» values are headless'''
 			 * } else 
@@ -368,25 +371,25 @@ ENDIF
 	}
 
 	def usedPackages(Iterable<EObject> values) {
-		values.map[#[it] + eAllContents.toIterable]
+		values.map[ #[ it ] + eAllContents.toIterable ]
 			.flatten // all EObject
-			.map[classEPackage] // all Class<? extend EPackage>
-			.toSet.sortBy[name] // To have a repeatable import
+			.map[ classEPackage ] // all Class<? extend EPackage>
+			.toSet.sortBy[ name ] // To have a repeatable import
 	}
 
 	def importedClasses(EObject root, Iterable<? extends Class<?>> staticImports) {
-		val it = new HashMap<Class<?>, Boolean>(staticImports.toInvertedMap[Boolean.TRUE])
-		val iAll = #[root] + root.eAllContents.toIterable
+		val it = new HashMap<Class<?>, Boolean>(staticImports.toInvertedMap[ Boolean.TRUE ])
+		val iAll = #[ root ] + root.eAllContents.toIterable
 		iAll.map [
-			#[it] + // element and its references
-			eClass.EAllReferences.filter[!containment] // Containment is reached by allContents 
-			.map[r| eGet(r) ]
+			#[ it ] + // element and its references
+			eClass.EAllReferences.filter[ !containment ] // Containment is reached by allContents 
+			.map[ r| eGet(r) ]
 			.filterNull // get defined
 			.map[
 				if (it instanceof Collection<?>) (it as Collection<? extends EObject>) else #[ it as EObject ]
 			]
 			.flatten.filter[ !splits.containsKey(it) ]
-		].flatten /* all elements + referenced element */ .map[#[it, callPath(false, Collections.emptyMap).key.key]].
+		].flatten /* all elements + referenced element */ .map[ #[ it, callPath(false, Collections.emptyMap).key.key ] ].
 			flatten
 			.map[ eClass.instanceClass ]
 			.toSet.sortBy[ name ] // sort to have always the same import
@@ -394,7 +397,7 @@ ENDIF
 				// println('\timport ' + usedClass.name)
 				if (!containsKey(usedClass)) {
 					put(usedClass, Boolean.valueOf( // Simple name already found
-						!keySet.map[simpleName].exists[equals(usedClass.simpleName)]
+						!keySet.map[ simpleName ].exists[ equals(usedClass.simpleName) ]
 					))
 				}
 			]
@@ -402,7 +405,10 @@ ENDIF
 	}
 
 	static def templateImports(Map<Class<?>, Boolean> importedClasses) {
-		'''«FOR c : importedClasses.entrySet.filter[ value ].map[ key ].toList.sortBy[ name ] SEPARATOR '\n'»import « c.name »«ENDFOR»'''
+		'''«FOR c : importedClasses.entrySet
+				.filter[ value ].map[ key ]
+				.toList.sortBy[ name ] SEPARATOR '\n'
+			»import «c.name»«ENDFOR»'''
 	}
 
 	static def toContent(Resource res) {
@@ -421,7 +427,7 @@ ENDIF
 	}
 
 	static def classEPackage(EObject it) {
-		eClass.EPackage.class.interfaces.findFirst[interfaces.contains(EPackage)]
+		eClass.EPackage.class.interfaces.findFirst[ interfaces.contains(EPackage) ]
 	}
 
 	static dispatch def toJava(Object it) {
