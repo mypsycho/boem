@@ -132,8 +132,8 @@ abstract class EmfAspect<E extends ENamedElement> {
                     specific.put(key, it.value)
                 } else if (it instanceof ENamedElement) {
                     target.assertAncestor(it)
-                } else {
-                    specific.put(it, null)
+                } else { // We use null to undefine an inheritance
+                    specific.put(it, it)
                 }
             ]
         }
@@ -152,7 +152,7 @@ abstract class EmfAspect<E extends ENamedElement> {
         
         override is(ENamedElement it, Object option) {
             val specific = specifics.get(it)
-            if (specific !== null) specific.containsKey(option) else false
+            if (specific !== null) specific.get(option) != null else false
         }
         
         override remove(ENamedElement it, Iterable<?> options) {
