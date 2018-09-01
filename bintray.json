@@ -16,8 +16,8 @@
     },
 
     "version": {
-        "name": "0.1", 
-        "desc": "Nightly",
+        "name": "0.1.nightly", 
+        "desc": "Last version available",
         "released": "2018-08-25",
         "vcs_tag": "master",
         "gpgSign": false
@@ -25,7 +25,7 @@
 
     "#comment-TODO" : "Define the upload pattern from pom version ?",
     "files": [
-        { "includePattern" : "releng/update-site/target/repository/(.*)", "uploadPattern" : "v0.1/$1", "matrixParams": { "override": 1 } }
+        { "includePattern" : "releng/update-site/target/(repository/.*)", "uploadPattern" : "0.1.nightly/$1", "matrixParams": { "override": 1 } }
 	],
 	
     "publish": true
