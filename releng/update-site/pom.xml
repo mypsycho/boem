@@ -23,9 +23,7 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-repository-plugin</artifactId>
 				<configuration>
-					<createArtifactRepository>true</createArtifactRepository>
-					<finalName>${project.groupId}-${unqualifiedVersion}.${buildQualifier}</finalName>
-					<compress>true</compress>
+					<skipArchive>true</skipArchive>
 					<repositoryName>MyPsycho Mod-it ${unqualifiedVersion}.${buildQualifier}</repositoryName>
 				</configuration>
 			</plugin>
