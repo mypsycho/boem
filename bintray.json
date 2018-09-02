@@ -1,13 +1,13 @@
 {
     "package": {
-        "name": "Mod-it",
+        "name": "p2",
         "repo": "modit-update-site",
         "subject": "mypsycho",
-        "desc": "Eclipse plugins for modeling by code. (Pushed by travis-ci from Github)",
+        "desc": "Eclipse plugins for modeling by code. (Pushed by Travis-ci from Github)",
         "website_url": "https://github.com/mypsycho/ModIt/",
         "issue_tracker_url": "https://github.com/mypsycho/ModIt/issues",
         "vcs_url": "https://github.com/mypsycho/ModIt.git",
-        "github_use_tag_release_notes": true,
+        "github_use_tag_release_notes": false,
         "github_release_notes_file": "RELEASE.txt",
         "licenses": [ "EPL-1.0" ],
         "labels": [ "Model", "xtend", "eclipse", "EMF", "Ecore", "mod-it" ],
@@ -16,16 +16,15 @@
     },
 
     "version": {
-        "name": "0.1.nightly", 
+        "name": "${mvn.build.majorVersion}.${mvn.build.minorVersion}", 
         "desc": "Last version available",
-        "released": "2018-08-25",
+        "released": "${mvn.build.date}",
         "vcs_tag": "master",
         "gpgSign": false
     },
 
-    "#comment-TODO" : "Define the upload pattern from pom version ?",
     "files": [
-        { "includePattern" : "releng/update-site/target/(repository/.*)", "uploadPattern" : "0.1.nightly/$1", "matrixParams": { "override": 1 } }
+        { "includePattern" : "releng/update-site/target/repository/(.*)", "uploadPattern" : "$1", "matrixParams": { "override": 1 } }
 	],
 	
     "publish": true
