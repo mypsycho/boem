@@ -14,9 +14,12 @@ abstract class EmfContribution implements Runnable {
         aspect = getAspect(eInstance)
     }
     
-    static def createStretcher(Map<EPackage, (EmfStretcher)=>EmfContribution> contents) {
+    static def createStretcher(Map<EPackage, Class<? extends EmfContribution>> contents) {
         val result = new EmfStretcher(contents.keySet).initialize
-        contents.values.forEach[ it?.apply(result)?.run ]
+        // define contribution
+        contents.values.filterNull.forEach[
+        	getConstructor(EmfStretcher).newInstance(result).run
+        ]
         result
     }
     
