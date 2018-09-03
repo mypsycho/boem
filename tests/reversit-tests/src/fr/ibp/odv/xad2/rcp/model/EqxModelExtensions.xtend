@@ -14,11 +14,10 @@ class EqxModelExtensions {
      }
     
     public static val EmfStretcher STRETCHER = EmfContribution.createStretcher(#{
-        EquinoxeCorePackage.eINSTANCE -> null,
-        EquinoxeComposantsMetierPackage.eINSTANCE -> null,
-        EquinoxeDialoguePackage.eINSTANCE -> null,
-        EquinoxeProcedurePackage.eINSTANCE -> null
+        EquinoxeCorePackage.eINSTANCE -> EquinoxeCoreContrib,
+        EquinoxeComposantsMetierPackage.eINSTANCE -> EquinoxeComposantsMetierContrib,
+        EquinoxeDialoguePackage.eINSTANCE -> EquinoxeDialogueContrib,
+        EquinoxeProcedurePackage.eINSTANCE -> EquinoxeProcedureContrib
     })
-
 
 }

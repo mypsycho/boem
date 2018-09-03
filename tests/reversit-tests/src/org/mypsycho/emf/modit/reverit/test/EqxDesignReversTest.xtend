@@ -46,7 +46,7 @@ import org.mypsycho.emf.reflem.EmfStretcher
 import static extension java.nio.file.Files.*
 
 /**
- * Test the BOEM API for non-containment EReferences
+ * Reverse Sirius design.
  */
 class EqxDesignReversTest extends ReversItTestContext {
     
