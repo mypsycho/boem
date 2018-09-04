@@ -13,26 +13,32 @@
       <genEnumLiterals ecoreEnumLiteral="BoemTest.ecore#//AnEnumeration/LITERAL2"/>
     </genEnums>
     <genClasses ecoreClass="BoemTest.ecore#//A">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/childrenA"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/children2A"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/childA"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/referencesA"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/referenceA"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BoemTest.ecore#//A/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/childrenNodeA"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/childrenNode2A"/>
+      <genFeatures property="None" children="true" createChild="true" propertyCategory=""
+          propertyDescription="" ecoreFeature="ecore:EReference BoemTest.ecore#//A/childNodeA"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/referencesNodeA"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/referenceNodeA"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//A/autoContainementA"/>
     </genClasses>
     <genClasses ecoreClass="BoemTest.ecore#//B">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/childrenB"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/childB"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/referenceB"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/referencesB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/childrenNodeB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/childNodeB"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BoemTest.ecore#//B/enumAttr"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//B/childrenNodeBNode"/>
     </genClasses>
     <genClasses ecoreClass="BoemTest.ecore#//C">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/childrenC"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/childC"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/referencesC"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/referenceC"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/childrenNodeC"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/childNodeC"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/referencesNodeC"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference BoemTest.ecore#//C/referenceNodeC"/>
     </genClasses>
-    <genClasses ecoreClass="BoemTest.ecore#//Node"/>
+    <genClasses ecoreClass="BoemTest.ecore#//Node">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BoemTest.ecore#//Node/children"/>
+    </genClasses>
+    <genClasses ecoreClass="BoemTest.ecore#//BNode"/>
+    <genClasses image="false" ecoreClass="BoemTest.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BoemTest.ecore#//NamedElement/name"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
