@@ -23,6 +23,7 @@ class ModIt<T> {
 	/** Description of the factory */
 	protected val ModItDescriptor<T> description
 
+
 	/**
 	 * A factory with immutable strategy.
 	 * 
@@ -35,27 +36,12 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Creates an {@link EObject} and initializes it when assembling.
+	 * Creates an {@link EObject}.
 	 * 
-	 * @param type of EObject to build
-	 * @param descr parsed by content provider
-	 * @param init of the given {@link EObject}
-	 * @throw IllegalArgumentException if type is not handled by the factory.
+	 * @param type the type of EObject to build
 	 */
-	def <R extends T> R create(Class<R> type, String descr, (R)=>void init) {
-		val it = impl.create(type)
-		if (descr !== null) {
-			if (description.contentProvider === null) {
-				throw new UnsupportedOperationException("Content cannot be provide as contentProvider is null")
-			}
-			impl.bindContent(it, descr)			
-		}
-		if (init !== null) {
-			impl.bindInit(it, init)
-		}
-		ModItAssembler.candidate(it)
-		
-		it
+	def <R extends T> R create(Class<R> type) {
+		create(type, null, null)
 	}
 
 	/**
@@ -79,14 +65,29 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Creates an {@link EObject}.
+	 * Creates an {@link EObject} and initializes it when assembling.
 	 * 
-	 * @param type the type of EObject to build
+	 * @param type of EObject to build
+	 * @param content parsed by content provider
+	 * @param init of the given {@link EObject}
+	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
-	def <R extends T> R create(Class<R> type) {
-		create(type, null, null)
+	def <R extends T> R create(Class<R> type, String content, (R)=>void init) {
+		val it = impl.create(type)
+		if (content !== null) {
+			if (description.contentProvider === null) {
+				throw new UnsupportedOperationException("Content cannot be provide as contentProvider is null")
+			}
+			impl.bindContent(it, content)			
+		}
+		if (init !== null) {
+			impl.bindInit(it, init)
+		}
+		ModItAssembler.candidate(it)
+		
+		it
 	}
-
+	
 	/**
 	 * Builds a proxy to be resolved
 	 * when {@link ModIt#assemble(T)} is called.
@@ -132,6 +133,48 @@ class ModIt<T> {
 	def <R extends T> alias(String id, R it) {
 		impl.bindAlias(it, id)
 		it
+	}
+	
+	/**
+	 * Creates an {@link EObject} and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type the type of EObject to build
+	 */
+	def <R extends T> R aliasCreate(String id, Class<R> type) {
+		aliasCreate(id, type, null, null)
+	}
+
+	/**
+	 * Creates an {@link EObject} and initializes it.
+	 * 
+	 * @param type of EObject to build
+	 * @param initializer of the given {@link EObject}
+	 */
+	def <R extends T> R aliasCreate(Class<R> type, (R)=>void initializer) {
+		create(type, null, initializer)
+	}
+	
+	/**
+	 * Creates an {@link EObject} and initializes it and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type of EObject to build
+	 * @param initializer of the given {@link EObject}
+	 */
+	def <R extends T> R aliasCreate(String id, Class<R> type, (R)=>void initializer) {
+		aliasCreate(id, type, null, initializer)
+	}
+	
+	/**
+	 * Creates an {@link EObject} and initializes it when assembling and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type of EObject to build
+	 * @param content parsed parsed by content provider
+	 */
+	def <R extends T> R aliasCreate(String id, Class<R> type, String content, (R)=>void init) {
+		alias(id, create(type, content, init))
 	}
 
 	/**
