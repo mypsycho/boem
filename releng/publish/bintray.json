@@ -24,8 +24,8 @@
     },
 
     "files": [
-        { "includePattern" : "releng/update-site/target/repository/(.*)", "uploadPattern" : "$1", "matrixParams": { "override": 1 } }
-	],
+        { "includePattern" : "releng/update-site/target/repository/(.*)", "uploadPattern" : "$1", "matrixParams": { "override": 1 } },
+ 	   ],
 	
     "publish": true
 }

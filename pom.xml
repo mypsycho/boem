@@ -29,62 +29,6 @@ http://www.eclipse.org/legal/epl-v10.html
 		</license>
 	</licenses>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mvn.build.date>${maven.build.timestamp}</mvn.build.date>
-		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-	</properties>
-
-	<build>
-		<plugins>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<goals>
-							<goal>parse-version</goal>
-						</goals>
-						<configuration>
-							<propertyPrefix>mvn.build</propertyPrefix>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>configure-bintray</id>
-						<!-- here the phase you need -->
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target</outputDirectory>
-							<resources>
-								<resource>
-									<directory>.</directory>
-									<includes>
-										<include>bintray.json</include>
-									</includes>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-	</build>
-
 	<modules>
 		<module>parent</module>
 		<module>plugins/modit</module>
@@ -103,6 +47,8 @@ http://www.eclipse.org/legal/epl-v10.html
 			<modules>
 				<module>releng/modit-feature</module>
 				<module>releng/update-site</module>
+				<module>docs</module>
+				<module>releng/publish</module>
 			</modules>
 		</profile>
 
