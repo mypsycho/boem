@@ -4,18 +4,19 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.List
 import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 
 class EClassStretcher {
     public val EmfStretcher context
-    public val EClass source
-    public val EmfAspect<EClass> aspect
+    public val EClassifier source
+    public val EmfAspect<EClassifier> aspect
 
     // Built info
     var List<EClass> inheritances = null
-    var Object keys = null
+    var Object keys = null // Possibly an error as Id cannot be composed (unlike SQL)
     
-    new (EmfStretcher context, EClass source) {
+    new(EmfStretcher context, EClass source) {
         this.context = context
         this.source = source
         val parentAspect = context.getAspect(source.EPackage)
@@ -30,25 +31,31 @@ class EClassStretcher {
     }
     
     def void compute() {
-        val result = new ArrayList(source.ESuperTypes.map[ context.computeInheritances(it) ].flatten.toList)
-        for (var i=0; i<result.length; i++) { // We dont iterate on tail to avoid sublist accumulation
-            val head = result.get(i)
-            val tail = result.subList(i, result.length)
-            if (tail.contains(head)) {
-                result.remove(i)
-                i-- // dont move forward
-            }
-        }
+    	if (source instanceof EClass) {
+	        val result = new ArrayList(source.ESuperTypes.map[ context.computeInheritances(it) ].flatten.toList)
+	        for (var i=0; i<result.length; i++) { // We dont iterate on tail to avoid sublist accumulation
+	            val head = result.get(i)
+	            val tail = result.subList(i, result.length)
+	            if (tail.contains(head)) {
+	                result.remove(i)
+	                i-- // dont move forward
+	            }
+	        }
+	        
+	        inheritances = if (result.empty) {
+	            Collections.singletonList(source)
+	        } else {
+	            result.add(0, source)
+	            newImmutableList(result)
+	        }
+	        val keyResult = newImmutableList(inheritances.reverseView.map[ EAttributes ].flatten.filter[ isID ].toList)
+	        
+	        keys = if (keyResult.isEmpty) null else if (keyResult.size == 1) keyResult.head else keyResult
         
-        inheritances = if (result.empty) {
-            Collections.singletonList(source)
         } else {
-            result.add(0, source)
-            newImmutableList(result)
+        	inheritances = Collections.emptyList
+        	
         }
-        val keyResult = newImmutableList(inheritances.reverseView.map[ EAttributes ].flatten.filter[ isID ].toList)
-        
-        keys = if (keyResult.isEmpty) null else if (keyResult.size == 1) keyResult.head else keyResult
     }
     
     def getInheritances() {

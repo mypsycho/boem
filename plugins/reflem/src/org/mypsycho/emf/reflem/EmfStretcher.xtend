@@ -13,6 +13,7 @@ import java.util.Collection
 import java.util.ArrayDeque
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EAttribute
+import org.eclipse.emf.ecore.EClassifier
 
 class EmfStretcher {
     
@@ -24,7 +25,7 @@ class EmfStretcher {
 
     val extras = new HashMap<EClass, EClassStretcher>
     
-    val progressions = new ArrayDeque<EClass>
+    val progressions = new ArrayDeque<EClassifier>
 
     
     new(EPackage... sources) {
