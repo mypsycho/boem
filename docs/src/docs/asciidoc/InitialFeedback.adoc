@@ -1,0 +1,173 @@
+= Feedback: Building a DSL with Eclipse Sirius 
+:source-highlighter: highlightjs
+:revealjs_center: false
+
+== Overview
+
+=== Context
+
+* Project to convert Rational Rose Extensions into Eclipse plugins
+** By translating UML stereotypes in DSL
+* Targeted DSL was important : 300+ classes, 350+ properties
+** A lot of Stereotype packages trnnsformed into 4 Emf Packages
+
+Edition features
+
+* Few types of diagrams expected (4)  
+* but all properties edited through Sirius:EEF and dispatched in 4 tabs.
+
+=== Presented points
+
+* Structural organization (in-short)
+* Eclipse plugins development
+
+== Structural organization: In-short
+
+=== Chosen factory
+
+Maven/tycho, gerrit, Jenkins, Oomph, Jira/confluence (Model-Driven agile!)
+
+=== Notable elements
+
+* A replicable structure for POM as the project were divided in 3 Gits
+* Layout files to keep consistency between oomph descriptors and Maven/Typho TPD
+* Reproducing Eclipse Nature philosophy in POMs using Pom parent and profile
+** For example: Xtend or projecting including code generation
+
+== Development : Limits of model-driven approach
+
+=== Genmodel
+A lot a boiler plates in code and hard to identify specific from mundane
+
+Poor handling of multi-inheritance.
+
+Customization of ItemProviderAdapter is painful.
+
+* Even with EmfLoopHole, each sub-class needed to be rewritten.
+
+Editing properties file was difficult with this number of Emf elements.
+
+* Renaming/refactoring adds pollution
+
+=== Writting Sirius Model
+
+(Un)Fortunately so repetitive 
+
+* Possibility (Compelled) to dev of a creation wizard.
+
+As one-shoot strategy, wizard lacks flexibility when modifying Meta-Model.
+
+**Resulting ODesign is huge !**
+
+== Retrospective analysis
+
+=== Needs ? (Beside using Xtend)
+
+Extends meta-model in seamless way with the implementation
+
+No generation for customization an Ecore Element
+
+Modifications of meta-model should be measured by compilation error
+
+=== Constraints
+
+Different aspects should be attached in a readable unit of code. 
+
+No massive switch forcing functional rules to be separated
+
+* In fact, developer should be able to choose between grouping 
+** by feature (validation, edition, ...)
+** by semantic (package or EClass) 
+
+For example, display, validation and specific actions of 1 element sould be in 1 place
+
+== Proposition
+
+Extending meta-model by code
+
+* Readable syntax (no eAnnotation)
+* Real typed-approach (no symbolic code like plugin.xml extensions)
+
+For example
+[source,xtend]
+----
+       XxNamedElement += #[ // A Emf Class is extended
+          String->[XxNamedElement| name ], // ItemProvider label provider
+          Diagnostic->#[ // Validation Defining validation rule
+            "EmptyName"->error->[XxNamedElement| name==null || name.trim.empty ],
+            "HiddenCar"->warning->[XxNamedElement| name!=null && name.trim != name ],
+        ]
+      ]
+      // Extended features
+      abstractConstrainedMethod_Precondition += multiline  // EEF: Property accepts carriage return.
+      abstractConstrainedMethod_Postcondition += multiline
+      abstractError_QualifiedName += shown
+      abstractError_Domain += shown
+      abstractExtendedReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
+      abstractReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
+      abstractRootElement_StandardGeneration += Tab->Tab.generation  // EEF: Property in a specific category.
+      abstractRootElement_ErrorGeneration += Tab->Tab.generation
+      abstractType_AllAttributes += hidden
+      basicType_MomTypeClass += Tab->Tab.generation
+----
+
+== How to use
+Project https://github.com/mypsycho/modit
+
+=== Available API 
+
+A singleton of EmfStrecher works on a group of EPackage, registers specificities and provides inheritance mechanism.
+
+EmfContribution provides a factory to initialize extensions of EPackage into the singleton.
+
+Each major function (edit, validated, etc) must be supported by an engine based on EmfContribution and running with an EmfStrecher.
+
+=== Example for Sirius
+
+Definition of singleton : EqxModelExtensions
+
+Contribution of model : EquinoxeCoreContrib, EquinoxeComposantsMetierContrib, …
+
+link:https://github.com/mypsycho/ModIt/tree/master/tests/reversit-tests/src-gen/fr/ibp/odv/xad2/rcp/model[code sample]
+
+Engine of Sirius (limited to EEF part) : 1 simple class (<500 lines)
+
+link:https://github.com/mypsycho/ModIt/blob/master/tests/reversit-tests/src/org/mypsycho/emf/modit/reverit/test/SiriusGenerator.xtend[SiriusGenerator]
+
+== Complements
+
+=== To reverse engineer of pivot model (genmodel or sirius)
+
+EReversIt can generate Xtend class matching Emf model
+
+It eases detection of pattern in models.
+
+Use case: Round-trip with Sirius
+* Edit in run mode
+* Reverse to code
+* Update engine accordingly
+
+=== I18n in edit plugin is messy
+
+Xtend syntax leads to a Class-based implementation 
+
+Typed approach (not only String)
+
+Using Xtend template instead of tricky pseudo MessageFormat
+
+== Possible complements
+
+=== In progress : Create an ItemProviderAdapterFactory
+
+Bevahiour can be customize endlessly (not limited to genmodel)
+
+Each function have a default behavior which can be overridden
+
+=== Fields of interest
+
+Validation, actions
+
+=== Existing POC
+
+EEF in Sirius
+
