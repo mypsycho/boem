@@ -37,6 +37,21 @@ http://www.eclipse.org/legal/epl-v10.html
 	<profiles>
 
 		<profile>
+			<id>tests-modules</id>
+			<activation>
+				<property>
+					<name>maven.test.skip</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<modules>
+				<module>tests/dummy-model</module>
+				<module>tests/modit-tests</module>
+				<module>tests/sample-tests</module>
+			</modules>
+		</profile>
+		
+		<profile>
 			<id>releng-modules</id>
 			<activation>
 				<property>
@@ -52,20 +67,6 @@ http://www.eclipse.org/legal/epl-v10.html
 			</modules>
 		</profile>
 
-		<profile>
-			<id>tests-modules</id>
-			<activation>
-				<property>
-					<name>maven.test.skip</name>
-					<value>!true</value>
-				</property>
-			</activation>
-			<modules>
-				<module>tests/dummy-model</module>
-				<module>tests/modit-tests</module>
-				<module>tests/sample-tests</module>
-			</modules>
-		</profile>
 
 	</profiles>
 

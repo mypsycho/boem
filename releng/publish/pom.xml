@@ -33,7 +33,7 @@
 		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>docs</artifactId>
+			<artifactId>update-site</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
@@ -43,51 +43,64 @@
 	<build>
 		<plugins>
 <!-- TODO Copy update-site/target and docs/target  -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<goals>
-							<goal>parse-version</goal>
-						</goals>
-						<configuration>
-							<propertyPrefix>mvn.build</propertyPrefix>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
+
 				<executions>
 					<execution>
-						<id>configure-bintray</id>
-						<!-- here the phase you need -->
+						<id>publish-p2</id>
 						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target</outputDirectory>
+							<outputDirectory>target/site/p2</outputDirectory>
 							<resources>
 								<resource>
-									<directory>.</directory>
-									<includes>
-										<include>bintray.json</include>
-									</includes>
-									<filtering>true</filtering>
+									<directory>../update-site/target/repository</directory>
+									<filtering>false</filtering>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
+					
+					<execution>
+						<id>publish-doc</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/site/slides</outputDirectory>
+							<resources>
+								<resource>
+									<directory>../../docs/target/generated-slides</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					
 				</executions>
 			</plugin>
 
+
 		</plugins>
+		
+		
+		<pluginManagement>
+			<plugins>
+				<plugin>
+
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+		
 	</build>
 
 	

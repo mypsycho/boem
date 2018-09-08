@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project 
-	xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -17,10 +16,10 @@
 	<name>Mod-it Parent</name>
 
 	<properties>
-	    <tpd.groupId>${project.groupId}</tpd.groupId>
-	    <tpd.version>${project.version}</tpd.version>
-        <tpd.classifier>platform</tpd.classifier>
-        <tpd.path>${tpd.classifier}</tpd.path>
+		<tpd.groupId>${project.groupId}</tpd.groupId>
+		<tpd.version>${project.version}</tpd.version>
+		<tpd.classifier>platform</tpd.classifier>
+		<tpd.path>${tpd.classifier}</tpd.path>
 
 		<tycho.version>1.2.0</tycho.version>
 		<xtend.version>2.14.0</xtend.version>
@@ -28,8 +27,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- supported: warning|error|ignore -->
-        <jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
-		
+		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+
 	</properties>
 
 	<build>
@@ -37,14 +36,14 @@
 
 		<plugins>
 
-		    <!-- All inheriting projects are eclipse project. -->
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <extensions>true</extensions>
-            </plugin>
+		  <!-- All inheriting projects are eclipse project. -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<extensions>true</extensions>
+			</plugin>
             
-            <!-- Only for this pom -->
+      <!-- Only for this pom -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -64,10 +63,10 @@
 									<classifier>${tpd.classifier}</classifier>
 								</artifact>
 								<artifact>
-                                    <file>${tpd.path}.target</file>
-                                    <type>target</type>
-                                    <classifier>${tpd.path}</classifier>
-                                </artifact>
+									<file>${tpd.path}.target</file>
+									<type>target</type>
+									<classifier>${tpd.path}</classifier>
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>
@@ -82,14 +81,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement> 
+		
+		<pluginManagement>
 			<plugins>
 				<plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-                <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.1</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>2.7</version>
@@ -100,10 +100,10 @@
 					<version>2.6.1</version>
 				</plugin>
 				<plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.0.0</version>
-                </plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-p2-repository-plugin</artifactId>
@@ -163,17 +163,17 @@
 						<format>'v'yyyyMMdd-HHmm</format>
 						<timestampProvider>jgit</timestampProvider>
 						 <!-- No expression supported for jgit.dirtyWorkingTree; Use property. -->
-                         <jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
+						<jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
 						<jgit.ignore>
 						</jgit.ignore>
 					</configuration>
 				</plugin>
 
-                <plugin>
-                    <groupId>org.eclipse.tycho</groupId>
-                    <artifactId>tycho-source-plugin</artifactId>
-                    <version>${tycho.version}</version>
-                </plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-source-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
 
 
 				<plugin>
@@ -182,78 +182,78 @@
 					<version>${tycho.version}</version>
 					<configuration>
 						<systemProperties> <!-- not sure why. Possibly: as a test write output file, default encoding -->
-                            <file.encoding>${project.build.sourceEncoding}</file.encoding>
-                        </systemProperties>
+							<file.encoding>${project.build.sourceEncoding}</file.encoding>
+						</systemProperties>
 					</configuration>
 				</plugin>
-				
+
 				<plugin>
-                    <groupId>org.eclipse.xtend</groupId>
-                    <artifactId>xtend-maven-plugin</artifactId>
-                    <version>${xtend.version}</version>
-                </plugin>
-                        
+					<groupId>org.eclipse.xtend</groupId>
+					<artifactId>xtend-maven-plugin</artifactId>
+					<version>${xtend.version}</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
 
-	 <profiles>
-        <profile>
-            <id>tycho-source</id>
-            <activation>
-                <file><!-- Active for bundle and tests, neither feature, site nor product -->
-                    <exists>META-INF/MANIFEST.MF</exists>
-                </file>
-            </activation>
+	<profiles>
+		<profile>
+			<id>tycho-source</id>
+			<activation>
+				<file><!-- Active for bundle and tests, neither feature, site nor product -->
+					<exists>META-INF/MANIFEST.MF</exists>
+				</file>
+			</activation>
 
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.tycho</groupId>
-                        <artifactId>tycho-source-plugin</artifactId>
-                        <executions>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-source-plugin</artifactId>
+						<executions>
                         <!-- 
                         Bug ? Default binding in doc seems missing in 0.26.0
                         http://www.eclipse.org/tycho/sitedocs/tycho-source-plugin/plugin-source-mojo.html
                          -->
-	                        <execution>
-	                            <phase>prepare-package</phase>
-	                            <goals>
-	                                <goal>plugin-source</goal>
-	                            </goals>
-	                        </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        
-        <profile>
-            <id>xtend-nature</id>
-            <activation>
-                <file>
-                    <exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
-                </file>
-            </activation>
+							<execution>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>plugin-source</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>xtend-nature</id>
+			<activation>
+				<file>
+					<exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
+				</file>
+			</activation>
 
 
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.xtend</groupId>
-                        <artifactId>xtend-maven-plugin</artifactId>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.xtend</groupId>
+						<artifactId>xtend-maven-plugin</artifactId>
 
-                        <executions>
+						<executions>
 							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+							<execution>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+							</execution>
+						</executions>
                         
                         <!-- Bug xtend 2.14 + Eclipse Photon : https://github.com/eclipse/xtext/issues/1231 -->
-                        <dependencies>
+						<dependencies>
 							<dependency>
 								<groupId>org.eclipse.jdt</groupId>
 								<artifactId>org.eclipse.jdt.core</artifactId>
@@ -270,16 +270,16 @@
 								<version>3.8.0</version>
 							</dependency>
 						</dependencies>
-					
-					
-					
-                    </plugin>
-					
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
-	
+
+
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
 </project>
 

@@ -83,7 +83,7 @@
 					-->
 				</dependencies>
 				<configuration>
-					<sourceDirectory>src/docs/asciidoc</sourceDirectory>
+					<sourceDirectory>src/docs/adocrjs</sourceDirectory>
 				</configuration>
 				<executions>
 					<execution>
