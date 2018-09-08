@@ -19,6 +19,11 @@
 		<revealjs.version>3.5.0</revealjs.version>
 		<!-- Use 'master' as version and remove the 'v' prefixing the download url to use the current snapshot version -->
 		<asciidoctor-revealjs.version>1.0.4</asciidoctor-revealjs.version>
+		<revealjs.theme>sky</revealjs.theme>
+		<!-- revealjs.theme 
+		Black (default), White, League, Sky, Beige, 
+		Simple, Serif, Blood, Night, Moon, Solarized 
+		-->
 	</properties>
 
 	<build>
@@ -63,19 +68,19 @@
 
 				<dependencies>
 					<!-- Comment this section to use the default jruby artifact provided by the plugin 
-						<dependency> 
+					<dependency> 
 						<groupId>org.jruby</groupId> 
 						<artifactId>jruby-complete</artifactId> 
 						<version>${jruby.version}</version> 
-						</dependency>
-						 -->
+					</dependency>
+					-->
 					<!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin 
-						<dependency> 
+					<dependency> 
 						<groupId>org.asciidoctor</groupId> 
 						<artifactId>asciidoctorj</artifactId> 
 						<version>${asciidoctorj.version}</version> 
-						</dependency> 
-						-->
+					</dependency> 
+					-->
 				</dependencies>
 				<configuration>
 					<sourceDirectory>src/docs/asciidoc</sourceDirectory>
@@ -93,13 +98,13 @@
 							<templateDir>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates/slim</templateDir>
 							<sourceHighlighter>coderay</sourceHighlighter>
 							<attributes>
-								<!-- As we are downloading reveal.js in runtime, it sits in a nonstandard 
-									folder `reveal.js-${revealjs.version}` -->
+								<!-- As we are downloading reveal.js in runtime, 
+								it sits in a nonstandard folder `reveal.js-${revealjs.version}` -->
 								<revealjsdir>reveal.js-${revealjs.version}</revealjsdir>
-								<!-- put here the reveal.js specific attributes -->
-								<sourcedir>${basedir}/src/main/java</sourcedir>
-								<revealjs_theme>black</revealjs_theme>
-								<revealjs_transition>linear</revealjs_transition>
+								<!-- reveal.js specific attributes -->
+								<sourcedir>${basedir}/src/docs/asciidoc</sourcedir>
+								<revealjs_theme>${revealjs.theme}</revealjs_theme>
+								<revealjs_transition>convex</revealjs_transition>
 								<project-version>${project.version}</project-version>
 							</attributes>
 						</configuration>
