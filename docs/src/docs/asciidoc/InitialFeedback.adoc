@@ -1,20 +1,24 @@
 = Feedback: Building a DSL with Eclipse Sirius 
 :source-highlighter: highlightjs
 :revealjs_center: false
+:customcss: compact.css
 
 == Overview
 
 === Context
 
-* Project to convert Rational Rose Extensions into Eclipse plugins
-** By translating UML stereotypes in DSL
-* Targeted DSL was important : 300+ classes, 350+ properties
-** A lot of Stereotype packages trnnsformed into 4 Emf Packages
+Project to convert Rational Rose Extensions into Eclipse plugins
+
+* By translating UML stereotypes into Ecore classes
+
+Targeted DSL was important : 300+ classes, 350+ properties
+
+* A lot of Stereotype packages transformed into 4 Emf Packages
 
 Edition features
 
-* Few types of diagrams expected (4)  
-* but all properties edited through Sirius:EEF and dispatched in 4 tabs.
+* Few types of diagrams were expected (4)  
+* but all properties to edit through Sirius:EEF and dispatched in 4 tabs.
 
 === Presented points
 
@@ -25,19 +29,24 @@ Edition features
 
 === Chosen factory
 
-Maven/tycho, gerrit, Jenkins, Oomph, Jira/confluence (Model-Driven agile!)
+Code: Maven/tycho, gerrit, Jenkins, Oomph, 
+
+Doc/management: Jira/confluence (Model-Driven agile!)
 
 === Notable elements
 
-* A replicable structure for POM as the project were divided in 3 Gits
-* Layout files to keep consistency between oomph descriptors and Maven/Typho TPD
-* Reproducing Eclipse Nature philosophy in POMs using Pom parent and profile
-** For example: Xtend or projecting including code generation
+A replicable structure for POM as the project are divided in 3 Gits
+
+Layout files to keep consistency between oomph descriptors and Maven/Typho TPD
+
+Reproducing Eclipse Nature philosophy in POMs using POM Parent and profile
+* For example: Xtend or projecting including code generation
 
 == Development : Limits of model-driven approach
 
 === Genmodel
-A lot a boiler plates in code and hard to identify specific from mundane
+
+A lot a boiler plates in code and hard to identify specific from mundane.
 
 Poor handling of multi-inheritance.
 
@@ -45,7 +54,7 @@ Customization of ItemProviderAdapter is painful.
 
 * Even with EmfLoopHole, each sub-class needed to be rewritten.
 
-Editing properties file was difficult with this number of Emf elements.
+Editing plugin.properties file was difficult with this number of EMF elements.
 
 * Renaming/refactoring adds pollution
 
@@ -53,7 +62,7 @@ Editing properties file was difficult with this number of Emf elements.
 
 (Un)Fortunately so repetitive 
 
-* Possibility (Compelled) to dev of a creation wizard.
+(Compelled)Possibility to dev of a creation wizard.
 
 As one-shoot strategy, wizard lacks flexibility when modifying Meta-Model.
 
@@ -61,13 +70,13 @@ As one-shoot strategy, wizard lacks flexibility when modifying Meta-Model.
 
 == Retrospective analysis
 
-=== Needs ? (Beside using Xtend)
+=== Needs ?
 
-Extends meta-model in seamless way with the implementation
+Extend meta-model in seamless way with the implementation
 
-No generation for customization an Ecore Element
+Avoid generation for customization an Ecore Element
 
-Modifications of meta-model should be measured by compilation error
+Modifications of meta-model leads to compilation error
 
 === Constraints
 
@@ -75,40 +84,44 @@ Different aspects should be attached in a readable unit of code.
 
 No massive switch forcing functional rules to be separated
 
-* In fact, developer should be able to choose between grouping 
-** by feature (validation, edition, ...)
-** by semantic (package or EClass) 
+In fact, developer should be able to choose between  
 
-For example, display, validation and specific actions of 1 element sould be in 1 place
+** grouping by feature (validation, edition, ...)
+** grouping by semantic (package or EClass) 
+
+Example: display, validation and specific actions of 1 element should be in 1 class.
 
 == Proposition
 
 Extending meta-model by code
 
 * Readable syntax (no eAnnotation)
-* Real typed-approach (no symbolic code like plugin.xml extensions)
+* Real typed-approach (no symbolic code like in plugin.xml extensions)
 
-For example
-[source,xtend]
+[%notitle]
+=== Code sample
+[source]
 ----
-       XxNamedElement += #[ // A Emf Class is extended
-          String->[XxNamedElement| name ], // ItemProvider label provider
-          Diagnostic->#[ // Validation Defining validation rule
-            "EmptyName"->error->[XxNamedElement| name==null || name.trim.empty ],
-            "HiddenCar"->warning->[XxNamedElement| name!=null && name.trim != name ],
-        ]
-      ]
-      // Extended features
-      abstractConstrainedMethod_Precondition += multiline  // EEF: Property accepts carriage return.
-      abstractConstrainedMethod_Postcondition += multiline
-      abstractError_QualifiedName += shown
-      abstractError_Domain += shown
-      abstractExtendedReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
-      abstractReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
-      abstractRootElement_StandardGeneration += Tab->Tab.generation  // EEF: Property in a specific category.
-      abstractRootElement_ErrorGeneration += Tab->Tab.generation
-      abstractType_AllAttributes += hidden
-      basicType_MomTypeClass += Tab->Tab.generation
+XxNamedElement += #[ // A Emf Class is extended
+  String->[XxNamedElement| name ], // ItemProvider label provider
+  Diagnostic->#[ // Validation Defining validation rule
+    "EmptyName"->error->[XxNamedElement| name==null || name.trim.empty ],
+    "HiddenCar"->warning->[XxNamedElement| name!=null && name.trim != name ],
+  ]
+]
+// Extended features
+//-- EEF: Property accepts carriage return.
+abstractConstrainedMethod_Precondition += multiline
+abstractConstrainedMethod_Postcondition += multiline
+abstractError_QualifiedName += shown
+abstractError_Domain += shown
+abstractExtendedReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
+abstractReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
+//-- EEF: Property in a specific category.
+abstractRootElement_StandardGeneration += Tab->Tab.generation
+abstractRootElement_ErrorGeneration += Tab->Tab.generation
+abstractType_AllAttributes += hidden
+basicType_MomTypeClass += Tab->Tab.generation
 ----
 
 == How to use
@@ -120,7 +133,7 @@ A singleton of EmfStrecher works on a group of EPackage, registers specificities
 
 EmfContribution provides a factory to initialize extensions of EPackage into the singleton.
 
-Each major function (edit, validated, etc) must be supported by an engine based on EmfContribution and running with an EmfStrecher.
+Major functions (edit, validated, etc) supported by 1 engine based on EmfContribution keys and running with an EmfStrecher.
 
 === Example for Sirius
 
@@ -136,18 +149,20 @@ link:https://github.com/mypsycho/ModIt/blob/master/tests/reversit-tests/src/org/
 
 == Complements
 
-=== To reverse engineer of pivot model (genmodel or sirius)
+=== Reverse engineer of existing models (genmodel, sirius, test)
 
-EReversIt can generate Xtend class matching Emf model
+EReversIt can generate Xtend classes matching any EMF model.
 
-It eases detection of pattern in models.
+Eases detection of pattern in models.
 
 Use case: Round-trip with Sirius
 * Edit in run mode
 * Reverse to code
 * Update engine accordingly
 
-=== I18n in edit plugin is messy
+=== I18n alternative using Xtend syntax
+
+Syntax of i18n Edit plugin or Eclipse is messy and limited
 
 Xtend syntax leads to a Class-based implementation 
 
@@ -157,17 +172,17 @@ Using Xtend template instead of tricky pseudo MessageFormat
 
 == Possible complements
 
-=== In progress : Create an ItemProviderAdapterFactory
+=== ItemProviderAdapterFactory <In progress>
 
-Bevahiour can be customize endlessly (not limited to genmodel)
+Behavior can be customize endlessly (genmodel is limited by its model)
 
 Each function have a default behavior which can be overridden
 
-=== Fields of interest
+=== Other fields of interest
 
 Validation, actions
 
 === Existing POC
 
-EEF in Sirius
+EEF Group for Sirius
 
