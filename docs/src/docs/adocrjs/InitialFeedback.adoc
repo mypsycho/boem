@@ -1,105 +1,151 @@
-= Feedback: Building a DSL with Eclipse Sirius 
+// Syntax hints:
+//   No empty first page : can be filled with sub-titles
+//   All sentences are separated by 1 empty line
+//   3 empty lines for new slide (==)
+//   Max lines 10 (11th is too low)
+//   Return carriage at 15 chars:
+//   ____1_________2_________3_________4_________5
+//   No space after colon (:)
+//   Punctation !
+
 :source-highlighter: highlightjs
-:revealjs_center: false
+:revealjs_center: true
 :customcss: compact.css
 
-== Overview
 
-=== Context
+= Feedback: Building a DSL with Eclipse Sirius 
 
-Project to convert Rational Rose Extensions into Eclipse plugins
+* _Project Overview_
 
-* By translating UML stereotypes into Ecore classes
+* _Structural organization (in-short)_
 
-Targeted DSL was important : 300+ classes, 350+ properties
+* _Eclipse plugins development_
 
-* A lot of Stereotype packages transformed into 4 Emf Packages
 
-Edition features
 
-* Few types of diagrams were expected (4)  
-* but all properties to edit through Sirius:EEF and dispatched in 4 tabs.
+== Project overview
 
-=== Presented points
+Convert Rational Rose Extensions into Eclipse 
+plugins
 
-* Structural organization (in-short)
-* Eclipse plugins development
+* From UML stereotypes to Ecore classes
 
-== Structural organization: In-short
+Targeted DSL was broad:
 
-=== Chosen factory
+* 300+ classes, 350+ properties
 
-Code: Maven/tycho, gerrit, Jenkins, Oomph, 
+* A lot of Stereotype packages transformed into 4 
+Emf Packages
 
-Doc/management: Jira/confluence (Model-Driven agile!)
+=== Edition features
+
+* Few types of diagrams were expected (4)
+  
+* but all properties to edit through Sirius:EEF and 
+dispatched in 4 tabs.
+
+
+
+== Structural organization 
+
+In-short (not the focus)
+
+* Code: Maven/tycho, gerrit, Jenkins, Oomph, 
+
+* Doc/management: Jira/Confluence _Model-Driven agile_
 
 === Notable elements
 
-A replicable structure for POM as the project are divided in 3 Gits
+A replicable structure for POM as the project are 
+divided in 3 Gits
 
-Layout files to keep consistency between oomph descriptors and Maven/Typho TPD
+Layout files to keep consistency between Oomph 
+descriptors and Maven/Typho TPD
 
-Reproducing Eclipse Nature philosophy in POMs using POM Parent and profile
-* For example: Xtend or projecting including code generation
+Reproducing Eclipse Nature philosophy in POMs 
+using POM Parent and profile
 
-== Development : Limits of model-driven approach
+* For example: Xtend or projecting including code 
+generation
 
-=== Genmodel
 
-A lot a boiler plates in code and hard to identify specific from mundane.
+
+== Development: Limits of model-driven approach
+
+* Using Genmodel
+
+* Writing Sirius Model
+
+=== Using Genmodel
+
+A lot a boiler plates in code and hard to identify 
+specific from mundane.
 
 Poor handling of multi-inheritance.
 
-Customization of ItemProviderAdapter is painful.
+Even with EmfLoopHole, customization of 
+ItemProviderAdapter is painful.
 
-* Even with EmfLoopHole, each sub-class needed to be rewritten.
+Editing plugin.properties file was laborious du to 
+size.
 
-Editing plugin.properties file was difficult with this number of EMF elements.
-
-* Renaming/refactoring adds pollution
-
-=== Writting Sirius Model
+=== Writing Sirius Model
 
 (Un)Fortunately so repetitive 
 
-(Compelled)Possibility to dev of a creation wizard.
+* Able/Compelled to dev of a creation wizard. [ :-( ]
 
-As one-shoot strategy, wizard lacks flexibility when modifying Meta-Model.
+* As one-shoot strategy, wizard lacks flexibility 
+when modifying Meta-Model.
 
 **Resulting ODesign is huge !**
 
+
+
 == Retrospective analysis
+
+Needs and constraints:
 
 === Needs ?
 
-Extend meta-model in seamless way with the implementation
+Extend meta-model in seamless way with the 
+implementation.
 
-Avoid generation for customization an Ecore Element
+Avoid generation for customization an Ecore 
+Element.
 
-Modifications of meta-model leads to compilation error
+Modifications of meta-model leads to compilation 
+errors.
 
 === Constraints
 
-Different aspects should be attached in a readable unit of code. 
+Different aspects should be attached in a readable 
+unit of code: 
 
-No massive switch forcing functional rules to be separated
+No structural switch splitting functional rules.
 
-In fact, developer should be able to choose between  
+Be able to choose between:
 
 ** grouping by feature (validation, edition, ...)
+
 ** grouping by semantic (package or EClass) 
 
-Example: display, validation and specific actions of 1 element should be in 1 class.
+For 1 element, Display, validation or actions could 
+be in 1 class.
+
+
 
 == Proposition
 
-Extending meta-model by code
+Extending meta-model by code:
 
-* Readable syntax (no eAnnotation)
-* Real typed-approach (no symbolic code like in plugin.xml extensions)
+* Readable syntax (no eAnnotation).
 
-[%notitle]
+* Real typed-approach: no symbolic code like in 
+plugin.xml extensions.
+
 === Code sample
+
 [source]
 ----
 XxNamedElement += #[ // A Emf Class is extended
@@ -124,65 +170,86 @@ abstractType_AllAttributes += hidden
 basicType_MomTypeClass += Tab->Tab.generation
 ----
 
+
+
 == How to use
+
 Project https://github.com/mypsycho/modit
+
+Extending BOEM approach: model-by-code.
 
 === Available API 
 
-A singleton of EmfStrecher works on a group of EPackage, registers specificities and provides inheritance mechanism.
+A singleton of EmfStrecher works on a group of 
+EPackage, registers specificities and provides 
+inheritance mechanism.
 
-EmfContribution provides a factory to initialize extensions of EPackage into the singleton.
+EmfContribution provides a factory to initialize 
+extensions of EPackage into the singleton.
 
-Major functions (edit, validated, etc) supported by 1 engine based on EmfContribution keys and running with an EmfStrecher.
+Major functions (edit, validated, etc) supported by
+1 engine based on EmfContribution keys and running with an EmfStrecher.
 
 === Example for Sirius
 
-Definition of singleton : EqxModelExtensions
+Definition of singleton: EqxModelExtensions
 
-Contribution of model : EquinoxeCoreContrib, EquinoxeComposantsMetierContrib, …
+Contribution of model: EquinoxeCoreContrib, 
+EquinoxeComposantsMetierContrib, ...
 
 link:https://github.com/mypsycho/ModIt/tree/master/tests/reversit-tests/src-gen/fr/ibp/odv/xad2/rcp/model[code sample]
 
-Engine of Sirius (limited to EEF part) : 1 simple class (<500 lines)
+Engine of Sirius (limited to EEF part): 1 simple 
+class (<500 lines).
 
 link:https://github.com/mypsycho/ModIt/blob/master/tests/reversit-tests/src/org/mypsycho/emf/modit/reverit/test/SiriusGenerator.xtend[SiriusGenerator]
 
+
+
 == Complements
 
-=== Reverse engineer of existing models (genmodel, sirius, test)
+Other available elements:
 
-EReversIt can generate Xtend classes matching any EMF model.
+=== Reverse engineer of existing models
+
+Applicable to genmodel, sirius, test, ...
+
+EReversIt can generate Xtend classes matching any 
+EMF model.
 
 Eases detection of pattern in models.
 
-Use case: Round-trip with Sirius
+Use case: **Round-trip with Sirius**
+
 * Edit in run mode
+
 * Reverse to code
+
 * Update engine accordingly
 
 === I18n alternative using Xtend syntax
 
-Syntax of i18n Edit plugin or Eclipse is messy and limited
+Syntax of i18n Edit plugin or Eclipse is messy and 
+limited.
 
-Xtend syntax leads to a Class-based implementation 
+Xtend syntax leads to a Class-based approach. 
 
-Typed approach (not only String)
+Typed approach (not only String).
 
-Using Xtend template instead of tricky pseudo MessageFormat
+Using Xtend template instead of tricky pseudo 
+MessageFormat.
+
+
 
 == Possible complements
 
-=== ItemProviderAdapterFactory <In progress>
+* ItemProviderAdapterFactory _In progress_
+** Customizable endlessly (unlike genmodel).
+** Functions have a overridable behavior.
 
-Behavior can be customize endlessly (genmodel is limited by its model)
+* Other fields of interest: Validation, actions ...
 
-Each function have a default behavior which can be overridden
+* Existing POC: EEF Group for Sirius.
 
-=== Other fields of interest
 
-Validation, actions
-
-=== Existing POC
-
-EEF Group for Sirius
-
+// end-of-file
