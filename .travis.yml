@@ -7,11 +7,13 @@ jobs:
   include:
   - stage: head
     script: mvn -B verify
+    
+# Need to deploy to bintray as github pages cannot handle several version !
 deploy:
   provider: pages
   skip_cleanup: true # to upload artifacts created during the build
   github-token: $GITHUB_TOKEN  # See in the settings of repo
-  local-dir: "releng/publish/target"
-  public_repo: "mypsycho/modit-updatesite"
+  local-dir: "releng/publish/target/site"
+  repo: mypsycho/modit-updatesite
   on:
     branch: master

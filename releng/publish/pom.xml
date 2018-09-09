@@ -41,14 +41,30 @@
 	</dependencies>
 
 	<build>
+	
 		<plugins>
-<!-- TODO Copy update-site/target and docs/target  -->
-
 
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-
 				<executions>
+														
+					<execution>
+						<id>publish-info</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/site</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/docs/asciidoc</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				
 					<execution>
 						<id>publish-p2</id>
 						<phase>package</phase>
@@ -86,14 +102,13 @@
 				</executions>
 			</plugin>
 
-
 		</plugins>
 		
 		
 		<pluginManagement>
 			<plugins>
+				
 				<plugin>
-
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.1.0</version>
 				</plugin>
