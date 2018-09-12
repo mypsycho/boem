@@ -30,24 +30,44 @@
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>update-site</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
-	
+
 		<plugins>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>output-html</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/site</outputDirectory>
+							<backend>html</backend>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+
 
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
-														
+
 					<execution>
 						<id>publish-info</id>
 						<phase>package</phase>
@@ -64,9 +84,9 @@
 							</resources>
 						</configuration>
 					</execution>
-				
+
 					<execution>
-						<id>publish-p2</id>
+						<id>publish-p2</id> <!-- from update-site -->
 						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -81,9 +101,9 @@
 							</resources>
 						</configuration>
 					</execution>
-					
+
 					<execution>
-						<id>publish-doc</id>
+						<id>publish-doc</id> <!-- from docs -->
 						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -98,27 +118,33 @@
 							</resources>
 						</configuration>
 					</execution>
-					
+
 				</executions>
 			</plugin>
 
 		</plugins>
-		
-		
+
+
 		<pluginManagement>
 			<plugins>
-				
+
 				<plugin>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.1.0</version>
 				</plugin>
 
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<version>1.5.6</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
-		
+
 	</build>
 
-	
+
 
 </project>
 

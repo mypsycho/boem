@@ -144,9 +144,9 @@ Extending meta-model by code:
 * Real typed-approach: no symbolic code like in 
 plugin.xml extensions.
 
-=== Code sample
+=== Expected code
 
-[source]
+[source,scala]
 ----
 XxNamedElement += #[ // A Emf Class is extended
   String->[XxNamedElement| name ], // ItemProvider label provider
@@ -156,20 +156,18 @@ XxNamedElement += #[ // A Emf Class is extended
   ]
 ]
 // Extended features
-//-- EEF: Property accepts carriage return.
+//   EEF: Property accepts carriage return.
 abstractConstrainedMethod_Precondition += multiline
 abstractConstrainedMethod_Postcondition += multiline
 abstractError_QualifiedName += shown
 abstractError_Domain += shown
 abstractExtendedReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
 abstractReturningMethod_ReturnTypeDocumentation += #[ Tab->Tab.documentation, multiline ]
-//-- EEF: Property in a specific category.
+//   EEF: Property in a specific category.
 abstractRootElement_StandardGeneration += Tab->Tab.generation
 abstractRootElement_ErrorGeneration += Tab->Tab.generation
 abstractType_AllAttributes += hidden
-basicType_MomTypeClass += Tab->Tab.generation
 ----
-
 
 
 == How to use

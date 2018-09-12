@@ -24,7 +24,11 @@ It has been created and used in industrial project to ease the creation input fo
 
 Install the feature Mod-it Feature (...) from one of the following update site:
 
-[Update site 1.0.0](P2 Update site 0.1.0)
+link:p2[P2 Update-Site]
+
+== Origin of the project
+
+link:slides/InitialFeedback.html[Project feedback]
 
 == Usage
 
@@ -33,7 +37,7 @@ Create a Mod-it factory
 
 [source]
 ----
-extension factory = EModIt.using(YourMM.eINSTANCE)
+extension factory = EModIt.using(YourPackage.eINSTANCE)
 ----
 
 _Keyword extension provides new fonctions to Class of EObject_
@@ -88,25 +92,25 @@ val model = B.create [
   name = "AName"
 
   // Adds one child with reference
-  childrenNodeA += "id0" >> Node.create [
+  childrenNodeA += "id0".aliasCreate(Node) [
       name = "ANodeName0"
   ]
   // Adds several children at once with references
   childrenNodeA += #[
-    "id1" >> Node.create [
+    "id1".aliasCreate(Node) [
       name = "ANodeName1"
     ],
-    "id2" >> Node.create [
+    "id2".aliasCreate(Node) [
       name = "ANodeName2"
     ]
   ]
 
   // Adds several children at once with references
   childrenNodeB += #[
-    "id3" >> Node.create [
+    "id3".aliasCreate(Node) [
       name = "ANodeName3"
     ],
-    "id4" >> Node.create [
+    "id4".aliasCreate(Node) [
       name = "ANodeName4"
     ]
   ]
@@ -182,7 +186,7 @@ You can also use a shorter syntax to access your elements
 ----
 val model = A.create [
   name = "AName"
-  childrenNodeA += "id1" >> Node.create [
+  childrenNodeA += "id1".aliasCreate(Node) [
     name = "ANode"
   ]
 ].assemble
@@ -200,10 +204,10 @@ assertTrue(target == "id1" => model)
 ----
 val it = A.create [
   name = "AName"
-  autoContainementA += "id0" >> B.create [
+  autoContainementA += "id0".aliasCreate(B) [
     referenceNodeA = Node.createRef("id1")
   ]
-  childrenNodeA += "id1" >> Node.create [
+  childrenNodeA += "id1".aliasCreate(Node) [
     name = "ANode"
   ]
 ].assemble
@@ -215,10 +219,10 @@ or with a shorter syntax
 ----
 val it = A.create [
   name = "AName"
-  autoContainementA += "id0" >> B.create [
-    referenceNodeA = Node << "id1"
+  autoContainementA += "id0".aliasCreate(B) [
+    referenceNodeA = Node.ref("id1")
   ]
-  childrenNodeA += "id1" >> Node.create [
+  childrenNodeA += "id1".aliasCreate(Node) [
     name = "ANode"
   ]
 ].assemble
@@ -227,9 +231,10 @@ val it = A.create [
 ==== How to update an element
 [source]
 ----
+// In real code, declare pool as extension
 val pool = A.create [
-  autoContainementA += "B" >> B.create [
-    autoContainementA += "D" >> C.create
+  autoContainementA += "B".aliasCreate(B) [
+    autoContainementA += "D".aliasCreate(C)
   ]
 ].assemble
 
@@ -247,24 +252,26 @@ pool.update [
   ]
 ]
 
-assertEquals("NameA", model.root.name)
-assertEquals("NameB", model.access(B, "B").name)
-assertEquals("NameC", model.access(C, "C").name)
+assertEquals("NameA", pool.root.name)
+assertEquals("NameB", pool.access(B, "B").name)
+assertEquals("NameC", pool.access(C, "C").name)
 
 pool.access(B, "B").name = "NameB2"
 pool.access(C, "C").name = "NameB2"
 
-assertEquals("NameB2", model.access(B, "B").name)
-assertEquals("NameC2", model.access(C, "C").name)
+assertEquals("NameB2", pool.access(B, "B").name)
+assertEquals("NameC2", pool.access(C, "C").name)
 ----
 
 == Contributing
 1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
+2. Create your feature branch: 
+`git checkout -b my-new-feature`
+3. Commit your changes: 
+`git commit -am 'Add some feature'`
+4. Push to the branch: 
+`git push origin my-new-feature`
 5. Submit a pull request.
 
 == License
-[Eclipse Public License - v 1.0](https://www.eclipse.org/legal/epl-v10.html)  
-[Contribution guidelines for this project](docs/CONTRIBUTING.md)
+link:https://www.eclipse.org/legal/epl-v10.html[Eclipse Public License - v 1.0] 
