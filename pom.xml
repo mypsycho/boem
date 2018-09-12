@@ -29,6 +29,7 @@ http://www.eclipse.org/legal/epl-v10.html
 		</license>
 	</licenses>
 
+
 	<modules>
 		<module>parent</module>
 		<module>plugins/modit</module>
@@ -69,6 +70,49 @@ http://www.eclipse.org/legal/epl-v10.html
 
 
 	</profiles>
+
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- Configuration to update version -->
+					<!-- Command remind
+					mvn -B gitflow:release -DpushRemote=false
+					option: -DversionDigitToIncrement=0  'increase major
+					option: -DversionDigitToIncrement=1  'increase minor
+					option: -DversionDigitToIncrement=2  'increase patch
+					option: (no versionDigitToIncrement) 'Last part increment
+					option: -DskipTag=true 'when tag cannot be pushed
+					
+					 -->
+					<groupId>com.amashchenko.maven.plugin</groupId>
+					<artifactId>gitflow-maven-plugin</artifactId>
+					<version>1.9.0</version>
+					<configuration>
+						<tychoBuild>true</tychoBuild>
+						<gitFlowConfig>
+							<productionBranch>master</productionBranch>
+							<developmentBranch>master</developmentBranch>
+						</gitFlowConfig>
+						<releaseRebase>true</releaseRebase>
+						<origin>origin</origin>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-versions-plugin</artifactId>
+					<version>1.1.0</version>
+					<configuration>
+						<!-- List of ArtifactIds reachable by this pom -->
+						<artifacts>container,parent,docs,publish</artifacts> <!-- or releng/publish ? -->
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 
 </project>
 
