@@ -121,7 +121,7 @@ class ModIt<T> {
 	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
 	def <R extends T> List<R> ref(Class<R> type, String... ids) {
-		ids.map[ impl.ref(type, it, null) ].toList
+		ids.map[ ref(type, it, null) ].toList
 	}
 
 	/**
@@ -151,8 +151,8 @@ class ModIt<T> {
 	 * @param type of EObject to build
 	 * @param initializer of the given {@link EObject}
 	 */
-	def <R extends T> R aliasCreate(Class<R> type, (R)=>void initializer) {
-		create(type, null, initializer)
+	def <R extends T> R aliasCreate(String id, Class<R> type, String content) {
+		aliasCreate(id, type, content, null)
 	}
 	
 	/**
