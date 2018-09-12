@@ -10,11 +10,12 @@ import fr.obeo.dsl.dart.dart.Parameter
 import fr.obeo.dsl.dart.dart.Project
 import java.io.File
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.xmi.XMLResource
 import org.mypsycho.emf.modit.EModIt
+import fr.obeo.dsl.dart.dart.Typed
 
 class MainLauncher {
 	
-
 	static extension final EModIt factory = EModIt.using(DartPackage.eINSTANCE) [
 		idProvider = [ toID ]
 	]
@@ -26,8 +27,6 @@ class MainLauncher {
 		else if (parent === null) name
 		else parent.toID?.concat("::" +name) ?: null
 	}
-
-
 	
 	def static onAll(EObject it) {
 		#[ it ] + [ it.eAllContents() ]
@@ -50,6 +49,7 @@ class MainLauncher {
 			
 		// Do some real stuff
 		content => [
+			
 			packages += #[ 
 				Package.create[
 					name = "myBusiness"
@@ -75,9 +75,7 @@ class MainLauncher {
 										Parameter.create[
 											name = "args"
 											type = Class.ref(content.name+"::Dart Standard Library::dart:core::List")
-										]
-									]
-								],
+								] ] ],
 								Function.create[
 									name = "start"
 								],
@@ -87,17 +85,13 @@ class MainLauncher {
 								Function.create[ 
 									name = "isRunning"
 									type = Class.ref(content.name+"::Dart Standard Library::dart:core::bool")
-								]
-							]
-						]
-					
-					]
-				]
-			]
+			] ] ] ] ] ]
 			assemble // ref 
 		]
 		println("Named elements are: ")
 		content.onAll.forEach[ println(prettyPrint) ]
+		
+		saveModel(content, new File("target/test/model/dartlang3.dartspec"), XMLResource.OPTION_LINE_WIDTH->4)
 	}
 	
 	
@@ -114,14 +108,10 @@ class MainLauncher {
 		if (extends !== null) " :> " + (extends.name ?: "?") else ""
 	}
 	
-	static dispatch def prettyDetail(Function it) {
+	static dispatch def prettyDetail(Typed it) {
 		if (type !== null) " : " + (type.toName ?: "?") else ""
 	}
 	
-	static dispatch def prettyDetail(Parameter it) {
-		if (type !== null) " : " + (type.toName ?: "?") else ""
-	}
-
 	static dispatch def prettyDetail(Package it) {
 		if (!dependencies.empty) " -> " + dependencies.map[ name ?: "?"].join(",") else ""
 	}

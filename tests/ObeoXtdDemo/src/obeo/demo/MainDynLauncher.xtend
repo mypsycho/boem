@@ -10,11 +10,6 @@ class MainDynLauncher {
 	def static onAll(EObject it) {
 		#[ it ] + [ it.eAllContents() ]
 	}
-
-	def static toName(EObject it) {
-		if (eClass.getEStructuralFeature("name") !== null) 
-			eGet(eClass.getEStructuralFeature("name")) as String
-	}
 		
 	def static main(String[] args) {
 
@@ -38,7 +33,7 @@ class MainDynLauncher {
 		// Do some real stuff
 		val extension factory = context.factory
 		content => [
-			
+
 			eEValues("packages") += #[ 
 				eCreate("Package") [
 					eSetValue("name", "myBusiness")
@@ -67,9 +62,7 @@ class MainDynLauncher {
 											eSetValue("type", 
 												eRef("Class", content.toName+"::Dart Standard Library::dart:core::List")
 											)
-										]
-									]
-								],
+								] ] ],
 								eCreate("Function") [
 									eSetValue("name", "start")
 								],
@@ -81,19 +74,13 @@ class MainDynLauncher {
 									eSetValue("type", 
 										eRef("Class", content.toName+"::Dart Standard Library::dart:core::bool")
 									)
-								]
-							]
-						]
-					]
-				]
-				
-			]
+			] ] ] ] ] ]
 			assemble // build references 
 		]
 		println("Named elements are: ")
 		content.onAll.forEach[  println(context.prettyPrint(it)) ]
 		
-		saveModel(content, new File("model/dartlang3.dartspec"), XMLResource.OPTION_LINE_WIDTH->4)
+		saveModel(content, new File("target/test/model/dartlang4.dartspec"), XMLResource.OPTION_LINE_WIDTH->4)
 	}
 	
 	/*
@@ -101,14 +88,12 @@ class MainDynLauncher {
 	 */
 	static def String prettyPrint(extension EDynModit context, EObject it) {
 		val prettyDetail = 
-			if (eInstanceOf("Class") && eValue("extends") !== null) 
-				" :> " + eEValue("extends").toName
-			else if (eInstanceOf("Function") && eValue("type") !== null) 
-				" : " + eEValue("type").toName
-			else if (eInstanceOf("Parameter") && eValue("type") !== null) 
-				" : " + eEValue("type").toName
-			else if (eInstanceOf("Package") && !eEValues("dependencies").empty) 
-				" -> " + eEValues("dependencies").map[ toName ?: "?"].join(",")
+			if (eInstanceOf("Class")) 
+				if (eValue("extends") !== null) " :> " + eEValue("extends").toName else ""
+			else if (eInstanceOf("Typed")) 
+				if (eValue("type") !== null) " : " + eEValue("type").toName else ""
+			else if (eInstanceOf("Package")) 
+				if (!eEValues("dependencies").empty) " -> " + eEValues("dependencies").map[ toName ?: "?"].join(",") else ""
 			else ""
 		
 		indent + (toName ?: "[" + eClass.name + "]") + prettyDetail
@@ -117,8 +102,10 @@ class MainDynLauncher {
 	static def String indent(EObject it) {
 		if (eContainer === null) "" else " " + eContainer.indent
 	}
-
 	
-
+	def static toName(EObject it) {
+		if (eClass.getEStructuralFeature("name") !== null) 
+			eGet(eClass.getEStructuralFeature("name")) as String
+	}
 	
 }

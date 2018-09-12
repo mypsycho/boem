@@ -12,7 +12,7 @@ class XmiEcoreLoader {
 	
 	extension final ResourceSet resSet = new ResourceSetImpl()
 	
-	public new(EPackage it, String fileExtension) {
+	new(EPackage it, String fileExtension) {
 		resourceFactoryRegistry.getExtensionToFactoryMap().put(fileExtension, new XMIResourceFactoryImpl)
 		packageRegistry.put(it.getNsURI(), it)
 	}

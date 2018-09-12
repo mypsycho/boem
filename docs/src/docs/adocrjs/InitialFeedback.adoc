@@ -7,13 +7,15 @@
 //   ____1_________2_________3_________4_________5
 //   No space after colon (:)
 //   Punctation !
-
+= Feedback: Building a DSL with Eclipse Sirius 
 :source-highlighter: highlightjs
 :revealjs_center: true
 :customcss: compact.css
 
+:imagesdir: images
+:title-slide-background-image: emf_logo.png
 
-= Feedback: Building a DSL with Eclipse Sirius 
+// image::emf_logo.png[background, size=cover]
 
 * _Project Overview_
 
@@ -170,6 +172,7 @@ abstractType_AllAttributes += hidden
 ----
 
 
+
 == How to use
 
 Project https://github.com/mypsycho/modit
@@ -182,11 +185,12 @@ A singleton of EmfStrecher works on a group of
 EPackage, registers specificities and provides 
 inheritance mechanism.
 
-EmfContribution provides a factory to initialize 
-extensions of EPackage into the singleton.
+EmfContribution provides a factory to wrap singleton 
+creation and initialization.
 
-Major functions (edit, validated, etc) supported by
-1 engine based on EmfContribution keys and running with an EmfStrecher.
+Major features (edit, validated, etc) can supported
+by 1 engine based on EmfContribution keys and 
+running  with an EmfStrecher.
 
 === Example for Sirius
 
@@ -208,11 +212,11 @@ link:https://github.com/mypsycho/ModIt/blob/master/tests/reversit-tests/src/org/
 
 Other available elements:
 
-=== Reverse engineer of existing models
+=== Reverse existing models
 
-Applicable to genmodel, sirius, test, ...
+For Genmodel, Sirius, test resources, ...
 
-EReversIt can generate Xtend classes matching any 
+EReversIt generates Xtend classes matching any 
 EMF model.
 
 Eases detection of pattern in models.
@@ -225,7 +229,7 @@ Use case: **Round-trip with Sirius**
 
 * Update engine accordingly
 
-=== I18n alternative using Xtend syntax
+=== I18n with Xtend
 
 Syntax of i18n Edit plugin or Eclipse is messy and 
 limited.
