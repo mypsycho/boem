@@ -9,9 +9,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 
 class XmiEcoreLoader {
-	
+
 	extension final ResourceSet resSet = new ResourceSetImpl()
-	
+
 	new(EPackage it, String fileExtension) {
 		resourceFactoryRegistry.getExtensionToFactoryMap().put(fileExtension, new XMIResourceFactoryImpl)
 		packageRegistry.put(it.getNsURI(), it)
@@ -23,11 +23,11 @@ class XmiEcoreLoader {
 
 	def saveModel(EObject content, File target, Pair<String, Object>... options) {
 		if (target.exists()) {
-            target.delete();
-        }
+			target.delete();
+		}
 		val res = createResource(URI.createFileURI(target.toString))
 		res.contents.add(content)
-		res.save(options.toMap([ key ], [ value ]))
+		res.save(options.toMap([key], [value]))
 	}
-		
+
 }

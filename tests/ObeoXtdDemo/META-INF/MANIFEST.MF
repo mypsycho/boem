@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: ObeoXtdDemo;singleton:=true
+Automatic-Module-Name: ObeoXtdDemo
 Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
@@ -15,5 +16,7 @@ Require-Bundle: org.eclipse.emf,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.xtext.xbase.lib,
- org.mypsycho.emf.modit;bundle-version="0.1.0"
+ org.mypsycho.emf.modit;bundle-version="0.1.0",
+ org.eclipse.emf.ecore.xcore.lib
 Bundle-ActivationPolicy: lazy
+

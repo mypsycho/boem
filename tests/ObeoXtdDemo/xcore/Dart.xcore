@@ -1,0 +1,166 @@
+@xcore.lang.Ecore(nsURI="http://www.obeo.fr/dsl/2014/dart")
+@xcore.lang.GenModel(contentTypeIdentifier="", modelDirectory="/ObeoXtdDemo/target/xcore-gen", classNamePattern="")
+package fr.obeo.dsl.dart.dart
+
+class Project extends Named {
+	contains Package[] packages opposite project
+}
+
+class Asset extends Named {
+	container Container ^container opposite assets
+}
+
+abstract class Container extends Named {
+	contains Asset[] assets opposite ^container
+}
+
+class Folder extends Container , Asset {
+}
+
+class Package extends Container {
+	String license
+	refers Package[] dependencies
+	container Project project opposite packages
+}
+
+abstract class DartResource extends Asset {
+	String documentation
+	contains Import[] imports
+	contains Export[] exports
+}
+
+class Import {
+	refers DartResource dartResource
+	String ^as
+	refers DartResource[] show
+	refers DartResource[] hide
+	refers Metadata[] metadata
+}
+
+class Export {
+	refers DartResource dartResource
+	refers DartResource[] show
+	refers DartResource[] hide
+	refers Metadata[] metadata
+}
+
+interface Type {
+}
+
+class Library extends DartResource {
+	refers Part[] parts opposite partOf
+	contains Typedef[] typedefs
+	refers Metadata[] metadata
+	contains Variable[] variables
+	contains Function[] functions
+}
+
+abstract class Part extends DartResource {
+	refers Library partOf opposite parts
+}
+
+abstract class Classifier extends Part {
+	contains Variable[] fields
+	refers Metadata[] metadata
+}
+
+class Metadata extends Classifier {
+}
+
+class Class extends Classifier , Type {
+	boolean ^abstract
+	refers Class ^extends
+	refers Class[] implements
+	refers Class[] mixins
+	contains Constructor[] constructors
+	contains Function[] methods
+}
+
+class Variable extends Typed , Named {
+	String documentation
+	boolean ^static
+	boolean constant
+	boolean final
+	String value
+	refers Metadata[] metadata
+}
+
+class Constructor {
+	boolean constant
+	String body
+	refers Metadata[] metadata
+}
+
+class Function extends Typed {
+	String documentation
+	boolean ^abstract
+	boolean ^static
+	String body
+	contains Parameter[] parameters
+	refers Metadata[] metadata
+}
+
+class Parameter extends Typed {
+	String value
+	boolean optional
+	refers Metadata[] metadata
+}
+
+class Typedef extends Type , Typed {
+	String documentation
+	contains Parameter[] parameters
+	refers Metadata[] metadata
+}
+
+class HTML extends Asset {
+	refers Asset[] uses
+}
+
+class Stylesheet extends Asset {
+	refers Stylesheet[] imports
+	volatile unsettable derived boolean partial
+}
+
+class Module extends Part {
+	refers AngularType[] types
+	contains Route[] routes
+}
+
+interface AngularType extends Class {
+}
+
+
+interface Published extends AngularType {
+	String publishAs
+}
+
+interface Decorator extends AngularType {
+	String selector
+}
+
+class Controller extends Published, Decorator {
+}
+
+class Component extends Published, Decorator {
+	refers Stylesheet stylesheet
+	refers HTML template
+}
+
+
+class Formatter extends AngularType {
+	String formatterName
+}
+
+class Route extends Named {
+	String path
+	refers HTML view
+	refers Route ^extends
+}
+
+interface Named {
+	String name
+}
+
+interface Typed extends Named {
+	refers Type ^type
+}

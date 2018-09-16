@@ -4,6 +4,7 @@ location "http://download.eclipse.org/releases/oxygen/" {
 	org.eclipse.platform.sdk lazy
 	org.eclipse.emf.feature.group lazy
 	org.eclipse.xtext.xbase.feature.group lazy
+	org.eclipse.emf.ecore.xcore.feature.group
 	org.eclipse.xtend.lib lazy
 	org.eclipse.xtend.lib.macro lazy
 	org.eclipse.xtend.feature.group lazy
