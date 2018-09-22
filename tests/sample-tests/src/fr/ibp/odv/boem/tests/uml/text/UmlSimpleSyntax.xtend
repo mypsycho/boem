@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.Generalization
 import org.eclipse.uml2.uml.Interface
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.TypedElement
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 import org.eclipse.uml2.uml.Operation
 
 class UmlSimpleSyntax {

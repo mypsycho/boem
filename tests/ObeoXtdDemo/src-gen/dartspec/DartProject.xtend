@@ -8,10 +8,8 @@ import fr.obeo.dsl.dart.dart.Metadata
 import fr.obeo.dsl.dart.dart.Package
 import fr.obeo.dsl.dart.dart.Project
 import java.util.HashMap
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 class DartProject {
 

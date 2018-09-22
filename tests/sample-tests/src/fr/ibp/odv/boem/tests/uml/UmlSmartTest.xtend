@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.Operation
 import org.eclipse.uml2.uml.Parameter
 import org.eclipse.uml2.uml.UMLPackage
 import org.junit.Test
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 import static org.junit.Assert.*
 import org.eclipse.uml2.uml.NamedElement

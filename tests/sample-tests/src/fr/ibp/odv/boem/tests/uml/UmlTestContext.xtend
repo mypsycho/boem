@@ -9,7 +9,7 @@ import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.UMLPackage
 import org.eclipse.uml2.uml.internal.resource.UMLResourceFactoryImpl
 import org.junit.Before
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.ModItPool
 
 /**

@@ -1,7 +1,7 @@
 package org.eclipse.emf.ecore
 
-import org.mypsycho.emf.i18n.EmfI18n
-import org.mypsycho.emf.i18n.EmfI18n.L10n
+import org.mypsycho.modit.emf.i18n.EmfI18n
+import org.mypsycho.modit.emf.i18n.EmfI18n.L10n
 
 class EcoreL10n_fr implements L10n {
 	

@@ -9,7 +9,7 @@ import org.mypsycho.emf.reflem.EmfStretcher
 
 class EqxModelExtensions {
     
-    public enum Tab {
+    enum Tab {
         conception, documentation, affichage, generation;
      }
     

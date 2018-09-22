@@ -3,7 +3,7 @@ package obeo.demo
 import java.io.File
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.xmi.XMLResource
-import org.mypsycho.emf.modit.EDynModit
+import org.mypsycho.modit.emf.EDynModit
 
 /**
  * This class is a demo to show how to load/navigate/modify a generated model
@@ -11,9 +11,7 @@ import org.mypsycho.emf.modit.EDynModit
  */
 class MainDynLauncher {
 
-	def static onAll(EObject it) {
-		#[it] + [it.eAllContents()]
-	}
+	def static onAll(EObject it) { #[ it ] + [ eAllContents() ] }
 
 	def static main(String[] args) {
 
@@ -93,7 +91,8 @@ class MainDynLauncher {
 				if (eValue("type") !== null) " : " + eEValue("type").toName else ""
 			else if (eInstanceOf("Package"))
 				if (!eEValues("dependencies").empty) " -> " +
-					eEValues("dependencies").map[toName ?: "?"].join(",") else ""
+					eEValues("dependencies").map[toName ?: "?"].join(",") 
+				else ""
 			else
 				""
 

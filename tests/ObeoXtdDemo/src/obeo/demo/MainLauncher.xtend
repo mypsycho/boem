@@ -12,7 +12,7 @@ import fr.obeo.dsl.dart.dart.Typed
 import java.io.File
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.xmi.XMLResource
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 import static extension org.eclipse.xtext.xbase.lib.InputOutput.*
 
@@ -43,11 +43,11 @@ class MainLauncher {
 		val Project content = loadModel(new File("model/dartlang.dartspec").toURI) as Project
 		
 		// Counting
-		'''There are «content.onAll.size» elements.'''.println
+		println('''There are «content.onAll.size» elements.''')
 		// Showing names
-		"Named elements were: ".println
+		println("Named elements were: ")
 		content.onAll.map[ it -> toName ].filter[ value !== null ].forEach [
-			'''<«key.eClass().getName()»> «value»'''.println
+			println('''<«key.eClass().getName()»> «value»''')
 		]
 
 		// Do some real stuff

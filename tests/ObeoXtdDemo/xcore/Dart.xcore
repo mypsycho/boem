@@ -1,5 +1,5 @@
 @xcore.lang.Ecore(nsURI="http://www.obeo.fr/dsl/2014/dart")
-@xcore.lang.GenModel(contentTypeIdentifier="", modelDirectory="/ObeoXtdDemo/target/xcore-gen", classNamePattern="")
+@xcore.lang.GenModel(contentTypeIdentifier="", modelDirectory="/org.mypsycho.emf.modit.ObeoXtdDemo/target/xcore-gen", classNamePattern="")
 package fr.obeo.dsl.dart.dart
 
 class Project extends Named {
@@ -14,7 +14,7 @@ abstract class Container extends Named {
 	contains Asset[] assets opposite ^container
 }
 
-class Folder extends Container , Asset {
+class Folder extends Container, Asset {
 }
 
 class Package extends Container {
@@ -91,13 +91,17 @@ class Constructor {
 	refers Metadata[] metadata
 }
 
-class Function extends Typed {
+class Function extends Parametrized {
 	String documentation
 	boolean ^abstract
 	boolean ^static
 	String body
-	contains Parameter[] parameters
 	refers Metadata[] metadata
+}
+
+
+class Parametrized extends Typed {
+	contains Parameter[] parameters
 }
 
 class Parameter extends Typed {
@@ -106,9 +110,8 @@ class Parameter extends Typed {
 	refers Metadata[] metadata
 }
 
-class Typedef extends Type , Typed {
+class Typedef extends Type, Parametrized {
 	String documentation
-	contains Parameter[] parameters
 	refers Metadata[] metadata
 }
 
@@ -128,7 +131,6 @@ class Module extends Part {
 
 interface AngularType extends Class {
 }
-
 
 interface Published extends AngularType {
 	String publishAs
@@ -158,7 +160,7 @@ class Route extends Named {
 }
 
 interface Named {
-	String name
+	String name 
 }
 
 interface Typed extends Named {

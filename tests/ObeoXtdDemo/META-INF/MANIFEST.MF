@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: ObeoXtdDemo;singleton:=true
-Automatic-Module-Name: ObeoXtdDemo
+Bundle-SymbolicName: org.mypsycho.emf.modit.ObeoXtdDemo;singleton:=true
+Automatic-Module-Name: org.mypsycho.emf.modit.ObeoXtdDemo
 Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName

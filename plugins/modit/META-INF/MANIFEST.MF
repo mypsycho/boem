@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.mypsycho.emf.modit
 Bundle-ManifestVersion: 2
 Bundle-Name: Mod-It Library
 Bundle-SymbolicName: org.mypsycho.emf.modit;singleton:=true
@@ -8,6 +9,7 @@ Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.xmi
-Export-Package: org.mypsycho.modit, org.mypsycho.emf.modit, org.mypsycho.xtend.i18n, org.mypsycho.emf.i18n
+Export-Package: org.mypsycho.modit, org.mypsycho.modit.emf, org.mypsycho.modit.i18n, org.mypsycho.modit.emf.i18n, org.mypsycho.modit.emf.stretch
 Bundle-Vendor: mypsycho
+
 

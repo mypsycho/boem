@@ -17,7 +17,7 @@ import fr.ibp.odv.boem.mm.test.BoemTest.BoemTestPackage
 import fr.ibp.odv.boem.mm.test.BoemTest.C
 import fr.ibp.odv.boem.mm.test.BoemTest.Node
 import org.junit.Test
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 import static org.junit.Assert.*
 
