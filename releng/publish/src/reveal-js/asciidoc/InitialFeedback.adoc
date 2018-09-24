@@ -8,15 +8,17 @@
 //   No space after colon (:)
 //   Punctation !
 
-// image::images/emf_logo.png[background, size=cover]
-
+// 
 :source-highlighter: highlightjs
 :revealjs_center: true
 :customcss: compact.css
 
 = Feedback: Building a DSL with Eclipse Sirius 
 
-:title-slide-background-image: images/emf_logo.png
+//:title-slide-background-image: images/emf_logo.png
+
+image::images/emf_logo.png[background]
+
 
 * _Project Overview_
 

@@ -30,7 +30,11 @@
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 
 	</properties>
-
+<!-- 
+	<modules>
+		<module>target-definition-id</module>
+	</modules>
+ -->
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 
@@ -43,7 +47,7 @@
 				<extensions>true</extensions>
 			</plugin>
             
-      <!-- Only for this pom -->
+      <!-- Only for this pom 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -71,7 +75,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
@@ -135,10 +139,10 @@
 						<target>
 							<artifact>
 								<groupId>${tpd.groupId}</groupId>
-								<artifactId>parent</artifactId>
+								<artifactId>target-definition-id</artifactId>
 								<version>${tpd.version}</version>
-								<classifier>${tpd.path}</classifier>
-							</artifact>
+
+						</artifact>
 						</target>
 					</configuration>
 				</plugin>
@@ -198,8 +202,7 @@
 	</build>
 
 	<profiles>
-		<profile>
-			<id>tycho-source</id>
+		<profile> <id>tycho-source</id>
 			<activation>
 				<file><!-- Active for bundle and tests, neither feature, site nor product -->
 					<exists>META-INF/MANIFEST.MF</exists>
@@ -228,56 +231,8 @@
 			</build>
 		</profile>
 
-		<profile>
-			<id>xtend-nature</id>
-			<activation>
-				<file>
-					<exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
-				</file>
-			</activation>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.xtend</groupId>
-						<artifactId>xtend-maven-plugin</artifactId>
-
-						<executions>
-							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
-							<execution>
-								<goals>
-									<goal>compile</goal>
-								</goals>
-							</execution>
-						</executions>
-                        
-            <!-- Bug xtend 2.14 + Eclipse Photon : https://github.com/eclipse/xtext/issues/1231 -->
-						<dependencies>
-							<dependency>
-								<groupId>org.eclipse.jdt</groupId>
-								<artifactId>org.eclipse.jdt.core</artifactId>
-								<version>3.12.2</version>
-							</dependency>
-							<dependency>
-								<groupId>org.eclipse.platform</groupId>
-								<artifactId>org.eclipse.core.runtime</artifactId>
-								<version>3.12.0</version>
-							</dependency>
-							<dependency>
-								<groupId>org.eclipse.platform</groupId>
-								<artifactId>org.eclipse.equinox.common</artifactId>
-								<version>3.8.0</version>
-							</dependency>
-						</dependencies>
-
-					</plugin>
-
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>xcore-nature</id>
+		<profile> <id>xcore-nature</id> <!-- xcore-nature comes before xtend-nature -->
+			<!-- xtext-maven-plugin should be called before xtend-maven-plugin -->
 			<activation>
 				<file>
 					<exists>.settings/org.eclipse.emf.ecore.xcore.Xcore.prefs</exists>
@@ -291,8 +246,19 @@
 				<xcore.emf.version>2.12.0</xcore.emf.version>
 				<xcore.xtext.version>2.13.0</xcore.xtext.version>
 				<xcore.codegen.version>1.2.0</xcore.codegen.version>
+				
 				<xcore.version>1.3.1</xcore.version>
 				<xcore.lib.version>1.1.100</xcore.lib.version>
+
+				<core-resources-version>3.7.100</core-resources-version>
+				<eclipse-text-version>3.5.101</eclipse-text-version>
+				<emf-version>2.12.0</emf-version>
+				<emf-common-version>2.12.0</emf-common-version>
+				<emf-codegen-version>2.11.0</emf-codegen-version>
+				<xtext-version>2.10.0</xtext-version>
+				<ecore-xtext-version>1.2.0</ecore-xtext-version>
+				<ecore-xcore-version>1.3.1</ecore-xcore-version>
+				<ecore-xcore-lib-version>1.1.100</ecore-xcore-lib-version>
 
 			</properties>
 			<build>
@@ -301,12 +267,12 @@
 					<plugin>
 						<groupId>org.eclipse.xtext</groupId>
 						<artifactId>xtext-maven-plugin</artifactId>
-						<version>${xcore.xtext.version}</version>
+						<version>${xtext-version}</version>
 						<executions>
 							<execution>
-								<phase>generate-sources</phase>
+						<!-- 	<phase>generate-sources</phase> default -->	
 								<goals>
-									<goal>generate</goal>
+									<goal>generate</goal><!-- generate-sources -->
 								</goals>
 							</execution>
 						</executions>
@@ -322,15 +288,17 @@
 									<setup>org.eclipse.emf.ecore.xcore.XcoreStandaloneSetup</setup>
 									<outputConfigurations>
 										<outputConfiguration>
-											<outputDirectory>${project.basedir}/src/main/java-gen</outputDirectory>
+											<outputDirectory>${project.build.xcore.Directory}</outputDirectory>
 										</outputConfiguration>
 									</outputConfigurations>
 								</language>
 							</languages>
 							<sourceRoots>
-								<root>${basedir}/src/main/resources</root>
+								<root>${project.sourceDirectory}</root> <!-- With this approach xcore cannot use xtend class in the module -->
+								<root>model</root> <!-- required to find xcore files -->
 							</sourceRoots>
 						</configuration>
+						
 						<dependencies>
 							<dependency>
 								<groupId>org.eclipse.text</groupId>
@@ -380,7 +348,7 @@
 							<dependency>
 								<groupId>org.eclipse.emf</groupId>
 								<artifactId>org.eclipse.emf.codegen</artifactId>
-								<version>2.11.0-v20150806-0404</version> <!-- ??? -->
+								<version>${emf-codegen-version}</version>
 							</dependency>
 							<dependency>
 								<groupId>org.eclipse.emf</groupId>
@@ -403,6 +371,54 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile> <id>xtend-nature</id>
+			<activation>
+				<file>
+					<exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
+				</file>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.xtend</groupId>
+						<artifactId>xtend-maven-plugin</artifactId>
+
+						<executions>
+							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
+							<execution>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+							</execution>
+						</executions>
+                        
+            <!-- Bug xtend 2.14 + Eclipse Photon : https://github.com/eclipse/xtext/issues/1231 -->
+						<dependencies>
+							<dependency>
+								<groupId>org.eclipse.jdt</groupId>
+								<artifactId>org.eclipse.jdt.core</artifactId>
+								<version>3.12.2</version>
+							</dependency>
+							<dependency>
+								<groupId>org.eclipse.platform</groupId>
+								<artifactId>org.eclipse.core.runtime</artifactId>
+								<version>3.12.0</version>
+							</dependency>
+							<dependency>
+								<groupId>org.eclipse.platform</groupId>
+								<artifactId>org.eclipse.equinox.common</artifactId>
+								<version>3.8.0</version>
+							</dependency>
+						</dependencies>
+
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
 
 	</profiles>
 

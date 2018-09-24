@@ -32,7 +32,7 @@ class DartContribution extends EmfContribution {
 				if (it instanceof Named) (
 					if (eContainer === null) xCall(Named)
 					else (eContainer.xCall(String->String) as String) ?.concat("/") ?.concat(xCall(Named) as String)
-				 )
+				) // else no qualified name
 			]
 		}
 		

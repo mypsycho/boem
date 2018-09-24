@@ -28,6 +28,12 @@ class DartTestContext {
 	static def String toName(EObject it) {
 		if (it instanceof Named) name
 	}
+	
 	def static onAll(EObject it) { #[ it ] + [ eAllContents() ] }
+	
+	static def String indent(EObject it) {
+		if (eContainer === null) "" else " " + eContainer.indent
+	}
+	
 	
 }

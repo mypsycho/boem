@@ -38,7 +38,7 @@ class DartReverse {
 		)
 		rv.shortcut = DartPackage.eINSTANCE.named_Name
 		rv.encoding = Charset.forName("UTF-8")
-		content.eAllContents.forEach [ // Double 'if' is auto-cast.
+		content.eAllContents.forEach [ // Double 'if' for auto-cast.
 			if (it instanceof Container) if (name !== null && !name.empty) rv.aliases.put(it, name)
 		]
 		rv.perform

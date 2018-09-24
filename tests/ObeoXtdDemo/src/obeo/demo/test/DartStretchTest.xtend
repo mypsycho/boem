@@ -4,15 +4,14 @@ import fr.obeo.dsl.dart.dart.Class
 import fr.obeo.dsl.dart.dart.Component
 import fr.obeo.dsl.dart.dart.DartPackage
 import fr.obeo.dsl.dart.dart.Function
-import fr.obeo.dsl.dart.dart.Named
 import fr.obeo.dsl.dart.dart.Package
 import fr.obeo.dsl.dart.dart.Parameter
 import fr.obeo.dsl.dart.dart.Project
 import java.io.File
 import obeo.demo.XmiEcoreLoader
-import org.eclipse.emf.ecore.EObject
-import org.mypsycho.modit.emf.EModIt
-import org.mypsycho.modit.emf.stretch.EmfStretcher
+import org.junit.Test
+
+import static extension org.junit.Assert.*
 
 /**
  * TODO transform into a JUnit
@@ -20,58 +19,139 @@ import org.mypsycho.modit.emf.stretch.EmfStretcher
  */
 class DartStretchTest extends DartTestContext {
 
-	static val extension EmfStretcher STRETCHER = DartContribution.STRETCHER
-	
-	static extension final EModIt factory = EModIt.using(DartPackage.eINSTANCE) [ desc|
-		desc.idProvider = [ // Create an ID when QName is defined
-			val parent = eContainer
-			val name = toName
-			if ((name === null) || name.empty) null
-			else if (parent === null) name 
-			else desc.idProvider.apply(parent) ?.concat("::" + name) ?: null
-		]
-		desc.contentProvider = [ content, it |
-			if (it instanceof Named) name = content
-			else throw new UnsupportedOperationException("No content provider for " + it)
-		]
-	]
-	
-	static def String toName(EObject it) {
-		if (it instanceof Named) name
-	}
-	def static onAll(EObject it) { #[ it ] + [ eAllContents() ] }
-	
-	def static void main(String... args) {
-		
-		val extension context = new XmiEcoreLoader(DartPackage.eINSTANCE, "dartspec")
-		
-				// Loading model
-		val Project content = loadModel(new File("model/dartlang.dartspec").toURI) as Project
-		
-		// Counting
-		println('''There are «content.onAll.size» elements.''') // 
-		// Showing names
-		println("Named elements were: ")
-		content.onAll.map[ it -> toName ].filter[ value !== null ].forEach[
-			println('''<«key.eClass().getName()»> «value»''')
-		]
+  extension XmiEcoreLoader context = new XmiEcoreLoader(DartPackage.eINSTANCE, "dartspec")
+  var Project content = loadModel(new File("model/dartlang.dartspec").toURI) as Project
 
-		// Do some real stuff
+
+	@Test
+	def void testLoading() {
+		
+		"Loaded elements".assertEquals(25, content.onAll.size)
+		"Loaded elements".assertEquals(
+'''<Project> Dart
+<Package> Dart Standard Library
+<Folder> dart:collection
+<Library> collection.dart
+<Folder> dart:convert
+<Library> convert.dart
+<Folder> dart:core
+<Library> core.dart
+<Class> bool
+<Class> double
+<Class> Function
+<Class> int
+<Class> List
+<Class> map
+<Class> Object
+<Class> String
+<Metadata> deprecated
+<Metadata> override
+<Metadata> proxy
+<Folder> dart:math
+<Library> math.dart'''
+				.toString.split("\\R").toList, 
+				content.onAll.map[ it -> toName ].filter[ value !== null ]
+				 .map[ "<" + key.eClass.name + "> " + value ].toList)
+		}
+		
+		
+  @Test
+	def void testEdit() {
+		content.appendContent
+		"all elements".assertEquals(37, content.onAll.size)
+	}
+	
+			
+  @Test
+	def void testToString() {
 		content.appendContent
 
-		println("Named elements are: ")
-		println('''There are «content.onAll.size» elements.''') // 37
-		content.onAll.forEach[ println(indent + xCall(String)) ]
-		
-		println("Qualified elements are: ")
-		content.onAll.map[ xCall(String->String) as String ].filterNull.forEach[ println(it) ]
+		"Labels of elements".assertEquals(
+'''Dart
+ Dart Standard Library
+  dart:collection
+   collection.dart
+    [Import]
+  dart:convert
+   convert.dart
+  dart:core
+   core.dart
+    [Import]
+    [Import]
+    [Import]
+   bool
+   double
+   Function
+   int
+   List
+   map
+   Object
+   String
+   deprecated
+   override
+   proxy
+  dart:math
+   math.dart
+ myBusiness
+  MyCoreSystem :> AbtractComponent
+   doRun()
+ myShared
+  AbtractComponent
+   init(List,#MISSING_TYPE)
+    args : List
+    context
+   start()
+   <unnamed-Function>() : List
+   stop()
+   isRunning() : bool'''.toString
+			.split("\\R").toList, 
+			content.onAll.map[ indent + xCall(String) ].toList)
 	}
-	
-	static def String indent(EObject it) {
-		if (eContainer === null) "" else " " + eContainer.indent
+
+  @Test
+	def void testQualifiedNames() {
+		content.appendContent
+
+		"Labels of elements".assertEquals(
+'''Dart
+Dart/Dart Standard Library
+Dart/Dart Standard Library/dart:collection
+Dart/Dart Standard Library/dart:collection/collection.dart
+Dart/Dart Standard Library/dart:convert
+Dart/Dart Standard Library/dart:convert/convert.dart
+Dart/Dart Standard Library/dart:core
+Dart/Dart Standard Library/dart:core/core.dart
+Dart/Dart Standard Library/dart:core/bool
+Dart/Dart Standard Library/dart:core/double
+Dart/Dart Standard Library/dart:core/Function
+Dart/Dart Standard Library/dart:core/int
+Dart/Dart Standard Library/dart:core/List
+Dart/Dart Standard Library/dart:core/map
+Dart/Dart Standard Library/dart:core/Object
+Dart/Dart Standard Library/dart:core/String
+Dart/Dart Standard Library/dart:core/deprecated
+Dart/Dart Standard Library/dart:core/override
+Dart/Dart Standard Library/dart:core/proxy
+Dart/Dart Standard Library/dart:math
+Dart/Dart Standard Library/dart:math/math.dart
+Dart/myBusiness
+Dart/myBusiness/MyCoreSystem
+Dart/myBusiness/MyCoreSystem/doRun()
+Dart/myShared
+Dart/myShared/AbtractComponent
+Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)
+Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)/args
+Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)/context
+Dart/myShared/AbtractComponent/start()
+Dart/myShared/AbtractComponent/<unnamed-Function>()
+Dart/myShared/AbtractComponent/stop()
+Dart/myShared/AbtractComponent/isRunning()'''
+			.toString.split("\\R").toList, 
+			content.onAll.map[ xCall(String->String) ].filterNull.toList)
 	}
-	
-	
+
+
+
 	static def appendContent(Project content) {
 		content => [
 			packages += #[ 

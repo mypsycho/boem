@@ -46,7 +46,9 @@ http://www.eclipse.org/legal/epl-v10.html
 				</property>
 			</activation>
 			<modules>
-				<module>tests/ObeoXtdDemo</module>
+			<!-- xcore + xtend is not ready
+				<module>tests/ObeoXtdDemo</module>  
+				-->
 				<module>tests/dummy-model</module>
 				<module>tests/modit-tests</module>
 				<module>tests/sample-tests</module>
