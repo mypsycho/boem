@@ -9,10 +9,12 @@
 //   Punctation !
 
 // image::images/emf_logo.png[background, size=cover]
-= Feedback: Building a DSL with Eclipse Sirius 
+
 :source-highlighter: highlightjs
 :revealjs_center: true
 :customcss: compact.css
+
+= Feedback: Building a DSL with Eclipse Sirius 
 
 :title-slide-background-image: images/emf_logo.png
 
