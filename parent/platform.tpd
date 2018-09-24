@@ -7,7 +7,9 @@ location "http://download.eclipse.org/releases/oxygen/" {
 	org.eclipse.emf.ecore.xcore.feature.group
 	org.eclipse.xtend.lib lazy
 	org.eclipse.xtend.lib.macro lazy
-	org.eclipse.xtend.feature.group lazy
+	// org.eclipse.xtend.feature.group lazy
+	
+	org.eclipse.emf.ecore.xcore.lib lazy // Feature contains 1 plugin
 	org.eclipse.uml2.uml lazy
 	org.junit lazy
 	
