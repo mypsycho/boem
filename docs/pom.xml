@@ -13,6 +13,11 @@
 	<properties>
 		<project.slides.directory>${project.build.directory}/generated-slides</project.slides.directory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- How to mirror this ? through settings ? -->
+		<reveal-js.archives.url>https://github.com/hakimel/reveal.js/archive</reveal-js.archives.url>
+		<asd-rj.archives.url>https://github.com/asciidoctor/asciidoctor-reveal.js/archive</asd-rj.archives.url>
+	
 
 		<asciidoctorj.version>1.5.6</asciidoctorj.version>
 		<jruby.version>1.7.26</jruby.version>
@@ -40,7 +45,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://github.com/asciidoctor/asciidoctor-reveal.js/archive/v${asciidoctor-revealjs.version}.zip</url>
+							<url>${asd-rj.archives.url}/v${asciidoctor-revealjs.version}.zip</url>
 							<unpack>true</unpack>
 							<outputFileName>asciidoctor-reveal.js-${asciidoctor-revealjs.version}.zip</outputFileName>
 							<outputDirectory>${project.build.directory}</outputDirectory>
@@ -53,7 +58,7 @@
 							<goal>wget</goal>
 						</goals>
 						<configuration>
-							<url>https://github.com/hakimel/reveal.js/archive/${revealjs.version}.zip</url>
+							<url>${reveal-js.archives.url}/${revealjs.version}.zip</url>
 							<unpack>true</unpack>
 							<outputFileName>reveal.js-${revealjs.version}.zip</outputFileName>
 							<outputDirectory>${project.slides.directory}</outputDirectory>

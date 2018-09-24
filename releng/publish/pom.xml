@@ -21,15 +21,29 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mvn.build.date>${maven.build.timestamp}</mvn.build.date>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+		
+		<project.slides.directory>${project.build.directory}/site/reveal-js</project.slides.directory>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- How to mirror this ? through settings ? -->
+		<reveal-js.archives.url>https://github.com/hakimel/reveal.js/archive</reveal-js.archives.url>
+		<asd-rj.archives.url>https://github.com/asciidoctor/asciidoctor-reveal.js/archive</asd-rj.archives.url>
+	
+
+		<asciidoctorj.version>1.5.6</asciidoctorj.version>
+		<jruby.version>1.7.26</jruby.version>
+		<revealjs.version>3.5.0</revealjs.version>
+		<!-- Use 'master' as version and remove the 'v' prefixing the download url to use the current snapshot version -->
+		<asciidoctor-revealjs.version>1.1.3</asciidoctor-revealjs.version>
+		<revealjs.theme>sky</revealjs.theme>
+		<!-- revealjs.theme 
+		Black (default), White, League, Sky, Beige, 
+		Simple, Serif, Blood, Night, Moon, Solarized 
+		-->
+		
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>docs</artifactId>
-			<version>${project.version}</version>
-			<type>pom</type>
-		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -102,23 +116,6 @@
 						</configuration>
 					</execution>
 
-					<execution>
-						<id>publish-doc</id> <!-- from docs -->
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/site/slides</outputDirectory>
-							<resources>
-								<resource>
-									<directory>../../docs/target/generated-slides</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-
 				</executions>
 			</plugin>
 
@@ -133,6 +130,18 @@
 					<version>3.1.0</version>
 				</plugin>
 
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<version>1.5.6</version>
+				</plugin>
+
+				<plugin>
+					<groupId>com.googlecode.maven-download-plugin</groupId>
+					<artifactId>download-maven-plugin</artifactId>
+					<version>1.3.0</version>
+				</plugin>
+				
 				<plugin>
 					<groupId>org.asciidoctor</groupId>
 					<artifactId>asciidoctor-maven-plugin</artifactId>
