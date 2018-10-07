@@ -62,7 +62,7 @@ class ReflemDefaultIpAdapter extends ItemProviderAdapter /* implements  IEditing
     		val String label = getter
     		getter = [ EObject o| label ]
     	}
-    	val defaultGetter = getter as Function
+    	val defaultGetter = getter as Function<EObject, String>
     	[ EObject it | 
     		val feat = eContainingFeature 
     		if (!feat.many) getAdapterFactory().getLabel(feat)
