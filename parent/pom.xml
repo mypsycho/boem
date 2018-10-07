@@ -30,11 +30,11 @@
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
 
 	</properties>
-<!-- 
+
 	<modules>
 		<module>target-definition-id</module>
 	</modules>
- -->
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 

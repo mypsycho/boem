@@ -22,55 +22,6 @@
 
 	<build>
 		<plugins>
-<!--  fails -->
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-eclipserun-plugin</artifactId>
-
-				<executions>
-					<execution>
-						<phase>generate-resources</phase> <!-- from tpd to target -->
-						<goals>
-							<goal>eclipse-run</goal>
-						</goals>
-
-						<configuration>
-							<repositories>
-								<repository>
-									<id>eclipse-oxygen</id>
-									<layout>p2</layout>
-									<url>http://download.eclipse.org/releases/oxygen/</url>
-								</repository>
-								<repository>
-									<id>eclipse-cbi-oxygen</id>
-									<layout>p2</layout>
-									<url>http://download.eclipse.org/cbi/updates/aggregator/headless/4.7/</url>
-								</repository>
-							</repositories>
-
-							<applicationsArgs>
-								<args>-consoleLog</args>
-								<args>-application</args> <args>tpd.converter</args>
-								<args>${project.artifactId}.tpd</args>
-							</applicationsArgs>
-					
-
-							<!-- Set dependencies to launch the application -->
-							<dependencies>
-								<dependency>
-									<artifactId>org.eclipse.cbi.targetplatform-feature</artifactId>
-									<type>eclipse-feature</type>
-								</dependency>
-								<dependency>
-									<artifactId>org.eclipse.equinox.p2.sdk</artifactId>
-									<type>eclipse-feature</type>
-								</dependency>
-							</dependencies>
-						</configuration>
-
-					</execution>
-				</executions>
-			</plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -111,77 +62,78 @@
 
 
 	</build>
-	
-	
+
+
 	<profiles>
-	<profile> <id>from-TPD</id>
-	<activation><property>
-	<name>skip</name><value>!true</value>
-	</property></activation>
-	<build>
-		<plugins>
+		<profile>
+			<id>from-TPD</id>
+
+			<build>
+				<plugins>
 <!--  fails 
 - missing
 - starting too late : should be done in 
 @Component(role = AbstractMavenLifecycleParticipant.class, hint = "TychoMavenLifecycleListener")
 -->
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-eclipserun-plugin</artifactId>
+					<plugin>
+						<groupId>org.eclipse.tycho.extras</groupId>
+						<artifactId>tycho-eclipserun-plugin</artifactId>
 
-				<executions>
-					<execution>
-						<phase>generate-resources</phase> <!-- from tpd to target -->
-						<goals>
-							<goal>eclipse-run</goal>
-						</goals>
+						<executions>
+							<execution>
+								<phase>generate-resources</phase> <!-- from tpd to target -->
+								<goals>
+									<goal>eclipse-run</goal>
+								</goals>
 
-						<configuration>
-							<repositories>
-								<repository>
-									<id>eclipse-oxygen</id>
-									<layout>p2</layout>
-									<url>http://download.eclipse.org/releases/oxygen/</url>
-								</repository>
-								<repository>
-									<id>eclipse-cbi-oxygen</id>
-									<layout>p2</layout>
-									<url>http://download.eclipse.org/cbi/updates/aggregator/headless/4.7/</url>
-								</repository>
-							</repositories>
+								<configuration>
+									<repositories>
+										<repository>
+											<id>eclipse-oxygen</id>
+											<layout>p2</layout>
+											<url>http://download.eclipse.org/releases/oxygen/</url>
+										</repository>
+										<repository>
+											<id>eclipse-cbi-oxygen</id>
+											<layout>p2</layout>
+											<url>http://download.eclipse.org/cbi/updates/aggregator/headless/4.7/</url>
+										</repository>
+									</repositories>
 
-							<applicationsArgs>
-								<args>-consoleLog</args>
-								<args>-application</args> <args>tpd.converter</args>
-								<args>${project.artifactId}.tpd</args>
-							</applicationsArgs>
+									<applicationsArgs>
+										<args>-consoleLog</args>
+										<args>-application</args>
+										<args>tpd.converter</args>
+										<args>${project.artifactId}.tpd</args>
+									</applicationsArgs>
 					
 
 							<!-- Set dependencies to launch the application -->
-							<dependencies>
-								<dependency>
-									<artifactId>org.eclipse.cbi.targetplatform-feature</artifactId>
-									<type>eclipse-feature</type>
-								</dependency>
-								<dependency>
-									<artifactId>org.eclipse.equinox.p2.sdk</artifactId>
-									<type>eclipse-feature</type>
-								</dependency>
-							</dependencies>
-						</configuration>
+									<dependencies>
+										<dependency>
+											<artifactId>org.eclipse.cbi.targetplatform-feature</artifactId>
+											<type>eclipse-feature</type>
+										</dependency>
+										<dependency>
+											<artifactId>org.eclipse.equinox.p2.sdk</artifactId>
+											<type>eclipse-feature</type>
+										</dependency>
+									</dependencies>
+								</configuration>
 
-					</execution>
-				</executions>
-			</plugin>
-
-
-		</plugins>
+							</execution>
+						</executions>
+					</plugin>
 
 
+				</plugins>
 
 
-	</build>
-	
-	</profile></profiles>
+
+
+			</build>
+
+		</profile>
+	</profiles>
 
 </project>
