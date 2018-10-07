@@ -10,10 +10,9 @@ jobs:
     
 # Need to deploy to bintray as github pages cannot handle several version !
 deploy:
-  provider: pages
+  provider: bintray
+  file: "releng/publish/bintray.json"
+  user: "mypsycho"
+  key:
+    secure: kmV4HEQ8GxSlyuRa0sgDg4tsdHS0sHJzHGQfz5gDb2SrxPbaWCLBVK0S4DjWboh2ccu3BCIu1CtBRfimJyTqWMgboH8H2m2dp1R4/XnIPx/s6TIarxRfqgiGZqxBidzX2qtUt0SV0KqpPQbPIGiuArCrBHQ3pVaY4wDlLIkoV6u6rj4nH/5nxvS0KB4KuHu9BpJ0FDF8njcecwzWvTef0WeVflL+f1Kud3Ty32NEvp2/YSZYN6Ad/piA0WmBKgMXs9Bh47i3sMrYrTxJzaj8dCpPdhPx03LiSd8J04P/36lyzRgHZ1wM4auw/ngric0s53jtqLHCVLn0tde1FnyTdpAKr5eLqC7cYHkUdRZRsQppDWXatXRIzkltAyCFZhzX8ZrwplROY0M43MpSFR/NNIfjvqej/M4H2HirYKztDqJNnZmNvndBEcQMaqNzPtPMV88W06EnMbnqSJnIrjOsZsWslQznQjuOHFc8U+PEw70LNFRBoeoQEz1u71/NXYLYLNfLGkyFk9RfeAL7r9o7v4V+dkmFTg4nd3ISTR9D1Eq9xoW8vyB+tx8h9gSSRm/fjehj2fcPuCbizJJCNMJdBPjeNN2HUqmidpbSPRMrNPVFkDVJfJgEzWaZSOphBG5FxWOSvkOp5+Wadbw0HE2CQ26wZ5vOT/8enTDpeW/oHVM=
   skip_cleanup: true # to upload artifacts created during the build
-  github-token: $GITHUB_TOKEN  # See in the settings of repo
-  local-dir: "releng/publish/target/site"
-  repo: mypsycho/modit-updatesite
-  on:
-    branch: master
