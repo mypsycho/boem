@@ -134,13 +134,12 @@ For example:
  
 [source]
 ----
-extension BoemFactory factory = new BoemFactory(BoemTestPackage.eINSTANCE).registerIdProvider([
-  if (it instanceof NamedElement) {
-    return it.name
-  }
-  return null
-])
-
+extension EModit factory = EModit.using(BoemTestPackage.eINSTANCE)[
+  idProvider = [
+    if (it instanceof NamedElement) name
+    null
+  ]
+]
 //...
 
 val model = B.create [

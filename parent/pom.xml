@@ -231,7 +231,9 @@
 			</build>
 		</profile>
 
-		<profile> <id>xcore-nature</id> <!-- xcore-nature comes before xtend-nature -->
+		<profile> 
+		<id>xcore-nature</id> 
+		<!-- xcore-nature comes before xtend-nature -->
 			<!-- xtext-maven-plugin should be called before xtend-maven-plugin -->
 			<activation>
 				<file>

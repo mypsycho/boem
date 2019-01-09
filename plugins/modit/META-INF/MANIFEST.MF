@@ -8,8 +8,13 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.xmi
-Export-Package: org.mypsycho.modit, org.mypsycho.modit.emf, org.mypsycho.modit.i18n, org.mypsycho.modit.emf.i18n, org.mypsycho.modit.emf.stretch
+ org.eclipse.emf.ecore.xmi,
+ com.google.guava,
+ org.eclipse.xtext.xbase.lib
+Export-Package: org.mypsycho.modit,
+ org.mypsycho.modit.emf,
+ org.mypsycho.modit.i18n,
+ org.mypsycho.modit.emf.i18n,
+ org.mypsycho.modit.emf.stretch
 Bundle-Vendor: mypsycho
-
 

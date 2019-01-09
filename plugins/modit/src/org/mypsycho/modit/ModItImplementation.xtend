@@ -175,7 +175,7 @@ abstract class ModItImplementation<T, F> {
 	 * @param oldValue the value to replace.
 	 * @param newValue the replacement value.
 	 */
-	def void replaceResolved(T container, F feature, T oldValue, T newValue)
+	def String replaceResolved(T container, F feature, T oldValue, T newValue)
 
 	/**
 	 * Attaches an id on the given value.
@@ -210,19 +210,37 @@ abstract class ModItImplementation<T, F> {
 	def String unbindContent(T it)
 
 	/**
-	 * Attaches an content on the given value.
+	 * Attaches an initialization task on the given value.
 	 * 
 	 * @param <R> type of it
 	 * @param it to attach
-	 * @param init action to perform 
+	 * @param task to perform 
 	 */
-	def <R extends T> void bindInit(R it, (R)=>void content)
+	def <R extends T> void bindInit(R it, (R)=>void task)
 
 	/**
-	 * Detaches any id from the object and returns it.
+	 * Detaches any initialization from the object and returns it.
 	 * 
 	 * @param it the targeted EObject
-	 * @return initializer
+	 * @return initialization
 	 */
 	def <R extends T> (R)=>void unbindInit(T it)
+	
+	/**
+	 * Attaches an on-assembly task on the given value.
+	 * 
+	 * @param <R> type of it
+	 * @param it to attach
+	 * @param task action to perform 
+	 */
+	def <R extends T> void bindAssemble(R it, (R)=>void task)
+    
+ 	/**
+	 * Detaches any on-assembly task from the object and returns it.
+	 * 
+	 * @param it the targeted EObject
+	 * @return task or null
+	 */
+    def <R extends T> (R)=>void unbindAssemble(T it)
+    
 }

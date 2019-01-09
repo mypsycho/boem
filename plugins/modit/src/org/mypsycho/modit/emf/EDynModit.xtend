@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 
+import static extension org.mypsycho.modit.AdvancedExtensions.*
+
 class EDynModit {
 
 	extension final ResourceSet resSet = new ResourceSetImpl()

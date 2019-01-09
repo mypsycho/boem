@@ -177,6 +177,17 @@ class ModIt<T> {
 		alias(id, create(type, content, init))
 	}
 
+
+	/**
+	 * Attaches an assembly task on element.
+	 * 
+	 * @param type of EObject to build
+	 * @param task of the given {@link EObject}
+	 */
+	def <R extends T> onAssembled(R it, (R)=>void task) {
+		impl.bindAssemble(it, task)
+	}
+
 	/**
 	 * Assembles the content tree of the value.
 	 * <p>

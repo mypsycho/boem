@@ -39,6 +39,7 @@ class ModItAssembler<T, F> {
 		try {
 			CURRENT_RUN.set(this)
 
+			val onAssemblies = new LinkedList<Pair<T, (T)=>void>>
 			// Builds all contents
 			val stack = new LinkedList<T>(values)
 			while (!stack.empty || !onFlies.empty) {
@@ -49,6 +50,10 @@ class ModItAssembler<T, F> {
 							context.description.contentProvider.accept(content, it)	
 						}
 						unbindInit?.apply(it)
+						val onAssembly = unbindAssemble
+						if (onAssembly != null) {
+							onAssemblies.add(0, it->onAssembly)
+						}
 						onFlies.remove(it) // if already attached
 					]
 				} else {
@@ -77,8 +82,10 @@ class ModItAssembler<T, F> {
 				stack.applyPopAll[ 
 					allReferences(it).forEach[ ref | updateRef(ref) ]
 				]
-			} 
+			}
 			
+			// At the end, perform assembly tasks
+			onAssemblies.forEach[ value.apply(key) ]
 
 		} finally {
 			onFlies.clear
@@ -119,9 +126,14 @@ class ModItAssembler<T, F> {
  of «registry.getQName(container)»'''
  				)
 			}
-			targetValue = (getProxyPath?.apply(targetValue)) ?: targetValue
+			val path = getProxyPath 
+			// Warning: if path is return null (illegal), 
+			// Elvis (?:) provide the wrong value
+			if (path != null) {
+				targetValue = path.apply(targetValue)
+			}
 
-			if (!targetValue.assignableTo(prop)) {
+			if (targetValue != null && !targetValue.assignableTo(prop)) {
 				throw new ClassCastException(
 '''At «registry.getQName(container)».«prop.propName», «««
 «proxyId» targets a «targetValue.typeName» «««
@@ -129,7 +141,13 @@ incompatible with «prop.refTypeName»'''
 				)
 			}
 
-			container.replaceResolved(prop, it, targetValue)
+			val fail = container.replaceResolved(prop, it, targetValue)
+			if (fail != null) {
+				throw new IllegalStateException(
+'''At «registry.getQName(container)».«prop.propName», «««
+«proxyId» value fails because «fail»'''
+				)
+			}
 		]
 
 	}

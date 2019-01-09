@@ -9,7 +9,6 @@ import java.util.Collections
 import java.util.HashMap
 import java.util.List
 import java.util.Map
-import java.util.concurrent.Callable
 import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.Enumerator
 import org.eclipse.emf.common.util.URI
@@ -21,6 +20,13 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+
+import static extension org.mypsycho.modit.AdvancedExtensions.*
+import org.eclipse.emf.ecore.EClass
+import java.util.Arrays
+import org.eclipse.emf.common.util.EList
+import java.util.ArrayList
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class EReversIt {
 
@@ -43,7 +49,7 @@ class EReversIt {
 
 	public var encoding = StandardCharsets.UTF_8
 
-	public var EAttribute shortcut = null
+	public var List<EAttribute> shortcuts = new ArrayList
 
 	new(String classname, Path dir, Resource... rSet) {
 		this(new ClassId(classname), dir, rSet.map[ it -> new ClassId(new ClassId(classname), URI) ])
@@ -149,16 +155,17 @@ ENDFOR
 		)
 	}
 
-	val PART_IMPORTS = #{Map, EObject, EModIt, ResourceSet, Callable}
+	val PART_IMPORTS = #{Map, EObject, EModIt, ResourceSet}
 
 	protected def templatePart(ClassId it, EObject content) {
-		val parentName = (if (pack != mainClass.pack) mainClass.pack + '.' else "").concat(mainClass.name)
+		val parentName = if (pack != mainClass.pack) mainClass.qName else mainClass.name
 		val importedClasses = content.importedClasses(PART_IMPORTS)
 '''package «pack»
 
 «importedClasses.templateImports»
+import static extension «mainClass.qName».*
 
-class «name» implements Callable<EObject> {
+class «name» {
 	val «parentName» context
 	val extension EModIt factory
 
@@ -167,25 +174,16 @@ class «name» implements Callable<EObject> {
 		this.factory = parent.factory
 	}
 
-	override call() {
+	def «content.templateClass(importedClasses)» call() {
 		«content.templateInnerCreate(importedClasses)»
 	}
 
 	def getExtras() { context.extras }
-
-«
-IF shortcut !== null 
-»
-	
-	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
-		context.at(values, key) as T // Xtend inference fails?
-	}«
-ENDIF
-»}
+}
 '''
 	}
 
-	val MAIN_IMPORTS = #{ HashMap, EObject, EModIt, ResourceSetImpl, URI }
+	val MAIN_IMPORTS = #{ Arrays, HashMap, EObject, EList, EReference, ResourceSet, ResourceSetImpl, URI, EModIt }
 
 	protected def templateSimpleMain() {
 		val it = orderedRoots.head
@@ -199,7 +197,7 @@ ENDIF
 	}
 
 	protected def String templateMain(
-		Map<Class<?>, Boolean> importedClasses,
+		Map<Class<?>, Boolean> importeds,
 		Iterable<Class<?>> packages,
 		String content
 	) {
@@ -207,7 +205,7 @@ ENDIF
 
 '''package «mainClass.pack»
 
-«importedClasses.templateImports»
+«importeds.templateImports»
 
 class «mainClass.name» {
 
@@ -219,46 +217,72 @@ class «mainClass.name» {
 
 «
 IF !extras.empty
-»
-	new() {
-		val rs = new ResourceSetImpl
+»	new() {
+		val it = new ResourceSetImpl
 		extras.putAll(#{// Used resources
 		«
  FOR e : extrasByName SEPARATOR ',\n'
-»  "«e.key»" -> rs.getResource(URI.createURI(« e.value.eResource.URI.toString.toJava »), true).contents.head«
+»	"«e.key»" -> eObject(« e.value.templateClass(importeds)», « EcoreUtil.getURI(e.value).toString.toJava »)«
  ENDFOR
-»«
- IF !extras.empty
 »
-		extras.putAll(#{ // Named elements
+		})
+«
+ IF !extras.empty
+»		extras.putAll(#{ // Named elements
 		«
   FOR a : explicitExtras.entrySet.toList.sortBy[ value ] SEPARATOR ',\n'
-		»  «a.value.toJava» -> «a.key.templateAlias(importedClasses)»«
+		»	«a.value.toJava» -> «a.key.templateAlias(importeds)»«
   ENDFOR
 »
+		})
 «
- ENDIF
+ ENDIF // explicit extras
 »	}
-
+	
+	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
+		rs.getEObject(URI.createURI(uri), true) as T
+	}
 «
-ENDIF
+ENDIF // extras
 »	def content() {
 		«content»
 	}
 
 	def context() { this }
 
+	static def <O extends EObject, R extends EObject> R at(O it, String featName, Class<R> type, Object... key) {
+		val feat = eClass.getEStructuralFeature(featName) as EReference
+		val keyValues = Arrays.asList(key)
+		(eGet(feat) as EList<?>).filter(type).findFirst[ r|
+			feat.EKeys.map[ r.eGet(it) ] == keyValues
+		] as R
+	}
+
 «
-IF shortcut !== null
-»	def <T extends «shortcut.EContainingClass.instanceClass.name»> at(Iterable<T> values, Object key) {
+FOR shortcut : shortcuts SEPARATOR ',\n'
+»	def <T extends «shortcut.EContainingClass.instanceClass.name»> at«shortcut.EContainingClass.instanceClass.simpleName»(Iterable<T> values, Object key) {
 		values.findFirst[ «shortcut.name» == key ]
 	}
 
 «
-ENDIF
+ENDFOR
 »}
 '''
 	}
+
+
+	protected def String templateAlias(EObject it, Map<Class<?>, Boolean> importeds) {
+		val path = callPath(false, importeds)
+		val base = path.key.key
+'''«path.prefix»«
+IF extras.containsKey(base) // TODO: clean as impossible due to callPath(**false**, importeds)
+»extras.get("«extras.get(base)»")«
+ELSE
+»eObject(«base.templateClass(importeds)», « EcoreUtil.getURI(base).toString.toJava »)«
+ENDIF
+»«path.value»'''
+	}
+
 
 	protected def String templateCreate(EObject it, Map<Class<?>, Boolean> importeds) {
 		val split = splits.get(it)
@@ -296,37 +320,21 @@ ENDIF
 »'''
 	}
 
-	protected def String templateAlias(EObject it, Map<Class<?>, Boolean> importeds) {
-		val path = callPath(false, importeds)
-		'''«path.prefix»extras.get("«extras.get(path.key.key)»")«path.value»'''
-	}
-
-	protected def prefix(Pair<Pair<EObject, ? extends Class<?>>, String> path) {
-		if (path.value !== null) (0 ..< (path.value.split(" as ").length - 1)).map[ "(" ].join else ""
-	}
-
-	protected def toUsedType(EObject it, Map<Class<?>, Boolean> importeds) {
-		val type = eClass.getInstanceClass()
-		if (importeds.containsKey(type) && importeds.get(type)) type.simpleName else type.name
-	}
-
 	protected def String templateRef(EObject it, Class<?> using, Map<Class<?>, Boolean> importeds) {
-		val refTypeText = toUsedType(importeds)
+		val refTypeText = templateClass(importeds)
 		val path = callPath(true, importeds)
 
 		val alias = namings.get(path.key.key)
 
 		// val refTypeText = toUsedType(importeds)
-		val rootTypeText = path.key.key.toUsedType(importeds)
+		val rootTypeText = path.key.key.templateClass(importeds)
 		val src = path.key.key
 
 		val expectedType = if (alias !== null) eClass.getInstanceClass() else using
 		var cast = 
-			if (!expectedType.isAssignableFrom(path.key.value)) {
-				val typeText = if (importeds.get(eClass.instanceClass) ?: false) eClass.instanceClass.
-						simpleName else eClass.instanceClass.name
-				"(" -> " as " + typeText + ")"
-			} else "" -> ""
+			if (!expectedType.isAssignableFrom(path.key.value.head)) 
+			"(" -> (" as " + templateClass(importeds) + ")")
+			else "" -> ""
 
 		if (alias !== null)
 '''«refTypeText».ref("«alias»")«
@@ -335,54 +343,80 @@ IF !path.value.empty
 ENDIF
 »'''
 		else if (explicitExtras.containsKey(src))
-			'''«cast.key»«path.prefix»extras.get(«explicitExtras.get(src).toJava»)«path.value»«cast.value»'''
+'''«cast.key»«path.prefix»extras.get(«explicitExtras.get(src).toJava»)«path.value»«cast.value»'''
 		else if (src.eResource !== null)
-			'''«cast.key»«path.prefix»extras.get("«extras.computeIfAbsent(src) [ "$"+extras.size ]»")«path.value»«cast.value»'''
+'''«cast.key»«path.prefix»extras.get("«extras.computeIfAbsent(src) [ 
+			"$"+extras.size 
+			]»")«path.value»«cast.value»'''
 		else null // Headless
 	}
 
+
+	protected def prefix(Pair<? extends Pair<EObject, ?>, String> path) {
+		if (path.value !== null) (0 ..< (path.value.split(" as ").length - 1)).map[ "(" ].join else ""
+	}
+	
+	
 	/**
 	 * Returns
 	 * 
 	 * @param it element go to
-	 * @param all to evaluate extras
+	 * @param withExtras to use extras as result
+	 * @param importeds classes in source
 	 * @return (root element) -> (exposed type) -> path
 	 */
-	protected def Pair<Pair<EObject, ? extends Class<?>>, String> callPath(EObject it, boolean all,
+	protected def Pair<Pair<EObject, ? extends Iterable<? extends Class<?>>>, String> callPath(EObject it, boolean withExtras,
 			Map<Class<?>, Boolean> importeds) {
 		if (namings.containsKey(it)) 
-			return it -> eClass.instanceClass -> ""
+			return (it -> #[ eClass.instanceClass, eClass.instanceClass ]) -> ""
 
-		if (eContainer === null || (all && explicitExtras.containsKey(it)))  // To extras
-			return it -> EObject -> ""
+		if (eContainer === null || (withExtras && explicitExtras.containsKey(it)))  // To extras
+			return (it -> #[ EObject, eClass.instanceClass ]) -> ""
 
 		val feat = eContainingFeature as EReference
 
 		val cont = eContainer
-		val card = if (!feat.many) ""
+		var casted = false
+		val segment = if (!feat.many) feat.toXtend
 			else {
 				val siblings = cont.eGet(feat) as Collection<EObject>
-				val isShortcut = shortcut?.containerClass !== null 
-					&& shortcut.containerClass.isAssignableFrom(feat.EType.instanceClass)
-				if (isShortcut) ".at(" + eGet(shortcut).toJava + ")"
-				else if (siblings.size == 1) ".head"
-				else ".get(" + siblings.toList.indexOf(it) + ")"
+				val keyed = !feat.EKeys.empty
+				val shortcut = if (!keyed) shortcuts.findFirst[ 
+					containerClass.isAssignableFrom(feat.EType.instanceClass)
+				]
+				
+				if (keyed) {
+					casted = true
+'''at(«feat.name.toJava», «templateClass(importeds)», «feat.EKeys.map[att| eGet(att).toJava ].join(', ')»)'''			
+				} else if (shortcut != null) 
+'''«feat.toXtend».at«shortcut.EContainingClass.instanceClass.simpleName»(«eGet(shortcut).toJava»)'''			
+				else if (siblings.size == 1)
+'''«feat.toXtend».head'''
+				else 
+'''«feat.toXtend».get(«siblings.toList.indexOf(it)»)'''
 			}
-
-		val parentPath = callPath(cont, all, importeds)
+		
+		val parentPath = callPath(cont, withExtras, importeds)
 
 		// is cast required
-		val declaring = feat.EContainingClass.instanceClass
+		val declaring = feat.EContainingClass
+		val onRootAlias = !withExtras && eContainer.eContainer == null // eContainer is already handle
+		val castRequired = !declaring.instanceClass.isAssignableFrom(parentPath.key.value.head)
+			&& !(onRootAlias)
 		var path = parentPath.value 
-			+ if (!declaring.isAssignableFrom(parentPath.key.value)) {
-				" as " + if (importeds.get(declaring) ?: false) declaring.simpleName else declaring.name + ")"
-			} else ""
+			+ (if (castRequired) (" as " + templateClass(declaring, importeds) + ")") else "")
 
-		val segment = feat.name + card
 
-		parentPath.key.key -> feat.EReferenceType.instanceClass -> path + "." + segment
+		val usedTypes = parentPath.key.value.tail
+		val typePath = #[ 
+			if (casted) eClass.instanceClass else feat.EReferenceType.instanceClass,
+			eClass.instanceClass
+		] + usedTypes
+		val typePathHead = typePath.toList.head
+		val typePathTail = typePath.toList.tail.toList
+		return (parentPath.key.key -> typePath.toList) -> path + "." + segment
 	}
-
+	
 	protected def templateProperty(EObject element, EStructuralFeature it, (Object, Class<?>)=>String encoding) {
 		val usingType = EType.instanceClass
 		if (isMany) {
@@ -421,7 +455,7 @@ ENDFOR
 	}
 
 	protected def isReference(EReference it) {
-		if (containment || derived) false
+		if (containment || derived || transient || !changeable) false
 		else if (EOpposite === null) true
 		else if (EOpposite.derived) true // is it possible ?
 		else if (EOpposite.containment) false
@@ -430,8 +464,13 @@ ENDFOR
 	}
 
 	protected def templateClass(EObject it, Map<Class<?>, Boolean> importedClasses) {
-		val jClass = eClass.instanceClass
-		if (importedClasses.get(jClass)) jClass.simpleName else jClass.name
+		eClass.templateClass(importedClasses)
+	}
+	
+	
+	protected def templateClass(EClass it, Map<Class<?>, Boolean> importedClasses) {
+		val jClass = instanceClass
+		if (importedClasses.get(jClass) ?: Boolean.FALSE) jClass.simpleName else jClass.name
 	}
 
 	protected def usedPackages(Iterable<EObject> values) {
@@ -442,31 +481,33 @@ ENDFOR
 	}
 
 	protected def importedClasses(EObject root, Iterable<? extends Class<?>> staticImports) {
-		val it = new HashMap<Class<?>, Boolean>(staticImports.toInvertedMap[ Boolean.TRUE ])
+		val result = new HashMap<Class<?>, Boolean>(staticImports.toInvertedMap[ Boolean.TRUE ])
 		val iAll = #[ root ] + root.eAllContents.toIterable
-		iAll.map [
-			#[ it ] + // element and its references
-			eClass.EAllReferences.filter[ reference ] // Containment is reached by allContents 
+		iAll.map [// element and its pure references (Containment is reached by allContents)
+			#[ it ] +  eClass.EAllReferences.filter[ reference ] //  
 			.map[ r| eGet(r) ]
 			.filterNull // get defined
 			.map[
 				if (it instanceof Collection<?>) (it as Collection<? extends EObject>) 
 				else #[ it as EObject ]
-			]
-			.flatten.filter[ !splits.containsKey(it) ]
-		].flatten /* all elements + referenced element */ .map[ #[ it, callPath(false, Collections.emptyMap).key.key ] ].
-			flatten
-			.map[ eClass.instanceClass ]
+			].flatten
+			.filter[ !splits.containsKey(it) ]
+		].flatten /* all elements + referenced element */ 
+//			.map[ 
+//				#[ it, callPath(false, Collections.emptyMap).key.key ]
+//			].flatten
+//			.map[ eClass.instanceClass ]
+			.map[ callPath(false, Collections.emptyMap).key.value.tail ].flatten
 			.toSet.sortBy[ name ] // sort to have always the same import
 			.forEach [ usedClass |
 				// println('\timport ' + usedClass.name)
-				if (!containsKey(usedClass)) {
-					put(usedClass, Boolean.valueOf( // Simple name already found
-						!keySet.map[ simpleName ].exists[ equals(usedClass.simpleName) ]
+				if (!result.containsKey(usedClass)) {
+					result.put(usedClass, Boolean.valueOf( // Simple name already found
+						!result.keySet.map[ simpleName ].exists[ equals(usedClass.simpleName) ]
 					))
 				}
 			]
-		it
+		result
 	}
 
 	protected def templateImports(Map<Class<?>, Boolean> importedClasses) {
@@ -523,5 +564,11 @@ ENDFOR
 	}
 
 	static def EObject toRoot(EObject it) { eContainer?.toRoot ?: it }
+
+	static def toXtend(EReference it) {
+		if (name.length > 1 && Character.isUpperCase(name.charAt(1))) name.toFirstUpper
+		else name
+	}
+
 
 }
