@@ -141,8 +141,8 @@ class ModIt<T> {
 	 * @param id of created element
 	 * @param type the type of EObject to build
 	 */
-	def <R extends T> R aliasCreate(String id, Class<R> type) {
-		aliasCreate(id, type, null, null)
+	def <R extends T> R createAs(Class<R> type, String id) {
+		createAs(type, id, null, null)
 	}
 
 	/**
@@ -151,8 +151,8 @@ class ModIt<T> {
 	 * @param type of EObject to build
 	 * @param initializer of the given {@link EObject}
 	 */
-	def <R extends T> R aliasCreate(String id, Class<R> type, String content) {
-		aliasCreate(id, type, content, null)
+	def <R extends T> R createAs(Class<R> type, String id, String content) {
+		createAs(type, id, content, null)
 	}
 	
 	/**
@@ -162,8 +162,8 @@ class ModIt<T> {
 	 * @param type of EObject to build
 	 * @param initializer of the given {@link EObject}
 	 */
-	def <R extends T> R aliasCreate(String id, Class<R> type, (R)=>void initializer) {
-		aliasCreate(id, type, null, initializer)
+	def <R extends T> R createAs(Class<R> type, String id, (R)=>void initializer) {
+		createAs(type, id, null, initializer)
 	}
 	
 	/**
@@ -173,8 +173,8 @@ class ModIt<T> {
 	 * @param type of EObject to build
 	 * @param content parsed parsed by content provider
 	 */
-	def <R extends T> R aliasCreate(String id, Class<R> type, String content, (R)=>void init) {
-		alias(id, create(type, content, init))
+	def <R extends T> R createAs(Class<R> type, String id, String content, (R)=>void init) {
+		id.alias(create(type, content, init))
 	}
 
 
@@ -256,5 +256,60 @@ class ModIt<T> {
 	protected def createRegistry() {
 		new ModItRegistry<T>(impl, description.getter)
 	}
+
+//
+// Deprecated notation: 
+//   createAs syntax follow create args order.
+//   aliasCreate syntax is not convenient.
+//
+
+	/**
+	 * Creates an {@link EObject} and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type the type of EObject to build
+	 */
+	@Deprecated // use createAs instead
+	def <R extends T> R aliasCreate(String id, Class<R> type) {
+		type.createAs(id, null, null)
+	}
+
+	/**
+	 * Creates an {@link EObject} and initializes it.
+	 * 
+	 * @param type of EObject to build
+	 * @param initializer of the given {@link EObject}
+	 */
+	@Deprecated // use createAs instead
+	def <R extends T> R aliasCreate(String id, Class<R> type, String content) {
+		type.createAs(id, content, null)
+	}
+	
+	/**
+	 * Creates an {@link EObject} and initializes it and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type of EObject to build
+	 * @param initializer of the given {@link EObject}
+	 */
+	@Deprecated // use createAs instead
+	def <R extends T> R aliasCreate(String id, Class<R> type, (R)=>void initializer) {
+		type.createAs(id, null, initializer)
+	}
+	
+	/**
+	 * Creates an {@link EObject} and initializes it when assembling and associate it to id.
+	 * 
+	 * @param id of created element
+	 * @param type of EObject to build
+	 * @param content parsed parsed by content provider
+	 */
+	@Deprecated // use createAs instead
+	def <R extends T> R aliasCreate(String id, Class<R> type, String content, (R)=>void init) {
+		type.createAs(id, content, init)
+	}
+
+		
+
 
 }

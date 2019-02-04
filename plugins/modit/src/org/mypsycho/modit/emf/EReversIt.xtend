@@ -70,21 +70,18 @@ class EReversIt {
 	}
 
 	protected def prepareContext() {
-				
-		val illegalSplits = splits.filter[ it, id | !roots.containsKey(toRoot) ].values
-		if (!illegalSplits.empty) {
-			throw new IllegalArgumentException(
-				"Split values must be contained by reversed resource. Use explicitExtras: " + illegalSplits
-			)
-		}
-		
-		val illegalAliases = splits.filter[ it, id | !roots.containsKey(toRoot) ].values
-		if (!illegalAliases.empty) {
-			throw new IllegalArgumentException(
-				"Alias values must be contained by reversed resource. Use explicitExtras: " + illegalAliases
-			)
-		}
-		
+		// Check alias and splits are defined
+		#[ "Alias" -> aliases, "Split" -> splits.mapValues[ name ] ].forEach[
+			// val Map<EObject, Object> cast = new HashMap(value) // Cast is required by xtend transformation.
+			val headlesses = value.filter[ it, id | !roots.containsKey(toRoot) ].values
+			if (!headlesses.empty) {
+				throw new IllegalArgumentException(
+					key + " values must be contained by reversed resource. Use explicitExtras: " + headlesses
+				)
+			}
+		]
+
+		// Check explicit are pure references
 		val illegalExtras = explicitExtras.filter[ it, id | roots.containsKey(toRoot) ].values
 		if (!illegalExtras.empty) {
 			throw new IllegalArgumentException(
@@ -94,8 +91,10 @@ class EReversIt {
 
 		val mappings = #[ roots.mapValues[ name ], splits.mapValues[ name ], aliases ]
 		
-		val allAliaseds = mappings.map[ keySet ].flatten.toList
-		val redundantAliaseds = allAliaseds.filter[ e| allAliaseds.filter[it == e].size > 1 ].toSet
+		val allAliaseds = mappings.map[ keySet ].flatten.toList // list to keep all occurences
+		val redundantAliaseds = allAliaseds
+			.filter[ e| allAliaseds.filter[it == e].size > 1 ] // redundant check
+			.toSet
 		if (!redundantAliaseds.empty) {
 			throw new IllegalArgumentException(
 				"Elements cannot have several aliases: " + redundantAliaseds
@@ -103,7 +102,9 @@ class EReversIt {
 		}
 		
 		val allAliases = mappings.map[ values ].flatten.toList
-		val redundantAliases = allAliases.filter[ e| allAliases.filter[it == e].size > 1 ].toSet
+		val redundantAliases = allAliases
+			.filter[ e| allAliases.filter[it == e].size > 1 ]
+			.toSet
 		if (!redundantAliases.empty) {
 			throw new IllegalArgumentException(
 				"Alias cannot be used several times: " + redundantAliases
@@ -301,11 +302,9 @@ ENDIF
 				-> [ Object it, Class<?> using | (it as EObject).templateCreate(importeds) ]
 		].map[ (key as Iterable<EStructuralFeature>).map[ f | f -> value ] ].flatten.toList
 
-'''«
+'''«templateClass(importeds)».create«
 IF namings.containsKey(it)
-»«namings.get(it).toJava».aliasCreate(«templateClass(importeds)»)«
-ELSE
-»«templateClass(importeds)».create«
+»As(«namings.get(it).toJava»)«
 ENDIF
 »«
 IF content.exists[ f | eIsSet(f.key) ]
@@ -528,11 +527,10 @@ ENDFOR
 		Files.createDirectories(target.parent)
 		val it = Files.newBufferedWriter(target, encoding)
 		try {
-			println('Writing ' + target)
+			print('Writing ' + target)
 			write(content.apply)
-		} finally {
-			close
-		}
+			println(' : ok')
+		} finally { close }
 	}
 
 	static def classEPackage(EObject it) {
