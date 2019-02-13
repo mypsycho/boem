@@ -1,8 +1,11 @@
 package org.mypsycho.modit
 
 import java.util.HashMap
+import java.io.PrintStream
 
 class ModItRegistry<T> {
+
+	public static val DEBUG = Boolean.getBoolean("modit.registry.debug")
 
 	extension val ModItImplementation<T, ?> implementation
 
@@ -27,6 +30,17 @@ class ModItRegistry<T> {
 		(explicits.entrySet.findFirst[m|m.value === it]?.key) // Find name
 		?: (if (containerOf(it) !== null) containerOf(it).QName + "." else "") // else use parent qname
 		+ '|' + typeName + '|' // and type
+	}
+	
+	def debug() {
+		if (DEBUG) trace(System.err)
+	}
+	
+	def trace(PrintStream out) {
+		out.println("*** ModIt registry ***")
+		explicits.entrySet.sortBy[ key ].forEach[
+			out.println("\t" + key +":"+value.class)
+		]
 	}
 
 }

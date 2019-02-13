@@ -56,7 +56,7 @@ class ClassId {
 	}
 	
 	override hashCode() {
-		(name?.hashCode) + (pack?.hashCode)
+		(name?:"").hashCode + (pack?:"").hashCode*32
 	}
 	
 

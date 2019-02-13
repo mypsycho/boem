@@ -121,6 +121,7 @@ class ModItAssembler<T, F> {
 
 			var targetValue = registry.get(proxyId);
 			if (targetValue === null) { // assert found
+				registry.debug
 				throw new NoSuchElementException(
 '''Unknown «proxyId» for «prop.propName»«««
  of «registry.getQName(container)»'''

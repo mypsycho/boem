@@ -6,11 +6,10 @@ Bundle-SymbolicName: org.mypsycho.emf.modit;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.xtend.lib,
+ org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.xmi,
- com.google.guava,
- org.eclipse.xtext.xbase.lib
+ org.eclipse.emf.ecore.xmi
 Export-Package: org.mypsycho.modit,
  org.mypsycho.modit.emf,
  org.mypsycho.modit.i18n,
