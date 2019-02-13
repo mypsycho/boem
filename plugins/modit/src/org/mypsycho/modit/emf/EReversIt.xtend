@@ -38,7 +38,7 @@ class EReversIt {
 
 	val List<EObject> orderedRoots
 
-	var Map<EObject, String> extras // We tracks anonymous extras elements
+	var Map<EObject, String> implicitExtras // We tracks anonymous extras elements
 	var Map<EObject, String> namings
 
 	public val splits = new HashMap<EObject, ClassId>
@@ -70,8 +70,10 @@ class EReversIt {
 	}
 
 	protected def prepareContext() {
-		// Check alias and splits are defined
-		#[ "Alias" -> aliases, "Split" -> splits.mapValues[ name ] ].forEach[
+		#[ // Check alias and splits are defined in the serialized tree.
+			"Alias" -> aliases, 
+			"Split" -> splits.mapValues[ name ] 
+		].forEach[
 			// val Map<EObject, Object> cast = new HashMap(value) // Cast is required by xtend transformation.
 			val headlesses = value.filter[ it, id | !roots.containsKey(toRoot) ].values
 			if (!headlesses.empty) {
@@ -91,28 +93,23 @@ class EReversIt {
 
 		val mappings = #[ roots.mapValues[ name ], splits.mapValues[ name ], aliases ]
 		
-		val allAliaseds = mappings.map[ keySet ].flatten.toList // list to keep all occurences
-		val redundantAliaseds = allAliaseds
-			.filter[ e| allAliaseds.filter[it == e].size > 1 ] // redundant check
-			.toSet
-		if (!redundantAliaseds.empty) {
-			throw new IllegalArgumentException(
-				"Elements cannot have several aliases: " + redundantAliaseds
-			)
-		}
-		
-		val allAliases = mappings.map[ values ].flatten.toList
-		val redundantAliases = allAliases
-			.filter[ e| allAliases.filter[it == e].size > 1 ]
-			.toSet
-		if (!redundantAliases.empty) {
-			throw new IllegalArgumentException(
-				"Alias cannot be used several times: " + redundantAliases
-			)
-		}
-		
-		extras = new HashMap()// We tracks anonymous extras elements
-		
+		// Checks aliases are a bijection.
+		#[
+			"Target elements" -> [ Map<EObject, String> it| keySet ],
+			"Names" -> [ Map<EObject, String> it| values ]
+		].forEach[ rule |
+			val ends = mappings.map(rule.value).flatten.toList // list to keep all occurrences
+			val redundants = ends
+				.filter[ e| ends.filter[ it == e ].size > 1 ] // redundant check
+				.toSet
+			if (!redundants.empty) {
+				throw new IllegalArgumentException(
+					rule.key + " cannot be used in several alias : " + redundants
+				)
+			}
+		]
+
+		implicitExtras = new HashMap()// We tracks anonymous extras elements
 		namings = mappings.map[ entrySet ].flatten.toMap([ key ], [ value ])
 	}
 
@@ -202,7 +199,7 @@ class «name» {
 		Iterable<Class<?>> packages,
 		String content
 	) {
-		val extrasByName = extras.entrySet.map[ value -> key ].toList.sortBy[ key ]
+		// val extrasByName = 
 
 '''package «mainClass.pack»
 
@@ -217,18 +214,22 @@ class «mainClass.name» {
 	)
 
 «
-IF !extras.empty
+IF !implicitExtras.empty || !explicitExtras.empty
 »	new() {
 		val it = new ResourceSetImpl
-		extras.putAll(#{// Used resources
+«
+ IF !implicitExtras.empty
+»		extras.putAll(#{// anonymous resources
 		«
- FOR e : extrasByName SEPARATOR ',\n'
+ FOR e : implicitExtras.entrySet.map[ value -> key ].toList.sortBy[ key ] SEPARATOR ',\n'
 »	"«e.key»" -> eObject(« e.value.templateClass(importeds)», « EcoreUtil.getURI(e.value).toString.toJava »)«
  ENDFOR
 »
 		})
 «
- IF !extras.empty
+ ENDIF // implicit extras
+»«
+ IF !explicitExtras.empty
 »		extras.putAll(#{ // Named elements
 		«
   FOR a : explicitExtras.entrySet.toList.sortBy[ value ] SEPARATOR ',\n'
@@ -239,10 +240,7 @@ IF !extras.empty
 «
  ENDIF // explicit extras
 »	}
-	
-	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
-		rs.getEObject(URI.createURI(uri), true) as T
-	}
+
 «
 ENDIF // extras
 »	def content() {
@@ -260,6 +258,14 @@ ENDIF // extras
 	}
 
 «
+IF !implicitExtras.empty || !explicitExtras.empty
+»	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
+		rs.getEObject(URI.createURI(uri), true) as T
+	}
+
+«
+ENDIF // extras
+»«
 FOR shortcut : shortcuts SEPARATOR ',\n'
 »	def <T extends «shortcut.EContainingClass.instanceClass.name»> at«shortcut.EContainingClass.instanceClass.simpleName»(Iterable<T> values, Object key) {
 		values.findFirst[ «shortcut.name» == key ]
@@ -276,8 +282,8 @@ ENDFOR
 		val path = callPath(false, importeds)
 		val base = path.key.key
 '''«path.prefix»«
-IF extras.containsKey(base) // TODO: clean as impossible due to callPath(**false**, importeds)
-»extras.get("«extras.get(base)»")«
+IF implicitExtras.containsKey(base) // TODO: clean as impossible due to callPath(**false**, importeds)
+»extras.get("«implicitExtras.get(base)»")«
 ELSE
 »eObject(«base.templateClass(importeds)», « EcoreUtil.getURI(base).toString.toJava »)«
 ENDIF
@@ -344,8 +350,8 @@ ENDIF
 		else if (explicitExtras.containsKey(src))
 '''«cast.key»«path.prefix»extras.get(«explicitExtras.get(src).toJava»)«path.value»«cast.value»'''
 		else if (src.eResource !== null)
-'''«cast.key»«path.prefix»extras.get("«extras.computeIfAbsent(src) [ 
-			"$"+extras.size 
+'''«cast.key»«path.prefix»extras.get("«implicitExtras.computeIfAbsent(src) [ 
+			"$"+implicitExtras.size 
 			]»")«path.value»«cast.value»'''
 		else null // Headless
 	}
@@ -411,8 +417,8 @@ ENDIF
 			if (casted) eClass.instanceClass else feat.EReferenceType.instanceClass,
 			eClass.instanceClass
 		] + usedTypes
-		val typePathHead = typePath.toList.head
-		val typePathTail = typePath.toList.tail.toList
+		// val typePathHead = typePath.toList.head // Debug expression
+		// val typePathTail = typePath.toList.tail.toList  // Debug expression
 		return (parentPath.key.key -> typePath.toList) -> path + "." + segment
 	}
 	
@@ -425,7 +431,8 @@ ENDIF
 			val valueTexts = values.map[ encoding.apply(it, usingType) ].toList
 			val displayeds = valueTexts.filter[ it !== null ].toList
 
-			/* Xtend fails to infer on multi inheritance : Pretty collections fails
+			// Xtend fails to infer on multi inheritance : Pretty collection-syntax fails
+			/*
 			  val container = if (ordered) '[ '->' ]' else '{'->'}'
 			  if (displayeds.empty) {
 			  '''// «safename» values are headless'''
@@ -552,7 +559,8 @@ ENDFOR
 	}
 
 	static dispatch def toJava(Enumerator it) {
-		class.name + ".getByName(\"" + name + "\")"
+		if (class.isEnum) class.name + "." + (it as Enum<?>).name()
+		else class.name + ".getByName(\"" + name + "\")"
 	}
 
 	static val RESERVEDS = "extension,default,transient".split(",").toList
