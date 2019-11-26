@@ -1,11 +1,11 @@
 package org.mypsycho.emf.modit.reverit.test
 
+import fr.ibp.odv.xad2.rcp.model.EqxModelExtensions
 import java.nio.file.Paths
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
 import org.junit.Test
-import org.mypsycho.emf.modit.ClassId
-import org.mypsycho.emf.modit.EReversIt
-import fr.ibp.odv.xad2.rcp.model.EqxModelExtensions
+import org.mypsycho.modit.emf.ClassId
+import org.mypsycho.modit.emf.EReversIt
 
 class EqxDesignGenTest extends ReversItTestContext {
     

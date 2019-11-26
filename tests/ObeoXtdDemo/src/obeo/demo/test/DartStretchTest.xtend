@@ -97,15 +97,19 @@ class DartStretchTest extends DartTestContext {
    doRun()
  myShared
   AbtractComponent
-   init(List,#MISSING_TYPE)
+   init(List,<untyped>)
     args : List
-    context
+    context : <untyped>
    start()
    <unnamed-Function>() : List
    stop()
    isRunning() : bool'''.toString
 			.split("\\R").toList, 
-			content.onAll.map[ indent + xCall(String) ].toList)
+			content.onAll.map[
+				val result = indent + getValue(DartContribution.LABEL)
+				System.err.println(result)
+				result
+			].toList)
 	}
 
   @Test
@@ -147,7 +151,7 @@ Dart/myShared/AbtractComponent/<unnamed-Function>()
 Dart/myShared/AbtractComponent/stop()
 Dart/myShared/AbtractComponent/isRunning()'''
 			.toString.split("\\R").toList, 
-			content.onAll.map[ xCall(String->String) ].filterNull.toList)
+			content.onAll.map[ getValue(DartContribution.QNAME) ].filterNull.toList)
 	}
 
 

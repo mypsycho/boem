@@ -17,6 +17,6 @@ Require-Bundle: org.eclipse.xtend.lib,
  fr.ibp.odv.xad2.rcp.properties.ext;bundle-version="1.1.7",
  fr.ibp.odv.xad2.model;bundle-version="1.1.7",
  fr.ibp.odv.xad2.model.legacy;bundle-version="1.1.7",
- org.mypsycho.emf.reflem
+ org.mypsycho.emf.modit.edit
 Bundle-Vendor: mypsycho
 

@@ -2,7 +2,9 @@ package org.mypsycho.modit.emf.stretch
 
 import java.util.ArrayList
 import java.util.Collections
+import java.util.HashMap
 import java.util.List
+import java.util.Map
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
@@ -13,26 +15,30 @@ class EClassStretcher {
 
 	public val EClassifier source
 
-	public val EmfAspect<EClassifier> aspect
+	public val EmfAspect<? extends EClassifier> aspect/*<>*/
 
 	// Built info
-	var List<EClassStretcher> inheritances = null
+	var List<? extends EClassStretcher> inheritances = null
+
+	// Cache is used to avoid continuous resolution
+	// LIMITATION: definition are immuable
+	val Map<Object, Object> cache = new HashMap
+	
+	val cacheResolution = [ inheritances.getThis(it) ] // Prevent useless instance
 
 
-	new(EmfStretcher context, EClass source) {
+	new(EmfStretcher context, EClassifier source) {
 		this.context = context
 		this.source = source
 		val parentAspect = context.getAspect(source.EPackage)
 		// No aspect for extras
-		this.aspect = if (parentAspect !== null)
-			new EmfAspect.Specific(source, parentAspect)
-		else
-			new EmfAspect.Default(source)
+		this.aspect = 
+			if (parentAspect !== null)
+				new EmfAspect.Specific(source, parentAspect)
+			else new EmfAspect.Default(source, true)
 	}
 
-	def isReady() {
-		inheritances !== null
-	}
+	def isComputed() { inheritances !== null }
 
 	def void compute() {
 		if (source instanceof EClass) {
@@ -48,10 +54,12 @@ class EClassStretcher {
 				}
 			}
 
-			inheritances = if (result.empty) #[ this, context.onClass(EObject) ]
+			inheritances = 
+				if (result.empty) 
+					#[ this, context.onClass(EObject) ]
 				else {
 					result.add(0, this)
-					newImmutableList(result)
+					Collections.unmodifiableList(result)
 				}
 
 		} else {
@@ -59,33 +67,16 @@ class EClassStretcher {
 		}
 	}
 
-	def getInheritances() {
-		inheritances
+	def getInheritances() { inheritances }
+
+	def <V> getThis(Object option) {
+		cache.computeIfAbsent(option, cacheResolution)
 	}
 
-
-	def <V> getThis(Object option, V byDefault) {
-		inheritances.getThis(option, byDefault)
-	}
-
-	def <V> isThis(Object option) {
-		inheritances.isAny(option)
-	}
-
-	def <V> getAll(Object option) {
-		inheritances.getAll(option)
-	}
+	def <V> getAll(Object option) { inheritances.getAll(option) }
 	
-	def <V> getSuper(Class<? extends EObject> from, Object option, V byDefault) {
-		superInheritances(from).getThis(option, byDefault)
-	}
-
-	def <V> isSuper(Class<? extends EObject> from, Object option) {
-		superInheritances(from).isAny(option)
-	}
-
-	def <V> getSuperAll(Class<? extends EObject> from, Object option) {
-		superInheritances(from).getAll(option)
+	def <V> getSuper(Class<? extends EObject> from, Object option) {
+		superInheritances(from).getThis(option)
 	}
 	
 	protected def <V> superInheritances(Class<? extends EObject> from) {
@@ -96,19 +87,16 @@ class EClassStretcher {
 			}
 			position++;
 		}
-		throw new IllegalAccessException(source.name + ' is not typed by ' + from.name)
+		throw new IllegalAccessException(source.name + ' does not inherit of ' + from.name)
 	}
 
-	protected static def <V> getThis(List<EClassStretcher> from, Object option, V byDefault) {
-		from.map[ aspect.get(option, null) ].findFirst[ it !== null ] ?: byDefault
+	protected static def getThis(List<? extends EClassStretcher> from, Object option) {
+		from.map[ aspect.get(source, option) ].findFirst[ it !== null ]
 	}
 
-	protected static def <V> isAny(List<EClassStretcher> from, Object option) {
-		from.exists[ aspect.is(option) ]
-	}
 	
-	protected static def <V> getAll(List<EClassStretcher> from, Object option) {
-		from.map[ aspect.get(option, null) ].filterNull
+	protected static def <V> getAll(List<? extends EClassStretcher> from, Object option) {
+		from.map[ aspect.get(source, option) ].filterNull
 	}
 
 }

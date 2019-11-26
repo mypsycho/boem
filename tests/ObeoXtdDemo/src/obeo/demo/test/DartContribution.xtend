@@ -1,68 +1,62 @@
 package obeo.demo.test
 
-import fr.obeo.dsl.dart.dart.Class
-import fr.obeo.dsl.dart.dart.DartPackage
 import fr.obeo.dsl.dart.dart.Named
 import fr.obeo.dsl.dart.dart.Parameter
 import fr.obeo.dsl.dart.dart.Parametrized
 import fr.obeo.dsl.dart.dart.Typed
 import java.util.Collections
-import org.eclipse.emf.ecore.EObject
 import org.mypsycho.modit.emf.stretch.EmfContribution
+import org.mypsycho.modit.emf.stretch.EmfExtensions
 import org.mypsycho.modit.emf.stretch.EmfStretcher
+import fr.obeo.dsl.dart.dart.Function
 
 class DartContribution extends EmfContribution {
 	
-	static extension DartPackage TARGET = DartPackage.eINSTANCE
+	public static val LABEL = EmfExtensions.byEObjects[ "[" + eClass.name + "]" ]
+	public static val QNAME = EmfExtensions.byEObjects[ null ]// (EmfExtensions.unsupported("QualifiedName", String))
 	
-	public static val EmfStretcher STRETCHER = EmfContribution.createStretcher(#{
-		TARGET -> DartContribution
-	})
-
-	
-	new(EmfStretcher it) {
-		super(it, TARGET)
-	}
+	new(EmfStretcher it) { super(it) }
 	
 	override run() {
 		
-		context.onClass(EObject).aspect += #{
-			String->[ EObject it | "[" + eClass.name + "]" ], // A display function
-			String->String->[ EObject it | // String->String is the key for qualified name
-				if (it instanceof Named) (
-					if (eContainer === null) xCall(Named)
-					else (eContainer.xCall(String->String) as String) ?.concat("/") ?.concat(xCall(Named) as String)
-				) // else no qualified name
-			]
-		}
+		val shortText = EmfExtensions.byEObjects(EmfExtensions.unsupported("short text", String))	
+		val id = EmfExtensions.byEObjects(EmfExtensions.unsupported("id", String))	
+		val qPath = EmfExtensions.byEObjects([ "" ])
 		
-		named += #{ 
-			Named->[ Named it | name ?: "<unnamed-"+eClass.name+">" ], 
-			String->[ Named it | xCall(Named) as String ]
-		}
-
-		typed += #{
-			Typed->[ Typed it | if (type !== null) " : " + type.xCall(Named) else "" ], 
-			String->[ Typed it | (xCallSuperOf(Typed, String) as String) + xCall(Typed) ]
-		}
-
-		class_ += #{
-			class_Extends-> [ fr.obeo.dsl.dart.dart.Class it | 
-				(if(^extends !== null) Collections.singletonList(^extends) else emptyList) + implements + mixins
-			],
-			String->[ Class it | 
-				(xCallSuperOf(Class, String) as String) 
-					+ (xCall(class_Extends) as Iterable<Class>).join(" :> ", ", ", "") [ xCall(Named) as String ]
-			]
-		}
-
-		parameter += #{
-			Parameter->[ Parameter it | if (type === null) "#MISSING_TYPE" else type.xCall(Named) ]
-		}
+		// XXX test duplicated assigment
 		
-		parametrized += #{
-			Named->[ Parametrized it | xCallSuperOf(Parametrized, Named) + "(" + parameters.map[ p | p.xCall(Parameter) ].join(",") + ")" ]
-		}
+		Named->shortText += [ name ?: "<unnamed-" + eClass.name + ">" ]
+		Named->id += [ getValue(shortText) ]
+		Named->LABEL += [ getValue(id) ]
+		
+		Named->qPath += [ 
+			if (eContainer === null) ""
+			else eContainer.getValue(qPath) + eContainer.getValue(shortText) + "/" 
+		]
+		Named->QNAME += [ (it>>qPath) + (it>>LABEL) ]
+		
+		Typed->LABEL += [ 
+			getSuper(Typed, LABEL) 
+			+ (if (type !== null) " : " + type.getValue(shortText) else "")
+		]
+		
+		
+		fr.obeo.dsl.dart.dart.Class->LABEL += [
+			val generals = (if(^extends !== null) Collections.singletonList(^extends) else emptyList)
+				+ implements + mixins
+			getSuper(fr.obeo.dsl.dart.dart.Class, LABEL) 
+				+ generals.join(" :> ", ", ", "")[ it>>shortText ]
+		]
+		fr.obeo.dsl.dart.dart.Class->QNAME += [ // xtend fails to infere with a type named Class
+			getValue(qPath) + getSuper(fr.obeo.dsl.dart.dart.Class, LABEL)
+		]
+
+		
+		Parameter->LABEL += [ getSuper(Typed, LABEL) + " : " + (type?.getValue(shortText) ?: "<untyped>") ]
+		Function->id += [ getSuper(Function, id) 
+			+ "(" + parameters.join(",")[ type?.getValue(shortText) ?: "<untyped>" ] + ")"
+		]
+		
 	}
 	
 

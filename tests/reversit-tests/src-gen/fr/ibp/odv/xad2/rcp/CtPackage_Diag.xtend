@@ -1,9 +1,8 @@
 package fr.ibp.odv.xad2.rcp
 
-import java.util.Map
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
-import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.sirius.diagram.BackgroundStyle
+import org.eclipse.sirius.diagram.ContainerLayout
 import org.eclipse.sirius.diagram.description.ContainerMapping
 import org.eclipse.sirius.diagram.description.DiagramDescription
 import org.eclipse.sirius.diagram.description.EdgeMapping
@@ -11,9 +10,9 @@ import org.eclipse.sirius.diagram.description.Layer
 import org.eclipse.sirius.diagram.description.NodeMapping
 import org.eclipse.sirius.diagram.description.style.FlatContainerStyleDescription
 import org.eclipse.sirius.diagram.description.tool.DeleteElementDescription
-import org.eclipse.sirius.viewpoint.description.Environment
+import org.eclipse.sirius.viewpoint.description.IdentifiedElement
 import org.eclipse.sirius.viewpoint.description.SystemColor
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 class CtPackage_Diag {
   val EqxModelDesign context
@@ -44,7 +43,7 @@ class CtPackage_Diag {
           semanticCandidatesExpression = "feature:classes"
           synchronizationLock = true
           domainClass = "equinoxeCore.CtClass"
-          childrenPresentation = org.eclipse.sirius.diagram.ContainerLayout.getByName("List")
+          childrenPresentation = ContainerLayout.getByName("List")
           deletionDescription = DeleteElementDescription.ref("Reused")[ ((it as DiagramDescription).toolSection.ownedTools.at("DoNotDeleteElements") as DeleteElementDescription) ]
           reusedNodeMappings += NodeMapping.ref("Reused")[ (it as DiagramDescription).defaultLayer.containerMappings.head.subNodeMappings.at("CtAttribute_Subnode_CtClass") ]
           reusedNodeMappings += NodeMapping.ref("Reused")[ (it as DiagramDescription).defaultLayer.containerMappings.head.subNodeMappings.at("CtOperation_Subnode_CtClass") ]
@@ -53,7 +52,7 @@ class CtPackage_Diag {
             labelSize = 12
             labelExpression = "service:getEqxLabel()"
             roundedCorner = true
-            backgroundStyle = org.eclipse.sirius.diagram.BackgroundStyle.getByName("GradientTopToBottom")
+            backgroundStyle = BackgroundStyle.getByName("GradientTopToBottom")
             borderColor = (extras.get("Color#dark_gray") as SystemColor)
             labelColor = (extras.get("Color#black") as SystemColor)
             backgroundColor = (extras.get("Color#white") as SystemColor)
@@ -65,7 +64,7 @@ class CtPackage_Diag {
           semanticCandidatesExpression = "feature:interfaces"
           synchronizationLock = true
           domainClass = "equinoxeCore.CtInterface"
-          childrenPresentation = org.eclipse.sirius.diagram.ContainerLayout.getByName("List")
+          childrenPresentation = ContainerLayout.getByName("List")
           deletionDescription = DeleteElementDescription.ref("Reused")[ ((it as DiagramDescription).toolSection.ownedTools.at("DoNotDeleteElements") as DeleteElementDescription) ]
           reusedNodeMappings += NodeMapping.ref("TypesGroupes_Diag_GTC")[ (it as DiagramDescription).defaultLayer.containerMappings.at("CtInterface_TypesGroup").subNodeMappings.head ]
           style = FlatContainerStyleDescription.create[
@@ -73,7 +72,7 @@ class CtPackage_Diag {
             labelSize = 12
             labelExpression = "service:getEqxLabel()"
             roundedCorner = true
-            backgroundStyle = org.eclipse.sirius.diagram.BackgroundStyle.getByName("GradientTopToBottom")
+            backgroundStyle = BackgroundStyle.getByName("GradientTopToBottom")
             borderColor = (extras.get("Color#dark_gray") as SystemColor)
             labelColor = (extras.get("Color#black") as SystemColor)
             backgroundColor = (extras.get("Color#white") as SystemColor)
@@ -88,7 +87,7 @@ class CtPackage_Diag {
     context.extras
   }
 
-  def <T extends org.eclipse.sirius.viewpoint.description.IdentifiedElement> at(Iterable<T> values, Object key) {
+  def <T extends IdentifiedElement> at(Iterable<T> values, Object key) {
     context.at(values, key) as T // Xtend inference fails?
   }
 

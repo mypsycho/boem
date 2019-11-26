@@ -1,96 +1,22 @@
 package fr.ibp.odv.xad2.rcp
 
-import fr.ibp.odv.xad2.rcp.properties.ext.sirius.eqxSiriusProperties.EqxHyperlinkDescription
 import java.util.HashMap
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.eclipse.sirius.diagram.description.AdditionalLayer
-import org.eclipse.sirius.diagram.description.ConditionalContainerStyleDescription
-import org.eclipse.sirius.diagram.description.ConditionalEdgeStyleDescription
-import org.eclipse.sirius.diagram.description.ConditionalNodeStyleDescription
-import org.eclipse.sirius.diagram.description.ContainerMapping
-import org.eclipse.sirius.diagram.description.DiagramDescription
-import org.eclipse.sirius.diagram.description.EdgeMapping
-import org.eclipse.sirius.diagram.description.Layer
-import org.eclipse.sirius.diagram.description.NodeMapping
-import org.eclipse.sirius.diagram.description.filter.CompositeFilterDescription
-import org.eclipse.sirius.diagram.description.filter.MappingFilter
-import org.eclipse.sirius.diagram.description.style.BeginLabelStyleDescription
-import org.eclipse.sirius.diagram.description.style.BundledImageDescription
-import org.eclipse.sirius.diagram.description.style.CenterLabelStyleDescription
-import org.eclipse.sirius.diagram.description.style.DotDescription
-import org.eclipse.sirius.diagram.description.style.EdgeStyleDescription
-import org.eclipse.sirius.diagram.description.style.EllipseNodeDescription
-import org.eclipse.sirius.diagram.description.style.EndLabelStyleDescription
-import org.eclipse.sirius.diagram.description.style.FlatContainerStyleDescription
-import org.eclipse.sirius.diagram.description.style.SquareDescription
-import org.eclipse.sirius.diagram.description.style.WorkspaceImageDescription
-import org.eclipse.sirius.diagram.description.tool.ContainerCreationDescription
-import org.eclipse.sirius.diagram.description.tool.DeleteElementDescription
-import org.eclipse.sirius.diagram.description.tool.DiagramNavigationDescription
-import org.eclipse.sirius.diagram.description.tool.DirectEditLabel
-import org.eclipse.sirius.diagram.description.tool.DoubleClickDescription
-import org.eclipse.sirius.diagram.description.tool.EdgeCreationDescription
-import org.eclipse.sirius.diagram.description.tool.ElementDoubleClickVariable
-import org.eclipse.sirius.diagram.description.tool.Navigation
-import org.eclipse.sirius.diagram.description.tool.NodeCreationDescription
-import org.eclipse.sirius.diagram.description.tool.NodeCreationVariable
-import org.eclipse.sirius.diagram.description.tool.SourceEdgeCreationVariable
-import org.eclipse.sirius.diagram.description.tool.SourceEdgeViewCreationVariable
-import org.eclipse.sirius.diagram.description.tool.TargetEdgeCreationVariable
-import org.eclipse.sirius.diagram.description.tool.TargetEdgeViewCreationVariable
-import org.eclipse.sirius.diagram.description.tool.ToolSection
-import org.eclipse.sirius.properties.Category
-import org.eclipse.sirius.properties.CheckboxDescription
-import org.eclipse.sirius.properties.CheckboxWidgetStyle
-import org.eclipse.sirius.properties.CustomDescription
-import org.eclipse.sirius.properties.CustomExpression
-import org.eclipse.sirius.properties.DynamicMappingForDescription
-import org.eclipse.sirius.properties.DynamicMappingIfDescription
-import org.eclipse.sirius.properties.GroupDescription
-import org.eclipse.sirius.properties.GroupStyle
-import org.eclipse.sirius.properties.HyperlinkWidgetStyle
-import org.eclipse.sirius.properties.LabelDescription
-import org.eclipse.sirius.properties.LabelWidgetStyle
-import org.eclipse.sirius.properties.ListDescription
-import org.eclipse.sirius.properties.PageDescription
-import org.eclipse.sirius.properties.SelectDescription
-import org.eclipse.sirius.properties.SelectWidgetConditionalStyle
-import org.eclipse.sirius.properties.SelectWidgetStyle
-import org.eclipse.sirius.properties.TextAreaDescription
-import org.eclipse.sirius.properties.TextDescription
-import org.eclipse.sirius.properties.TextWidgetConditionalStyle
-import org.eclipse.sirius.properties.TextWidgetStyle
+import org.eclipse.sirius.diagram.description.DescriptionPackage
+import org.eclipse.sirius.diagram.description.filter.FilterPackage
+import org.eclipse.sirius.diagram.description.style.StylePackage
+import org.eclipse.sirius.diagram.description.tool.ToolPackage
+import org.eclipse.sirius.properties.PropertiesPackage
 import org.eclipse.sirius.properties.ViewExtensionDescription
-import org.eclipse.sirius.properties.WidgetAction
-import org.eclipse.sirius.viewpoint.description.Customization
-import org.eclipse.sirius.viewpoint.description.EAttributeCustomization
 import org.eclipse.sirius.viewpoint.description.Environment
 import org.eclipse.sirius.viewpoint.description.Group
+import org.eclipse.sirius.viewpoint.description.IdentifiedElement
 import org.eclipse.sirius.viewpoint.description.JavaExtension
-import org.eclipse.sirius.viewpoint.description.SystemColor
-import org.eclipse.sirius.viewpoint.description.SytemColorsPalette
-import org.eclipse.sirius.viewpoint.description.VSMElementCustomization
 import org.eclipse.sirius.viewpoint.description.Viewpoint
-import org.eclipse.sirius.viewpoint.description.tool.Case
-import org.eclipse.sirius.viewpoint.description.tool.ChangeContext
-import org.eclipse.sirius.viewpoint.description.tool.ContainerViewVariable
-import org.eclipse.sirius.viewpoint.description.tool.CreateInstance
-import org.eclipse.sirius.viewpoint.description.tool.Default
-import org.eclipse.sirius.viewpoint.description.tool.EditMaskVariables
-import org.eclipse.sirius.viewpoint.description.tool.ElementDeleteVariable
-import org.eclipse.sirius.viewpoint.description.tool.ElementSelectVariable
-import org.eclipse.sirius.viewpoint.description.tool.ElementVariable
-import org.eclipse.sirius.viewpoint.description.tool.ElementViewVariable
-import org.eclipse.sirius.viewpoint.description.tool.InitEdgeCreationOperation
-import org.eclipse.sirius.viewpoint.description.tool.InitialNodeCreationOperation
-import org.eclipse.sirius.viewpoint.description.tool.InitialOperation
-import org.eclipse.sirius.viewpoint.description.tool.NameVariable
-import org.eclipse.sirius.viewpoint.description.tool.Switch
-import org.eclipse.sirius.viewpoint.description.tool.ToolDescription
-import org.mypsycho.emf.modit.EModIt
+import org.mypsycho.modit.emf.EModIt
 
 class EqxModelDesign {
 
@@ -98,11 +24,11 @@ class EqxModelDesign {
 
   public extension EModIt factory = EModIt.using(
     fr.ibp.odv.xad2.rcp.properties.ext.sirius.eqxSiriusProperties.EqxSiriusPropertiesPackage.eINSTANCE,
-    org.eclipse.sirius.diagram.description.DescriptionPackage.eINSTANCE,
-    org.eclipse.sirius.diagram.description.filter.FilterPackage.eINSTANCE,
-    org.eclipse.sirius.diagram.description.style.StylePackage.eINSTANCE,
-    org.eclipse.sirius.diagram.description.tool.ToolPackage.eINSTANCE,
-    org.eclipse.sirius.properties.PropertiesPackage.eINSTANCE,
+    DescriptionPackage.eINSTANCE,
+    FilterPackage.eINSTANCE,
+    StylePackage.eINSTANCE,
+    ToolPackage.eINSTANCE,
+    PropertiesPackage.eINSTANCE,
     org.eclipse.sirius.viewpoint.description.DescriptionPackage.eINSTANCE,
     org.eclipse.sirius.viewpoint.description.tool.ToolPackage.eINSTANCE
   )
@@ -233,7 +159,7 @@ class EqxModelDesign {
     this
   }
 
-  def <T extends org.eclipse.sirius.viewpoint.description.IdentifiedElement> at(Iterable<T> values, Object key) {
+  def <T extends IdentifiedElement> at(Iterable<T> values, Object key) {
     values.findFirst[ name == key ]
   }
 

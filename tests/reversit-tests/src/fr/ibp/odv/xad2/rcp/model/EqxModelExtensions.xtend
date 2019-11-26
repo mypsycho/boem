@@ -1,11 +1,7 @@
 package fr.ibp.odv.xad2.rcp.model
 
-import fr.ibp.odv.xad2.model.equinoxeComposantsMetier.EquinoxeComposantsMetierPackage
-import fr.ibp.odv.xad2.model.equinoxeCore.EquinoxeCorePackage
-import fr.ibp.odv.xad2.model.equinoxeDialogue.EquinoxeDialoguePackage
-import fr.ibp.odv.xad2.model.equinoxeProcedure.EquinoxeProcedurePackage
-import org.mypsycho.emf.reflem.EmfContribution
-import org.mypsycho.emf.reflem.EmfStretcher
+import org.mypsycho.modit.emf.stretch.EmfContribution
+import org.mypsycho.modit.emf.stretch.EmfStretcher
 
 class EqxModelExtensions {
     

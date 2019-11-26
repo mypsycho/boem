@@ -51,7 +51,7 @@ class ModItAssembler<T, F> {
 						}
 						unbindInit?.apply(it)
 						val onAssembly = unbindAssemble
-						if (onAssembly != null) {
+						if (onAssembly !== null) {
 							onAssemblies.add(0, it->onAssembly)
 						}
 						onFlies.remove(it) // if already attached
@@ -130,11 +130,11 @@ class ModItAssembler<T, F> {
 			val path = getProxyPath 
 			// Warning: if path is return null (illegal), 
 			// Elvis (?:) provide the wrong value
-			if (path != null) {
+			if (path !== null) {
 				targetValue = path.apply(targetValue)
 			}
 
-			if (targetValue != null && !targetValue.assignableTo(prop)) {
+			if (targetValue !== null && !targetValue.assignableTo(prop)) {
 				throw new ClassCastException(
 '''At «registry.getQName(container)».«prop.propName», «««
 «proxyId» targets a «targetValue.typeName» «««
@@ -143,7 +143,7 @@ incompatible with «prop.refTypeName»'''
 			}
 
 			val fail = container.replaceResolved(prop, it, targetValue)
-			if (fail != null) {
+			if (fail !== null) {
 				throw new IllegalStateException(
 '''At «registry.getQName(container)».«prop.propName», «««
 «proxyId» value fails because «fail»'''

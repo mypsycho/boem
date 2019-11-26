@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Modit Sirius
+Bundle-SymbolicName: org.mypsycho.emf.modit.sirius;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.sirius;visibility:=reexport,
+ org.eclipse.sirius.diagram;visibility:=reexport,
+ org.eclipse.sirius.diagram.sequence;visibility:=reexport,
+ org.eclipse.sirius.tree;visibility:=reexport,
+ org.eclipse.sirius.table;visibility:=reexport,
+ org.mypsycho.emf.modit;visibility:=reexport
+

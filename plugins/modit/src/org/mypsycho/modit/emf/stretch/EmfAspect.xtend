@@ -1,6 +1,5 @@
 package org.mypsycho.modit.emf.stretch
 
-import java.util.Collections
 import java.util.HashMap
 import java.util.Map
 import org.eclipse.emf.ecore.ENamedElement
@@ -8,73 +7,29 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 
 abstract class EmfAspect<E extends ENamedElement> {
+	
+	public val E source
 
-	public val E value
-
-	new(E value) {
-		this.value = value
-	}
+	new(E source) { this.source = source }
 
 	// Basic Operation
-	def ENamedElement add(ENamedElement it, Iterable<?> options)
+	def ENamedElement add(ENamedElement it, Object key, Object value)
 
-	def <V> V get(ENamedElement it, Object option, V byDefault)
+	def Object get(ENamedElement it, Object option)
 
-	def boolean is(ENamedElement it, Object option)
-
-	def void remove(ENamedElement it, Iterable<?> options)
-
-	// Operator API
-	def operator_add(ENamedElement it, Object option) {
-		add(it, Collections.singleton(option))
+	def add(ENamedElement target, Iterable<? extends Pair<?, ?>> options) {
+		options.forEach[option| target.add(option.key, option.value) ]		
 	}
-
-	def operator_add(ENamedElement it, Iterable<?> options) {
-		add(it, options)
+	def operator_add(ENamedElement target, Pair<?, ?> option) {
+		target.add(option.key, option.value)
 	}
-
-	def operator_remove(ENamedElement it, Object option) {
-		remove(it, Collections.singleton(option))
-	}
-
-	def operator_remove(ENamedElement it, Iterable<?> options) {
-		remove(it, options)
+	def operator_add(ENamedElement target, Iterable<? extends Pair<?, ?>> options) {
+		target.add(options)
 	}
 
 
-	// Default value API    
-	def ENamedElement add(Iterable<?> options) {
-		add(value, options)
-	}
 
-	def <V> get(Object option, V byDefault) {
-		get(value, option, byDefault)
-	}
 
-	def is(Object option) {
-		is(value, option)
-	}
-
-	def remove(Iterable<?> options) {
-		remove(value, options)
-	}
-
-	// Default value:Operator API
-	def operator_add(Object option) {
-		add(value, Collections.singleton(option))
-	}
-
-	def operator_add(Iterable<?> options) {
-		add(value, options)
-	}
-
-	def operator_remove(Object option) {
-		remove(value, Collections.singleton(option))
-	}
-
-	def operator_remove(Iterable<?> options) {
-		remove(value, options)
-	}
 
 	def static boolean isContaining(EObject it, EObject value) {
 		value !== null && (it == value || isContaining(value.eContainer))
@@ -93,45 +48,37 @@ abstract class EmfAspect<E extends ENamedElement> {
 		else throw new IllegalArgumentException(name + " do not belong to " + value.name)
 	}
 
+	static val MAP_PROVIDER = [ new HashMap ]
 	static class Default<E extends ENamedElement> extends EmfAspect<E> {
 
 		val properties = new HashMap<ENamedElement, Map<Object, Object>>
+		val boolean writeOnce
 
-		new(E value) {
+		new(E value, boolean cached) {
 			super(value)
+			writeOnce = cached
+		}
+		
+		// TODO : adapt Feature
+
+		protected def doAdd(ENamedElement target, Object key, Object value) {
+			val values = properties.computeIfAbsent(target, MAP_PROVIDER)
+			if (writeOnce && values.containsKey(key)) {
+				throw new IllegalStateException("Duplicated assignment of " + key + " on " + target)
+			}
+			values.put(key, value)
 		}
 
-		protected def doAdd(ENamedElement target, Iterable<?> options) {
-			val specific = properties.computeIfAbsent(target, [new HashMap])
-			options.forEach [
-				if (it instanceof Pair<?, ?>) { // Xtend fails to resolve it.value and resolve this.value
-					specific.put(key, it.value)
-				} else if (it instanceof ENamedElement) {
-					target.assertContaining(it)
-				} else { // We use null to undefine an inheritance
-					specific.put(it, it)
-				}
-			]
-		}
-
-		override add(ENamedElement it, Iterable<?> options) {
-			doAdd(value.assertContaining(it), options)
+		override add(ENamedElement it, Object key, Object value) {
+			doAdd(source.assertContaining(it), key, value)
 			it
 		}
 
-		override <V> get(ENamedElement it, Object option, V byDefault) {
-			(properties.get(it)?.get(option) as V) ?: byDefault
+		override get(ENamedElement it, Object option) {
+			properties.get(it)?.get(option)
 		}
 
-		override is(ENamedElement it, Object option) {
-			val specific = properties.get(it)
-			if (specific !== null) specific.get(option) != null else false
-		}
 
-		override remove(ENamedElement it, Iterable<?> options) {
-			val specific = properties.get(it)
-			if (specific !== null) options.forEach[specific.remove(it)]
-		}
 
 	}
 
@@ -140,75 +87,48 @@ abstract class EmfAspect<E extends ENamedElement> {
 		val EmfAspect<?> container
 
 		new(E value, EmfAspect<?> parent) {
-			super(parent.value.assertContaining(value))
+			super(parent.source.assertContaining(value))
 			this.container = parent
 		}
 
-		override add(ENamedElement it, Iterable<?> options) {
-			container.add(value.assertContaining(it), options)
+		override add(ENamedElement it, Object key, Object value) {
+			container.add(source.assertContaining(it), key, value)
 		}
 
-		override <V> get(ENamedElement it, Object option, V byDefault) {
-			container.get(value.assertContaining(it), option, byDefault)
-		}
-
-		override is(ENamedElement it, Object option) {
-			container.is(value.assertContaining(it), option)
-		}
-
-		override remove(ENamedElement it, Iterable<?> options) {
-			container.remove(value.assertContaining(it), options)
+		override get(ENamedElement it, Object option) {
+			container.get(source.assertContaining(it), option)
 		}
 
 	}
 
 	static class Package extends Default<EPackage> {
 
-		new(EPackage value) {
-			super(value)
-		}
+		new(EPackage value, boolean cached) { super(value, cached) }
 
 		def toEClass(Class<? extends EObject> it) { // Can work only if value is a package
-			val target = value.EClassifiers.findFirst[c| c.instanceClass == it]
+			val target = source.EClassifiers.findFirst[c| c.instanceClass == it]
 			if (target === null) {
-				throw new IllegalArgumentException(name + " do not belong to " + value.name)
+				throw new IllegalArgumentException(name + " do not belong to " + source.name)
 			}
 			target
 		}
 
 		// Reflective API
-		def ENamedElement add(Class<? extends EObject> it, Iterable<?> options) {
-			add(toEClass, options)
+		def ENamedElement add(Class<? extends EObject> it, Object key, Object value) {
+			toEClass.add(key, value)
 		}
 	
-		def <V> V get(Class<? extends EObject> it, Object option, V byDefault) {
-			get(toEClass, option, byDefault)
-		}
-	
-		def boolean is(Class<? extends EObject> it, Object option) {
-			is(toEClass, option)
-		}
-	
-		def void remove(Class<? extends EObject> it, Iterable<?> options) {
-			remove(toEClass, options)
-		}
 	
 		// Reflective:Operator API
-		def operator_add(Class<? extends EObject> it, Object option) {
-			add(toEClass, Collections.singleton(option))
+		def operator_add(Class<? extends EObject> it, Pair<?, ?> option) {
+			add(option.key, option.value)
 		}
 	
-		def operator_add(Class<? extends EObject> it, Iterable<?> options) {
-			add(toEClass, options)
+		def operator_add(Class<? extends EObject> it, Iterable<?extends Pair<?, ?>> options) {
+			val eClass = toEClass
+			options.forEach[option| eClass.add(option.key, option.value) ]
 		}
 	
-		def operator_remove(Class<? extends EObject> it, Object option) {
-			remove(toEClass, Collections.singleton(option))
-		}
-	
-		def operator_remove(Class<? extends EObject> it, Iterable<?> options) {
-			remove(toEClass, options)
-		}
 
 	}
 

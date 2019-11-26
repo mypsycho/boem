@@ -21,8 +21,8 @@ class AdvancedExtensions {
 		Function1<? super T, K> computeKeys, 
 		Function1<? super T, V> computeValues
 	) {
-		if (computeKeys == null) throw new NullPointerException("computeKeys")
-		if (computeValues == null) throw new NullPointerException("computeValues")
+		if (computeKeys === null) throw new NullPointerException("computeKeys")
+		if (computeValues === null) throw new NullPointerException("computeValues")
 		val result = Maps.newLinkedHashMap()
 		while(values.hasNext()) {
 			val T t = values.next()

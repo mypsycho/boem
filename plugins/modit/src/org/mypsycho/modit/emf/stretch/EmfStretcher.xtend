@@ -8,47 +8,43 @@ import java.util.Deque
 import java.util.HashMap
 import java.util.List
 import java.util.Map
-import java.util.function.Consumer
-import java.util.function.Function
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
+import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.emf.ecore.EcorePackage
-import java.util.concurrent.Callable
-import java.util.function.BiConsumer
-import java.util.function.BiFunction
+
 
 class EmfStretcher {
 
 
-	public val List<EPackage> allSources // Order is fixed
+	public val List<? extends EPackage> allSources // Order is fixed
 
-	val Map<EPackage, EmfAspect.Package> elements
+	val Map<? extends EPackage, ? extends EmfAspect.Package> elements
 
-	val List<EmfStretcher> extensions
+	val List<? extends EmfStretcher> extensions
 
-	var Map<EClass, EClassStretcher> contents = null
+	var Map<? extends EClass, ? extends EClassStretcher> contents = null
 
-	val extras = new HashMap<EClass, EClassStretcher>
+	val extras = new HashMap<EClassifier, EClassStretcher>
 
-	var progressions = new ArrayDeque<EClassifier> // 
+	var progressions = new ArrayDeque<EClassifier> // set to null when initialized
 
 	new(EPackage... sources) {
-		this(sources, true, Collections.EMPTY_LIST)
+		this(sources, true, Collections.emptyList)
 	}
 
-	new(List<EPackage> sources, boolean recursive, List<EmfStretcher> extensions) {
-		allSources = newArrayList(
-			if (recursive)
-				sources.map[ #[ it ] + eAllContents.toIterable.filter(EPackage) ].flatten
-			else
-				sources
+	new(List<? extends EPackage> sources, boolean recursive, List<? extends EmfStretcher> extensions) {
+		allSources = new ArrayList(
+			if (!recursive) sources
+			else sources.map[ #[ it ] + eAllContents.toIterable.filter(EPackage) ].flatten.toList
 		)
 		this.extensions = extensions
-		elements = allSources.toInvertedMap[ new EmfAspect.Package(it) ]
+		elements = allSources.toInvertedMap[ new EmfAspect.Package(it, true) ]
 		
-		assertTree(this, new ArrayDeque, new ArrayList)
+		// must avoid circular pattern in EmfStretcher
+		assertTree(new ArrayDeque, new ArrayList)
 		
 		// Creating EClassStretcher instance requires elements.
 		extras.put(EcorePackage.eINSTANCE.EObject, 
@@ -58,24 +54,13 @@ class EmfStretcher {
 		
 	}
 
-	static def void assertTree(EmfStretcher it, Deque<EmfStretcher> stack, Collection<EmfStretcher> cumul) {
-		if (cumul.contains(it)) { // seen this, done that
-			return
-		}
-		if (stack.contains(it)) {
-			throw new IllegalArgumentException(
-				"Circular analysis " + stack.join(" -> ")[ allSources.join(",", "Pack[ ", " ]")[ name ] ]
-			)
-		}
-
-		stack.push(it)
-		extensions.forEach[ assertTree(stack, cumul) ]
-		cumul.add(it)
-		stack.pop
-	}
 
 	def getTargets() { allSources }
 
+	protected def assertInit() {
+		if (contents === null) throw new IllegalStateException("Not initialized")
+	}
+	
 	def EmfStretcher initialize() {
 		if (contents !== null) {
 			return this // already done
@@ -95,11 +80,12 @@ class EmfStretcher {
 		this
 	}
 
-	def boolean canProvide(EClass it) {
+	def boolean canProvide(EClassifier it) {
 		contents.containsKey(it) || extras.containsKey(it) || extensions.exists[ ext| ext.canProvide(it) ]
 	}
 
 	def onClass(Class<? extends EObject> it) {
+		assertInit
 		// We won't reach extensions
 		// User is supposed to know the structure
 		val eClass = (contents.keySet + extras.keySet).findFirst[ t| t.instanceClass == it ]
@@ -107,19 +93,20 @@ class EmfStretcher {
 		eClass.onClass
 	}
 
-	def onClass(EClass it) {
+	def onClass(EClassifier it) {
 		val result = tryOnClass
 		if (result === null) throw new IllegalArgumentException(name + ' is not defined in this context.')
 		result
 	}
 
-	protected def EClassStretcher tryOnClass(EClass it) {
+	protected def EClassStretcher tryOnClass(EClassifier it) {
+		assertInit
 		contents.get(it) ?: extras.get(it) ?: extensions.findFirst[ ext|ext.canProvide(it) ]?.onClass(it)
 	}
 
-	package def List<EClassStretcher> computeInheritances(EClass it) {
+	package def List<?extends EClassStretcher> computeInheritances(EClassifier it) {
 		val EClassStretcher content = tryOnClass ?: extras.computeIfAbsent(it)[ new EClassStretcher(this, it) ]
-		if (content.ready) {
+		if (content.computed) {
 			return content.inheritances
 		}
 		if (progressions.contains(it)) {
@@ -133,97 +120,148 @@ class EmfStretcher {
 
 	def getAspect(EPackage it) { elements.get(it) }
 
-	def xIs(EObject it, Object option) { onClass(eClass).isThis(option) }
-
-	def xGet(EObject it, Object option) { 
-		onClass(eClass)
-		.getThis(option, UNDEFINED)
-		.assertDefined(option)
+	static def toFeatID(EmfParticipant ext, EStructuralFeature feat) {
+		ext->feat
 	}
 
-	def xCall(EObject it, Object option) { tryCall(xGet(option), option) }
-	
-	def xApply(EObject it, Object option, Object params) { tryApply(xGet(option), params, option) }
-	
-	def <T extends EObject> xIsSuperOf(T it, Class<T> current, Object option) {
-		onClass(eClass).isSuper(current, option)
-	}
-	
-	def <T extends EObject, V> xGetSuperOf(T it, Class<T> current, Object option) {
-		onClass(eClass).getSuper(current, option, UNDEFINED)
+
+	def add(EClassifier it, EmfParticipant.Participation<?> option) {
+		EPackage.aspect.add(it, option.key, option)
 	}
 
-	def <T extends EObject> xCallSuperOf(T it, Class<T> current, Object option) {
-		tryCall(xGetSuperOf(current, option), option)
+	def add(Pair<EClass, EStructuralFeature> it, EmfParticipant.Participation<?> option) {
+		key.assertApplicable(value)
+		key.EPackage.aspect.add(key, option.key.toFeatID(value), option)
 	}
-	
-	def <T extends EObject> xApplySuperOf(T it, Class<T> current, Object option, Object params) {
-		tryApply(xGetSuperOf(current, option), params, option)
-	}
-	
-	
-	def static tryCall(EObject it, Object fun, Object option) {
-		// Function
-		if (fun instanceof Functions.Function1<?, ?>) (fun as Functions.Function1<EObject, ?>).apply(it)
-		else if (fun instanceof Function<?, ?>) (fun as Function<EObject, ?>).apply(it)
 
-		// Runnable
-		else if (fun instanceof Procedures.Procedure0) {
-			fun.apply
-			null
-		} else if (fun instanceof Runnable) {
-			fun.run
-			null
-		} else if (fun instanceof Callable<?>) {
-			fun.call
-			null
+// bindings shorcuts
+// def <T> operator_add(EClassifier it, EmfContribution.Participation<?> option) {
+
+//	def <T,V extends EObject> operator_add(Class<V> it, EmfExtensions.OBinding<T, V> option) {
+//		option.register(onClass)
+//	}
+	
+	def <T, O extends EObject, V extends O> operator_mappedTo(Class<V> it, EmfExtensions.XObject<T, O> ext) {
+		ext.bind(this, it)
+	}
+
+	def <T,V extends EObject> operator_mappedTo(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
+		ext.bind(this, key, value)
+	}
+
+
+
+
+//	def operator_add(EClassifier it, EmfContribution.Participation<?> option) {
+//		add(option)
+//	}
+//
+//	def operator_add(Pair<EClass, EStructuralFeature> it, EmfContribution.Participation<?> option) {
+//		add(option)
+//	}
+
+
+
+	// API is asymmetric on purpose
+
+	// EmfToolings
+	// EmfToolings.XClass
+
+	def <T> operator_mappedTo(EClass it, EmfToolings.XClass<T> ext) {
+		ext.bind(this, it)
+	}
+	
+	def <T> getValue(EClass it, EmfToolings.XClass<T> part) {
+		part.exec(it, onClass.getThis(part) as EmfToolings.CBinding<T>)
+	}
+	
+	def <T> operator_doubleGreaterThan(EClass it, EmfToolings.XClass<T> part) {
+		getValue(part)
+	}
+
+	// EmfToolings.XFeature
+	
+	def <T> operator_mappedTo(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> ext) {
+		ext.bind(this, key, value)
+	}
+
+	def <T> operator_mappedTo(EStructuralFeature it, EmfToolings.XFeature<T> ext) {
+		ext.bind(this, it)
+	}
+	
+	def <T> getValue(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> part) {
+		part.exec(key, value, key.onClass.getThis(part.toFeatID(value)) as EmfToolings.FBinding<T>)
+	}
+	
+	def <T> operator_doubleGreaterThan(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> part) {
+		getValue(part)
+	}
+
+	def <T> operator_doubleGreaterThan(EStructuralFeature it, EmfToolings.XFeature<T> part) {
+		(eClass->it).getValue(part)
+	}
+
+
+	// EmfExtensions
+	// EmfExtensions.XObject
+	def <T, O extends EObject, V extends O> getValue(V it, EmfExtensions.XObject<T, O> part) {
+		part.exec(it, eClass.onClass.getThis(part) as EmfExtensions.OBinding<T, O, ? super V>)
+	}
+
+	def <T, O extends EObject, V extends O> operator_doubleGreaterThan(V it, EmfExtensions.XObject<T, O> part) {
+		getValue(part)
+	}
+
+	def <T, O extends EObject, V extends O, C extends V> T getSuper(C it, Class<V> type, EmfExtensions.XObject<T, O> part) {
+		part.exec(it, eClass.onClass.getSuper(type, part) as EmfExtensions.OBinding<T, O, ? super V>)
+	}
+	
+
+	// EmfExtensions.XValue
+	def <T, V extends EObject> getValue(V it, EStructuralFeature feat, EmfExtensions.XValue<T> part) {
+		part.exec(it, feat, eClass.onClass.getThis(part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
+	}
+	
+	def <T, V extends EObject> getValue(Pair<V, EStructuralFeature> it, EmfExtensions.XValue<T> part) {
+		key.getValue(value, part)
+	}
+
+	def <T, V extends EObject> operator_doubleGreaterThan(Pair<V, EStructuralFeature> it, EmfExtensions.XValue<T> part) {
+		getValue(part)
+	}
+
+	def <T, V extends EObject, C extends V> getSuper(C it, EStructuralFeature feat, Class<V> type, EmfExtensions.XValue<T> part) {
+		part.exec(it, feat, eClass.onClass.getSuper(type, part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
+	}
+
+	def <T, V extends EObject, C extends V> T getSuper(Pair<C, EStructuralFeature> it, Class<V> type, EmfExtensions.XValue<T> part) {
+		key.getSuper(value, type, part)
+	}
+	
+	
+
+
+	static def assertApplicable(EClassifier it, EStructuralFeature feat) {
+		if (it instanceof EClass) if (!EAllStructuralFeatures.contains(feat)) {
+			throw new IllegalArgumentException(feat.name + ' is not a feature of EClass ' + name)	
 		}
-		// Consumer
-		else if (fun instanceof Procedures.Procedure1<?>) { 
-			(fun as Procedures.Procedure1<EObject>).apply(it) 
-			null
-		} else if (fun instanceof Consumer<?>) { 
-			(fun as Consumer<EObject>).accept(it) 
-			null
+	}
+
+	static def void assertTree(EmfStretcher it, Deque<EmfStretcher> stack, Collection<EmfStretcher> cumul) {
+		if (cumul.contains(it)) { // been there, done that
+			return
+		}
+		if (stack.contains(it)) {
+			throw new IllegalArgumentException(
+				"Circular analysis " + stack.join(" -> ")[ allSources.join(",", "Pack[ ", " ]")[ name ] ]
+			)
 		}
 
-		else throw new UnsupportedOperationException(eClass + " does not provide a function " + option);
+		stack.push(it)
+		extensions.forEach[ assertTree(stack, cumul) ]
+		cumul.add(it)
+		stack.pop
 	}
-	
-	def static tryApply(EObject it, Object fun, Object params, Object option) {
-		// Stateless Function
-		if (fun instanceof Functions.Function1<?, ?>) (fun as Functions.Function1<Object, ?>).apply(params)
-		else if (fun instanceof Function<?, ?>) (fun as Function<Object, ?>).apply(params)
 
-		// Statefull Function
-		else if (fun instanceof Functions.Function2<?, ?, ?>) (fun as Functions.Function2<EObject, Object, ?>).apply(it, params)
-		else if (fun instanceof BiFunction<?, ?, ?>) (fun as BiFunction<EObject, Object, ?>).apply(it, params) 
-
-		// Stateless Consumer
-		else if (fun instanceof Procedures.Procedure1<?>) { 
-			(fun as Procedures.Procedure1<Object>).apply(params) 
-			null
-		} else if (fun instanceof Consumer<?>) { 
-			(fun as Consumer<Object>).accept(params) 
-			null
-		}
-		// Statefull Consumer
-		else if (fun instanceof Procedures.Procedure2<?, ?>) { 
-			(fun as Procedures.Procedure2<EObject, Object>).apply(it, params) 
-			null
-		} else if (fun instanceof BiConsumer<?, ?>) { 
-			(fun as BiConsumer<EObject, Object>).accept(it, params) 
-			null
-		}
-		else throw new UnsupportedOperationException(eClass + " does not provide a function " + option);
-	}
-	
-	static val UNDEFINED = new Object
-	
-	private def static assertDefined(Object it, Object option) {
-		if (it !== UNDEFINED) it
-		else throw new UnsupportedOperationException("" + option)
-	}
-	
 
 }

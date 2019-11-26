@@ -148,7 +148,7 @@ class EModIt extends ModIt<EObject> {
 			}
 					
 			if (FeatureMapUtil.isMany(container, feature)) {
-				if (newValue == null) {
+				if (newValue === null) {
 					return "Null value is unsupported on multi references"
 				}
 				

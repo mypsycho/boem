@@ -1,7 +1,5 @@
 package org.mypsycho.emf.modit.reverit.test
 
-import fr.ibp.odv.xad2.rcp.properties.ext.sirius.eqxSiriusProperties.EqxHyperlinkDescription
-import fr.ibp.odv.xad2.rcp.properties.ext.sirius.eqxSiriusProperties.EqxSiriusPropertiesPackage
 import org.eclipse.emf.common.util.Enumerator
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EAttribute
@@ -41,10 +39,10 @@ import org.eclipse.sirius.viewpoint.description.style.StylePackage
 import org.eclipse.sirius.viewpoint.description.tool.ChangeContext
 import org.eclipse.sirius.viewpoint.description.tool.InitialOperation
 import org.eclipse.sirius.viewpoint.description.tool.ToolPackage
-import org.mypsycho.emf.reflem.EmfAspect
-import org.mypsycho.emf.reflem.EmfStretcher
-import org.mypsycho.emf.modit.EModIt
 import org.mypsycho.emf.modit.reverit.test.EmfExtensions.Ext
+import org.mypsycho.modit.emf.EModIt
+import org.mypsycho.modit.emf.stretch.EmfAspect
+import org.mypsycho.modit.emf.stretch.EmfStretcher
 
 class SiriusGenerator {
 

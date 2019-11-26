@@ -1,0 +1,15 @@
+package org.mypsycho.sirius.diagram.ulayout
+
+import org.eclipse.sirius.viewpoint.DFeatureExtension
+import org.eclipse.sirius.diagram.DDiagram
+
+annotation "http://www.eclipse.org/sirius/1.1.0" as viewpoint
+annotation "http://www.eclipse.org/sirius/diagram/1.1.0" as diagram
+
+class DDiagramLayout extends DFeatureExtension {
+	refers DDiagram[1] parent
+	contains DLayout layout
+}
+
+abstract class DLayout {
+}
