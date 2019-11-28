@@ -244,7 +244,8 @@ ENDIF // extras
 
 	def context() { this }
 
-	static def <O extends EObject, R extends EObject> R at(O it, String featName, Class<R> type, Object... key) {
+    // deprecated
+	static def <R extends EObject> R at(EObject it, String featName, Class<R> type, Object... key) {
 		val feat = eClass.getEStructuralFeature(featName) as EReference
 		val keyValues = Arrays.asList(key)
 		(eGet(feat) as EList<?>).filter(type).findFirst[ r|
@@ -252,6 +253,15 @@ ENDIF // extras
 		] as R
 	}
 
+	// Only works for feature with keys
+	static def <O extends EObject, R extends O> R at(EList<E> values, Class<R> type, Object... key) {
+		val eList = values as EcoreEList<E>
+		val feat = eList.feature
+		val keyValues = Arrays.asList(key)
+		eList.filter(type).findFirst[ r|
+			feat.EKeys.map[ r.eGet(it) ] == keyValues
+		] as R
+	}
 «
 IF !implicitExtras.empty || !explicitExtras.empty
 »	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
