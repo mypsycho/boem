@@ -21,26 +21,21 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 	
 	static def String getTextFromDefaultFeature(EObject it, Map<EClass, (EObject)=>String> cache) {
 		// Very slow implementation
-		var impl = cache.get(eClass)
-		if (impl != null) {
-			return impl.apply(it)
-		}
-		// Search usual feature
-		val feat = DEFAULT_LABEL_FEATNAMES.map[known|
-			eClass.EAllAttributes.findFirst[ known == name 
-				&& EAttributeType.instanceClass == String
-			]
-		].filterNull.head
-		
-		if (feat != null) { // use found feature
-			impl = [ eGet(feat) as String ]
-		} else { // use class name
-			val classLabel = EmfI18n.get(eClass.EPackage).getLabel(eClass)
-			impl = [ classLabel ]
-		}
-		// Save applicable implementation
-		cache.put(eClass, impl)
-		impl.apply(it)
+		cache.computeIfAbsent(eClass) [
+			// Search usual feature
+			val feat = DEFAULT_LABEL_FEATNAMES.map[known|
+				eClass.EAllAttributes.findFirst[ known == name 
+					&& EAttributeType.instanceClass == String
+				]
+			].filterNull.head
+			
+			if (feat !== null) { // use found feature
+				[ eGet(feat) as String ]
+			} else { // use class name as label
+				val classLabel = EmfI18n.get(eClass.EPackage).getLabel(eClass);
+				[ classLabel ]
+			}
+		].apply(it)
 	}
 
 	
@@ -104,11 +99,11 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 	}
 
 	override getText(Object it) {
-		(it as EObject)>>ModitEdits.TEXT
+		(it as EObject)*ModitEdits.TEXT
 	}
     
     override getImage(Object it) {
-    	overlayImage(resourceLocator.getImage((it as EObject)>>ModitEdits.IMAGE))
+    	overlayImage(resourceLocator.getImage((it as EObject)*ModitEdits.IMAGE))
     }
 
 

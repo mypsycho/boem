@@ -12,5 +12,8 @@ Require-Bundle: com.google.guava,
  org.eclipse.sirius.diagram.sequence;visibility:=reexport,
  org.eclipse.sirius.tree;visibility:=reexport,
  org.eclipse.sirius.table;visibility:=reexport,
- org.mypsycho.emf.modit;visibility:=reexport
+ org.mypsycho.emf.modit;visibility:=reexport,
+ org.eclipse.core.runtime
+Bundle-Activator: org.mypsycho.modit.emf.sirius.MisActivator
+Bundle-ActivationPolicy: lazy
 

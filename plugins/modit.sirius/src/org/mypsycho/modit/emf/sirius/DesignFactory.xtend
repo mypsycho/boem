@@ -97,5 +97,11 @@ class DesignFactory extends ResourceFactoryImpl {
 
 	override Resource createResource(URI uri) { new ClassResource(uri) }
 
-	def static ModelProvider getProvider(Resource rs) { ((rs as ClassResource)).getValue() }
+	def static ModelProvider getProvider(int id) {
+		MisActivator.^default.getProvider(id)
+	}
+	
+	def static toUri(String pluginId, Class<? extends ModelProvider> it) {
+		pluginId + "/" + name + "." + DesignFactory.EXTENSION
+	}  
 }

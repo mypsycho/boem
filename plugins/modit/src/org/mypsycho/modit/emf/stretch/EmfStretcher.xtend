@@ -175,7 +175,7 @@ class EmfStretcher {
 		part.exec(it, onClass.getThis(part) as EmfToolings.CBinding<T>)
 	}
 	
-	def <T> operator_doubleGreaterThan(EClass it, EmfToolings.XClass<T> part) {
+	def <T> operator_multiply(EClass it, EmfToolings.XClass<T> part) {
 		getValue(part)
 	}
 
@@ -193,11 +193,11 @@ class EmfStretcher {
 		part.exec(key, value, key.onClass.getThis(part.toFeatID(value)) as EmfToolings.FBinding<T>)
 	}
 	
-	def <T> operator_doubleGreaterThan(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> part) {
+	def <T> operator_multiply(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> part) {
 		getValue(part)
 	}
 
-	def <T> operator_doubleGreaterThan(EStructuralFeature it, EmfToolings.XFeature<T> part) {
+	def <T> operator_multiply(EStructuralFeature it, EmfToolings.XFeature<T> part) {
 		(eClass->it).getValue(part)
 	}
 
@@ -208,7 +208,7 @@ class EmfStretcher {
 		part.exec(it, eClass.onClass.getThis(part) as EmfExtensions.OBinding<T, O, ? super V>)
 	}
 
-	def <T, O extends EObject, V extends O> operator_doubleGreaterThan(V it, EmfExtensions.XObject<T, O> part) {
+	def <T, O extends EObject, V extends O> operator_multiply(V it, EmfExtensions.XObject<T, O> part) {
 		getValue(part)
 	}
 
@@ -226,7 +226,7 @@ class EmfStretcher {
 		key.getValue(value, part)
 	}
 
-	def <T, V extends EObject> operator_doubleGreaterThan(Pair<V, EStructuralFeature> it, EmfExtensions.XValue<T> part) {
+	def <T, V extends EObject> operator_multiply(Pair<V, EStructuralFeature> it, EmfExtensions.XValue<T> part) {
 		getValue(part)
 	}
 

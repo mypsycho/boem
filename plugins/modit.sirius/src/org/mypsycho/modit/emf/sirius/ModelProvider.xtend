@@ -2,12 +2,12 @@ package org.mypsycho.modit.emf.sirius
 
 import java.util.ArrayList
 import java.util.List
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
 import org.eclipse.sirius.viewpoint.description.Group
+import org.eclipse.sirius.viewpoint.description.JavaExtension
 import org.eclipse.sirius.viewpoint.description.style.StylePackage
 import org.eclipse.sirius.viewpoint.description.tool.ToolPackage
 import org.mypsycho.modit.emf.EModIt
@@ -16,9 +16,8 @@ abstract class ModelProvider {
 	
 	static class Service {
 		
-		static def Object moditInvoke(EObject it, String uri, int methodId, Object params) {
-			var resource = eResource.resourceSet.getResource(URI.createURI(uri), false)
-			DesignFactory.getProvider(resource).invoke(methodId, it, params)
+		static def Object moditInvoke(EObject it, int providerId, int methodId, Object params) {
+			DesignFactory.getProvider(providerId).invoke(methodId, it, params)
 		}
 		
 	}
@@ -45,18 +44,27 @@ abstract class ModelProvider {
 	val List<Object> expressions = new ArrayList	
 	val protected extension EModIt factory
 	
-	val protected Resource resource
+	//val Resource resource
+	val int id
 	val Group value
 	
 	
 	new (Iterable<? extends EPackage> descriptorPackages, Resource rs) {
 		factory = EModIt.using(descriptorPackages)
-		resource = rs
-		value = Group.create [ init ]
+		
+		id = MisActivator.^default.registerProvider(this)
+		
+		//resource = rs
+		value = Group.create
+		value.init
+		value.assemble
+		value.ownedViewpoints.forEach[
+			// 
+			ownedJavaExtensions += JavaExtension.create [ qualifiedClassName = Service.name ]
+		]
+
 		// eObjects are not headless: eResource is not null.
 		rs.contents.add(value)
-		
-		value.assemble
 	}
 	
 	
@@ -67,137 +75,92 @@ abstract class ModelProvider {
 	def void init(Group it)
 
 
-	protected def String expression(String variable, Functions.Function1<? extends EObject, ?> callable) {
-		variable.createExpression(null, 0, callable)
-	}
-	
-	protected def String expression(String variable, String params, Functions.Function2<? extends EObject, ?, ?> callable) {
-		variable.createExpression(params, 1, callable)
-	}
-
-	protected def String expression(String variable, String params, Functions.Function3<? extends EObject, ?, ?, ?> callable) {
-		variable.createExpression(params, 2, callable)
-	}
-
-	protected def String expression(String variable, String params, Functions.Function4<? extends EObject, ?, ?, ?, ?> callable) {
-		variable.createExpression(params, 3, callable)
-	}
-
-	protected def String expression(String variable, String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, ?> callable) {
-		variable.createExpression(params, 4, callable)
-	}
-
-	protected def String expression(String variable, String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, ?> callable) {
-		variable.createExpression(params, 5, callable)
-	}
-	
-	protected def String expression(String variable, Procedures.Procedure1<? extends EObject> callable) {
-		variable.createExpression(null, 0, callable)
-	}
-
-	protected def String expression(String variable, String params, Procedures.Procedure2<? extends EObject, ?> callable) {
-		variable.createExpression(params, 1, callable)
-	}
-
-	protected def String expression(String variable, String params, Procedures.Procedure3<? extends EObject, ?, ?> callable) {
-		variable.createExpression(params, 2, callable)
-	}
-
-	protected def String expression(String variable, String params, Procedures.Procedure4<? extends EObject, ?, ?, ?> callable) {
-		variable.createExpression(params, 3, callable)
-	}
-
-	protected def String expression(String variable, String params, Procedures.Procedure5<? extends EObject, ?, ?, ?, ?> callable) {
-		variable.createExpression(params, 4, callable)
-	}
-
-	protected def String expression(String variable, String params, Procedures.Procedure6<? extends EObject, ?, ?, ?, ?, ?> callable) {
-		variable.createExpression(params, 5, callable)
-	}
-
-
-// SELF
-
 	protected def String expression(Functions.Function1<? extends EObject, ?> callable) {
-		SELF.expression(callable)
+		SELF.createExpression(0, callable)
+	}
+	
+	protected def String expression(String variable, Functions.Function1<? extends EObject, ?> callable) {
+		variable.createExpression(0, callable)
 	}
 	
 	protected def String expression(String params, Functions.Function2<? extends EObject, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(1, callable)
 	}
 
 	protected def String expression(String params, Functions.Function3<? extends EObject, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(2, callable)
 	}
 
 	protected def String expression(String params, Functions.Function4<? extends EObject, ?, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(3, callable)
 	}
 
 	protected def String expression(String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(4, callable)
 	}
 
 	protected def String expression(String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(5, callable)
 	}
 	
 	protected def String expression(Procedures.Procedure1<? extends EObject> callable) {
-		SELF.expression(callable)
+		SELF.createExpression(0, callable)
+	}
+
+	protected def String expression(String variable, Procedures.Procedure1<? extends EObject> callable) {
+		variable.createExpression(0, callable)
 	}
 
 	protected def String expression(String params, Procedures.Procedure2<? extends EObject, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(1, callable)
 	}
 
 	protected def String expression(String params, Procedures.Procedure3<? extends EObject, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(2, callable)
 	}
 
 	protected def String expression(String params, Procedures.Procedure4<? extends EObject, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(3, callable)
 	}
 
 	protected def String expression(String params, Procedures.Procedure5<? extends EObject, ?, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(4, callable)
 	}
 
 	protected def String expression(String params, Procedures.Procedure6<? extends EObject, ?, ?, ?, ?, ?> callable) {
-		SELF.expression(params, callable)
+		params.createExpression(5, callable)
 	}
 
 
-
-
-
-	private def String createExpression(String variable, String params, int size, Object callable) {
-		params.assertParams(size)
-		val id = expressions.size
+	private def String createExpression(String signature, int size, Object callable) {
+		val params = signature.toInvokeParams(size + 1)
+		val methodId = expressions.size
 		expressions += callable
-		if (params !== null) '''aql:«variable».moditInvoke(«id», '«resource.URI»', Sequence {«params»})'''
-		else '''aql:«variable».moditInvoke(«id», '«resource.URI»', null)'''
+		'''aql:«params.key».moditInvoke(«id», «methodId», Sequence {«params.value»})'''
 	}
 	
-	def <P1, P2, P3, P4, P5, P6, R> R invoke(int methodId, EObject context, Object params) {
-		val List<?> values = params as List<?>
+	def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject it, Object params) {
+		val List<Object> values = params as List<Object>
+		values.add(0, it)
 		val it = expressions.get(methodId)
 		switch (it) {
 			// functions
-			Functions.Function1<P1, R> :                     apply(context as P1)
-			Functions.Function2<P1, P2, R> :                 apply(context as P1, values.get(0) as P2)
-			Functions.Function3<P1, P2, P3, R> :             apply(context as P1, values.get(0) as P2, values.get(1) as P3)
-			Functions.Function4<P1, P2, P3, P4, R> :         apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4)
-			Functions.Function5<P1, P2, P3, P4, P5, R> :     apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4, values.get(3) as P5)
-			Functions.Function6<P1, P2, P3, P4, P5, P6, R> : apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4, values.get(3) as P5, values.get(4) as P6)
+			Functions.Function1<P0, R> :                     apply(values.get(0) as P0)
+			Functions.Function2<P0, P1, R> :                 apply(values.get(0) as P0, values.get(1) as P1)
+			Functions.Function3<P0, P1, P2, R> :             apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2)
+			Functions.Function4<P0, P1, P2, P3, R> :         apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3)
+			Functions.Function5<P0, P1, P2, P3, P4, R> :     apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4)
+			Functions.Function6<P0, P1, P2, P3, P4, P5, R> : apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4, values.get(5) as P5)
 			default: {
 				switch (it) {
 					// procedures return void.
-					Procedures.Procedure1<P1> :                     apply(context as P1)
-					Procedures.Procedure2<P1, P2> :                 apply(context as P1, values.get(0) as P2)
-					Procedures.Procedure3<P1, P2, P3> :             apply(context as P1, values.get(0) as P2, values.get(1) as P3)
-					Procedures.Procedure4<P1, P2, P3, P4> :         apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4)
-					Procedures.Procedure5<P1, P2, P3, P4, P5> :     apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4, values.get(3) as P5)
-					Procedures.Procedure6<P1, P2, P3, P4, P5, P6> : apply(context as P1, values.get(0) as P2, values.get(1) as P3, values.get(2) as P4, values.get(3) as P5, values.get(4) as P6)
+					Procedures.Procedure1<P0> :                     apply(values.get(0) as P0)
+					Procedures.Procedure2<P0, P1> :                 apply(values.get(0) as P0, values.get(1) as P1)
+					Procedures.Procedure3<P0, P1, P2> :             apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2)
+					Procedures.Procedure4<P0, P1, P2, P3> :         apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3)
+					Procedures.Procedure5<P0, P1, P2, P3, P4> :     apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4)
+					Procedures.Procedure6<P0, P1, P2, P3, P4, P5> : apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4, values.get(5) as P5)
+					default : throw new UnsupportedOperationException(it.getClass().toString)
 				}
 				null
 			}
@@ -208,8 +171,20 @@ abstract class ModelProvider {
 		params.join(",")
 	}
 	
-	protected def void assertParams(String it, int size) {
-		val actualSize = if (it === null) 0 else split(",").length
-		if (actualSize != size) throw new IllegalArgumentException('''Arguments [«it»] does not match signature size («size»)"''')
+	/**
+	 * 
+	 * 
+	 * @param it 
+	 * @param size
+	 */
+	protected def toInvokeParams(String it, int size) {
+		val values = split(",")
+		if (values.length == size) {
+			SELF->params			
+		} else if (values.length == size + 1) {
+			values.get(0)->values.tail.join(",")
+		} else {
+			throw new IllegalArgumentException('''Arguments [«it»] does not match signature size («size»)"''')
+		}
 	}
 }
