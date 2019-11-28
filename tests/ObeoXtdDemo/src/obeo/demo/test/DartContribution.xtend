@@ -1,14 +1,13 @@
 package obeo.demo.test
 
+import fr.obeo.dsl.dart.dart.Class
+import fr.obeo.dsl.dart.dart.Function
 import fr.obeo.dsl.dart.dart.Named
 import fr.obeo.dsl.dart.dart.Parameter
-import fr.obeo.dsl.dart.dart.Parametrized
 import fr.obeo.dsl.dart.dart.Typed
-import java.util.Collections
 import org.mypsycho.modit.emf.stretch.EmfContribution
 import org.mypsycho.modit.emf.stretch.EmfExtensions
 import org.mypsycho.modit.emf.stretch.EmfStretcher
-import fr.obeo.dsl.dart.dart.Function
 
 class DartContribution extends EmfContribution {
 	
@@ -26,34 +25,30 @@ class DartContribution extends EmfContribution {
 		// XXX test duplicated assigment
 		
 		Named->shortText += [ name ?: "<unnamed-" + eClass.name + ">" ]
-		Named->id += [ getValue(shortText) ]
-		Named->LABEL += [ getValue(id) ]
-		
+		Named->id += [ it*shortText ]
 		Named->qPath += [ 
 			if (eContainer === null) ""
-			else eContainer.getValue(qPath) + eContainer.getValue(shortText) + "/" 
-		]
-		Named->QNAME += [ (it>>qPath) + (it>>LABEL) ]
-		
-		Typed->LABEL += [ 
-			getSuper(Typed, LABEL) 
-			+ (if (type !== null) " : " + type.getValue(shortText) else "")
+			else eContainer*qPath + eContainer*id + "/" 
 		]
 		
+		Named->LABEL += [ it*id ]
+		Named->QNAME += [ it*qPath + it*id ]
 		
-		fr.obeo.dsl.dart.dart.Class->LABEL += [
-			val generals = (if(^extends !== null) Collections.singletonList(^extends) else emptyList)
-				+ implements + mixins
-			getSuper(fr.obeo.dsl.dart.dart.Class, LABEL) 
-				+ generals.join(" :> ", ", ", "")[ it>>shortText ]
+		
+		Typed->LABEL += [
+			val suffix = if (type !== null) " : " + type*shortText else ""
+			getSuper(Typed, LABEL) + suffix
 		]
-		fr.obeo.dsl.dart.dart.Class->QNAME += [ // xtend fails to infere with a type named Class
-			getValue(qPath) + getSuper(fr.obeo.dsl.dart.dart.Class, LABEL)
+		
+		Class->LABEL += [
+			val generals = #[ ^extends ].filterNull + implements + mixins
+			val suffix = generals.join(" :> ", ", ", "")[ it*shortText ]
+			getSuper(Class, LABEL) + suffix 
 		]
-
 		
 		Parameter->LABEL += [ getSuper(Typed, LABEL) + " : " + (type?.getValue(shortText) ?: "<untyped>") ]
-		Function->id += [ getSuper(Function, id) 
+		Function->id += [ 
+			getSuper(Function, id) 
 			+ "(" + parameters.join(",")[ type?.getValue(shortText) ?: "<untyped>" ] + ")"
 		]
 		
