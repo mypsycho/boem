@@ -1,22 +1,24 @@
-target "Mod-it Build target platform" with requirements, source
+target "Mod-it Build target platform" 
+
+with requirements, source
 
 location eclipse-oxygen "http://download.eclipse.org/releases/oxygen/" {
 	
-	org.eclipse.emf.feature.group lazy
+	org.eclipse.emf.feature.group 
 	// required for xcore
-	org.eclipse.emf.ecore.feature.group lazy
-	org.eclipse.xtext.xbase.feature.group lazy
-	org.eclipse.emf.ecore.xcore.feature.group lazy
+	org.eclipse.emf.ecore.feature.group 
+	org.eclipse.xtext.xbase.feature.group 
+	org.eclipse.emf.ecore.xcore.feature.group 
 	// required for xtend
-	org.eclipse.xtend.lib lazy
-	org.eclipse.xtend.lib.macro lazy
-	// org.eclipse.xtend.feature.group lazy
+	org.eclipse.xtend.lib 
+	org.eclipse.xtend.lib.macro 
+	// org.eclipse.xtend.feature.group 
 	
-	org.eclipse.emf.ecore.xcore.lib lazy // Feature contains 1 plugin
+	org.eclipse.emf.ecore.xcore.lib  // Feature contains 1 plugin
 	
-	org.eclipse.platform.sdk lazy // item provider
+	org.eclipse.platform.sdk  // item provider
 	
-	org.eclipse.uml2.uml lazy //tests
-	org.junit lazy
+	org.eclipse.uml2.uml  //tests
+	org.junit
 	
 }
