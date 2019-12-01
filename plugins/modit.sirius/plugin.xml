@@ -12,7 +12,7 @@
    <extension
          point="org.eclipse.sirius.externalJavaAction">
       <javaActions
-            actionClass="org.mypsycho.modit.emf.sirius.ModelProvider.Service"
+            actionClass="org.mypsycho.modit.emf.sirius.SiriusModelProvider.Service"
                      id="org.mypsycho.emf.modit.sirius.service">
       </javaActions>
    </extension>

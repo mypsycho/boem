@@ -12,15 +12,8 @@ import org.eclipse.sirius.viewpoint.description.style.StylePackage
 import org.eclipse.sirius.viewpoint.description.tool.ToolPackage
 import org.mypsycho.modit.emf.EModIt
 
-abstract class ModelProvider {
-	
-	static class Service {
-		
-		static def Object moditInvoke(EObject it, int providerId, int methodId, Object params) {
-			DesignFactory.getProvider(providerId).invoke(methodId, it, params)
-		}
-		
-	}
+abstract class SiriusModelProvider {
+
 	
 	public static val SELF = "self"
 	
@@ -29,105 +22,118 @@ abstract class ModelProvider {
 		DescriptionPackage.eINSTANCE,
 		StylePackage.eINSTANCE,
 		ToolPackage.eINSTANCE,
+		
 		// Should be a separated plugin
 		org.eclipse.sirius.diagram.description.DescriptionPackage.eINSTANCE,
 		org.eclipse.sirius.diagram.description.tool.ToolPackage.eINSTANCE,
+		
 		// Should be a separated plugin
 		org.eclipse.sirius.diagram.sequence.description.DescriptionPackage.eINSTANCE,
 		org.eclipse.sirius.diagram.sequence.description.tool.ToolPackage.eINSTANCE,
+		
 		org.eclipse.sirius.table.metamodel.table.description.DescriptionPackage.eINSTANCE,
 		// table tools are in same package
 		org.eclipse.sirius.tree.description.DescriptionPackage.eINSTANCE
 		// tree tools are in same package
 	}
 	
-	val List<Object> expressions = new ArrayList	
-	val protected extension EModIt factory
+	val List<Object> expressions = new ArrayList
+	// Factory is public to be access to provider sub-parts.
+	public val extension EModIt factory
 	
-	//val Resource resource
+	public val Resource resource
 	val int id
 	val Group value
 	
 	
 	new (Iterable<? extends EPackage> descriptorPackages, Resource rs) {
 		factory = EModIt.using(descriptorPackages)
+		resource = rs
 		
-		id = MisActivator.^default.registerProvider(this)
+		// registration use resource uri, it must be set after
+		id = MisActivator.instance.registerProvider(this)
 		
-		//resource = rs
 		value = Group.create
+		// Init cannot happen in constructor 
+		// as calling init(Group) must be overridden.
+		// Having a overridden method called in constructor is unsafe.
+	}
+	
+	new (Resource rs) { this(DEFAULT_PACKAGES, rs) }
+	
+	def buildContent() {
+		
 		value.init
-		value.assemble
+		// as ownedViewpoints is composition, navigation is safe
 		value.ownedViewpoints.forEach[
-			// 
-			ownedJavaExtensions += JavaExtension.create [ qualifiedClassName = Service.name ]
+			ownedJavaExtensions += JavaExtension.create[ 
+				qualifiedClassName = SiriusModelProviderService.name
+			]
 		]
+		value.assemble
 
 		// eObjects are not headless: eResource is not null.
-		rs.contents.add(value)
+		resource.contents.add(value)
+		value
 	}
 	
 	
-	new (Resource rs) {
-		this(DEFAULT_PACKAGES, rs)
-	}
-	
-	def void init(Group it)
+	protected def void init(Group it)
 
 
-	protected def String expression(Functions.Function1<? extends EObject, ?> callable) {
+	def String expression(Functions.Function1<? extends EObject, ?> callable) {
 		SELF.createExpression(0, callable)
 	}
 	
-	protected def String expression(String variable, Functions.Function1<? extends EObject, ?> callable) {
+	def String expression(String variable, Functions.Function1<? extends EObject, ?> callable) {
 		variable.createExpression(0, callable)
 	}
 	
-	protected def String expression(String params, Functions.Function2<? extends EObject, ?, ?> callable) {
+	def String expression(String params, Functions.Function2<? extends EObject, ?, ?> callable) {
 		params.createExpression(1, callable)
 	}
 
-	protected def String expression(String params, Functions.Function3<? extends EObject, ?, ?, ?> callable) {
+	def String expression(String params, Functions.Function3<? extends EObject, ?, ?, ?> callable) {
 		params.createExpression(2, callable)
 	}
 
-	protected def String expression(String params, Functions.Function4<? extends EObject, ?, ?, ?, ?> callable) {
+	def String expression(String params, Functions.Function4<? extends EObject, ?, ?, ?, ?> callable) {
 		params.createExpression(3, callable)
 	}
 
-	protected def String expression(String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, ?> callable) {
+	def String expression(String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, ?> callable) {
 		params.createExpression(4, callable)
 	}
 
-	protected def String expression(String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, ?> callable) {
+	def String expression(String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, ?> callable) {
 		params.createExpression(5, callable)
 	}
 	
-	protected def String expression(Procedures.Procedure1<? extends EObject> callable) {
+	def String expression(Procedures.Procedure1<? extends EObject> callable) {
 		SELF.createExpression(0, callable)
 	}
 
-	protected def String expression(String variable, Procedures.Procedure1<? extends EObject> callable) {
+	def String expression(String variable, Procedures.Procedure1<? extends EObject> callable) {
 		variable.createExpression(0, callable)
 	}
 
-	protected def String expression(String params, Procedures.Procedure2<? extends EObject, ?> callable) {
+	def String expression(String params, Procedures.Procedure2<? extends EObject, ?> callable) {
 		params.createExpression(1, callable)
 	}
 
-	protected def String expression(String params, Procedures.Procedure3<? extends EObject, ?, ?> callable) {
+	def String expression(String params, Procedures.Procedure3<? extends EObject, ?, ?> callable) {
 		params.createExpression(2, callable)
 	}
 
-	protected def String expression(String params, Procedures.Procedure4<? extends EObject, ?, ?, ?> callable) {
+	def String expression(String params, Procedures.Procedure4<? extends EObject, ?, ?, ?> callable) {
 		params.createExpression(3, callable)
 	}
 
-	protected def String expression(String params, Procedures.Procedure5<? extends EObject, ?, ?, ?, ?> callable) {
+	def String expression(String params, Procedures.Procedure5<? extends EObject, ?, ?, ?, ?> callable) {
 		params.createExpression(4, callable)
 	}
 
-	protected def String expression(String params, Procedures.Procedure6<? extends EObject, ?, ?, ?, ?, ?> callable) {
+	def String expression(String params, Procedures.Procedure6<? extends EObject, ?, ?, ?, ?, ?> callable) {
 		params.createExpression(5, callable)
 	}
 
@@ -136,12 +142,13 @@ abstract class ModelProvider {
 		val params = signature.toInvokeParams(size + 1)
 		val methodId = expressions.size
 		expressions += callable
-		'''aql:«params.key».moditInvoke(«id», «methodId», Sequence {«params.value»})'''
+		// Warning: no space between Sequence
+		'''aql:«params.key».moditInvoke(«id», «methodId», Sequence{«params.value»})'''
 	}
 	
-	def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject it, Object params) {
+	def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject value, Object params) {
 		val List<Object> values = params as List<Object>
-		values.add(0, it)
+		values.add(0, value)
 		val it = expressions.get(methodId)
 		switch (it) {
 			// functions

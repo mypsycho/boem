@@ -6,9 +6,9 @@ import java.lang.reflect.InvocationTargetException
 import java.util.Map
 import org.eclipse.emf.common.CommonPlugin
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic
-import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 
@@ -22,26 +22,20 @@ class DesignFactory extends ResourceFactoryImpl {
 
 		new(URI uri, String text, Throwable cause) {
 			super(text, cause)
+							cause.printStackTrace
 			location = uri.toString()
 		}
 
-		new(URI uri, String text) {
-			this(uri, text, null)
-		}
+		new(URI uri, String text) { this(uri, text, null) }
 
 		override String getLocation() { location }
 
 		override int getLine() { 0 }
 
 		override int getColumn() { 0 } 
-		// see org.eclipse.core.internal.boot.PlatformURLHandler#openConnection(URL)
-		// see org.eclipse.core.internal.runtime.PlatformURLPluginConnection
-		// $NON-NLS-1$
-		// $NON-NLS-1$
-		// cannot execute withtout the resource set.
 	}
 
-	static def loadModelProvider(URI uri) {
+	static def createModelProviderFactory(URI uri) {
 		var String spec = uri.path().trim()
 		if (spec.startsWith("/")) {
 			spec = spec.substring(1)
@@ -54,54 +48,70 @@ class DesignFactory extends ResourceFactoryImpl {
 			throw new ClassDiagnostic(uri, "Missing class")
 		}
 		var String pluginName = spec.substring(PLUGIN_PATH.length() + 1, classPathIx)
-		var String className = spec.substring(classPathIx + 1, spec.length() - EXTENSION.length() - 2)
+		var String className = spec.substring(classPathIx + 1, spec.length() - EXTENSION.length() - 1)
 		try {
-			/*FIXME Cannot add Annotation to Variable declaration. Java code: @SuppressWarnings("unchecked")*/
-			(CommonPlugin.loadClass(pluginName, className) as Class<? extends ModelProvider>)
-				.getConstructor(ResourceSet)
+			(CommonPlugin.loadClass(pluginName, className) as Class<? extends SiriusModelProvider>)
+				.getConstructor(Resource)
 		} catch (ClassNotFoundException e) {
-			throw new ClassDiagnostic(uri, "Missing class")
+			throw new ClassDiagnostic(uri, "Missing class " + className, e)
 		} catch (NoSuchMethodException e) {
-			throw new ClassDiagnostic(uri, "Missing constructor")
+			throw new ClassDiagnostic(uri, "Missing constructor new(ResourceSet) in " + className, e)
 		} catch (SecurityException e) {
-			throw new ClassDiagnostic(uri, "Class illegal access")
+			throw new ClassDiagnostic(uri, "Class illegal access to " + className, e)
 		}
 	}
 
 
 	static class ClassResource extends ResourceImpl {
-		package Constructor<? extends ModelProvider> factory
-		package ModelProvider value
+		package Constructor<? extends SiriusModelProvider> factory
 
 		new(URI uri) {
 			super(uri)
 			try {
-				factory = loadModelProvider(uri)
+				factory = createModelProviderFactory(uri)
 			} catch (ClassDiagnostic dg) {
-				getErrors().add(dg)
+				getErrors() += dg
 			}
 		}
 
-		override void load(Map<?, ?> options) throws IOException {
-			try {
-				value = factory.newInstance(resourceSet)
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
-				getErrors().add(new ClassDiagnostic(uri, "Illegal instantiation", e))
+  		override String getURIFragment(EObject it) {
+  			super.getURIFragment(it)
+  		}
+
+		override load(Map<?, ?> options) throws IOException {
+			if (loaded) return // conform to super
+
+			// code inspire from load(InputStream, option)
+			val notification = setLoaded(true);
+			isLoading = true;
+
+			errors?.clear
+			warnings?.clear
+			try { // 
+				getContents().add(factory.newInstance(this).buildContent)
 			} catch (InvocationTargetException e) {
-				getErrors().add(new ClassDiagnostic(uri, "Illegal instantiation", e.getCause()))
+				getErrors() += new ClassDiagnostic(uri, "Illegal instantiation", e.getCause())
+//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
+			} catch (Exception e) {
+				getErrors() += new ClassDiagnostic(uri, "Illegal instantiation", e)
+			} finally {
+				isLoading = false;
+				notification?.eNotify
+				modified = false
 			}
 		}
+		
+		override protected doUnload() { getContents().clear }
 
-		def ModelProvider getValue() { value }
 	}
 
-	override Resource createResource(URI uri) { new ClassResource(uri) }
+	override createResource(URI uri) { new ClassResource(uri) }
 
-	def static ModelProvider getProvider(int id) {
-		MisActivator.^default.getProvider(id)
+	def static toUriPath(String pluginId, Class<? extends SiriusModelProvider> clazz) {
+		"/" + PLUGIN_PATH + "/" + toModelPath(pluginId, clazz)
 	}
 	
-	def static toUri(String pluginId, Class<? extends ModelProvider> it) {
-		pluginId + "/" + name + "." + DesignFactory.EXTENSION
+	def static toModelPath(String pluginId, Class<? extends SiriusModelProvider> clazz) {
+		pluginId + "/" + clazz.name + "." + DesignFactory.EXTENSION
 	}  
 }
