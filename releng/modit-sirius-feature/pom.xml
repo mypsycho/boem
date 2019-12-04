@@ -13,7 +13,7 @@
 		<relativePath>../../parent</relativePath>
 	</parent>
 
-	<artifactId>org.mypsycho.emf.modit_feature</artifactId>
+	<artifactId>org.mypsycho.emf.modit.sirius_feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 	<name>Mod-it Feature</name>
 

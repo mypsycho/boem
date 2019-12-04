@@ -33,6 +33,8 @@ http://www.eclipse.org/legal/epl-v10.html
 	<modules>
 		<module>parent</module>
 		<module>plugins/modit</module>
+		<module>plugins/modit.sirius</module>
+		<module>plugins/modit.edit</module><!-- Compile only -->
 	</modules>
 
 	<profiles>
@@ -48,10 +50,10 @@ http://www.eclipse.org/legal/epl-v10.html
 			<modules>
 			<!-- xcore + xtend is not ready
 				<module>tests/ObeoXtdDemo</module>  
-				-->
 				<module>tests/dummy-model</module>
-				<module>tests/modit-tests</module>
 				<module>tests/sample-tests</module>
+				-->
+				<module>tests/modit-tests</module>
 			</modules>
 		</profile>
 		
@@ -65,6 +67,7 @@ http://www.eclipse.org/legal/epl-v10.html
 			</activation>
 			<modules>
 				<module>releng/modit-feature</module>
+				<module>releng/modit-sirius-feature</module>
 				<module>releng/update-site</module>
 				<module>docs</module>
 				<module>releng/publish</module>
@@ -107,7 +110,7 @@ http://www.eclipse.org/legal/epl-v10.html
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-versions-plugin</artifactId>
-					<version>1.1.0</version>
+					<version>1.5.1</version>
 					<configuration>
 						<!-- List of ArtifactIds reachable by this pom -->
 						<artifacts>container,parent,docs,publish</artifacts> <!-- or releng/publish ? -->

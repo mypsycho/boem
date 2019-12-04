@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.xtend.lib,
  org.mypsycho.emf.modit
 Export-Package: org.mypsycho.emf.reflem
 Bundle-Vendor: mypsycho
+Automatic-Module-Name: org.mypsycho.emf.modit.edit
 

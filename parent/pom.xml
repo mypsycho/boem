@@ -21,13 +21,13 @@
 		<tpd.classifier>platform</tpd.classifier>
 		<tpd.path>${tpd.classifier}</tpd.path>
 
-		<tycho.version>1.2.0</tycho.version>
+		<tycho.version>1.5.1</tycho.version>
 		<xtend.version>2.14.0</xtend.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- supported: warning|error|ignore -->
-		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
+		<git.dirty>error</git.dirty>
 
 	</properties>
 
@@ -126,15 +126,17 @@
 						<resolver>p2</resolver>
 						<environments>
 							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86</arch>
+								<os>*</os>
+								<ws>*</ws>
+								<arch>*</arch>
 							</environment>
+							<!-- 
 							<environment>
 								<os>win32</os>
 								<ws>win32</ws>
 								<arch>x86_64</arch>
 							</environment>
+							 -->
 						</environments>
 						<target>
 							<artifact>
@@ -166,9 +168,13 @@
 						<!-- 'v' prefix in commun usage in eclipse -->
 						<format>'v'yyyyMMdd-HHmm</format>
 						<timestampProvider>jgit</timestampProvider>
-						 <!-- No expression supported for jgit.dirtyWorkingTree; Use property. -->
-						<jgit.dirtyWorkingTree>${jgit.dirtyWorkingTree}</jgit.dirtyWorkingTree>
+						 <!-- No expression supported for git.dirty; Use property. -->
+						<jgit.dirtyWorkingTree>${git.dirty}</jgit.dirtyWorkingTree>
+						<!-- Ignore eclipse lazy update confs. -->
 						<jgit.ignore>
+						.*
+						.settings/
+						pom.xml
 						</jgit.ignore>
 					</configuration>
 				</plugin>

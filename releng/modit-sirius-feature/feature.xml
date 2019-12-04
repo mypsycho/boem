@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.mypsycho.emf.modit.sirius_feature"
+      label="ModIt Sirius integration Feature"
+      version="0.1.0.qualifier"
+      provider-name="mypsycho">
+
+   <description url="http://www.example.com/description">
+      Mod-it : Modelling-as-code
+
+Library to easily create or reverse models using a XTend syntax.
+The format in which models are saved are as readable as a YAML
+file but with the full capacity of code.
+Using such syntax helps for example to :
+* Speed up the creation of tests
+* Improve the readability of the tests
+* Improve maintainability when the tested metamodel changes
+* Ease the creation of inter-connected models
+
+Include Eclipse Sirius integration
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="org.mypsycho.emf.modit.feature"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.mypsycho.emf.modit.sirius"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

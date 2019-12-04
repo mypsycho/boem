@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.mypsycho.emf.modit.feature_0.1.0.qualifier.jar" id="org.mypsycho.emf.modit.feature" version="0.1.0.qualifier">
+<!-- Directly edited as Eclipse Category Editor does not handle dynamic version -->
+   <feature id="org.mypsycho.emf.modit.feature" >
+      <category name="emf.modit"/>
+   </feature>
+   <feature id="org.mypsycho.emf.modit.sirius_feature" >
       <category name="emf.modit"/>
    </feature>
    <category-def name="emf.modit" label="EMF Mod-It"/>

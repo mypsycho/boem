@@ -19,4 +19,6 @@ Export-Package: org.mypsycho.modit.emf.sirius
 Bundle-Activator: org.mypsycho.modit.emf.sirius.MisActivator
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.resources
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.mypsycho.emf.modit.sirius
 

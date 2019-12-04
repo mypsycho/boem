@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.mypsycho.emf.modit.feature"
+      id="org.mypsycho.emf.modit_feature"
       label="ModIt Feature"
-      version="0.1.0.qualifier">
+      version="0.1.0.qualifier"
+      provider-name="mypsycho">
 
    <description url="https://github.com/mypsycho/ModIt">
       Mod-it : Modelling-as-code
 
 Library to easily create or reverse models using a XTend syntax.
-
 The format in which models are saved are as readable as a YAML
 file but with the full capacity of code.
 Using such syntax helps for example to :
