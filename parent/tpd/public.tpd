@@ -1,0 +1,6 @@
+target "Mod-it build" 
+
+with requirements, source
+
+include "runtime.tpd"
+include "test.tpd"

@@ -5,20 +5,22 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.mypsycho.emf.modit</groupId>
-		<artifactId>parent</artifactId>
-		<version>0.1.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
-
-	<artifactId>target-definition-id</artifactId>
-	<packaging>eclipse-target-definition</packaging>
-	<name>Target definition Id</name>
-
-
-
-
+	<groupId>org.mypsycho.emf.modit</groupId>
+	<artifactId>tpd</artifactId>
+	<version>1.0.0-SNAPSHOT</version><!-- Version is independent from parent version -->
+	<packaging>pom</packaging>
+	<name>Target Plateform Id</name>
+	
+	<!-- 
+	Version is independent from parent version:
+	When tycho:set-version is used, target plateform must not be updated automatically.
+	
+	 -->
+	
+	<properties>
+		<tp.version>1.0.0-SNAPSHOT</tp.version>
+		<tp.mode>public</tp.mode>
+	</properties>
 
 	<build>
 		<plugins>
@@ -36,28 +38,50 @@
 						</goals>
 						<configuration>
 							<artifacts>
+								<!-- For TPD, classifier is prefixed by '/' to enable relative include -->
+								<!-- No '..' path is allowed -->
 								<artifact>
-									<file>${project.artifactId}.tpd</file>
+									<file>public.tpd</file>
 									<type>tpd</type>
-									<classifier>tpd</classifier>
+									<classifier>/public</classifier>
 								</artifact>
+
+								<artifact>
+									<file>runtime.tpd</file>
+									<type>tpd</type>
+									<classifier>/runtime</classifier>
+								</artifact>
+
+								<artifact>
+									<file>test.tpd</file>
+									<type>tpd</type>
+									<classifier>/test</classifier>
+								</artifact>
+
+								<!-- path must match file with extension to work on full or incremental build  -->
+								<artifact>
+									<file>${tp.mode}.target</file>
+									<type>target</type>
+									<classifier>${tp.mode}</classifier>
+								</artifact>
+								
 							</artifacts>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+
 		</plugins>
 
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.eclipse.tycho.extras</groupId>
-					<artifactId>tycho-eclipserun-plugin</artifactId>
-					<version>${tycho.version}</version>
+						<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.0.0</version>
 				</plugin>
-
-			</plugins>
-
+				</plugins>
 		</pluginManagement>
 
 

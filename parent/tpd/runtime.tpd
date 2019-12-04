@@ -1,0 +1,25 @@
+target "Mod-it runtime" 
+
+with requirements, source
+
+
+//location eclipse-oxygen "http://download.eclipse.org/releases/oxygen/" {
+location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
+	
+	org.eclipse.emf.feature.group
+	// +-> emf, emf.edit, emf.edit.ui
+	
+	// required for xtend : no containing feature but xtext.redist
+	org.eclipse.xtext.redist.feature.group
+	// +-> org.eclipse.xtend.lib 
+	// +-> org.eclipse.xtend.lib.macro 
+	
+	
+	// org.eclipse.platform.feature.group  // item provider
+	
+	org.eclipse.sirius.runtime.feature.group
+	// +-> sirius.diagram
+	org.eclipse.sirius.runtime.aql.feature.group
+	org.eclipse.sirius.specifier.feature.group
+		
+}

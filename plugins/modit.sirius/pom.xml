@@ -13,8 +13,8 @@
 		<relativePath>../../parent/</relativePath>
 	</parent>
 
-	<artifactId>org.mypsycho.emf.modit.edit</artifactId>
+	<artifactId>org.mypsycho.emf.modit.sirius</artifactId>
 	<packaging>eclipse-plugin</packaging> <!-- In Tycho, artifactId must match bundle-SymbolicName -->
-	<name>Mod-It Edit</name>
+	<name>Mod-it Sirius integration</name>
 
 </project>

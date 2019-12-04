@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
 <!-- Directly edited as Eclipse Category Editor does not handle dynamic version -->
-   <feature id="org.mypsycho.emf.modit.feature" >
+   <feature id="org.mypsycho.emf.modit_feature" >
       <category name="emf.modit"/>
    </feature>
    <feature id="org.mypsycho.emf.modit.sirius_feature" >

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ModIt Lib
+Bundle-Name: Mod-It Edit
 Bundle-SymbolicName: org.mypsycho.emf.modit.edit
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

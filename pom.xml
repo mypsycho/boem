@@ -50,9 +50,9 @@ http://www.eclipse.org/legal/epl-v10.html
 			<modules>
 			<!-- xcore + xtend is not ready
 				<module>tests/ObeoXtdDemo</module>  
+				-->
 				<module>tests/dummy-model</module>
 				<module>tests/sample-tests</module>
-				-->
 				<module>tests/modit-tests</module>
 			</modules>
 		</profile>
@@ -61,7 +61,7 @@ http://www.eclipse.org/legal/epl-v10.html
 			<id>releng-modules</id>
 			<activation>
 				<property>
-					<name>releng.skip</name>
+					<name>tycho.releng.skip</name>
 					<value>!true</value>
 				</property>
 			</activation>
