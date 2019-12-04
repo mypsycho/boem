@@ -92,25 +92,25 @@ val model = B.create [
   name = "AName"
 
   // Adds one child with reference
-  childrenNodeA += "id0".aliasCreate(Node) [
+  childrenNodeA += Node.createAs("id0") [
       name = "ANodeName0"
   ]
   // Adds several children at once with references
   childrenNodeA += #[
-    "id1".aliasCreate(Node) [
+    Node.createAs("id1") [
       name = "ANodeName1"
     ],
-    "id2".aliasCreate(Node) [
+    Node.createAs("id2") [
       name = "ANodeName2"
     ]
   ]
 
   // Adds several children at once with references
   childrenNodeB += #[
-    "id3".aliasCreate(Node) [
+    Node.createAs("id3") [
       name = "ANodeName3"
     ],
-    "id4".aliasCreate(Node) [
+    Node.createAs("id4") [
       name = "ANodeName4"
     ]
   ]
@@ -185,7 +185,7 @@ You can also use a shorter syntax to access your elements
 ----
 val model = A.create [
   name = "AName"
-  childrenNodeA += "id1".aliasCreate(Node) [
+  childrenNodeA += Node.createAs("id1") [
     name = "ANode"
   ]
 ].assemble
@@ -203,10 +203,10 @@ assertTrue(target == "id1" => model)
 ----
 val it = A.create [
   name = "AName"
-  autoContainementA += "id0".aliasCreate(B) [
+  autoContainementA += B.createAs("id0") [
     referenceNodeA = Node.createRef("id1")
   ]
-  childrenNodeA += "id1".aliasCreate(Node) [
+  childrenNodeA += Node.createAs("id1") [
     name = "ANode"
   ]
 ].assemble
@@ -218,10 +218,10 @@ or with a shorter syntax
 ----
 val it = A.create [
   name = "AName"
-  autoContainementA += "id0".aliasCreate(B) [
+  autoContainementA += B.createAs("id0") [
     referenceNodeA = Node.ref("id1")
   ]
-  childrenNodeA += "id1".aliasCreate(Node) [
+  childrenNodeA += Node.createAs("id1") [
     name = "ANode"
   ]
 ].assemble
@@ -232,8 +232,8 @@ val it = A.create [
 ----
 // In real code, declare pool as extension
 val pool = A.create [
-  autoContainementA += "B".aliasCreate(B) [
-    autoContainementA += "D".aliasCreate(C)
+  autoContainementA += B.createAs("B") [
+    autoContainementA += C.createAs("D")
   ]
 ].assemble
 

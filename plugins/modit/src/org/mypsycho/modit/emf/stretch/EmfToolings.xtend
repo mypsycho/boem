@@ -2,7 +2,6 @@ package org.mypsycho.modit.emf.stretch
 
 import java.util.Map
 import org.eclipse.emf.ecore.EClass
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 
 /**
