@@ -1,4 +1,4 @@
-package fr.ibp.odv.boem.tests.uml.text
+package org.mypsycho.modit.emf.sample.uml.text
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.uml2.uml.Classifier

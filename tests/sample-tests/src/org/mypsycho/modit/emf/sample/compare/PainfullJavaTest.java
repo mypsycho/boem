@@ -9,7 +9,7 @@
  *    Arthur Daussy - initial API and implementation
  *    Jacob Geisel - extending test coverage and documentation
  *******************************************************************************/
-package fr.ibp.odv.boem.tests.compare;
+package org.mypsycho.modit.emf.sample.compare;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +22,15 @@ import fr.ibp.odv.boem.mm.test.BoemTest.C;
 import fr.ibp.odv.boem.mm.test.BoemTest.Node;
 
 /**
- * Test used to compare syntax with Boem API
+ * Test used to compare syntax with Mod-It API.
+ * <p>
+ * In this example,
+ * <ul> 
+ * <li>All objects definition are in sequence even when they a contaiment relationship.</li>
+ * <li>All objects must be created to be used. So creation and relations are separated.</li>
+ * </ul>
+ *  
+ * </p>
  * 
  * @author Arthur Daussy
  * @author Jacob Geisel

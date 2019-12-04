@@ -1,4 +1,4 @@
-package fr.ibp.odv.boem.tests.uml;
+package org.mypsycho.modit.emf.sample.uml;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,10 +10,11 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.junit.Test;
 
+
 /**
  * This class provides a classic implementation of testing an Meta-Model.
  * <p>
- * It should be compared with {@link UmlSmartTest }.
+ * It should be compared with {@link org.mypsycho.modit.emf.sample.uml.UmlSmartTest }.
  * </p>
  */
 public class UmlPainfullTest {

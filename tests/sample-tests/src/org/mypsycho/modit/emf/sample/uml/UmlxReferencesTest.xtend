@@ -1,4 +1,4 @@
-package fr.ibp.odv.boem.tests.uml
+package org.mypsycho.modit.emf.sample.uml
 
 import org.eclipse.uml2.uml.Class
 import org.eclipse.uml2.uml.Generalization

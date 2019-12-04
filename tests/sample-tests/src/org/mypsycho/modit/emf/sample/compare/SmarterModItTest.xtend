@@ -9,7 +9,7 @@
  *    Arthur Daussy - initial API and implementation
  *    Jacob Geisel - extending test coverage and documentation
  *******************************************************************************/
-package fr.ibp.odv.boem.tests.compare
+package org.mypsycho.modit.emf.sample.compare
 
 import fr.ibp.odv.boem.mm.test.BoemTest.A
 import fr.ibp.odv.boem.mm.test.BoemTest.B
@@ -23,11 +23,12 @@ import org.mypsycho.modit.emf.EModIt
 import static org.junit.Assert.*
 
 /**
- * Test used to compare syntax with pure java API
+ * Test used to compare syntax with pure java API.
+ * <p>
+ * In this example, we provide sub-language to fill a object from a single String.
+ * </p>
  * 
- * @author Arthur Daussy
- * @author Jacob Geisel
- *
+ * @author Nicolas PERANSIN
  */
 class SmarterModItTest {
 
@@ -58,7 +59,7 @@ class SmarterModItTest {
 			childNodeA = Node.create("SingleChildName")
 
 			// Adds one child
-			childrenNodeA += "id2".alias(Node.create("ANodeName0"))
+			childrenNodeA += Node.createAs("id2", "ANodeName0")
 
 			// Adds several children at once
 			childrenNodeA += #[

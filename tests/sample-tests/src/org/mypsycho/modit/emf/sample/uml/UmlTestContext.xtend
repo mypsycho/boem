@@ -1,6 +1,6 @@
-package fr.ibp.odv.boem.tests.uml
+package org.mypsycho.modit.emf.sample.uml
 
-import fr.ibp.odv.boem.tests.uml.text.UmlSimpleSyntax
+import org.mypsycho.modit.emf.sample.uml.text.UmlSimpleSyntax
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet

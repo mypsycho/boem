@@ -1,4 +1,4 @@
-package fr.ibp.odv.boem.tests.uml
+package org.mypsycho.modit.emf.sample.uml
 
 import org.eclipse.uml2.uml.Generalization
 import org.eclipse.uml2.uml.Interface
@@ -46,7 +46,7 @@ class UmlxUpdateTest extends UmlTestContext {
 			general = Interface << "umlInterface3"
 		]
 
-		assertEquals(access("umlInterface3"), umlgen.targets.get(0))
+		assertEquals(access("umlInterface3"), umlgen.targets.head)
 
 	}
 }
