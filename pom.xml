@@ -112,8 +112,9 @@ http://www.eclipse.org/legal/epl-v10.html
 					<artifactId>tycho-versions-plugin</artifactId>
 					<version>1.5.1</version>
 					<configuration>
-						<!-- List of ArtifactIds reachable by this pom -->
-						<artifacts>container,parent,docs,publish</artifacts> <!-- or releng/publish ? -->
+						<!-- List of ArtifactIds reachable by this pom. -->
+						<!-- Only the ones without project.parent. -->
+						<artifacts>container,parent,docs,publish</artifacts>
 					</configuration>
 				</plugin>
 			</plugins>
