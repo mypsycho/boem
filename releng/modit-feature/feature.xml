@@ -2,7 +2,7 @@
 <feature
       id="org.mypsycho.emf.modit_feature"
       label="ModIt Feature"
-      version="0.1.0.qualifier"
+      version="0.2.0.qualifier"
       provider-name="mypsycho">
 
    <description url="https://github.com/mypsycho/ModIt">
