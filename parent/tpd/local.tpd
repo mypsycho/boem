@@ -4,7 +4,7 @@ with requirements, source
 
 
 //location eclipse-oxygen "http://download.eclipse.org/releases/oxygen/" {
-location eclipse_2019_09 "file:/C:/dev/tools/eclipse/dsl-2019-09/p2/" {
+location eclipse_2019_09 "file:/C:/dev/etc/mirrors.p2/eclipse_2019_09/" {
 	
 	org.eclipse.emf.feature.group
 	// +-> emf, emf.edit, emf.edit.ui
