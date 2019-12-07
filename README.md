@@ -1,4 +1,4 @@
-# Mod-it  (Refactoring in progress...)
+# Mod-it [![Build Status](https://travis-ci.org/mypsycho/ModIt.svg?branch=master)](https://travis-ci.org/mypsycho/ModIt)
 
 Mod-it library provides an API to ease creations of EMF Models in XTend.
 
@@ -17,7 +17,7 @@ It has been created and used in industrial project to ease the creation input fo
 
 ## Content (work in progress...)
 
-See documentation and binaries at https://mypsycho.github.io/ModIt/
+See documentation and binaries at ...
 
 
 ## Contributing
