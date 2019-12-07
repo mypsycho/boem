@@ -57,10 +57,23 @@ http://www.eclipse.org/legal/epl-v10.html
 				<module>releng/modit-feature</module>
 				<module>releng/modit-sirius-feature</module>
 				<module>releng/update-site</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>docs-modules</id>
+			<activation>
+				<property>
+					<name>tycho.docs.skip</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<modules>
 				<module>docs</module>
 				<module>releng/publish</module>
 			</modules>
 		</profile>
+
 	</profiles>
 	<build>
 		<pluginManagement>

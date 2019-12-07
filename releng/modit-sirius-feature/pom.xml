@@ -15,6 +15,6 @@
 
 	<artifactId>org.mypsycho.emf.modit.sirius_feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<name>Mod-it Feature</name>
+	<name>Mod-it to Sirius Feature</name>
 
 </project>
