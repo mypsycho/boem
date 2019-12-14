@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mvn.build.date>${maven.build.timestamp}</mvn.build.date>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-		<project.slides.directory>${project.build.directory}/site/reveal-js</project.slides.directory>
+		<project.slides.directory>${project.build.directory}/generated-docs/slides</project.slides.directory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- How to mirror this ? through settings ? -->
@@ -59,6 +59,7 @@
 			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
+				<!-- This plugin use a cache in '.m2' . :-) -->
 				<executions>
 					<execution>
 						<id>install-asciidoctor-revealjs</id>
@@ -111,9 +112,10 @@
 						<configuration>
 							<sourceDirectory>src/reveal-js/asciidoc</sourceDirectory>
 							<outputDirectory>${project.slides.directory}</outputDirectory>
+							<preserveDirectories>true</preserveDirectories>
 							<backend>revealjs</backend>
 							<templateDir>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates</templateDir>
-							<sourceHighlighter>coderay</sourceHighlighter>
+							<sourceHighlighter>highlight.js</sourceHighlighter>
 							<attributes>
 								<!-- 
 								As we are downloading reveal.js in runtime, it sits in a nonstandard 
@@ -135,9 +137,11 @@
 							<goal>process-asciidoc</goal>
 						</goals>
 						<configuration>
-							<sourceDirectory>src/main/asciidoc</sourceDirectory>
-							<outputDirectory>target/site</outputDirectory>
+							<!--  sourceDirectory:src/main/asciidoc -->
+							<!-- <outputDirectory>target/site</outputDirectory> -->
 							<backend>html</backend>
+							<preserveDirectories>true</preserveDirectories>
+							<sourceHighlighter>highlight.js</sourceHighlighter>
 						</configuration>
 					</execution>
 				</executions>
@@ -161,22 +165,7 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>publish-p2</id> <!-- from update-site project -->
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/site/p2</outputDirectory>
-							<resources>
-								<resource>
-									<directory>../update-site/target/repository</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
+
 					<execution>
 						<id>publish-bintray</id>
 						<phase>package</phase>

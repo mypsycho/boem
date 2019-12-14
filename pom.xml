@@ -69,7 +69,6 @@ http://www.eclipse.org/legal/epl-v10.html
 				</property>
 			</activation>
 			<modules>
-				<module>docs</module>
 				<module>releng/publish</module>
 			</modules>
 		</profile>

@@ -6,7 +6,7 @@
 //   Return carriage at 15 chars:
 //   ____1_________2_________3_________4_________5
 //   No space after colon (:)
-//   Punctation !
+//   Punctuation !
 
 // 
 :source-highlighter: highlightjs
@@ -153,8 +153,10 @@ plugin.xml extensions.
 
 [source,scala]
 ----
-XxNamedElement += #[ // A Emf Class is extended
-  String->[XxNamedElement| name ], // ItemProvider label provider
+// A Emf Class is extended
+XxNamedElement->label += [ name ] 
+XxNamedElement->diagnostic += [ name ] 
+  String->, 
   Diagnostic->#[ // Validation Defining validation rule
     "EmptyName"->error->[XxNamedElement| name==null || name.trim.empty ],
     "HiddenCar"->warning->[XxNamedElement| name!=null && name.trim != name ],
