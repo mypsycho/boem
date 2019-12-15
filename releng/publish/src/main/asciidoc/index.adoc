@@ -1,4 +1,4 @@
-= Mod-it
+= Mod-it (Refactoring in progress)
 
 Mod-it library provides an API to ease creations of EMF Models in XTend.
 
@@ -264,4 +264,4 @@ assertEquals("NameC2", pool.access(C, "C").name)
 
 
 == License
-link:https://www.eclipse.org/legal/epl-v10.html[Eclipse Public License - v 1.0] 
+https://www.eclipse.org/legal/epl-v10.html[Eclipse Public License - v 1.0] 

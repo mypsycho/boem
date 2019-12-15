@@ -1,28 +1,54 @@
-= Mod-it [![Build Status](https://travis-ci.org/mypsycho/ModIt.svg?branch=master)](https://travis-ci.org/mypsycho/ModIt)
+// -----1---------2---------3---------4---------5---------6---------7---------8---------9
+= Mod-it
+
+[Travis-ci, link=https://travis-ci.org/mypsycho/ModIt]
+image::https://img.shields.io/travis/mypsycho/ModIt/master.svg?branch=master[Travis-ci status]
 
 Mod-it library provides an API to ease creations of EMF Models in XTend.
 
-EMod-it extension frees developers of tedious EMF factory syntax making model description close to JSon file.
-It also suppresses the sequential constraint of code by providing a registry and resolving references in assemble phase.
+When embedding models into code (mostly for tests), developers usually struggles with 2 
+strategies:
+
+ * Using resource source and weighing the project with
+ ** Hard-to-read/edit/merge content
+ ** Very repetitive
+ ** Stale version
+ * Using code and undergo
+ ** Unfriendly EMF syntax
+ ** Sequential descriptions of hierarchical elements
+ ** declare-before-reference constraints
+
+This library frees developers of tedious EMF factory syntax making model description
+similar to a JSon file.
+It also suppresses the sequential constraint of code by providing a registry mechanism 
+and resolving references in an assembling phase.
 
 Using such syntax helps to:
- * Speed up the creation of tests
- * Improve the readability of the tests
+
+ * Speed up the creation of tests,
+ * Improve the readability of the tests,
  * Improve maintainability when the tested metamodel changes
  * Ease the creation of inter-connected models
 
-It has been created and used in industrial projects to ease the creation input for JUnit tests on the metamodel and business rules.
+It has been created and used in industrial projects to ease the creation input for JUnit 
+tests on the metamodel and business rules.
 
-== Content (work in progress...)
+== Content
 
-It also comes with various functions:
- * EMF enrichment where user can associate properties and lambda to metamodel and providing pseudo multi-inheritance for EObject. 
- * EReversIt generates Xtend source from existing models providing round-trips for tests routine. 
- * EMF Sirius integration to write Sirius model in textual mode and lambda in xtend (instead of AQL).
+It also comes with various features:
+
+ * EMF Sirius integration to write Sirius model in textual mode and lambda in XTend 
+ (skipping uncompiled AQL).
+ * EReversIt generates Xtend source from existing models providing:
+ ** Efficient tool to convert existing project resource,
+ ** Round-trips for manual tests to automatic test process.
+ * EMF enrichment where user can associate properties and lambda to metamodel and 
+ providing pseudo multi-inheritance for EObject. 
  * i18n classes to use xtend template instead of properties syntax.
 
-See documentation and binaries at ...
-
+Read link:https://mypsycho.github.io/ModIt/[documentation] and use an version of update 
+site on https://dl.bintray.com/mypsycho/modit-update-site/p2/[Bintray].
+ 
 
 == Contributing
 
@@ -37,5 +63,5 @@ See documentation and binaries at ...
 5. Submit a pull request.
 
 == License
-[Eclipse Public License - v 1.0](https://www.eclipse.org/legal/epl-v10.html)  
-[Contribution guidelines for this project](docs/CONTRIBUTING.md)
+link:https://www.eclipse.org/legal/epl-v10.html[Eclipse Public License - v 1.0]  
+
