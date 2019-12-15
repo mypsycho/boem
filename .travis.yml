@@ -7,10 +7,15 @@ jobs:
   include:
   - stage: head
     script: mvn -B verify
-    
+
+env:
+  global:
+    - BINTRAY_SUBJECT=mypsycho
+    - BINTRAY_REPO=modit-update-site
+
 # Need to deploy to bintray as github pages cannot handle several version !
 deploy:
-  - provider: script # bin_tray fails with inner path
+  - provider: script # bin_tray fails with sub path ??
     script: bash deployBinTray.sh p2 0.2.nightly releng/update-site/target/repository
     on:
       branch: master
@@ -20,7 +25,7 @@ deploy:
     # See in the settings of repo and github.com/settings/tokens
     token: $GITHUB_TOKEN
     local_dir: "releng/publish/target/generated-docs"
-    repo: "mypsycho/modit-updatesite"
+    # repo: "mypsycho/ModIt"
     on:
       branch: master
 #      tags: true
