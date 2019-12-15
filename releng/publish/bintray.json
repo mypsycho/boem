@@ -16,7 +16,7 @@
     },
     
     "version": {
-        "name": "${mvn.build.majorVersion}.${mvn.build.minorVersion}.nightly", 
+        "name": "${mvn.build.majorVersion}.${mvn.build.minorVersion}.${mvn.build.maturity}", 
         "desc": "Last version available",
         "released": "${mvn.build.date}",
         "vcs_tag": "master",
@@ -26,17 +26,12 @@
     "files": [
         {
 	        "includePattern" : "releng/update-site/target/repository/([^/]+)", 
-	        "uploadPattern" : "./$1", 
+	        "uploadPattern" : "$1", 
 	        "matrixParams": { "override": 1 } 
         },
         {
-	        "includePattern" : "releng/update-site/target/repository/features/([^/]+)", 
-	        "uploadPattern" : "./features/$1", 
-	        "matrixParams": { "override": 1 } 
-        },
-        {
-	        "includePattern" : "releng/update-site/target/repository/plugins/([^/]+)", 
-	        "uploadPattern" : "./plugins/$1", 
+	        "includePattern" : "releng/update-site/target/repository/([^/]+)/(.+)", 
+	        "uploadPattern" : "p2/${mvn.build.majorVersion}.${mvn.build.minorVersion}.nightly/$1/$2", 
 	        "matrixParams": { "override": 1 } 
         }
  	],
