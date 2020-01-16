@@ -15,7 +15,7 @@ import org.mypsycho.modit.emf.EModIt
 abstract class SiriusModelProvider {
 
 	
-	public static val SELF = "self"
+	public static val AQL_SELF = "self"
 	
 	
 	public static val DEFAULT_PACKAGES = #{
@@ -81,36 +81,36 @@ abstract class SiriusModelProvider {
 	protected def void init(Group it)
 
 
-	def String expression(Functions.Function1<? extends EObject, ?> callable) {
-		SELF.createExpression(0, callable)
+	def <T> String expression(Functions.Function1<? extends EObject, T> callable) {
+		AQL_SELF.createExpression(0, callable)
 	}
 	
-	def String expression(String variable, Functions.Function1<? extends EObject, ?> callable) {
+	def <T> expression(String variable, Functions.Function1<? extends EObject, T> callable) {
 		variable.createExpression(0, callable)
 	}
 	
-	def String expression(String params, Functions.Function2<? extends EObject, ?, ?> callable) {
+	def <T> expression(String params, Functions.Function2<? extends EObject, ?, T> callable) {
 		params.createExpression(1, callable)
 	}
 
-	def String expression(String params, Functions.Function3<? extends EObject, ?, ?, ?> callable) {
+	def <T> expression(String params, Functions.Function3<? extends EObject, ?, ?, T> callable) {
 		params.createExpression(2, callable)
 	}
 
-	def String expression(String params, Functions.Function4<? extends EObject, ?, ?, ?, ?> callable) {
+	def <T> expression(String params, Functions.Function4<? extends EObject, ?, ?, ?, T> callable) {
 		params.createExpression(3, callable)
 	}
 
-	def String expression(String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, ?> callable) {
+	def <T> expression(String params, Functions.Function5<? extends EObject, ?, ?, ?, ?, T> callable) {
 		params.createExpression(4, callable)
 	}
 
-	def String expression(String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, ?> callable) {
+	def <T> expression(String params, Functions.Function6<? extends EObject, ?, ?, ?, ?, ?, T> callable) {
 		params.createExpression(5, callable)
 	}
 	
 	def String expression(Procedures.Procedure1<? extends EObject> callable) {
-		SELF.createExpression(0, callable)
+		AQL_SELF.createExpression(0, callable)
 	}
 
 	def String expression(String variable, Procedures.Procedure1<? extends EObject> callable) {
@@ -167,7 +167,7 @@ abstract class SiriusModelProvider {
 					Procedures.Procedure4<P0, P1, P2, P3> :         apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3)
 					Procedures.Procedure5<P0, P1, P2, P3, P4> :     apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4)
 					Procedures.Procedure6<P0, P1, P2, P3, P4, P5> : apply(values.get(0) as P0, values.get(1) as P1, values.get(2) as P2, values.get(3) as P3, values.get(4) as P4, values.get(5) as P5)
-					default : throw new UnsupportedOperationException(it.getClass().toString)
+					default : throw new UnsupportedOperationException(getClass.toString)
 				}
 				null
 			}
@@ -187,7 +187,7 @@ abstract class SiriusModelProvider {
 	protected def toInvokeParams(String it, int size) {
 		val values = split(",")
 		if (values.length == size) {
-			SELF->params			
+			AQL_SELF->params			
 		} else if (values.length == size + 1) {
 			values.get(0)->values.tail.join(",")
 		} else {

@@ -29,6 +29,9 @@ import static extension org.mypsycho.modit.AdvancedExtensions.*
 
 class EReversIt {
 
+	static val MAIN_IMPORTS = #{ Arrays, HashMap, EObject, EList, EReference, ResourceSet, ResourceSetImpl, URI, EModIt }
+	static val PART_IMPORTS = #{ Map, EObject, EModIt, ResourceSet }
+
 	val ClassId mainClass
 
 	val Path target
@@ -51,6 +54,9 @@ class EReversIt {
 
 	public var List<EAttribute> shortcuts = new ArrayList
 
+	// Reset for each file.
+	val currentImports = new HashMap<Class<?>, Boolean>()
+
 	new(String classname, Path dir, Resource... rSet) {
 		this(new ClassId(classname), dir, rSet.map[ it -> new ClassId(new ClassId(classname), URI) ])
 	}
@@ -63,11 +69,6 @@ class EReversIt {
 			else values.toMap( [ key.toEObject ], [ value ] )
 	}
 
-	static def toEObject(Notifier it) {
-		if (it instanceof EObject) it
-		else if (it instanceof Resource) toContent 
-		else throw new IllegalArgumentException("Unsupported type of " + it)
-	}
 
 	protected def prepareContext() {
 		#[ // Check alias and splits are defined in the serialized tree.
@@ -113,7 +114,6 @@ class EReversIt {
 		namings = mappings.map[ entrySet ].flatten.toMap([ key ], [ value ])
 	}
 
-	val currentImports = new HashMap<Class<?>, Boolean>()
 	def perform() throws IOException {
 
 		prepareContext
@@ -124,22 +124,31 @@ class EReversIt {
 			]
 		]
 
-		var doTemplate = 
-			if (roots.size == 1) [| templateSimpleMain ]
-			else {
-				// Write class of each elements
-				orderedRoots.forEach [
-					val id = roots.get(it)
-					target.resolve(id.toPath).toFile[ 
-						templatePart(id, it).toString
-					]
+		val mainFile = target.resolve(mainClass.toPath)
+		
+		if (roots.size == 1) {
+			
+			mainFile.toFile[ templateSimpleMain(orderedRoots.head) ]
+			
+		} else {
+			// Write class of each elements
+			orderedRoots.forEach [
+				val id = roots.get(it)
+				target.resolve(id.toPath).toFile[ 
+					templatePart(id, it).toString
 				]
-				[| templateComposedMain ]
-			}
-		// Write main class
-		target.resolve(mainClass.toPath).toFile(doTemplate)
+			]
+			mainFile.toFile[ templateComposedMain ]
+		}
+
 	}
 
+	protected def templateSimpleMain(EObject it) {
+		registerImports(MAIN_IMPORTS)
+
+		templateMain(#[ it ].usedPackages) [ templateCreate + ".assemble" ]
+	}
+	
 	protected def templateComposedMain() {
 		// Register imports
 		currentImports.clear
@@ -155,8 +164,6 @@ ENDFOR
 ].assemble'''
 		]
 	}
-
-	val PART_IMPORTS = #{ Map, EObject, EModIt, ResourceSet }
 
 	protected def templatePart(ClassId it, EObject content) {
 		val parentName = if (pack != mainClass.pack) mainClass.qName else mainClass.name
@@ -184,14 +191,8 @@ class «name» {
 '''
 	}
 
-	val MAIN_IMPORTS = #{ Arrays, HashMap, EObject, EList, EReference, ResourceSet, ResourceSetImpl, URI, EModIt }
 
-	protected def templateSimpleMain() {
-		val it = orderedRoots.head
-		registerImports(MAIN_IMPORTS)
 
-		templateMain(#[ it ].usedPackages) [ templateCreate + ".assemble" ]
-	}
 
 	protected def String templateMain(Iterable<Class<?>> packages, ()=>String content) {
 		// val extrasByName = 
@@ -254,12 +255,15 @@ ENDIF // extras
 	}
 
 	// Only works for feature with keys
-	static def <O extends EObject, R extends O> R at(EList<E> values, Class<R> type, Object... key) {
-		val eList = values as EcoreEList<E>
-		val feat = eList.feature
-		val keyValues = Arrays.asList(key)
+	static def <O extends EObject, R extends O> R at(EList<?> values, Class<R> type, Object... key) {
+		val attKeys = ((values as EcoreEList<?>).feature as EReference).EKeys
+		val keyValues = key.toList
+		
+		if (keyValues.size != attKeys.size) {
+			throw new IllegalArgumentException("Wrong args size " + keyValues.size + " instead of " + attKeys.size)	
+		}
 		eList.filter(type).findFirst[ r|
-			feat.EKeys.map[ r.eGet(it) ] == keyValues
+			attKeys.map[ r.eGet(it) ] == keyValues
 		] as R
 	}
 «
@@ -608,4 +612,9 @@ ENDFOR
 		else name
 	}
 
+	static def toEObject(Notifier it) {
+		if (it instanceof EObject) it
+		else if (it instanceof Resource) toContent 
+		else throw new IllegalArgumentException("Unsupported type of " + it)
+	}
 }
