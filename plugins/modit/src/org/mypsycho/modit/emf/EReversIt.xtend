@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.util.EcoreUtil
 
-import static extension org.mypsycho.modit.AdvancedExtensions.*
 
 class EReversIt {
 
@@ -71,7 +70,8 @@ class EReversIt {
 
 
 	protected def prepareContext() {
-		#[ // Check alias and splits are defined in the serialized tree.
+		// Check alias and splits are defined in the serialized tree.
+		#[
 			"Alias" -> aliases, 
 			"Split" -> splits.mapValues[ name ] 
 		].forEach[
@@ -84,11 +84,11 @@ class EReversIt {
 			}
 		]
 
-		// Check explicit are pure references
+		// Check explicit extra are pure references
 		val illegalExtras = explicitExtras.filter[ it, id | roots.containsKey(toRoot) ].values
 		if (!illegalExtras.empty) {
 			throw new IllegalArgumentException(
-				"Aliases must not be contained by reversed resource. Use splits or alias: " + illegalExtras
+				"Explicit extra values must not be contained by reversed resource. Use splits or alias: " + illegalExtras
 			)
 		}
 
@@ -100,9 +100,8 @@ class EReversIt {
 			"Names" -> [ Map<EObject, String> it| values ]
 		].forEach[ rule |
 			val ends = mappings.map(rule.value).flatten.toList // list to keep all occurrences
-			val redundants = ends
-				.filter[ e| ends.filter[ it == e ].size > 1 ] // redundant check
-				.toSet
+			
+			val redundants = ends.filter[ !isUniqueIn(ends) ].toSet
 			if (!redundants.empty) {
 				throw new IllegalArgumentException(
 					rule.key + " cannot be used in several alias : " + redundants
@@ -113,6 +112,7 @@ class EReversIt {
 		implicitExtras = new HashMap()// We tracks anonymous extras elements
 		namings = mappings.map[ entrySet ].flatten.toMap([ key ], [ value ])
 	}
+
 
 	def perform() throws IOException {
 
@@ -145,26 +145,38 @@ class EReversIt {
 
 	protected def templateSimpleMain(EObject it) {
 		registerImports(MAIN_IMPORTS)
-
-		templateMain(#[ it ].usedPackages) [ templateCreate + ".assemble" ]
+		templateMain(#[ it ].usedPackages) [ templateSimpleContent ]
 	}
-	
+
+	// Xtend
+	protected def templateSimpleContent(EObject it) {
+		// Call modit.assemble on it
+		templateCreate + ".assemble"
+	}
+		
 	protected def templateComposedMain() {
 		// Register imports
 		currentImports.clear
 		currentImports.putAll(MAIN_IMPORTS.toInvertedMap[ Boolean.TRUE ])
 		
-		templateMain(orderedRoots.usedPackages) [
+		templateMain(orderedRoots.usedPackages) [ 
+			orderedRoots.map[ roots.get(it) ]
+				.templateComposedContent()
+		]
+	}
+	
+	// Xtend
+	protected def String templateComposedContent(Iterable<?extends ClassId> values) {
 '''#[
 	«
-FOR p : orderedRoots.map[ roots.get(it) ] SEPARATOR ',\n'
-»new «p.qName»(this).call«
+FOR value : values SEPARATOR ',\n'
+»new «value.qName»(this).createContent«
 ENDFOR
 »
 ].assemble'''
-		]
 	}
 
+	// Xtend
 	protected def templatePart(ClassId it, EObject content) {
 		val parentName = if (pack != mainClass.pack) mainClass.qName else mainClass.name
 		content.registerImports(PART_IMPORTS)
@@ -182,7 +194,7 @@ class «name» {
 		this.factory = parent.factory
 	}
 
-	def «content.templateClass» call() {
+	def «content.templateClass» createContent() {
 		«content.templateInnerCreate»
 	}
 
@@ -192,8 +204,7 @@ class «name» {
 	}
 
 
-
-
+	// Xtend
 	protected def String templateMain(Iterable<Class<?>> packages, ()=>String content) {
 		// val extrasByName = 
 
@@ -206,7 +217,7 @@ class «mainClass.name» {
 	public val extras = new HashMap<String, EObject> 
 
 	public extension EModIt factory = EModIt.using(
-		«FOR p : packages SEPARATOR ',\n'»«p.name».eINSTANCE«ENDFOR»
+		«FOR p : packages SEPARATOR ',\n' »«p.name».eINSTANCE«ENDFOR»
 	)
 
 «
@@ -229,7 +240,7 @@ IF !implicitExtras.empty || !explicitExtras.empty
 »		extras.putAll(#{ // Named elements
 		«
   FOR a : explicitExtras.entrySet.toList.sortBy[ value ] SEPARATOR ',\n'
-		»	«a.value.toJava» -> «a.key.templateAlias»«
+»	«a.value.toJava» -> «a.key.templateAlias»«
   ENDFOR
 »
 		})
@@ -239,7 +250,7 @@ IF !implicitExtras.empty || !explicitExtras.empty
 
 «
 ENDIF // extras
-»	def content() {
+»	def createContent() {
 		«content.apply»
 	}
 
@@ -287,6 +298,87 @@ ENDFOR
 	}
 
 
+
+
+	protected def templateCreate(EObject it) {
+		val split = splits.get(it)
+		if (split !== null) templateOutterCreate(split)
+		else templateInnerCreate
+	}
+	
+	// Xtend
+	protected def String templateOutterCreate(EObject it, ClassId split) {
+		// TODO use import registry short name ( a current package is needed )
+		'''new «IF mainClass.pack != split.pack»«split.pack».«ENDIF»«split.name»(this).createContent'''
+	}
+
+	// Xtend
+	protected def String templateInnerCreate(EObject it) {
+		// Find setted attributes, references, <>references
+		val content = innerContent
+
+'''«templateClass».create«
+IF namings.containsKey(it)
+»As(«namings.get(it).toJava»)«
+ENDIF
+»«
+IF content.exists[ c | eIsSet(c.key) ]
+» [
+	«
+FOR c : content SEPARATOR statementSeparator 
+»«templateProperty(c.key, c.value)»«
+ENDFOR
+»
+]«
+ENDIF
+»'''
+	}
+	
+	protected def getInnerContent(EObject it) {
+		// Find setted attributes, references, <>references
+		 #[
+			eClass.EAllAttributes.filter[ a | eIsSet(a) && a.defaultValue != eGet(a) ]
+				-> [ Object it, Class<?> using | toJava ],
+			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isReference ]
+				-> [ Object it, Class<?> using | (it as EObject).templateRef(using) ],
+			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isContainment ]
+				-> [ Object it, Class<?> using | (it as EObject).templateCreate ]
+		]
+		.map[ (key as Iterable<EStructuralFeature>).map[ f | f -> value ] ]
+		.flatten.toList
+	}
+	
+	//
+	// Refactor START
+	//
+	
+		
+	protected static class Expr {
+		public val EObject src
+		public val Iterable<? extends Class<?>> chain // required for import evaluation
+		public val String value
+		
+		// public val Expr parent
+		// public val EClass cast
+		
+		
+		new (EObject src, Iterable<? extends Class<?>> chain) {
+			this(src, chain, null)
+		}
+			
+		new (EObject src, Iterable<? extends Class<?>> chain, String value) {
+			this.src = src
+			this.chain = chain
+			this.value = value
+		}
+		
+		protected def prefix() {
+			if (value === null) ""
+			else (0 ..< (value.split(" as ").length - 1)).map[ "(" ].join
+		}
+	}
+	
+		// Xtend
 	protected def String templateAlias(EObject it) {
 		val path = callPath(false)
 		val base = path.src
@@ -298,90 +390,35 @@ ELSE
 ENDIF
 »«path.value»'''
 	}
-
-
-	protected def String templateCreate(EObject it) {
-		val split = splits.get(it)
-		if (split === null) templateInnerCreate
-		else '''new «IF mainClass.pack != split.pack»«split.pack».«ENDIF»«split.name»(this).call'''
-	}
-
-	protected def String templateInnerCreate(EObject it) {
-		// Find setted attributes, references, <>references
-		val content = #[
-			eClass.EAllAttributes.filter[ a | eIsSet(a) && a.defaultValue != eGet(a) ]
-				-> [ Object it, Class<?> using | toJava ],
-			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isReference ]
-				-> [ Object it, Class<?> using | (it as EObject).templateRef(using) ],
-			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isContainment ]
-				-> [ Object it, Class<?> using | (it as EObject).templateCreate ]
-		].map[ (key as Iterable<EStructuralFeature>).map[ f | f -> value ] ].flatten.toList
-
-'''«templateClass».create«
-IF namings.containsKey(it)
-»As(«namings.get(it).toJava»)«
-ENDIF
-»«
-IF content.exists[ f | eIsSet(f.key) ]
-» [
-	«
-FOR c : content SEPARATOR '\n' 
-»«templateProperty(c.key, c.value)»«
-ENDFOR
-»
-]«
-ENDIF
-»'''
-	}
-
+	
 	protected def String templateRef(EObject it, Class<?> using) {
 		val refTypeText = templateClass
 		val path = callPath(true)
-
 		val alias = namings.get(path.src)
-		val rootTypeText = path.src.templateClass
-
 		val expectedType = if (alias !== null) eClass.getInstanceClass() else using
-		var cast = 
-			if (expectedType.isAssignableFrom(path.chain.head)) "" -> "" // no cast
-			else "(" -> (" as " + templateClass + ")")
 
+		val cast = if (!expectedType.isAssignableFrom(path.chain.head)) it // else null
+
+		// TODO Xtend
 		if (alias !== null)
 '''«refTypeText».ref("«alias»")«
-IF !path.value.empty
-»[ «cast.key»«path.prefix»(it as «rootTypeText»)«path.value»«cast.value» ]«
+IF path.value !== null
+»[ «'''«path.prefix»«"it".templateCast(path.src)»«path.value»'''.templateCast(cast)» ]«
 ENDIF
 »'''
 		else if (explicitExtras.containsKey(path.src))
-'''«cast.key»«path.prefix»extras.get(«explicitExtras.get(path.src).toJava»)«path.value»«cast.value»'''
+'''«path.prefix»extras.get(«explicitExtras.get(path.src).toJava»)«path.value»'''.templateCast(cast)
 		else if (path.src.eResource !== null)
-'''«cast.key»«path.prefix»extras.get("«
-	implicitExtras.computeIfAbsent(path.src) [ "$"+implicitExtras.size ]
-»")«path.value»«cast.value»'''
+'''«path.prefix»extras.get("«
+	implicitExtras.computeIfAbsent(path.src) [ "$" + implicitExtras.size ]
+»")«path.value»'''.templateCast(cast)
 		else null // Headless
 	}
 
 
-
-	
-	
-	static class Expr {
-		public val EObject src
-		public val Iterable<? extends Class<?>> chain // required for import evaluation
-		public val String value
-		new (EObject src, Iterable<? extends Class<?>> chain, String value) {
-			this.src = src
-			this.chain = chain
-			this.value = value
-		}
-		protected def prefix() {
-			if (value === null) ""
-			else (0 ..< (value.split(" as ").length - 1)).map[ "(" ].join
-		}
-	}
 	
 	/**
-	 * Returns
+	 * Returns the expression of this path.
 	 * 
 	 * @param it element go to
 	 * @param withExtras to use extras as result
@@ -398,7 +435,8 @@ ENDIF
 
 		val cont = eContainer
 		var casted = false
-		val segment = if (!feat.many) feat.toXtend
+		// TODO Xtend
+		val segment = if (!feat.many) "." + feat.toGetter
 			else {
 				val siblings = cont.eGet(feat) as Collection<EObject>
 				val keyed = !feat.EKeys.empty
@@ -408,13 +446,13 @@ ENDIF
 				
 				if (keyed) {
 					casted = true
-'''at(«feat.name.toJava», «templateClass», «feat.EKeys.map[att| eGet(att).toJava ].join(', ')»)'''			
+'''.at(«feat.name.toJava», «templateClass», «feat.EKeys.map[att| eGet(att).toJava ].join(', ')»)'''			
 				} else if (shortcut !== null) 
-'''«feat.toXtend».at«shortcut.EContainingClass.instanceClass.simpleName»(«eGet(shortcut).toJava»)'''			
+'''.«feat.toGetter».at«shortcut.EContainingClass.instanceClass.simpleName»(«eGet(shortcut).toJava»)'''			
 				else if (siblings.size == 1)
-'''«feat.toXtend».head'''
+'''.«feat.toGetter».head'''
 				else 
-'''«feat.toXtend».get(«siblings.toList.indexOf(it)»)'''
+'''.«feat.toGetter».get(«siblings.toList.indexOf(it)»)'''
 			}
 		
 		val parentPath = callPath(cont, withExtras)
@@ -424,9 +462,8 @@ ENDIF
 		val onRootAlias = !withExtras && eContainer.eContainer === null // eContainer is already handle
 		val castRequired = !declaring.instanceClass.isAssignableFrom(parentPath.chain.head)
 			&& !(onRootAlias)
-		var path = parentPath.value 
-			+ (if (castRequired) (" as " + declaring.templateClass + ")") else "")
-
+		
+		val cast = if (castRequired) (" as " + declaring.templateClass + ")") else ""
 
 		val usedTypes = parentPath.chain.tail
 		val typePath = #[ 
@@ -435,45 +472,46 @@ ENDIF
 		] + usedTypes
 		// val typePathHead = typePath.toList.head // Debug expression
 		// val typePathTail = typePath.toList.tail.toList  // Debug expression
-		return new Expr(parentPath.src, typePath.toList, path + "." + segment)
+		new Expr(parentPath.src, typePath.toList, 
+			// declaring for cast (nullable), segment application
+			parentPath.value + cast + segment
+		)
+	}
+	
+	
+	//
+	// Refactor END
+	//
+	
+	def templateCast(CharSequence expr, EObject expected) {
+		expr.templateCast(expected.eClass)
+	}
+
+	//XTend
+	def templateCast(CharSequence expr, EClass expected) {
+		if (expected === null) expr.toString
+		else "(" + expr + " as " + expected.templateClass + ")"
 	}
 	
 	protected def templateProperty(EObject element, EStructuralFeature it, (Object, Class<?>)=>String encoding) {
 		val usingType = EType.instanceClass
 		if (isMany) {
-			val values = (element.eGet(it) as Collection<?>)
-			if (values.isEmpty) return ""
-			// Surround when several values are present
-			val valueTexts = values.map[ encoding.apply(it, usingType) ].toList
-			val displayeds = valueTexts.filter[ it !== null ].toList
-
-			// Xtend fails to infer on multi inheritance : Pretty collection-syntax fails
-			/*
-			  val container = if (ordered) '[ '->' ]' else '{'->'}'
-			  if (displayeds.empty) {
-			  '''// «safename» values are headless'''
-			  } else 
-			      (if (displayeds.size == 1) '''«name» += «displayeds.head»'''
-			          else if (it instanceof EAttribute)
-			  '''«safename» += #«container.key» «FOR t : displayeds SEPARATOR ', ' »«t»«ENDFOR» «container.value»'''
-			          else 
-			  '''«safename» += #«container.key»
-			    «FOR t : displayeds SEPARATOR ',\n' »«t»«ENDFOR»
-			  «container.value«'''
-			      ) + if (valueTexts.contains(null)) "// some values are headless" else ""
-			 */
-			// Xtend fallback, no grouping !
-'''«
-FOR t : displayeds SEPARATOR '\n'
-»«safename» += «t»«
-ENDFOR
-»'''
-
+			(element.eGet(it) as Collection<?>)
+				.map[ encoding.apply(it, usingType) ]
+				.join(statementSeparator) // Let's hope command separator is universal ...
+				[ valueText | templateProperty(valueText, true) ]
 		} else {
-			val value = element.eGet(it)
-			val valueText = encoding.apply(value, usingType)
-			if (valueText !== null) safename + ' = ' + valueText else '// ' + safename + ' is headless'
+			val valueText = encoding.apply(element.eGet(it), usingType)
+			templateProperty(valueText, false)
 		}
+	}
+	
+	// Xtend
+	protected def templateProperty(EStructuralFeature it, String value, boolean many) {
+		if (value === null) ('// ' + safename + ' is headless') // is this universal (for any lang) ??
+		// TODO log an error
+		else if (many) safename + ' += ' + value
+		else safename + ' = ' + value
 	}
 
 	protected def isReference(EReference it) {
@@ -489,10 +527,12 @@ ENDFOR
 		eClass.templateClass
 	}
 	
-	
 	protected def templateClass(EClass it) {
-		val jClass = instanceClass
-		if (currentImports.get(jClass) ?: Boolean.FALSE) jClass.simpleName else jClass.name
+		instanceClass.templateClass
+	}
+
+	protected def templateClass(Class<?> it) {
+		if (currentImports.get(it) ?: Boolean.FALSE) simpleName else name
 	}
 
 	protected def usedPackages(Iterable<? extends EObject> values) {
@@ -521,7 +561,9 @@ ENDFOR
 					.filter[ it instanceof Enum<?> ]
 					.map[ class ]
 
-				// TODO: other datatypes ??
+					// TODO: other datatypes ??
+					// We need the factory of the bound to the attributes
+					// to encode/decode
 
 				+ eClass.EAllReferences // all referenced elements
 					.filter[ reference ] //  
@@ -545,8 +587,6 @@ ENDFOR
 					))
 				}
 			]
-
-
 	}
 
 	
@@ -554,15 +594,18 @@ ENDFOR
 '''«
 FOR c : currentImports.entrySet
 	.filter[ value ].map[ key ]
-	.toList.sortBy[ name ] SEPARATOR '\n'
-»import «c.name»«
+	.toList.sortBy[ name ] 
+SEPARATOR statementSeparator
+»«c.templateImport»«/* */
 ENDFOR
 »'''
 	}
+		
+	// XTend
+	protected def templateImport(Class<?> it) { "import " + name }
+	
 
-	static def toContent(Resource res) {
-		res.contents.get(0)
-	}
+	static def toContent(Resource res) { res.contents.get(0) }
 
 	def toFile(Path target, ()=>String content) throws IOException {
 		Files.createDirectories(target.parent)
@@ -595,19 +638,28 @@ ENDFOR
 	}
 
 	dispatch def toJava(Enumerator it) {
-		if (class.isEnum) class.name + "." + (it as Enum<?>).name()
-		else class.name + ".getByName(\"" + name + "\")"
+		class.templateClass
+			+ "." + (
+				if (class.isEnum) (it as Enum<?>).name()
+				else ("getByName(\"" + name + "\")")
+			)
 	}
 
-	static val RESERVEDS = "extension,default,transient".split(",").toList
 
-	static def safename(EStructuralFeature it) {
-		if (RESERVEDS.contains(name)) '^' + name else name
+	static val XTEND_RESERVEDS = "extension,default,transient".split(",").toList
+	// Xtend
+	def safename(EStructuralFeature it) {
+		if (XTEND_RESERVEDS.contains(name)) '^' + name else name
+	}
+	
+	// Xtend (generic)
+	def getStatementSeparator() {
+		"\n"
 	}
 
 	static def EObject toRoot(EObject it) { eContainer?.toRoot ?: it }
 
-	static def toXtend(EReference it) {
+	static def toGetter(EReference it) {
 		if (name.length > 1 && Character.isUpperCase(name.charAt(1))) name.toFirstUpper
 		else name
 	}
@@ -617,4 +669,11 @@ ENDFOR
 		else if (it instanceof Resource) toContent 
 		else throw new IllegalArgumentException("Unsupported type of " + it)
 	}
+	
+	static def isUniqueIn(Object it, Iterable<?> values) {
+		values.filter[ value | it == value ].size <= 1
+	}
+	
+	
+	
 }
