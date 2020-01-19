@@ -8,6 +8,7 @@ import org.eclipse.xtext.xbase.lib.Functions.Function1
 /**
  * Unavailable extension in 2.1O
  */
+ @Deprecated
 class AdvancedExtensions { 
 	def static <T, K, V> Map<K, V> toMap(Iterable<? extends T> values, 
 		Function1<? super T, K> computeKeys, 
