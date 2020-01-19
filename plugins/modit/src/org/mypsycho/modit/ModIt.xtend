@@ -5,6 +5,7 @@ import java.util.Collections
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import java.util.ArrayList
+import java.util.Objects
 
 /**
  * Utility class that contains the Mod-it abstraction.
@@ -60,8 +61,8 @@ class ModIt<T> {
 	 * @param type of EObject to build
 	 * @param initializer of the given {@link EObject}
 	 */
-	def <R extends T> R create(Class<R> type, (R)=>void initializer) {
-		create(type, null, initializer)
+	def <R extends T> R create(Class<R> type, (R)=>void init) {
+		create(type, null, init)
 	}
 
 	/**
@@ -75,9 +76,7 @@ class ModIt<T> {
 	def <R extends T> R create(Class<R> type, String content, (R)=>void init) {
 		val it = impl.create(type)
 		if (content !== null) {
-			if (description.contentProvider === null) {
-				throw new UnsupportedOperationException("Content cannot be provide as contentProvider is null")
-			}
+			Objects.requireNonNull(description.contentProvider, "No content provider")
 			impl.bindContent(it, content)			
 		}
 		if (init !== null) {
@@ -177,7 +176,6 @@ class ModIt<T> {
 		id.alias(create(type, content, init))
 	}
 
-
 	/**
 	 * Attaches an assembly task on element.
 	 * 
@@ -185,7 +183,12 @@ class ModIt<T> {
 	 * @param task of the given {@link EObject}
 	 */
 	def <R extends T> onAssembled(R it, (R)=>void task) {
-		impl.bindAssemble(it, task)
+		Objects.requireNonNull(task, "Task undefined")
+		val previous = impl.unbindAssemble(it)
+		impl.bindAssemble(it, 
+			if (previous !== null) previous.andThen(task)
+			else task
+		)
 	}
 
 	/**
@@ -257,7 +260,6 @@ class ModIt<T> {
 		new ModItRegistry<T>(impl, description.getter)
 	}
 
-//
 // Deprecated notation: 
 //   createAs syntax follow create args order.
 //   aliasCreate syntax is not convenient.
@@ -308,8 +310,5 @@ class ModIt<T> {
 	def <R extends T> R aliasCreate(String id, Class<R> type, String content, (R)=>void init) {
 		type.createAs(id, content, init)
 	}
-
-		
-
 
 }

@@ -236,7 +236,10 @@ abstract class ModItImplementation<T, F> {
 	def <R extends T> void bindAssemble(R it, (R)=>void task)
     
  	/**
-	 * Detaches any on-assembly task from the object and returns it.
+	 * Detaches any on-assembly task from the object.
+	 * <p>
+	 * To run it or to amend it.
+	 * </p>
 	 * 
 	 * @param it the targeted EObject
 	 * @return task or null
