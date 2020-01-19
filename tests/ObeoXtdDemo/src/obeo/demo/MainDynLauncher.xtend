@@ -35,44 +35,44 @@ class MainDynLauncher {
 		val extension factory = context.factory
 		content => [
 
-			eEValues("packages") += #[eCreate("Package") [
-				eSetValue("name", "myBusiness")
-				eEValues("dependencies") += context.eRef("Package", content.toName + "::myShared")
-				eEValues("assets") += eCreate("Component") [
-					eSetValue("name", "MyCoreSystem")
-					// This fails as 
-					eSetValue("extends", context.eRef("Class", content.toName + "::myShared::AbtractComponent"))
-					eEValues("methods") += #[
-						eCreate("Function")[eSetValue("name", "doRun")]
+			eValues("packages") += #[ 
+				eCreate("Package") [
+					eSetValue("name", "myBusiness")
+					eValues("dependencies") += context.eRef("Package", content.toName + "::myShared")
+					eValues("assets") += eCreate("Component") [
+						eSetValue("name", "MyCoreSystem")
+						// This fails as 
+						eSetValue("extends", context.eRef("Class", content.toName + "::myShared::AbtractComponent"))
+						eValues("methods") += eCreate("Function")[ eSetValue("name", "doRun") ]
 					]
-				]
-			], eCreate("Package") [
-				eSetValue("name", "myShared")
-				eEValues("assets") += #[eCreate("Class") [
-					eSetValue("name", "AbtractComponent")
-					eSetValue("abstract", true)
-					eEValues("methods") += #[eCreate("Function") [
-						eSetValue("name", "init")
-						eEValues("parameters") += #[eCreate("Parameter") [
-							eSetValue("name", "args")
-							eSetValue(
-								"type",
-								eRef("Class", content.toName + "::Dart Standard Library::dart:core::List")
-							)
-						]]
-					], eCreate("Function") [
-						eSetValue("name", "start")
-					], eCreate("Function") [
-						eSetValue("name", "stop")
-					], eCreate("Function") [
-						eSetValue("name", "isRunning")
-						eSetValue(
-							"type",
-							eRef("Class", content.toName + "::Dart Standard Library::dart:core::bool")
-						)
-					]]
-				]]
-			]]
+				], 
+				eCreate("Package") [
+					eSetValue("name", "myShared")
+					eValues("assets") += #[
+						eCreate("Class") [
+							eSetValue("name", "AbtractComponent")
+							eSetValue("abstract", true)
+							eValues("methods") += #[
+								eCreate("Function") [
+									eSetValue("name", "init")
+									eValues("parameters") += #[
+										eCreate("Parameter") [
+											eSetValue("name", "args")
+											eSetValue("type",
+												eRef("Class", content.toName + "::Dart Standard Library::dart:core::List")
+											)
+										]
+									]
+								], 
+								eCreate("Function") [ eSetValue("name", "start") ], 
+								eCreate("Function") [ eSetValue("name", "stop") ], 
+								eCreate("Function") [
+									eSetValue("name", "isRunning")
+									eSetValue(
+										"type",
+										eRef("Class", content.toName + "::Dart Standard Library::dart:core::bool")
+									)
+			]	]	]	]	]	]
 			assemble // build references 
 		]
 		println("Named elements are: ")
@@ -86,12 +86,12 @@ class MainDynLauncher {
 	 */
 	static def String prettyPrint(extension EDynModit context, EObject it) {
 		val prettyDetail = if (eInstanceOf("Class"))
-				if (eValue("extends") !== null) " :> " + eEValue("extends").toName else ""
+				if (eValue("extends") !== null) " :> " + eEObject("extends").toName else ""
 			else if (eInstanceOf("Typed"))
-				if (eValue("type") !== null) " : " + eEValue("type").toName else ""
+				if (eValue("type") !== null) " : " + eEObject("type").toName else ""
 			else if (eInstanceOf("Package"))
-				if (!eEValues("dependencies").empty) " -> " +
-					eEValues("dependencies").map[toName ?: "?"].join(",") 
+				if (!eValues("dependencies").empty) " -> " +
+					eValues("dependencies").map[toName ?: "?"].join(",") 
 				else ""
 			else
 				""

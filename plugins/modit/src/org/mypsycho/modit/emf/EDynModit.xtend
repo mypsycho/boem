@@ -11,8 +11,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 
-import static extension org.mypsycho.modit.AdvancedExtensions.*
-
 class EDynModit {
 
 	extension final ResourceSet resSet = new ResourceSetImpl()
@@ -24,10 +22,8 @@ class EDynModit {
 	new(java.net.URI mmLocation, String fileExtension, (EDynModit, EModIt.Descriptor)=>void init) {
 		resourceFactoryRegistry.getExtensionToFactoryMap().put("ecore", new XMIResourceFactoryImpl)
 		
-		metamodel = getResource(
-			URI.createURI(mmLocation.toASCIIString),
-			true
-		).getContents().get(0) as EPackage;
+		metamodel = URI.createURI(mmLocation.toASCIIString).getResource(true)
+			.getContents().get(0) as EPackage;
 
 		resourceFactoryRegistry.getExtensionToFactoryMap().put(fileExtension, new XMIResourceFactoryImpl)
 
@@ -46,10 +42,6 @@ class EDynModit {
 		it
 	}
 
-	def eEValues(EObject it, String feat) {
-		eGet(eClass.getEStructuralFeature(feat)) as List<EObject>
-	}
-
 	def eSetValue(EObject it, String feat, Object value) {
 		eSet(eClass.getEStructuralFeature(feat), value)
 	}
@@ -58,11 +50,15 @@ class EDynModit {
 		eGet(eClass.getEStructuralFeature(feat))
 	}
 
-	def eString(EObject it, String feat) { // Shorcut
+	def eValues(EObject it, String feat) { // Shortcut
+		eValue(feat) as List<EObject>
+	}
+
+	def eString(EObject it, String feat) { // Shortcut
 		eValue(feat) as String
 	}
 
-	def eEValue(EObject it, String feat) { // Shorcut
+	def eEObject(EObject it, String feat) { // Shortcut
 		eValue(feat) as EObject
 	}
 
@@ -71,14 +67,14 @@ class EDynModit {
 	}
 
 	def EObject loadModel(java.net.URI it) {
-		getResource(URI.createURI(toASCIIString), true).getContents().get(0)
+		URI.createURI(toASCIIString).getResource(true).getContents().get(0)
 	}
 
 	def saveModel(EObject content, File target, Pair<String, Object>... options) {
 		if (target.exists()) {
 			target.delete();
 		}
-		val res = createResource(URI.createFileURI(target.toString))
+		val res = URI.createFileURI(target.toString).createResource()
 		res.contents.add(content)
 		res.save(options.toMap([key], [value]))
 	}
