@@ -1,22 +1,28 @@
 package org.mypsycho.modit.emf.sirius
 
 import java.util.ArrayList
+import java.util.HashMap
 import java.util.List
+import java.util.Map
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.JavaExtension
 import org.eclipse.sirius.viewpoint.description.style.StylePackage
 import org.eclipse.sirius.viewpoint.description.tool.ToolPackage
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.mypsycho.modit.emf.EModIt
 
 abstract class SiriusModelProvider {
 
-	
+	public static val RESOURCE_MODE = -1
+
 	public static val AQL_SELF = "self"
-	
+	/** Separator of parameter */
+	public static val PARAM_SEP = ","
 	
 	public static val DEFAULT_PACKAGES = #{
 		DescriptionPackage.eINSTANCE,
@@ -38,20 +44,24 @@ abstract class SiriusModelProvider {
 	}
 	
 	val List<Object> expressions = new ArrayList
-	// Factory is public to be access to provider sub-parts.
-	public val extension EModIt factory
 	
-	public val Resource resource
-	val int id
+	// Factory is public to be access to provider sub-parts.
+	@Accessors
+	val extension EModIt factory
+	
+	@Accessors
+	val Resource resource
+	
+	@Accessors
+	val Map<String, EObject> extras = new HashMap 
+	
+	var Integer id
 	val Group value
 	
 	
 	new (Iterable<? extends EPackage> descriptorPackages, Resource rs) {
 		factory = EModIt.using(descriptorPackages)
 		resource = rs
-		
-		// registration use resource uri, it must be set after
-		id = MisActivator.instance.registerProvider(this)
 		
 		value = Group.create
 		// Init cannot happen in constructor 
@@ -61,10 +71,27 @@ abstract class SiriusModelProvider {
 	
 	new (Resource rs) { this(DEFAULT_PACKAGES, rs) }
 	
-	def buildContent() {
+	def getRootAlias() { class.simpleName }
+	
+	def registerContent() {
+		// registration use resource uri, it must be set after
+		id = MisActivator.instance.registerProvider(this)
+		buildContent
+	}
+	
+	def buildEffectiveModel() {
+		// registration use resource uri, it must be set after
+		id = RESOURCE_MODE
+		buildContent
+	}
+	
+	protected def buildContent() {
 		
-		value.init
-		// as ownedViewpoints is composition, navigation is safe
+		resource.resourceSet.initExtras
+		rootAlias.alias(value)
+		value.initContent
+		
+		// as ownedViewpoints is composition, navigation is safe before assemble
 		value.ownedViewpoints.forEach[
 			ownedJavaExtensions += JavaExtension.create[ 
 				qualifiedClassName = SiriusModelProviderService.name
@@ -77,8 +104,11 @@ abstract class SiriusModelProvider {
 		value
 	}
 	
+	protected def initExtras(ResourceSet it) {
+		// optional abstraction
+	}
 	
-	protected def void init(Group it)
+	protected def void initContent(Group it)
 
 
 	def <T> String expression(Functions.Function1<? extends EObject, T> callable) {
@@ -142,9 +172,16 @@ abstract class SiriusModelProvider {
 		val params = signature.toInvokeParams(size + 1)
 		val methodId = expressions.size
 		expressions += callable
+		
+		if (id == RESOURCE_MODE) 
+		''''''
+		else
 		// Warning: no space between Sequence
 		'''aql:«params.key».moditInvoke(«id», «methodId», Sequence{«params.value»})'''
 	}
+	
+	
+	
 	
 	def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject value, Object params) {
 		val List<Object> values = params as List<Object>
@@ -174,24 +211,24 @@ abstract class SiriusModelProvider {
 		}
 	}
 	
-	protected def params(String... params) {
-		params.join(",")
-	}
+	/**
+	 * Create a string from expression from a sequence of parameter names.
+	 * 
+	 * @param params names
+	 * @return string of parameters
+	 */
+	protected def params(String... params) { params.join(PARAM_SEP) }
 	
 	/**
-	 * 
+	 * Defines invocation parameters based on 
 	 * 
 	 * @param it 
 	 * @param size
 	 */
 	protected def toInvokeParams(String it, int size) {
-		val values = split(",")
-		if (values.length == size) {
-			AQL_SELF->params			
-		} else if (values.length == size + 1) {
-			values.get(0)->values.tail.join(",")
-		} else {
-			throw new IllegalArgumentException('''Arguments [«it»] does not match signature size («size»)"''')
-		}
+		val values = split(PARAM_SEP)
+		if (values.length == size) AQL_SELF->params
+		else if (values.length == size + 1) values.head->values.tail.join(",")	
+		else throw new IllegalArgumentException('''Arguments [«it»] does not match signature size («size»)"''')
 	}
 }

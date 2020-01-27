@@ -23,8 +23,12 @@ import org.osgi.framework.BundleContext;
 
 
 /**
+ * Activator of plugin.
+ * <p>
+ * It provides in memory Sirius Model registration.
+ * </p>
+ * 
  * @author nperansin
- *
  */
 public class MisActivator extends Plugin {
 
@@ -36,12 +40,23 @@ public class MisActivator extends Plugin {
     private static MisActivator instance;
 
     // registereds protects itself and serviceProviders content.
-    private Map<String, Registration> registereds = null;
+    private Map<String/*URI*/, Registration> registereds = null;
+    
+    // registereds protects itself and serviceProviders content.
+    private Map<String/*classname*/, SiriusModelProvider> implsCache = null;
     
     // Providers are index for a better performance. Otherwise key would be enough.
     private List<? extends SiriusModelProvider> serviceProviders = null;
 
-
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static MisActivator getInstance() {
+    	return instance;
+    }
+    
     private static final ViewpointFileCollector MODEL_PROVIDER_COLLECTOR = 
     		new ViewpointFileCollector() {
 
@@ -66,12 +81,14 @@ public class MisActivator extends Plugin {
         
         private final String siriusPath;
         
-        private int index = UNALLOCATED_INDEX;
+        private final String implClass;
         
+        private int index = UNALLOCATED_INDEX;
         
         private SiriusModelProvider instance = null;
         
         public Registration(String pluginId, Class<? extends SiriusModelProvider> mpClass) {
+        	implClass = mpClass.getName();
         	key = DesignFactory.toUriPath(pluginId, mpClass);
         	siriusPath = DesignFactory.toModelPath(pluginId, mpClass);
         }
@@ -89,6 +106,11 @@ public class MisActivator extends Plugin {
     		synchronized (registereds) {
     			if (registereds.get(getKey()) == this) {
     				registereds.remove(getKey());
+    				implsCache.remove(implClass);
+    			}
+    			
+    			if (implsCache.get(implClass) == instance) {
+    				implsCache.remove(implClass);
     			}
     			
 				if (index != UNALLOCATED_INDEX
@@ -105,7 +127,16 @@ public class MisActivator extends Plugin {
 			index = id;
 		}
 
-		public void allocated(SiriusModelProvider it) {
+		/**
+		 * Allocated the provider
+		 * <p>
+		 * 
+		 * </p>
+		 *
+		 * @param it instance of register
+		 * @return index
+		 */
+		public int allocated(SiriusModelProvider it) {
 			
 			// search free id
 			if (index == Registration.UNALLOCATED_INDEX) {
@@ -117,6 +148,8 @@ public class MisActivator extends Plugin {
 			
 			instance = it;
 			updateServices(index, it);
+	    	implsCache.put(implClass, it);
+	    	return getIndex();
 		}
 
 		public void initViewpoints() {
@@ -135,6 +168,7 @@ public class MisActivator extends Plugin {
     				MODEL_PROVIDER_COLLECTOR);
     	
     	registereds = new HashMap<String, Registration>();
+    	implsCache = new HashMap<String, SiriusModelProvider>();
     	serviceProviders = new ArrayList<>();
     }
 
@@ -173,6 +207,13 @@ public class MisActivator extends Plugin {
     	
     }
     
+	/**
+	 * Register this SiriusModelProvider as Sirius model.
+	 *
+	 * @param pluginId exposing the class
+	 * @param mpClass to instantiate
+	 * @return anchor to unregister the model
+	 */
 	public IDisposable registerGroups(String pluginId, Class<? extends SiriusModelProvider> mpClass) {
 		Registration result;
 		synchronized (registereds) {
@@ -192,26 +233,43 @@ public class MisActivator extends Plugin {
     int registerProvider(SiriusModelProvider it) {
     	Registration reg;
     	synchronized (registereds) {
-    		String uriPath = it.resource.getURI().path();
+    		String uriPath = it.getResource().getURI().path();
     		reg = registereds.get(uriPath);
 	    	if (reg == null) { // reloading
 	    		throw new IllegalStateException("Unregistered model provider " + uriPath);
 	    	}
-			reg.allocated(it);
-			return reg.getIndex();
+
+			return reg.allocated(it);
 		}
     }
     
+    /**
+     * Returns the model provider registered with specified id.
+     * <p>
+     * Package to limit access to SiriusModelProviderService.
+     * </p>
+     *
+     * @param id of model provider
+     * @return registered provider (may be null)
+     * @throws IndexOutOfBoundsException if id does match any existing id
+     */
     SiriusModelProvider getProvider(int id) {
     	return serviceProviders.get(id);
     }
     
+    
     /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
+     * Returns the model provider registered with specified class.
+     * <p>
+     * Package to limit access to SiriusModelProviderService.
+     * </p>
+     *
+     * @param classname of model provider
+     * @return registered provider (may be null)
+     * @throws IndexOutOfBoundsException if id does match any existing id
      */
-    public static MisActivator getInstance() {
-    	return instance;
+    SiriusModelProvider getProvider(String classname) {
+    	return implsCache.get(classname);
     }
+
 }
