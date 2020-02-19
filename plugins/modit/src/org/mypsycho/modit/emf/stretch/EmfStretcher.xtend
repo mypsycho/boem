@@ -14,12 +14,19 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.emf.ecore.EcorePackage
+import org.eclipse.xtend.lib.annotations.Accessors
 
-
+/**
+ * EMF Stretcher can associate value to item for all EMF meta-element.
+ * <p>
+ * When queried by item, value are resolved according inheritance relation of EMF classifiers.
+ * </p>
+ * <p>Items declares @{
+ */
 class EmfStretcher {
 
-
-	public val List<? extends EPackage> allSources // Order is fixed
+	@Accessors
+	val List<? extends EPackage> allSources // Order is fixed
 
 	val Map<? extends EPackage, ? extends EmfAspect.Package> elements
 

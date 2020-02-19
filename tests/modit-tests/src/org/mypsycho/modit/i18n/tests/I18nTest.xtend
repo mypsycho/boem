@@ -17,8 +17,8 @@ class I18nTest {
 
 	public val ()=>String menu = [
 '''«Meal.label»«
-IF Meal.getLabel('comment') !== null
-»(«Meal.getLabel('comment')»)«
+IF Meal.getLabel(Messages.COMMENT) !== null
+»(«Meal.getLabel(Messages.COMMENT)»)«
 ENDIF
 »:«
 FOR f : Meal.values SEPARATOR ','

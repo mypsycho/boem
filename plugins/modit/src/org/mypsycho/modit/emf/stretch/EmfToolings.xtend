@@ -5,7 +5,12 @@ import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EStructuralFeature
 
 /**
- * Must be access by byClass, byObjects, byProperty, byProperties.
+ * Class providing extensive properties and methods for EMF meta-model.
+ * <p>
+ * It must be used with a EMF Stretcher instance.
+ * </p>
+ * <p>
+ * Must be instantiate by byClass, byClasses, byProperty, byProperties.
  * <p>
  * No <b>overloading</b> to prevent inference error on participant type.
  * </p>
@@ -15,7 +20,7 @@ import org.eclipse.emf.ecore.EStructuralFeature
  */
 abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.Participation<P> {
 
-	
+
 	/**
 	 * Create an implementation for specified type which throws UnsupportedOperationException.
 	 * 
@@ -26,10 +31,10 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 	static def <T> (EClass)=>T unsupported(String label, Class<T> expectedType) {
 		[ throw new UnsupportedOperationException(label + " for " + it?.name) ]
 	}
-	
+
 	// Class extension
 	//
-	
+
 	static def <T> byClass(T byDefault) { new XClass<T>().asValue(byDefault) }
 
 	static def <T> byClasses((EClass)=>T byDefault) { new XClass<T>().asFct(byDefault) }
@@ -45,16 +50,16 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 	static def <T> byFeatures((EClass, EStructuralFeature)=>T byDefault) { 
 		new XFeature<T>().asValue(byDefault)
 	}
-	
+
 	static def <T, C> byFeatures((EClass, EStructuralFeature, Map<EClass, C>)=>T byDefault) { 
 		new XFeature<T>().asCache(byDefault)
 	}
-	
 
-	protected new(P key, EClassStretcher target) { super(key, target) }
-	
 
-	
+	private new(P key, EClassStretcher target) { super(key, target) }
+
+
+
 	// += 
 	def operator_add(T it) { impl }
 	def impl(T defValue) {
@@ -67,7 +72,7 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 		asFct(provider)
 		target.context.register()
 	}
-	
+
 	/**
 	 * 
 	 * <C> Cache content
@@ -85,8 +90,8 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 		else if (direct) value as T
 		else (value as (EClass)=>T).apply(it)
 	}
-	
-	
+
+
 	static class XClass<T> extends EmfParticipant {
 		
 		def bind(EmfStretcher it, EClass type) { 
@@ -100,25 +105,25 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 			else if (direct) value as T
 			else (value as (EClass)=>T).apply(it)
 		}
-
 	}
-	
+
+
 	static class CBinding<T> extends EmfToolings<T, XClass<T>> {
 
 		new(XClass<T> key, EClassStretcher target) { super(key, target) }
-		
+
 		override register(EmfStretcher it) { 
 			add(target.source, this)
 		}
-		
 	}
-	
-	static class XFeature<T> extends EmfParticipant {
+
+
+	final static class XFeature<T> extends EmfParticipant {
 
 		def bind(EmfStretcher it, EClass type, EStructuralFeature feat) { 
 			new FBinding<T>(this, onClass(type), feat)
 		}
-		
+
 		def bind(EmfStretcher it, EStructuralFeature feat) { 
 			new FBinding<T>(this, onClass(feat.EContainingClass), feat)
 		}
@@ -133,17 +138,17 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 			}
 		}
 	}
-	
-		
-	static class FBinding<T> extends EmfToolings<T, XFeature<T>> {
-		
+
+
+	final static class FBinding<T> extends EmfToolings<T, XFeature<T>> {
+
 		val EStructuralFeature feature
-		
+
 		new(XFeature<T> key, EClassStretcher target, EStructuralFeature feat) {
 			super(key, target)
 			feature = feat
 		}
-		
+
 		override register(EmfStretcher it) {	
 			add((target.source as EClass)->feature, this)
 		}

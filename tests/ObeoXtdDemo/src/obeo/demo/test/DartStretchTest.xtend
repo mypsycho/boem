@@ -14,15 +14,17 @@ import org.junit.Test
 import static extension org.junit.Assert.*
 
 /**
- * TODO transform into a JUnit
- * 
+ * Test EmfStretcher with some dart model.
  */
 class DartStretchTest extends DartTestContext {
 
-  extension XmiEcoreLoader context = new XmiEcoreLoader(DartPackage.eINSTANCE, "dartspec")
-  var Project content = loadModel(new File("model/dartlang.dartspec").toURI) as Project
+	extension XmiEcoreLoader context = new XmiEcoreLoader(DartPackage.eINSTANCE, "dartspec")
+	var Project content = new File("model/dartlang.dartspec").toURI.loadModel() as Project
 
 
+	/**
+	 * Test the content of the model resource and testing assertions.
+	 */
 	@Test
 	def void testLoading() {
 		
@@ -55,14 +57,19 @@ class DartStretchTest extends DartTestContext {
 		}
 		
 		
-  @Test
+	/**
+	 * Test the content of the model resource plus the dynamic loading with EModIt.
+	 */
+	@Test
 	def void testEdit() {
 		content.appendContent
 		"all elements".assertEquals(37, content.onAll.size)
 	}
 	
-			
-  @Test
+	/**
+	 * Test the XObject contribution.
+	 */
+	@Test
 	def void testToString() {
 		content.appendContent
 
@@ -106,13 +113,16 @@ class DartStretchTest extends DartTestContext {
    isRunning() : bool'''.toString
 			.split("\\R").toList, 
 			content.onAll.map[
-				val result = indent + getValue(DartContribution.LABEL)
+				val result = indent + it * DartContribution.LABEL
 				System.err.println(result)
 				result
 			].toList)
 	}
 
-  @Test
+	/**
+	 * Test the XObject contribution.
+	 */
+	@Test
 	def void testQualifiedNames() {
 		content.appendContent
 
@@ -151,11 +161,17 @@ Dart/myShared/AbtractComponent/<unnamed-Function>()
 Dart/myShared/AbtractComponent/stop()
 Dart/myShared/AbtractComponent/isRunning()'''
 			.toString.split("\\R").toList, 
-			content.onAll.map[ getValue(DartContribution.QNAME) ].filterNull.toList)
+			content.onAll.map[ it * DartContribution.QNAME ].filterNull.toList)
 	}
 
 
-
+	/**
+	 * Add dynamic declaration into provided project.
+	 * 
+	 * 
+	 * @param Project to complete
+	 * @return initial project
+	 */
 	static def appendContent(Project content) {
 		content => [
 			packages += #[ 

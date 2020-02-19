@@ -1,6 +1,3 @@
-/**
- * Copyright (c) 2020 Obeo.
- */
 package org.mypsycho.modit.emf.sirius;
 
 import java.nio.file.Path
@@ -28,8 +25,8 @@ import org.mypsycho.modit.emf.EReversIt
  */
 class SiriusReverseIt {
 
-    val rs = new ResourceSetImpl()
-    val Group source
+	val rs = new ResourceSetImpl()
+	val Group source
 	val ClassId classId
 	
 	@Accessors
@@ -41,20 +38,25 @@ class SiriusReverseIt {
 		source = URI.createPlatformPluginURI(odesignUri, true).loadSiriusGroup
 		
 		engine = source.eResource.createEngine(classname, dir) => [
-            
-            // Split RepresentationDescription DiagramExtensionDescription
-            splits.putAll(source.ownedViewpoints
-                .map[ ownedRepresentationExtensions ].flatten
-                .toInvertedMap[ new ClassId(classId.pack, toClassname) ])
-                
-            aliases.put(source, classId.name)
-             
-            explicitExtras.putAll(usedMetamodels)
+			
+			// Split RepresentationDescription DiagramExtensionDescription
+			splits.putAll(findDefaultSplits)
+				
+			aliases.put(source, classId.name)
+			 
+			explicitExtras.putAll(usedMetamodels)
 
-            explicitExtras.putAll(source.systemColorsPalette.entries.toInvertedMap[ "Color#" + name ])
+			explicitExtras.putAll(source.systemColorsPalette.entries.toInvertedMap[ "Color#" + name ])
 
-        ]
+		]
 	}
+	
+	def findDefaultSplits() {
+		source.ownedViewpoints
+				.map[ ownedRepresentationExtensions ].flatten
+				.toInvertedMap[ new ClassId(classId.pack, toClassname) ]
+	}
+	
 	
 	def getUsedMetamodels() {
 		// Find them just once
@@ -64,11 +66,11 @@ class SiriusReverseIt {
 		
 		// we need a copy as resources list is extended by navigation
 		new ArrayList(rs.resources)
-        	.map[ o | [ o.allContents ] as Iterable<EObject> ].flatten
-        	.map[ metamodels ].flatten.toSet
-        	// Some metamodels may be identified by reflection
-        	.map[ getCanonicalPackage(emfExtensions) ].toSet
-        	.toInvertedMap[ nsURI ]
+			.map[ o | [ o.allContents ] as Iterable<EObject> ].flatten
+			.map[ metamodels ].flatten.toSet
+			// Some metamodels may be identified by reflection
+			.map[ getCanonicalPackage(emfExtensions) ].toSet
+			.toInvertedMap[ nsURI ]
 	}
 	
 	def getCanonicalPackage(EPackage epack, IExtension[] emfExtensions) {
@@ -119,8 +121,8 @@ class SiriusReverseIt {
 	}
 	
 	static def camel(String it) {
-    	split("\\s+").join("")[ toLowerCase.toFirstUpper ]
-    }
+		split("\\s+").join("")[ toLowerCase.toFirstUpper ]
+	}
 	
 	protected static class Engine extends EReversIt {
 		new(String classname, Path dir, Resource res) {
@@ -154,7 +156,7 @@ ENDIF // extras
 
 	def context() { this }
 
-«templateCommonNavigation»
+«templateCommonQueries»
 
 }
 '''

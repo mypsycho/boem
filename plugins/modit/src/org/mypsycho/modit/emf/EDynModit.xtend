@@ -11,6 +11,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 
+/**
+ * Container to create EMF Model from Meta-model without Java generation.
+ * <p>
+ * As it is unlikely to have Ecore model with no generation, this class is only for research purpose.
+ * </p>
+ */
 class EDynModit {
 
 	extension final ResourceSet resSet = new ResourceSetImpl()

@@ -1,16 +1,17 @@
-package org.mypsycho.modit
+package org.mypsycho.modit.compatibility
 
 import com.google.common.collect.Maps
 import java.util.Iterator
 import java.util.Map
 import org.eclipse.xtext.xbase.lib.Functions.Function1
+import java.util.Objects
 
 /**
  * Unavailable extension in 2.1O
  */
  @Deprecated
 class AdvancedExtensions { 
-	def static <T, K, V> Map<K, V> toMap(Iterable<? extends T> values, 
+	def static <T, K, V> Map<K, V> toMap(Iterable<? extends T> values,
 		Function1<? super T, K> computeKeys, 
 		Function1<? super T, V> computeValues
 	) {
@@ -18,12 +19,12 @@ class AdvancedExtensions {
 	}
 	
 	
-	static def <T, K, V> Map<K, V> toMap(Iterator<? extends T> values, 
+	static def <T, K, V> Map<K, V> toMap(Iterator<? extends T> values,
 		Function1<? super T, K> computeKeys, 
 		Function1<? super T, V> computeValues
 	) {
-		if (computeKeys === null) throw new NullPointerException("computeKeys")
-		if (computeValues === null) throw new NullPointerException("computeValues")
+		Objects.requireNonNull(computeKeys, "computeKeys")
+		Objects.requireNonNull(computeValues, "computeValues")
 		val result = Maps.newLinkedHashMap()
 		while(values.hasNext()) {
 			val T t = values.next()

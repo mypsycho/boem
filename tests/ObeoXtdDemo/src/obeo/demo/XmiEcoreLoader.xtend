@@ -1,6 +1,7 @@
 package obeo.demo
 
-import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
@@ -18,15 +19,21 @@ class XmiEcoreLoader {
 	}
 
 	def EObject loadModel(java.net.URI it) {
-		getResource(URI.createURI(toASCIIString), true).getContents().get(0)
+		URI.createURI(toASCIIString).loadModel
 	}
 
-	def saveModel(EObject content, File target, Pair<String, Object>... options) {
-		if (target.exists()) {
-			target.delete();
-		}
+	def EObject loadModel(URI it) {
+		getResource(true).getContents().get(0)
+	}
+
+	def saveModel(EObject content, Path target, Pair<String, Object>... options) {
+		#[ content ].saveModel(target, options)
+	}
+
+	def saveModel(Iterable<? extends EObject> content, Path target, Pair<String, Object>... options) {
+		Files.deleteIfExists(target)
 		val res = createResource(URI.createFileURI(target.toString))
-		res.contents.add(content)
+		res.contents += content
 		res.save(options.toMap([key], [value]))
 	}
 

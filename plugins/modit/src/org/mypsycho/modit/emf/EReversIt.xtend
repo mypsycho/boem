@@ -6,16 +6,13 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.ArrayList
-import java.util.Arrays
 import java.util.Collection
-import java.util.Collections
 import java.util.HashMap
 import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.Enumerator
-import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
@@ -25,19 +22,19 @@ import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.util.EcoreEList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
-
-import static extension org.mypsycho.modit.AdvancedExtensions.*
 
 class EReversIt {
 
 	protected static val MAIN_IMPORTS = #{ 
-		Arrays, HashMap, // util
-		EObject, EList, EReference, ResourceSet, ResourceSetImpl, URI, // emf
-		EModIt
+		HashMap, Class, // java
+		Accessors, // xtend.lib
+		EObject, EList, EReference, Resource, ResourceSet, ResourceSetImpl, EcoreEList, // emf
+		EModIt, ModitModel
 	}
-	protected static val PART_IMPORTS = #{ Map, EObject, EModIt, ResourceSet }
+	protected static val PART_IMPORTS = #{ EObject, EModIt }
 
 	protected val ClassId mainClass
 
@@ -47,18 +44,19 @@ class EReversIt {
 
 	protected val List<EObject> orderedRoots
 
-	protected var Map<EObject, String> implicitExtras // We tracks anonymous extras elements
+	// Tracking anonymous extras elements using generated id
+	protected var Map<EObject, String> implicitExtras
 	
 	protected var Map<EObject, String> namings
 
 	@Accessors
-	val splits = new HashMap<EObject, ClassId>
+	val Map<EObject, ClassId> splits = new HashMap
 
 	@Accessors
-	val aliases = new HashMap<EObject, String>
+	val Map<EObject, String> aliases = new HashMap
 	
 	@Accessors
-	val explicitExtras = new HashMap<EObject, String>
+	val Map<EObject, String> explicitExtras = new HashMap
 
 	@Accessors
 	var Charset encoding = StandardCharsets.UTF_8
@@ -68,6 +66,8 @@ class EReversIt {
 
 	// Reset for each file.
 	val currentImports = new HashMap<Class<?>, Boolean>()
+	var ClassId currentClass
+
 
 	new(String classname, Path dir, Resource... rSet) {
 		this(new ClassId(classname), dir, rSet.map[ it -> new ClassId(new ClassId(classname), URI) ])
@@ -105,12 +105,23 @@ class EReversIt {
 			)
 		}
 
-		// Check explicit extra are unique
-		val explicitExtraNames = explicitExtras.entrySet.map[ value ].toList
-		val redundantExtras = explicitExtraNames.filter[ !isUniqueIn(explicitExtraNames) ].toSet
+		// Check explicit extra are unique.
+		// extras may different instance but same uri: Package !!
+		val extrasByUris = new HashMap<String, String>
+		val redundantExtras = new ArrayList<String>
+		explicitExtras.entrySet.forEach[
+			if (extrasByUris.containsKey(value)) {
+				if (key.toUri != extrasByUris.get(value)) {
+					redundantExtras += value
+				}
+			} else {
+				extrasByUris.put(value, key.toUri)
+			}
+		]
+		
 		if (!redundantExtras.empty) {
 			throw new IllegalArgumentException(
-				"Explicit extra must be unique: " + redundantExtras
+				"Explicit extra must be unique for: " + redundantExtras
 			)
 		}
 
@@ -184,6 +195,7 @@ class EReversIt {
 	def Iterable<?extends Class<?>> getPartStaticImports() { PART_IMPORTS }
 
 	protected def templateSimpleMain(EObject it) {
+		currentClass = mainClass
 		registerImports(mainStaticImports)
 		templateMain(#[ it ].usedPackages) [ templateSimpleContent ]
 	}
@@ -196,6 +208,7 @@ class EReversIt {
 		
 	protected def templateComposedMain() {
 		// Register imports
+		currentClass = mainClass
 		null.registerImports(mainStaticImports)
 		
 		templateMain(orderedRoots.usedPackages) [ 
@@ -217,6 +230,7 @@ ENDFOR
 	}
 
 	protected def templatePart(ClassId it, EObject content) {
+		currentClass = it
 		content.registerImports(partStaticImports)
 		templatePartBody(content)
 	}
@@ -254,72 +268,82 @@ class «name» {
 
 «templateImports»
 
-class «mainClass.name» {
+class «mainClass.name» implements ModitModel {
 
-	public val extras = new HashMap<String, EObject> 
+	@Accessors
+	val extras = new HashMap<String, EObject> 
 
-	public extension EModIt factory = EModIt.using(
+	@Accessors
+	protected val extension EModIt factory = EModIt.using(
 		«FOR p : packages SEPARATOR ',\n' »«p.name».eINSTANCE«ENDFOR»
 	)
 
-«
-IF !implicitExtras.empty || !explicitExtras.empty
-»	new() {
-		val it = new ResourceSetImpl
+	override loadContent(Resource it) {
+		val values = resourceSet.buildModel.roots
+		contents += values
+		values
+	}
+
+	def buildModel() {
+		buildModel(new ResourceSetImpl())
+	}
+
+	def buildModel(ResourceSet rs) {
+		rs.initExtras()
+		createContent
+	}
+
+	protected def void initExtras(ResourceSet it) {
 		«templateExtras»
 	}
 
-«
-ENDIF // extras
-»	def createContent() {
+	protected def createContent() {
+		// provide a ModitPool
 		«content.apply»
 	}
 
 	def context() { this }
 
-	«templateCommonNavigation»
+	«templateCommonQueries»
 }
 '''
 	}
 
+	// xtend
 	protected def String templateExtras() {
-'''«
- IF !implicitExtras.empty
-»extras.putAll(#{// anonymous resources
+		if (!implicitExtras.empty) templateImplicitExtras else ""
+		+ if (!explicitExtras.empty) templateExplicitExtras else ""
+	}
+
+	// xtend
+	protected def String templateImplicitExtras() {
+'''extras.putAll(#{ // anonymous resources
 «
-  FOR ext : implicitExtras.entrySet.map[ value -> key ].toList.sortBy[ key ] SEPARATOR ',\n'
-»	"«ext.key»" -> eObject(« ext.value.templateClass», « EcoreUtil.getURI(ext.value).toString.toJava »)«
-  ENDFOR
+FOR ext : implicitExtras.entrySet.map[ value -> key ].toList.sortBy[ key ]
+»	"«ext.key»" -> eObject(« ext.value.templateClass», «ext.value.toUri.toString.toJava»),
+«
+ENDFOR
 »
 })
-«
- ENDIF // implicit extras
-»«
- IF !explicitExtras.empty
-»extras.putAll(#{ // Named elements
-«
-  FOR ext : explicitExtras.entrySet.toList.sortBy[ value ] SEPARATOR ',\n'
-»	«ext.value.toJava» -> «ext.key.templateAlias»«
-  ENDFOR
-»})
-«
- ENDIF // explicit extras
-»
 '''
 	}
 
 
-	protected def String templateCommonNavigation() {
+	// xtend
+	protected def String templateExplicitExtras() {
+'''extras.putAll(#{ // Named elements
+«
+FOR ext : explicitExtras.entrySet.toList.sortBy[ value ]
+»	«ext.value.toJava» -> «ext.key.templateAlias»,
+«
+ENDFOR
+»})
 '''
-// deprecated
-static def <R extends EObject> R at(EObject it, String featName, Class<R> type, Object... key) {
-	val feat = eClass.getEStructuralFeature(featName) as EReference
-	val keyValues = Arrays.asList(key)
-	(eGet(feat) as EList<?>).filter(type).findFirst[ r|
-		feat.EKeys.map[ r.eGet(it) ] == keyValues
-	] as R
-}
+	}
 
+	// xtend
+	protected def String templateCommonQueries() {
+'''
 // Only works for feature with keys
 static def <R extends EObject> R at(EList<?> values, Class<R> type, Object... keys) {
 	val attKeys = ((values as EcoreEList<?>).feature as EReference).EKeys
@@ -337,8 +361,7 @@ static def <R extends EObject> R at(EList<?> values, Class<R> type, Object... ke
 
 // Only works for feature with keys
 static def <R extends EObject> R at(EList<R> values, Object... keys) {
-	val type = ((values as EcoreEList<?>).feature as EReference).EType.instanceClass as Class<R>
-	values.at(type, keys)
+	values.at(EObject, keys) as R
 }
 
 «
@@ -351,7 +374,9 @@ IF !implicitExtras.empty || !explicitExtras.empty
 ENDIF // extras
 »«
 FOR shortcut : shortcuts SEPARATOR ',\n'
-»def <T extends «shortcut.EContainingClass.instanceClass.name»> at«shortcut.EContainingClass.instanceClass.simpleName»(Iterable<T> values, Object key) {
+»static def <T extends «shortcut.EContainingClass.instanceClass.name
+»> at«shortcut.EContainingClass.instanceClass.simpleName
+»(Iterable<T> values, Object key) {
 	values.findFirst[ «shortcut.name» == key ]
 }
 «
@@ -359,7 +384,6 @@ ENDFOR // shortcuts
 »
 '''
 	}
-
 
 	protected def templateCreate(EObject it) {
 		val split = splits.get(it)
@@ -419,7 +443,7 @@ ENDIF
 		public val (String)=>String segment
 		
 		new (EObject src, Iterable<? extends Class<?>> chain) {
-			this.parent = null
+			parent = null
 			this.src = src
 			this.chain = chain
 			cast = null
@@ -459,8 +483,13 @@ ENDIF
 	
 	// Xtend
 	protected def String templateExplicitAlias(EObject it) {
-'''eObject(«templateClass», « EcoreUtil.getURI(it).toString.toJava »)'''	
+'''eObject(«templateClass», «toUri.toJava »)'''	
 	}	
+	
+	protected def toUri(EObject it) {
+		if (it instanceof EPackage) nsURI + '#'
+		else EcoreUtil.getURI(it).toString
+	}
 	
 	protected def String templateRef(EObject it, Class<?> using) {
 		val path = callPath(true)
@@ -504,7 +533,7 @@ ENDIF
 		if (namings.containsKey(it)) 
 			return new Expr(it, #[ eClass.instanceClass, eClass.instanceClass ])
 
-		if (eContainer === null || (withExtras && explicitExtras.containsKey(it)))  // To extras
+		if (eContainer === null || (withExtras && explicitExtras.containsKey(it))) // To extras
 			return new Expr(it, #[ EObject, eClass.instanceClass ])
 
 		val feat = eContainingFeature as EReference		
@@ -524,7 +553,7 @@ ENDIF
 			eClass.instanceClass
 		] + usedTypes
 		// val typePathHead = typePath.toList.head // Debug expression
-		// val typePathTail = typePath.toList.tail.toList  // Debug expression
+		// val typePathTail = typePath.toList.tail.toList // Debug expression
 		new Expr(parentPath, typePath.toList, 
 			if (castRequired) declaring else null
 		) [ source | templateReferenceSegment(feat, source) ]
@@ -541,7 +570,7 @@ ENDIF
 		if (!feat.many)
 			return source + "." + feat.toGetter
 
-		val siblings = eContainer.eGet(feat) as Collection<EObject>
+		val siblings = eContainer.eGet(feat) as List<EObject> // Ecore only provide Elist
 		val keyed = !feat.EKeys.empty
 		val shortcut = if (!keyed) shortcuts.findFirst[ 
 			containerClass.isAssignableFrom(feat.EType.instanceClass)
@@ -555,7 +584,7 @@ ENDIF
 		else if (siblings.size == 1)
 '''«source».«feat.toGetter».head'''
 		else 
-'''«source».«feat.toGetter».get(«siblings.toList.indexOf(it)»)'''
+'''«source».«feat.toGetter».get(«siblings.indexOf(it)»)'''
 
 	}
 
@@ -615,12 +644,11 @@ ENDIF
 			.toSet.sortBy[ name ] // To have a repeatable import
 	}
 
-	protected def registerImports(EObject root, Iterable<? extends Class<?>> staticImports) {
+	protected def void registerImports(EObject root, Iterable<? extends Class<?>> staticImports) {
 		currentImports.clear
-		currentImports.putAll(staticImports.toInvertedMap[ Boolean.TRUE ])
+		staticImports.forEach[ registerImport ]
 
-		if (root === null) Collections.emptyList
-		else (#[ root ] + root.eAllContents.toIterable)
+		if (root !== null) (#[ root ] + root.eAllContents.toIterable)
 			.map [
 				
 				#[ 
@@ -642,7 +670,7 @@ ENDIF
 					// to encode/decode
 
 				+ eClass.EAllReferences // all referenced elements
-					.filter[ reference ] //  
+					.filter[ reference ]
 					.map[ r| eGet(r) ].filterNull // only defined
 					.map[
 						if (it instanceof Collection<?>) (it as Collection<? extends EObject>) 
@@ -655,15 +683,17 @@ ENDIF
 			].flatten
 			.toSet.sortBy[ name ] // sort to always have the same import
 			// a optimal code would count but homonyms of Classes are not common in a model
-			.forEach [
-				if (!currentImports.containsKey(it)) {
-					currentImports.put(it, Boolean.valueOf( // Simple name already found
-						!currentImports.keySet.map[ simpleName ].exists[n| n.equals(simpleName) ]
-					))
-				}
-			]
+			.forEach [ registerImport ]
 	}
 
+	protected def void registerImport(Class<?> it) {
+		if (!currentImports.containsKey(it)) {
+			// Simple name already found
+			val exist = currentClass.name !== simpleName
+				&& currentImports.keySet.map[ simpleName ].exists[n| n.equals(simpleName) ]
+			currentImports.put(it, Boolean.valueOf(!exist))
+		}	
+	}
 	
 	protected def templateImports() {
 '''«
@@ -746,7 +776,5 @@ ENDFOR
 	static def isUniqueIn(Object it, Iterable<?> values) {
 		values.filter[ value | it == value ].size <= 1
 	}
-	
-	
 	
 }

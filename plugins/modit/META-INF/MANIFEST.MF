@@ -16,4 +16,5 @@ Export-Package: org.mypsycho.modit,
  org.mypsycho.modit.emf.i18n,
  org.mypsycho.modit.emf.stretch
 Bundle-Vendor: mypsycho
+Bundle-ActivationPolicy: lazy
 

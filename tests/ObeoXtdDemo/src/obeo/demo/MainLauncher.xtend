@@ -10,6 +10,7 @@ import fr.obeo.dsl.dart.dart.Parameter
 import fr.obeo.dsl.dart.dart.Project
 import fr.obeo.dsl.dart.dart.Typed
 import java.io.File
+import java.nio.file.Paths
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.mypsycho.modit.emf.EModIt
@@ -91,7 +92,7 @@ class MainLauncher {
 		"Named elements are: ".println
 		content.onAll.forEach[ prettyPrint.println ]
 
-		saveModel(content, new File("target/test/model/dartlang3.dartspec"), XMLResource.OPTION_LINE_WIDTH -> 4)
+		saveModel(content, Paths.get("target/test/model/dartlang3.dartspec"), XMLResource.OPTION_LINE_WIDTH -> 4)
 	}
 
 	/*

@@ -178,17 +178,32 @@ class ModIt<T> {
 
 	/**
 	 * Attaches an assembly task on element.
+	 * <p>
+	 * If a task was already attached, provided task is run afterward.
+	 * </p>
 	 * 
-	 * @param type of EObject to build
-	 * @param task of the given {@link EObject}
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
 	 */
 	def <R extends T> onAssembled(R it, (R)=>void task) {
+		onAssembled[it, previous| 
+			previous?.apply(it)
+			task.apply(it)
+		]
+	}
+
+	/**
+	 * Attaches an assembly task on element controlling previous task execution.
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	def <R extends T> onAssembled(R it, (R, (R)=>void)=>void task) {
 		Objects.requireNonNull(task, "Task undefined")
 		val previous = impl.unbindAssemble(it)
-		impl.bindAssemble(it, 
-			if (previous !== null) previous.andThen(task)
-			else task
-		)
+		impl.bindAssemble(it) [ task.apply(it, previous) ]
 	}
 
 	/**

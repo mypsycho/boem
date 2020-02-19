@@ -4,6 +4,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.List
 import java.util.Map
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
@@ -13,10 +14,14 @@ import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.JavaExtension
 import org.eclipse.sirius.viewpoint.description.style.StylePackage
 import org.eclipse.sirius.viewpoint.description.tool.ToolPackage
+import org.eclipse.xtend.lib.annotations.AccessorType
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.mypsycho.modit.emf.EModIt
+import org.mypsycho.modit.emf.ModitModel
 
-abstract class SiriusModelProvider {
+import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
+
+abstract class SiriusModelProvider implements ModitModel {
 
 	public static val RESOURCE_MODE = -1
 
@@ -47,21 +52,22 @@ abstract class SiriusModelProvider {
 	
 	// Factory is public to be access to provider sub-parts.
 	@Accessors
-	val extension EModIt factory
+	// extension must be protected to be used by sub-classes
+	protected val extension EModIt factory
+	
+	@Accessors(#[ AccessorType.PROTECTED_GETTER ])
+	var Resource resource
 	
 	@Accessors
-	val Resource resource
+	// extension must be protected to be modified by sub-classes
+	protected val Map<String, EObject> extras = new HashMap
 	
-	@Accessors
-	val Map<String, EObject> extras = new HashMap 
-	
-	var Integer id
+	package var Integer id
 	val Group value
 	
 	
-	new (Iterable<? extends EPackage> descriptorPackages, Resource rs) {
+	new (Iterable<? extends EPackage> descriptorPackages) {
 		factory = EModIt.using(descriptorPackages)
-		resource = rs
 		
 		value = Group.create
 		// Init cannot happen in constructor 
@@ -69,20 +75,25 @@ abstract class SiriusModelProvider {
 		// Having a overridden method called in constructor is unsafe.
 	}
 	
-	new (Resource rs) { this(DEFAULT_PACKAGES, rs) }
+	new (Resource rs) { this(DEFAULT_PACKAGES) }
+	
+	// getter of extras is read-only
+	def Map<String, ? extends EObject> getExtras() {
+		extras
+	}
 	
 	def getRootAlias() { class.simpleName }
 	
-	def registerContent() {
+	def registerContent(Resource container) {
 		// registration use resource uri, it must be set after
 		id = MisActivator.instance.registerProvider(this)
 		buildContent
 	}
 	
-	def buildEffectiveModel() {
+	override loadContent(Resource resource) {
 		// registration use resource uri, it must be set after
 		id = RESOURCE_MODE
-		buildContent
+		#[ buildContent ]
 	}
 	
 	protected def buildContent() {
@@ -104,9 +115,14 @@ abstract class SiriusModelProvider {
 		value
 	}
 	
-	protected def initExtras(ResourceSet it) {
+	protected def void initExtras(ResourceSet it) {
 		// optional abstraction
 	}
+	
+	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
+		rs.getEObject(URI.createURI(uri), true) as T
+	}
+	
 	
 	protected def void initContent(Group it)
 
@@ -173,11 +189,7 @@ abstract class SiriusModelProvider {
 		val methodId = expressions.size
 		expressions += callable
 		
-		if (id == RESOURCE_MODE) 
-		''''''
-		else
-		// Warning: no space between Sequence
-		'''aql:«params.key».moditInvoke(«id», «methodId», Sequence{«params.value»})'''
+		SiriusModelProviderService.toAql(this, methodId, params)
 	}
 	
 	

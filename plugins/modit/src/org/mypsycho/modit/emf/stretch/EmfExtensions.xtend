@@ -6,7 +6,13 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 
 /**
+ * Class providing extensive methods for EMF instance.
+ * <p>
+ * It must be used with a EMF Stretcher instance.
+ * </p>
+ * <p>
  * Must be access by byObject, byObjects, byProperty, byProperties.
+ * </p>
  * <p>
  * No <b>overloading</b> to prevent inference error on participant type.
  * </p>
@@ -19,8 +25,11 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 	
 	/**
 	 * Create an implementation for specified type which throws UnsupportedOperationException.
+	 * <p>
+	 * This method can be used for extensions where no result should be provided on undefined class.
+	 * </p>
 	 * 
-	 * @param <T> type of provided extension
+	 * @param <T> type of provided by the extension
 	 * @param label of operation
 	 * @param expectedType required for inference (but not used)
 	 */
@@ -41,7 +50,7 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 	static def <T, O extends EObject, C> byObjects((O, Map<EClass, C>)=>T byDefault) { 
 		new XObject<T, O>().asCache(byDefault)
 	}
-	
+
 	static def <T> byEObject(T byDefault) { 
 		byObject(EObject, byDefault)
 	}
@@ -71,11 +80,10 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		new XValue<T>().asCache(byDefault)
 	}
 
-	
-	protected new(P key, EClassStretcher target) { super(key, target) }
-	
 
-	
+	private new(P key, EClassStretcher target) { super(key, target) }
+
+
 	// += 
 	def operator_add(T it) { impl }
 	def impl(T defValue) {
@@ -88,7 +96,7 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		asFct(provider)
 		target.context.register()
 	}
-	
+
 	/**
 	 * 
 	 * <C> Cache content
@@ -108,12 +116,12 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		else (value as (V)=>T).apply(it as V)
 	}
 		
-	static class XObject<T, O extends EObject> extends EmfParticipant {
-		
+	final static class XObject<T, O extends EObject> extends EmfParticipant {
+
 		def <V extends O> bind(EmfStretcher it, Class<V> type) { 
 			new OBinding<T, O, V>(this, onClass(type))
 		}
-		
+
 //		def <V extends EObject> operator_mappedTo(T value) {
 //			new OBinding<T, V>(this, null).asValue(value)
 //		}
@@ -125,7 +133,6 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 //		def <V extends EObject, C> operator_mappedTo((V, Map<EClass, C>)=>T provider) {
 //			new OBinding<T, V>(this, null).asCache(value)
 //		}
-		
 
 		def <V extends O> exec(V it, OBinding<T, ?, ? super V> impl) {
 			if (impl !== null) impl.apply(it)
@@ -136,16 +143,16 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		}
 
 	}
-	
-	static class OBinding<T, O extends EObject, V extends O> extends EmfExtensions<T, V, XObject<T, O>> {
+
+	final static class OBinding<T, O extends EObject, V extends O> extends EmfExtensions<T, V, XObject<T, O>> {
 
 		new(XObject<T, O> key, EClassStretcher target) { super(key, target) }
-		
+
 		override register(EmfStretcher it) {
 			add(target.source, this)
 		}
 	}
-	
+
 	static class XValue<T> extends EmfParticipant {
 
 		def <V extends EObject> bind(EmfStretcher it, Class<V> type, EStructuralFeature feat) { 
@@ -163,20 +170,19 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 				default: throw new ClassCastException("Implementation is ill-typed: " + value?.class)
 			}
 		}
-		
 	}
-	
-	static class VBinding<T, V extends EObject> extends EmfExtensions<T, V, XValue<T>> {
-		
+
+	final static class VBinding<T, V extends EObject> extends EmfExtensions<T, V, XValue<T>> {
+
 		val EStructuralFeature feature
 		new(XValue<T> key, EClassStretcher target, EStructuralFeature feat) {
 			super(key, target)
 			feature = feat
 		}
-		
+
 		override register(EmfStretcher it) {	
 			add((target.source as EClass)->feature, this)
 		}
 	}
-	
+
 }

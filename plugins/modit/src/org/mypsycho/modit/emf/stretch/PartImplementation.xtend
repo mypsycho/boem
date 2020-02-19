@@ -15,7 +15,7 @@ class PartImplementation {
 	protected static def <I extends PartImplementation> asValue(I it, Object impl) {
 		value = impl
 		direct = true
-		cache = null			
+		cache = null
 		it
 	}
 	
