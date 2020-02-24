@@ -4,6 +4,7 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap
 import java.util.Locale
+import java.util.ResourceBundle
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EEnumLiteral
 import org.eclipse.emf.ecore.ENamedElement
@@ -30,6 +31,9 @@ class EmfI18nFactory {
 			[ create(key, locale, key.class.classLoader) ]
 	}
 
+	/** Singleton to build localization sequence. */
+	static val RB_CONTROL = new ResourceBundle.Control {/* Default instance is not accessible */}
+
 	def EmfI18n create(EPackage it, Locale locale, ClassLoader loader) {
 		val pkBasename = basename
 
@@ -50,7 +54,7 @@ class EmfI18nFactory {
 		val result = createInstance(it, locale)
 		result.labels.putAll(byDefault.labels)
 
-		I18n.RB_CONTROL.getCandidateLocales(name, locale) // note: name is not used, can be anything but null
+		RB_CONTROL.getCandidateLocales(name, locale) // note: name is not used, can be anything but null
 			.reverseView.tail // from general to local, locale.root is already done
 			.map[ I18n.toL10n(it, pkBasename, loader) as EmfI18n.L10n ]
 			.filterNull.forEach[ apply(result) ]

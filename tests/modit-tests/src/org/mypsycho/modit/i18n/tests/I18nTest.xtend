@@ -13,7 +13,10 @@ class I18nTest {
 
 	var extension Messages i18n
 
-	static val DATE0 = new Calendar.Builder().setDate(1976, 2 - 1, 12).setTimeOfDay(7, 55, 0).build.time
+	static val DATE0 = new Calendar.Builder()
+		.setDate(1976, 2 - 1, 12)
+		.setTimeOfDay(7, 55, 0)
+		.build.time
 
 	public val ()=>String menu = [
 '''«Meal.label»«
@@ -32,7 +35,7 @@ ENDFOR
 		#[
 			greetingAll.apply, // Test references
 			greetingYou.apply("Joe"), // Test parameter
-			greetingYou.apply(DATE0), // Test value localisation
+			greetingAt.apply(DATE0), // Test value localisation
 			menu.apply // Test classes and enum
 		]
 	}
@@ -42,7 +45,7 @@ ENDFOR
 		assertArrayEquals(#[
 			"Greetings folks !",
 			"Greetings Joe ...",
-			"Greetings Feb/1976 ...",
+			"Greetings on Feb/1976 ...",
 			"Meal:starter,main course,cheese,dessert"
 		], Locale.ROOT.allCases)
 	}
@@ -52,7 +55,7 @@ ENDFOR
 		assertArrayEquals(#[
 			"Salut tout le monde !",
 			"Salut Joe ...",
-			"Salut févr./1976 ...",
+			"Salut le févr./1976 ...",
 			"Repas(c'est important):entrée,plat,fromage,dessert"
 		], Locale.FRANCE.allCases)
 	}
@@ -62,9 +65,9 @@ ENDFOR
 		assertArrayEquals(#[
 			"Allo tout le monde !",
 			"Allo Joe ...",
-			"Allo févr./1976 ...",
+			"Allo le févr./1976 ...",
 			"Bectance(Y a bon):entrée,Poutine,fromage,dessert"
-		], Locale.CANADA_FRENCH.allCases)
+		], new Locale("fr", "CA", "argo").allCases)
 	}
 
 	@Test
@@ -72,7 +75,7 @@ ENDFOR
 		assertArrayEquals(#[
 			"Salut tout le monde !",
 			"Salut Joe ...",
-			"Salut févr./1976 ...",
+			"Salut le févr./1976 ...",
 			"Repas(c'est important):entrée,plat,fromage,dessert"
 		], allCases(null))
 	}
