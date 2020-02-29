@@ -47,8 +47,9 @@ class AutoIdTest extends ModItTestContext {
 			]
 		].assemble
 
-		assertNoBoemUriLeft(root)
+		assertNoBuildUriLeft(root)
 		assertNoAdapterLeft(root)
+		
 		val refOwner = access(B, "id0");
 		assertEquals(4, refOwner.referencesNodeA.size)
 		assertEquals(access(Node, "id1"), refOwner.referencesNodeA.get(0))

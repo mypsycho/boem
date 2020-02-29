@@ -13,9 +13,7 @@
 package org.mypsycho.modit.emf.modit.tests
 
 import java.util.Collection
-import java.util.Collections
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.InternalEObject
 import org.mypsycho.modit.emf.EModIt
 
@@ -30,48 +28,32 @@ abstract class ModItTestContext {
 	/**
 	 * Checks that there is not adapter lest in the model (some adapters are added while building the model)
 	 */
-	protected def assertNoAdapterLeft(EObject eObject) {
-		assertTrue(eObject.eAdapters.isEmpty)
-		val contentIte = eObject.eAllContents
-		while (contentIte.hasNext) {
-			val next = contentIte.next
-			assertTrue(next.eAdapters.isEmpty)
-		}
+	protected def assertNoAdapterLeft(EObject it) {
+		(#[ it ] + [ eAllContents ])
+			.forEach[ eObject | assertEquals(0, eObject.eAdapters.size) ]
 	}
 
 	/**
 	 * Checks that there are no BoemURIs left in the model
 	 */
-	protected def assertNoBoemUriLeft(EObject eObject) {
-		eObject.assertNoRefToBoemURI()
-		val contentIte = eObject.eAllContents
-		while (contentIte.hasNext){
-			val next = contentIte.next
-			next. assertNoRefToBoemURI()
-		}
-
+	protected def assertNoBuildUriLeft(EObject it) {
+		(#[ it ] + [ eAllContents ])
+			.forEach[ eObject | eObject.assertNoRefToBuildURI ]
 	}
 
-	private def void assertNoRefToBoemURI(EObject eObject) {
-		for (EReference ref : eObject.eClass.EAllReferences) {
-			var Collection<InternalEObject> values;
-			if (ref.isMany) {
-				values = eObject.eGet(ref, false) as Collection<InternalEObject>
-			} else {
-				values = Collections.singleton(eObject.eGet(ref, false) as InternalEObject)
-			}
-
-			for (EObject value : values) {
-				value.assertNoBoemUri
-			}
-		}
+	private def void assertNoRefToBuildURI(EObject eObject) {
+		assertEquals("Unexpected temporary URI", 0, 
+			eObject.eClass.EAllReferences
+				.map[ 
+					if (many) eObject.eGet(it, false) as Collection<InternalEObject>
+					else #[ eObject.eGet(it, false) as InternalEObject ]
+				].flatten
+				.filter[
+					if (it instanceof InternalEObject) 
+						eIsProxy && EModIt.PROXY_URI_SCHEME == eProxyURI.scheme
+					else false
+				].size
+		)
 	}
 
-	private def void assertNoBoemUri(EObject eObject) {
-		if (eObject instanceof InternalEObject) {
-			if (eObject.eIsProxy() && EModIt.PROXY_URI_SCHEME == eObject.eProxyURI.scheme) {
-				fail("There is still BoemUris in the model");
-			}
-		}
-	}
 }

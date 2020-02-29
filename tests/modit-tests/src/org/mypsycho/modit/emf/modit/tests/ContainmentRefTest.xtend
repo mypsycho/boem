@@ -158,6 +158,7 @@ class ContainmentRefTest extends ModItTestContext {
 		].assemble
 
 		assertNoAdapterLeft(model.root)
+		
 		assertEquals("AName", model.root.name)
 		assertEquals(3, model.root.childrenNodeA.size)
 		assertEquals("ANodeName0", model.access(Node, "id0").name)

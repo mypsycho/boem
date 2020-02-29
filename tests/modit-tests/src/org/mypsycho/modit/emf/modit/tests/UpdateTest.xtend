@@ -44,8 +44,8 @@ class UpdateTest extends ModItTestContext {
 			]
 		].assemble
 
-		assertEquals(null, maA.root.name)
-		assertEquals(null, maA.access(NamedElement, "B").name)
+		assertNull(maA.root.name)
+		assertNull(maA.access(NamedElement, "B").name)
 
 		maA.update [
 			name = "NameA"

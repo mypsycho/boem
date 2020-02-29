@@ -50,7 +50,7 @@ class RefTest extends ModItTestContext {
 			]
 		].assemble
 
-		assertNoBoemUriLeft(root)
+		assertNoBuildUriLeft(root)
 		assertNoAdapterLeft(root)
 
 		assertEquals("ANode", access(Node, "id1").name)
@@ -74,7 +74,7 @@ class RefTest extends ModItTestContext {
 			]
 		].assemble
 
-		assertNoBoemUriLeft(root)
+		assertNoBuildUriLeft(root)
 		assertNoAdapterLeft(root)
 		assertEquals("ANode", access(Node, "id1").name)
 		assertEquals(access(Node, "id1"), access(B, "id0").referenceNodeA)
@@ -98,7 +98,7 @@ class RefTest extends ModItTestContext {
             ]
         ].assemble
 
-        assertNoBoemUriLeft(root)
+        assertNoBuildUriLeft(root)
         assertNoAdapterLeft(root)
 
         assertEquals("Node1", access(Node, "id#1").name)
@@ -169,7 +169,7 @@ class RefTest extends ModItTestContext {
 		val target = access(Node, "id1");
 		assertEquals("ANode", target.name)
 		val refOwner = access(B, "id0");
-		assertNoBoemUriLeft(root)
+		assertNoBuildUriLeft(root)
 		assertEquals(1, refOwner.referencesNodeA.size)
 		assertEquals(target, refOwner.referencesNodeA.get(0))
 
@@ -199,8 +199,9 @@ class RefTest extends ModItTestContext {
 			}
 		].assemble
 
-		assertNoBoemUriLeft(root)
+		assertNoBuildUriLeft(root)
 		assertNoAdapterLeft(root)
+		
 		val refOwner = access(B, "id0");
 		assertEquals(3, refOwner.referencesNodeA.size)
 		assertEquals(access(Node, "id1"), refOwner.referencesNodeA.get(0))
