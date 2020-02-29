@@ -18,7 +18,7 @@
 <setting id="preserve.new.lines" value="true"/>
 <setting id="blank.lines.between.enum.literals" value="0"/>
 <setting id="newline.after.parameter.annotations" value="false"/>
-<setting id="line.width.max" value="120"/>
+<setting id="line.width.max" value="100"/>
 <setting id="line.separator" value="&#13;&#10;"/>
 <setting id="braces.in.new.line" value="false"/>
 <setting id="newline.after.class.annotations" value="false"/>
