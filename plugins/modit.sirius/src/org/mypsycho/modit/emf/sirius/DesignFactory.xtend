@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.mypsycho.modit.emf.sirius
 
-import org.mypsycho.modit.emf.ModitModel
 import org.mypsycho.modit.emf.ModitResourceFactory
 
 /**
