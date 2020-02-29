@@ -33,10 +33,12 @@ import static org.junit.Assert.*
 class SmarterModItTest {
 
 	extension EModIt factory = EModIt.using(BoemTestPackage.eINSTANCE) [ descr|
+	     /* Creation Decription is used to set name of element */
 	     descr.contentProvider = [ content, value |
             if (value instanceof NamedElement) value.name = content
         ]
 
+		/* automatic identification of some elements by a path  */
         descr.idProvider = [
             // Element is named 
             if (it instanceof NamedElement) {

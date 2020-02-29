@@ -26,8 +26,8 @@ import fr.ibp.odv.boem.mm.test.BoemTest.Node;
  * <p>
  * In this example,
  * <ul> 
- * <li>All objects definition are in sequence even when they a contaiment relationship.</li>
- * <li>All objects must be created to be used. So creation and relations are separated.</li>
+ * <li>All objects definition are in sequence even when they have a containment relationship.</li>
+ * <li>All objects must be created before it can be used. Creation and relations definitions are separated.</li>
  * </ul>
  *  
  * </p>

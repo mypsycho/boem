@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Nicolas PERANSIN.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *    Nicolas PERANSIN - initial API and implementation
+ *******************************************************************************/
 package org.mypsycho.modit.i18n
 
 import java.text.DateFormat
@@ -209,7 +221,24 @@ abstract class I18n {
 			I18n.create(type, locale)
 		] as T
 	}
+
+	private static def <T extends I18n> T create(Class<T> type, Locale locale) {
+		val loader = type.classLoader ?: ClassLoader.systemClassLoader
+		val result = type.newInstance
+		result.locale = locale
+		
+		val basename = type.name
+		
+		RB_CONTROL.getCandidateLocales(type.name, locale)
+			.reverseView.tail // from general to local, avoiding root
+			.map[ toL10n(basename, loader) ]
+			.filter(L10n)
+			// Xtend bug : it should provide <?> in parameter.
+			.forEach[ Object it | (it as L10n<T>).update(result) ]
+		result
+	}
 	
+		
 	static def toL10n(Locale it, String basename, ClassLoader loader) {
 		val fullname = basename
 			+ if (language.empty) "" else '_' + language 
@@ -222,22 +251,6 @@ abstract class I18n {
 		} catch(ClassNotFoundException e) {
 			null
 		}	
-	}
-
-
-	static def <T extends I18n> T create(Class<T> type, Locale locale) {
-		val loader = type.classLoader ?: ClassLoader.systemClassLoader
-		val result = type.newInstance
-		result.locale = locale
-		
-		val basename = type.name
-		
-		RB_CONTROL.getCandidateLocales(type.name, locale)
-			.reverseView.tail // from general to local, avoiding root
-			.map[ toL10n(basename, loader) ]
-			.filter(L10n)
-			.forEach[ (it as L10n<T>).update(result) ]
-		result
 	}
 	
 }
