@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.resource.Resource
  * @author nperansin
  */
 interface ModitModel {
+
 	/** 
 	 * Load the content of this model into the provided resource.
 	 * @param resource to load

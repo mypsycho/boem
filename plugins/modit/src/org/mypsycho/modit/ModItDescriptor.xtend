@@ -16,6 +16,8 @@ import java.util.function.BiConsumer
 
 /**
  * Class describing specific behavior of an factory.
+ * 
+ * @param <T> Common abstraction for all model elements: match ModIt constraint
  */
 class ModItDescriptor<T> implements Cloneable {
 

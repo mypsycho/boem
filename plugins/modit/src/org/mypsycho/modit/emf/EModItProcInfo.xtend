@@ -19,18 +19,28 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 /**
  * Class to bind values to an EObject.
  * <p>
- * Identification of attachment is link to type
+ * Identification of attachment is link to type.
  * </p>
  */
 class EModItProcInfo extends AdapterImpl {
 	
+	/** Possible types of attachment */
 	enum PiType { 
 		alias, path, content, init, assemble
 	}
-	
-	val Object value
+
+	/** type of attachment */
 	val PiType type
 
+	/** value attached */
+	val Object value
+
+	/**
+	 * Create a new attachment.
+	 * 
+	 * @param type of attachment
+	 * @param value attached
+	 */
 	new(PiType type, Object value) {
 		this.value = value;
 		this.type = type;

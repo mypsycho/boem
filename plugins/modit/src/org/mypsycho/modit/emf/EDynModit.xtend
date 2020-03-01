@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 /**
  * Container to create EMF Model from Meta-model without Java generation.
  * <p>
- * As it is unlikely to have Ecore model with no generation, this class is only for research purpose.
+ * As it is unlikely to have Ecore model with no generation, this class is mainly for research purpose.
  * </p>
  */
 class EDynModit {

@@ -15,9 +15,10 @@ package org.mypsycho.modit
 import java.util.Collection
 
 /**
- * Mapping for Mod-it factory and an implementation which provides container and reference.
+ * Abstract mapping for Mod-it factory and an model implementation which provides container and 
+ * reference.
  * 
- * @param <T> Common abstraction for all model elements.
+ * @param <T> Common abstraction for all model elements: match ModIt constraint
  * @param <F> type for property descriptors.
  */
 abstract class ModItImplementation<T, F> {

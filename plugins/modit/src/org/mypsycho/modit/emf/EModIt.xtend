@@ -31,6 +31,7 @@ import org.mypsycho.modit.ModItImplementation
 import org.mypsycho.modit.emf.EModItProcInfo.PiType
 
 import static extension org.mypsycho.modit.emf.EModItProcInfo.*
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * Mod-it implementation for Ecore Modeling Framework.
@@ -43,14 +44,31 @@ class EModIt extends ModIt<EObject> {
 	// Public for testing purpose
 	public static val String PROXY_URI_SCHEME = "modit";
 	
+	/**
+	 * Create a factory instance for provided packages.
+	 * 
+	 * @param packages containing EClass to create
+	 */
 	static def using(EPackage...  packages) {
 		return using(packages, null)
 	}
 	
+	/**
+	 * Create a factory instance for provided package.
+	 * 
+	 * @param package containing EClass to create
+	 * @param initializer define factory context
+	 */
 	static def using(EPackage  packages, (Descriptor)=>void initializer) {
 		return using(#[ packages ], initializer)
 	}
-	   
+	
+	/**
+	 * Create a factory instance for provided packages.
+	 * 
+	 * @param packages containing EClass to create
+	 * @param initializer define factory context
+	 */
 	static def using(List<?extends EPackage> packages, (Descriptor)=>void initializer) {
 		new EModIt(new Descriptor => [
 				ePackages += packages
@@ -58,17 +76,26 @@ class EModIt extends ModIt<EObject> {
 			], [ new Implementation(it) ])
 	}
 	
+	/**
+	 * Descriptor for EMF factory.
+	 */
+	@Accessors
 	static class Descriptor extends ModItDescriptor<EObject> {
-		/** Packages containing EClass to use. */
-		public val List<EPackage> ePackages = new ArrayList
-		public var subPackage = true
+		/** Packages containing EClass to instantiate. */
+		val List<EPackage> ePackages = new ArrayList
+		/** Include inner package */
+		var boolean subPackage = true
 	}
 	
 	
 	/**
 	 * Create a factory with immutable strategy.
+	 * <p>
+	 * Prefer calling '#using(...)' methods.
+	 * </p>
 	 * 
 	 * @param descr of the factory
+	 * @param delegation implementation of EMF access
 	 */
 	new(Descriptor descr, (ModIt<EObject>)=>ModItImplementation<EObject, ?> delegation) {
 		super(descr, delegation)
@@ -76,9 +103,9 @@ class EModIt extends ModIt<EObject> {
 	
 	
 	/**
-	 * Factory of EObject.
+	 * Implementation for EObjects.
 	 */
-	static class Implementation extends ModItImplementation<EObject, EReference> {
+	protected static class Implementation extends ModItImplementation<EObject, EReference> {
 
 		val rules = new HashMap<Class<? extends EObject>, ()=>EObject>()
 	

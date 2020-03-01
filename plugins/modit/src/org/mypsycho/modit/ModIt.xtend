@@ -41,6 +41,7 @@ class ModIt<T> {
 	 * A factory with immutable strategy.
 	 * 
 	 * @param descr of the factory
+	 * @param delegation implementation of model access
 	 */
 	new(ModItDescriptor<T> descr, (ModIt<T>)=>ModItImplementation<T, ?> delegation) {
 		description = descr.clone // we protect modification after creation

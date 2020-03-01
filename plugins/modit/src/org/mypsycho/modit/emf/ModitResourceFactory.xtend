@@ -21,28 +21,49 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
+import java.util.Objects
 
+/**
+ * EMF Factory to load model created from ModitModel instanace into a resource.
+ * <p>
+ * It can only be using with resources identified by plugin URI. 
+ * </p>
+ */
 class ModitResourceFactory extends ResourceFactoryImpl {
 	
-	static val PLUGIN_PATH = "plugin" // used in URI, but not public.
+	static val PLUGIN_PATH = "plugin/" // used in URI, but not public.
 	
+	/** Extension used by EMF parser to find this Factory */
 	public static val DEFAULT_EXTENSION = "modit"
 	
 	val String fileExtension
 
-	new(String ext) {
-		fileExtension = ext
-	}
-	
+	/**
+	 * Default constructor used by EMF loader.
+	 */
 	new() {
 		this(DEFAULT_EXTENSION)
 	} 
 
-	override createResource(URI uri) { new ClassResource(this, uri) }
+	/**
+	 * Generic constructor to use specific extension.
+	 * 
+	 * @param ext extension to use
+	 */
+	new(String ext) {
+		fileExtension = Objects.requireNonNull(ext)
+	}
+	
+	override createResource(URI uri) { 
+		new ClassResource(this, uri)
+	}
 
-
-	// No basic Resource.Diagnostic
+	/**
+	 * Diagnostic used where model creation fails.
+	 */
 	static class ClassDiagnostic extends Exception implements Diagnostic {
+	// No basic Resource.Diagnostic
+
 		final String location
 
 		new(URI uri, String text, Throwable cause) {
@@ -67,13 +88,19 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 		if (!spec.startsWith(PLUGIN_PATH)) {
 			throw new ClassDiagnostic(uri, "Invalid plugin URI")
 		}
-		var int classPathIx = spec.indexOf("/", PLUGIN_PATH.length() + 1)
+		if (!fileExtension.equalsIgnoreCase(uri.fileExtension)) {
+			throw new ClassDiagnostic(uri, "Invalid extension")
+		}
+		var int classPathIx = spec.indexOf("/", PLUGIN_PATH.length())
+		
 		if (classPathIx === -1) {
 			throw new ClassDiagnostic(uri, "Missing class")
 		}
-		var String pluginName = spec.substring(PLUGIN_PATH.length() + 1, classPathIx)
 		
-		var String className = spec.substring(classPathIx + 1, 
+		var String pluginName = spec.substring(PLUGIN_PATH.length(), classPathIx)
+		
+		var String className = spec.substring(
+			classPathIx + 1, 
 			spec.length() - fileExtension.length() - 1 /* dot */
 		)
 		try {

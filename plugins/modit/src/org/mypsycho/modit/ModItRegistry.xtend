@@ -15,6 +15,12 @@ package org.mypsycho.modit
 import java.util.HashMap
 import java.io.PrintStream
 
+/**
+ * Registry of identified elements filled by ModitAssembler and access by ModitPool.
+ * 
+ * @param <T> Common abstraction for all model elements: match ModIt constraint
+ * @param <R> types of root elements.
+ */
 class ModItRegistry<T> {
 
 	public static val DEBUG = Boolean.getBoolean("modit.registry.debug")

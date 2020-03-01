@@ -18,6 +18,9 @@ import java.util.Objects
 
 /**
  * Lightweight object to store class identification.
+ * <p>
+ * Used by EReverse to identify generated classes.
+ * </p>
  */
 class ClassId {
 

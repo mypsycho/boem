@@ -19,6 +19,9 @@ import java.util.NoSuchElementException
 
 /**
  * This class wraps the construction of elements together.
+ * 
+ * @param <T> Common abstraction for all model elements: match ModIt constraint
+ * @param <F> type for property descriptors.
  */
 class ModItAssembler<T, F> {
 

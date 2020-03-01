@@ -17,6 +17,12 @@ import java.util.Collection
 import java.util.List
 import java.util.NoSuchElementException
 
+/**
+ * Group of elements identified by the assembling of a Mod-It factory.
+ * 
+ * @param <T> Common abstraction for all model elements: match ModIt constraint
+ * @param <R> types of root elements.
+ */
 class ModItPool<T, R extends T> {
 
 	/** Root elements fi */
