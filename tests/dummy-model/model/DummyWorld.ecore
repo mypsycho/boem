@@ -19,7 +19,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1"
         eType="#//Job" containment="true" eOpposite="#//Job/parent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="offers" upperBound="-1"
-        eType="#//Offer" containment="true" eOpposite="#//Offer/parent"/>
+        eType="#//Offer" containment="true" eOpposite="#//Offer/parent" eKeys="#//Titled/name"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Directory">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
