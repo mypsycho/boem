@@ -2,7 +2,7 @@
 <feature
       id="org.mypsycho.emf.modit.sirius_feature"
       label="ModIt Sirius integration Feature"
-      version="0.3.0.qualifier"
+      version="0.3.1.qualifier"
       provider-name="mypsycho">
 
    <description url="http://www.example.com/description">
