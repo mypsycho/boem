@@ -19,12 +19,17 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.ArrayList
 import java.util.Collection
+import java.util.Collections
 import java.util.HashMap
+import java.util.HashSet
 import java.util.List
 import java.util.Map
+import java.util.Set
 import org.eclipse.emf.common.notify.Notifier
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.common.util.Enumerator
+import org.eclipse.emf.common.util.TreeIterator
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EAttribute
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
@@ -38,16 +43,31 @@ import org.eclipse.emf.ecore.util.EcoreEList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 
+/**
+ * Source code Generator reversing model into Xtend class.
+ * <p>
+ * It can reverse 1 or several resources or model root objects. <br/>
+ * EObject hierarchy can be 'split' into several class using mapping of EObject and ClassId. <br/>
+ * Non-generated referenced elements can be 'aliased' with specified String.
+ * </p>
+ * <p>
+ * As generation templates are separated from model analysis, it would be easy to extend the class
+ * to generate into another language.
+ * </p>
+ */
 class EReversIt {
 
 	protected static val MAIN_IMPORTS = #{ 
 		HashMap, Class, // java
 		Accessors, // xtend.lib
-		EObject, EList, EReference, Resource, ResourceSet, ResourceSetImpl, EcoreEList, // emf
+		EObject, EList, EReference, Resource, ResourceSet, ResourceSetImpl, // emf
+		EcoreEList, URI, // emf queries
 		EModIt, ModitModel
 	}
+	
 	protected static val PART_IMPORTS = #{ EObject, EModIt }
 
+	// Constructor context
 	protected val ClassId mainClass
 
 	protected val Path target
@@ -56,17 +76,16 @@ class EReversIt {
 
 	protected val List<EObject> orderedRoots
 
-	// Tracking anonymous extras elements using generated id
-	protected var Map<EObject, String> implicitExtras
-	
-	protected var Map<EObject, String> namings
-
+	// Generation parameters
+	/** Elements contained in their own class */
 	@Accessors
 	val Map<EObject, ClassId> splits = new HashMap
 
+	/** Generated elements with user identification */
 	@Accessors
 	val Map<EObject, String> aliases = new HashMap
 	
+	/** Non-Generated elements with an user identification */
 	@Accessors
 	val Map<EObject, String> explicitExtras = new HashMap
 
@@ -76,8 +95,16 @@ class EReversIt {
 	@Accessors
 	val List<EAttribute> shortcuts = new ArrayList
 
+	/** All generated elements with an user name: roots + aliases + splits */
+	protected var Map<EObject, String> namings // built
+
+	/** Non-Generated elements without identification (generated id) */
+	// Tracking anonymous extras elements using generated id
+	protected var Map<EObject, String> implicitExtras
+
+
 	// Reset for each file.
-	val currentImports = new HashMap<Class<?>, Boolean>()
+	val Map<Class<?>, Boolean> currentImports = new HashMap
 	var ClassId currentClass
 
 
@@ -208,7 +235,11 @@ class EReversIt {
 
 	protected def templateSimpleMain(EObject it) {
 		currentClass = mainClass
-		registerImports(mainStaticImports)
+		registerImports(
+			mainStaticImports 
+			+ findExtrasReferencedClasses 
+			+ findShortcutsClasses
+		)
 		templateMain(#[ it ].usedPackages) [ templateSimpleContent ]
 	}
 
@@ -221,7 +252,13 @@ class EReversIt {
 	protected def templateComposedMain() {
 		// Register imports
 		currentClass = mainClass
-		null.registerImports(mainStaticImports)
+		// callPath(false).chain.tail
+		
+		null.registerImports(
+			mainStaticImports 
+			+ findExtrasReferencedClasses 
+			+ findShortcutsClasses
+		)
 		
 		templateMain(orderedRoots.usedPackages) [ 
 			orderedRoots.map[ roots.get(it) ]
@@ -332,8 +369,8 @@ class «mainClass.name» implements ModitModel {
 '''extras.putAll(#{ // anonymous resources
 «
 FOR ext : implicitExtras.entrySet.map[ value -> key ].toList.sortBy[ key ]
-»	"«ext.key»" -> eObject(« ext.value.templateClass», «ext.value.toUri.toString.toJava»),
-«
+SEPARATOR ",\n" // cannot include comma in template: improper for last value
+»	"«ext.key»" -> eObject(« ext.value.templateClass», «ext.value.toUri.toString.toJava»)«
 ENDFOR
 »
 })
@@ -346,10 +383,11 @@ ENDFOR
 '''extras.putAll(#{ // Named elements
 «
 FOR ext : explicitExtras.entrySet.toList.sortBy[ value ]
-»	«ext.value.toJava» -> «ext.key.templateAlias»,
-«
+SEPARATOR ",\n" // cannot include comma in template: improper for last value
+»	«ext.value.toJava» -> «ext.key.templateAlias»«
 ENDFOR
-»})
+»
+})
 '''
 	}
 
@@ -385,8 +423,9 @@ IF !implicitExtras.empty || !explicitExtras.empty
 «
 ENDIF // extras
 »«
-FOR shortcut : shortcuts SEPARATOR ',\n'
-»static def <T extends «shortcut.EContainingClass.instanceClass.name
+FOR shortcut : shortcuts 
+SEPARATOR ',\n'
+»static def <T extends «shortcut.EContainingClass.templateClass
 »> at«shortcut.EContainingClass.instanceClass.simpleName
 »(Iterable<T> values, Object key) {
 	values.findFirst[ «shortcut.name» == key ]
@@ -423,7 +462,8 @@ ENDIF
 IF content.exists[ c | eIsSet(c.key) ]
 » [
 	«
-FOR c : content SEPARATOR statementSeparator 
+FOR c : content 
+SEPARATOR statementSeparator 
 »«templateProperty(c.key, c.value)»«
 ENDFOR
 »
@@ -437,7 +477,7 @@ ENDIF
 		#[
 			eClass.EAllAttributes.filter[ a | eIsSet(a) && a.defaultValue != eGet(a) ]
 				-> [ Object it, Class<?> using | toJava ],
-			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isReference ]
+			eClass.EAllReferences.filter[ r | eIsSet(r) && r.pureReference ]
 				-> [ Object it, Class<?> using | (it as EObject).templateRef(using) ],
 			eClass.EAllReferences.filter[ r | eIsSet(r) && r.isContainment ]
 				-> [ Object it, Class<?> using | (it as EObject).templateCreate ]
@@ -628,7 +668,7 @@ ENDIF
 		else safename + ' = ' + value
 	}
 
-	protected def isReference(EReference it) {
+	protected def isPureReference(EReference it) {
 		if (containment || derived || transient || !changeable) false
 		else if (EOpposite === null) true
 		else if (EOpposite.derived) true // is it possible ?
@@ -652,50 +692,74 @@ ENDIF
 	protected def usedPackages(Iterable<? extends EObject> values) {
 		values.map[ #[ it ] + eAllContents.toIterable ]
 			.flatten // all EObject
-			.map[ classEPackage ] // all Class<? extend EPackage>
+			.map[ findDeclaringPackage ] // all Class<? extend EPackage>
 			.toSet.sortBy[ name ] // To have a repeatable import
+	}
+
+	
+	protected def findShortcutsClasses() {
+		shortcuts.map[ EContainingClass.instanceClass ].toSet
+	}
+
+	protected def findExtrasReferencedClasses() {
+		explicitExtras.keySet.map[
+			callPath(false).chain.tail
+		].flatten.toSet
 	}
 
 	protected def void registerImports(EObject root, Iterable<? extends Class<?>> staticImports) {
 		currentImports.clear
 		staticImports.forEach[ registerImport ]
 
-		if (root !== null) (#[ root ] + root.eAllContents.toIterable)
-			.map [
-				
-				#[ 
-					eClass.instanceClass // we want the interface for EModIt
-				] // Contained elements
-				
-				+ eClass.EAllAttributes // Enum
-					.map[ a| eGet(a) ]
-					.filterNull // get defined
-					.map[
-						if (it instanceof Collection<?>) (it as Collection<?>) 
-						else #[ it ]
-					].flatten
-					.filter[ it instanceof Enum<?> ]
-					.map[ class ]
+		if (root === null) {
+			return
+		}
+		val Set<Class<?>> usedClasses = new HashSet
+		usedClasses += root.getReferencedClasses
+		// Cannot use Iterable concatenation, prune must be used.
+		for (val TreeIterator<EObject> iContents = root.eAllContents; iContents.hasNext; ) {
+			val child = iContents.next
+			if (splits.containsKey(child)) {
+				iContents.prune
+			} else {
+				usedClasses += child.getReferencedClasses
+			}
+		}
 
-					// TODO: other datatypes ??
-					// We need the factory of the bound to the attributes
-					// to encode/decode
-
-				+ eClass.EAllReferences // all referenced elements
-					.filter[ reference ]
-					.map[ r| eGet(r) ].filterNull // only defined
-					.map[
-						if (it instanceof Collection<?>) (it as Collection<? extends EObject>) 
-						else #[ it as EObject ]
-					]
-					.flatten
-					.filter[ !splits.containsKey(it) ] // TODO: can't remember Why ?
-					.map[ callPath(false).chain.tail ].flatten
-
-			].flatten
-			.toSet.sortBy[ name ] // sort to always have the same import
+		usedClasses
+			.sortBy[ name ] // sort to always have the same import
 			// a optimal code would count but homonyms of Classes are not common in a model
 			.forEach [ registerImport ]
+	}
+	
+	protected def getReferencedClasses(EObject it) {	
+		// we want the interface for EModIt
+		#[ eClass.instanceClass ]
+
+		+ eClass.EAllAttributes // Enum
+			.map[ a| eGet(a) ]
+			.filterNull // get defined
+			.map[
+				if (it instanceof Collection<?>) (it as Collection<?>) 
+				else #[ it ]
+			].flatten
+			.filter[ it instanceof Enum<?> ]
+			// TODO handle DataType parsing (using Package parse)
+			// We need the factory of the bound to the attributes
+			// to encode/decode
+			.map[ class ]
+
+		+ eClass.EAllReferences // only pure referenced elements
+			.filter[ pureReference ]
+			.map[ r| eGet(r) ] // only defined
+			.map[
+				if (it instanceof Collection<?>) (it as Collection<? extends EObject>) 
+				else if (it instanceof EObject) #[ it ]
+				else Collections.emptyList
+			]
+			.flatten
+			.map[ callPath(false).chain.tail ]
+			.flatten
 	}
 
 	protected def void registerImport(Class<?> it) {
@@ -713,7 +777,7 @@ FOR c : currentImports.entrySet
 	.filter[ value ].map[ key ]
 	.toList.sortBy[ name ] 
 SEPARATOR statementSeparator
-»«c.templateImport»«/* */
+»«c.templateImport»«
 ENDFOR
 »'''
 	}
@@ -734,7 +798,7 @@ ENDFOR
 		} finally { close }
 	}
 
-	static def classEPackage(EObject it) {
+	static def findDeclaringPackage(EObject it) {
 		eClass.EPackage.class.interfaces.findFirst[ interfaces.contains(EPackage) ]
 	}
 
