@@ -23,18 +23,20 @@
 			<comments><![CDATA[
 Copyright (c) 2018 Nicolas Peransin, Arthur Daussy and Jacob Geisel.
 This program and the accompanying materials are made available 
-under the terms of the Eclipse Public License v1.0
+under the terms of the Eclipse Public License v2.0
 which accompanies this distribution, and is available at
-http://www.eclipse.org/legal/epl-v10.html
+https://www.eclipse.org/legal/epl-2.0/
 ]]></comments>
 		</license>
 	</licenses>
+	
 	<modules>
 		<module>parent</module>
 		<module>plugins/modit</module>
 		<module>plugins/modit.sirius</module>
 		<module>plugins/modit.edit</module><!-- Compile only -->
 	</modules>
+	
 	<profiles>
 		<profile>
 			<id>tests-modules</id>
@@ -53,6 +55,7 @@ http://www.eclipse.org/legal/epl-v10.html
 				<module>tests/modit-tests</module>
 			</modules>
 		</profile>
+		
 		<profile>
 			<id>releng-modules</id>
 			<activation>
