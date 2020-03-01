@@ -35,15 +35,22 @@ tests on the metamodel and business rules.
 
 == Content
 
-It also comes with various features:
+It comes with various features:
 
- * EMF Sirius integration to write Sirius model in textual mode and lambda in XTend 
- (skipping uncompiled AQL).
- * EReversIt generates Xtend source from existing models providing:
+ * EMF model factory API
+
+ * EReversIt generates Xtend sources from existing models providing:
  ** Efficient tool to convert existing project resource,
  ** Round-trips for manual tests to automatic test process.
+ 
+ * EMF Resource factory extension providing dynamic content as an EMF Resource.
+ 
+ * EMF Sirius integration to write Sirius model in textual mode and lambda in XTend 
+ (avoiding uncompiled queries). +
+
  * EMF enrichment where user can associate properties and lambda to metamodel and 
- providing pseudo multi-inheritance for EObject. 
+ providing pseudo multi-inheritance for EObject. +
+ 
  * i18n classes to use xtend template instead of properties syntax.
 
 Read link:https://mypsycho.github.io/ModIt/[documentation] and use an version of update 
@@ -52,16 +59,12 @@ site on https://dl.bintray.com/mypsycho/modit-update-site/p2/[Bintray].
 
 == Contributing
 
-1. Fork it!
-
-2. Create your feature branch: `git checkout -b my-new-feature`
-
-3. Commit your changes: `git commit -am 'Add some feature'`
-
-4. Push to the branch: `git push origin my-new-feature`
-
-5. Submit a pull request.
+. Fork it!
+. Create your feature branch: `git checkout -b my-new-feature`
+. Commit your changes: `git commit -am 'Add some feature'`
+. Push to the branch: `git push origin my-new-feature`
+. Submit a pull request.
 
 == License
-link:https://www.eclipse.org/legal/epl-v10.html[Eclipse Public License - v 1.0]  
+link:https://www.eclipse.org/legal/epl-2.0/[Eclipse Public License - v 2.0]  
 
