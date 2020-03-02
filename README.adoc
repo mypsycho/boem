@@ -19,8 +19,8 @@ strategies:
  ** declare-before-reference constraints
 
 This library frees developers of tedious EMF factory syntax making model description
-similar to a JSon file.
-It also suppresses the sequential constraint of code by providing a registry mechanism 
+similar to a JSon file with compilation check.
+It also suppresses the constraint of sequential code by providing a registry mechanism 
 and resolving references in an assembling phase.
 
 Using such syntax helps to:
@@ -37,19 +37,21 @@ tests on the metamodel and business rules.
 
 It comes with various features:
 
- * EMF model factory API
+ * EModit: EMF model factory API.
 
  * EReversIt generates Xtend sources from existing models providing:
  ** Efficient tool to convert existing project resource,
  ** Round-trips for manual tests to automatic test process.
  
- * EMF Resource factory extension providing dynamic content as an EMF Resource.
+ * EMF Resource factory extension provides dynamic content as an EMF Resource.
+ ** Using plugin URI ending with '.modit', you can target class creating EMF models.
  
  * EMF Sirius integration to write Sirius model in textual mode and lambda in XTend 
- (avoiding uncompiled queries). +
+ (avoiding uncompiled queries).
+ ** SiriusReverseIt can generated classes from an existing ODesign.
 
  * EMF enrichment where user can associate properties and lambda to metamodel and 
- providing pseudo multi-inheritance for EObject. +
+ providing pseudo multi-inheritance for EObject.
  
  * i18n classes to use xtend template instead of properties syntax.
 
