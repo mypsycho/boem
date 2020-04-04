@@ -10,9 +10,10 @@
  * Contributors:
  *    Nicolas PERANSIN - initial API and implementation
  *******************************************************************************/
-package org.mypsycho.modit.emf.sirius
+package org.mypsycho.modit.emf.sirius.internal
 
 import org.mypsycho.modit.emf.ModitResourceFactory
+import org.mypsycho.modit.emf.sirius.SiriusModelProvider
 
 /**
  * Resource Factory used to load Sirius model with dynamic expression.
@@ -24,7 +25,6 @@ class DesignFactory extends ModitResourceFactory {
 
 	public static final String EXTENSION = "modit_sirius"
 
-
 	new() {
 		super(EXTENSION)
 	}
@@ -32,6 +32,7 @@ class DesignFactory extends ModitResourceFactory {
 	override toContent(Object it, ClassResource res) {
 		res.contents += (it as SiriusModelProvider).registerContent(res)
 	}
+
 
 	def static toSiriusUri(String pluginId, Class<? extends SiriusModelProvider> clazz) {
 		pluginId.toUri(clazz, EXTENSION)

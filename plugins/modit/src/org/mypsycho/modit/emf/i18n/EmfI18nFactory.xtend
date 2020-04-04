@@ -27,8 +27,6 @@ class EmfI18nFactory {
 
 	public static val JAVAEXTENSION = "Package" // well-known extension for Java Classname for EPackage
 
-	public static val EXTENSION = "L10n"
-
 	val instances = new HashMap<Pair<EPackage, Locale>, EmfI18n>
 
 	val defaultValues = new HashMap<EPackage, EmfI18n>
@@ -37,11 +35,12 @@ class EmfI18nFactory {
 		get(it, Locale.^default)
 	}
 
-	// XXX Improper approach for OSGI ?
 	def EmfI18n get(EPackage it, Locale locale) {
-		instances.computeIfAbsent(it -> locale) 
-			[ create(key, locale, key.class.classLoader) ]
+		instances.computeIfAbsent(it -> locale) [
+			create(key, locale, key.class.classLoader)
+		]
 	}
+
 
 	/** Singleton to build localization sequence. */
 	static val RB_CONTROL = new ResourceBundle.Control {/* Default instance is not accessible */}
@@ -49,55 +48,79 @@ class EmfI18nFactory {
 	def EmfI18n create(EPackage it, Locale locale, ClassLoader loader) {
 		val pkBasename = basename
 
+		// Get or create the default values for all package elements
 		val byDefault = defaultValues.computeIfAbsent(it) [
 			// default labels
-			val byDefault = new EmfI18n(it, Locale.ROOT, EClassifiers.toMap[ instanceClass ])
-			byDefault.setLabel(it, toDefaultLabel)
-			EClassifiers // we dont want to iterate on sub-packages
-				.map[ eAllContents.toIterable + Collections.singletonList(it) ]
-				.flatten.filter(ENamedElement)
-				.forEach [ byDefault.setLabel(it, toDefaultLabel) ]
+			val result = new EmfI18n(it, Locale.ROOT, EClassifiers.toMap[ instanceClass ])
 			
-			(I18n.toL10n(Locale.ROOT, pkBasename, loader) as EmfI18n.L10n)?.apply(byDefault)
+			new EmfI18n.L10n { // default 
+				override apply() {
+					label = toDefaultLabel // current package
+					EClassifiers // Don't iterate on sub-packages, don't use eAllContents
+						.map[ eAllContents.toIterable + Collections.singletonList(it) ]
+						.flatten.filter(ENamedElement)
+						.forEach [ 
+							label = toDefaultLabel
+						]
+				}
+			}.init(result)
 
-			byDefault
+			// Perform locale.root once for all instance.
+			(I18n.toL10n(Locale.ROOT, pkBasename, loader) as EmfI18n.L10n)?.init(result)
+
+			result
 		]
 
-		val result = createInstance(it, locale)
+		val result = createInstance(locale)
+		// Clone default values
 		result.labels.putAll(byDefault.labels)
 
-		RB_CONTROL.getCandidateLocales(name, locale) // note: name is not used, can be anything but null
-			.reverseView.tail // from general to local, locale.root is already done
+		// note: name is not used for getCandidateLocales, can be anything but null.
+		RB_CONTROL.getCandidateLocales(name, locale)
+			.reverseView // from general to local, 
+			.tail // locale.root is already done in default creation
 			.map[ I18n.toL10n(it, pkBasename, loader) as EmfI18n.L10n ]
-			.filterNull.forEach[ apply(result) ]
+			.filterNull
+			.forEach[ init(result) ]
 		result
 	}
 
 	def basename(EPackage it) { // TODO how to handle package name to class name
-		toJavaname + EXTENSION
+		toJavaname(it) + EmfI18n.CLASS_EXTENSION
 	}
 
 	def EmfI18n createInstance(EPackage it, Locale locale) {
 		new EmfI18n(it, locale, defaultValues.get(it).classMap)
 	}
 
-	protected def toJavaname(EPackage it) {
-		val javaname = class.interfaces.findFirst[ interfaces.contains(EPackage) ].name
-		if (javaname.endsWith(JAVAEXTENSION)) 
-			javaname.substring(0, javaname.length - JAVAEXTENSION.length) 
-		else javaname
+	// not static so it can be overridden
+	protected def toDefaultLabel(ENamedElement it) {
+		if (it instanceof EEnumLiteral) 
+			literal 
+		else // Class should start with Upper case
+			name.toText((it instanceof EClassifier) || (it instanceof EPackage))
 	}
 
-	protected def toDefaultLabel(ENamedElement it) {
-		if (it instanceof EEnumLiteral) literal // Class should start with Upper case
-		else name.toText((it instanceof EClassifier) || (it instanceof EPackage))
+	static protected def toJavaname(EPackage it) {
+		val javaname = class.interfaces
+			.findFirst[ interfaces.contains(typeof(EPackage)) ]
+			.name
+		
+		val pkgName = 
+			if (javaname.endsWith(JAVAEXTENSION)) // trim extension
+				javaname.substring(0, javaname.length - JAVAEXTENSION.length) 
+			else javaname
+		
+		val qualifIndex = pkgName.lastIndexOf('.')
+		
+		if (qualifIndex != -1) 
+			pkgName.substring(0, qualifIndex) + EmfI18n.PACKAGE_PATH + pkgName.substring(qualifIndex)
+		else EmfI18n.PACKAGE_PATH + pkgName
 	}
+
 
 	static def toText(String it, boolean startUp) { // public for test purpose
-		if (it === null) {
-			return null
-		}
-		if (it.isEmpty()) {
+		if (it === null || empty) {
 			return it
 		}
 
@@ -105,6 +128,7 @@ class EmfI18nFactory {
 		var int tokenStart = 0
 		var int currentType = Character.getType(charAt(tokenStart))
 		for (var pos = tokenStart + 1; pos < length; pos++) {
+			// TODO handle '_' as space
 			val type = Character.getType(charAt(pos))
 			if (type != currentType) {
 				if (type == Character.LOWERCASE_LETTER && currentType == Character.UPPERCASE_LETTER) {
@@ -122,7 +146,20 @@ class EmfI18nFactory {
 		}
 		words += substring(tokenStart, length)
 
+		// only words in the middle should not have uppercase
+		(0..<words.length).forEach[
+			val word = words.get(it)
+			if ((!startUp || it != 0) 
+				&& word.length > 1
+				&& word != word.toUpperCase
+			) {
+				words.set(it, word.toLowerCase)
+			}
+		]
+
 		words.join(" ")
 	}
+
+	
 
 }

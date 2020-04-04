@@ -24,14 +24,13 @@ import org.eclipse.emf.ecore.EStructuralFeature
  * <p>
  * Must be instantiate by byClass, byClasses, byProperty, byProperties.
  * <p>
- * No <b>overloading</b> to prevent inference error on participant type.
+ * 's' suffix is used to avoid <b>overloading</b> preventing inference error on participant type, .
  * </p>
  * 
  * <T> Type returned by the participant
  * <P> Type of participant
  */
 abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.Participation<P> {
-
 
 	/**
 	 * Create an implementation for specified type which throws UnsupportedOperationException.
@@ -46,7 +45,6 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	// Class extension
 	//
-
 	static def <T> byClass(T byDefault) { new XClass<T>().asValue(byDefault) }
 
 	static def <T> byClasses((EClass)=>T byDefault) { new XClass<T>().asFct(byDefault) }
@@ -55,7 +53,6 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	// Feature extension
 	//
-
 	static def <T> byFeature(T byDefault) { new XFeature<T>().asValue(byDefault) }
 
 	// note: byFeatures((EClass)=>T) is useless; unlike all feature of a class 
@@ -104,7 +101,7 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 	}
 
 
-	static class XClass<T> extends EmfParticipant {
+	final static class XClass<T> extends EmfParticipant {
 		
 		def bind(EmfStretcher it, EClass type) { 
 			new CBinding<T>(this, onClass(type))
@@ -120,7 +117,7 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 	}
 
 
-	static class CBinding<T> extends EmfToolings<T, XClass<T>> {
+	final static class CBinding<T> extends EmfToolings<T, XClass<T>> {
 
 		new(XClass<T> key, EClassStretcher target) { super(key, target) }
 

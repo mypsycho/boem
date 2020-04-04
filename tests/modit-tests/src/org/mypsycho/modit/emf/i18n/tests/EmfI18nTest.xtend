@@ -26,13 +26,13 @@ class EmfI18nTest {
 	    
     @Test
     def void defaultLabels() {
-    	val extension EmfI18n it = EmfI18n.get(EcorePackage.eINSTANCE, Locale.US)
-		assertEquals("E Class", EClass.label)
-		assertEquals("E Data Type", EMF.EDataType.label)
+    	val extension EmfI18n it = EmfI18n.get(EMF, Locale.US)
+		assertEquals("EMF class", EClass.label)
+		assertEquals("EMF data type", EMF.EDataType.label)
 		assertEquals("name", EMF.ENamedElement_Name.label)
+		assertEquals("EMF model element", EMF.EAnnotation_EModelElement.label)
     }
 	
-  
     @Test
     def void localisedLabels() {
     	val extension EmfI18n it = EmfI18n.get(EMF, Locale.FRANCE)

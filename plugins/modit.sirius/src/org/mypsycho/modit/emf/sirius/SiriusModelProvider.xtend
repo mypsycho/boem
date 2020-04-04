@@ -13,9 +13,11 @@
 package org.mypsycho.modit.emf.sirius
 
 import java.util.ArrayList
+import java.util.Collection
 import java.util.HashMap
 import java.util.List
 import java.util.Map
+import java.util.Objects
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
@@ -30,9 +32,15 @@ import org.eclipse.xtend.lib.annotations.AccessorType
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.emf.ModitModel
+import org.mypsycho.modit.emf.sirius.internal.SiriusModelProviderService
 
 import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
 
+/**
+ * Class to provide model for Eclipse Sirius to interprete.
+ * 
+ * @author nperansin
+ */
 abstract class SiriusModelProvider implements ModitModel {
 
 	public static val RESOURCE_MODE = -1
@@ -74,10 +82,24 @@ abstract class SiriusModelProvider implements ModitModel {
 	// extension must be protected to be modified by sub-classes
 	protected val Map<String, EObject> extras = new HashMap
 	
+	@Accessors(#[ AccessorType.PUBLIC_GETTER ])
 	package var Integer id
 	val Group value
+	/** Flag defined when building and a lamba is used */
+	var inlineServiceRequired = false
 	
+	@Accessors(#[ AccessorType.PACKAGE_GETTER ])
+	val SiriusModelProviderService.Callback callback = new SiriusModelProviderService.Callback {
+		override invoke(int methodId, EObject value, Object params) {
+			SiriusModelProvider.this.invoke(methodId, value, params)
+		}
+	}
 	
+	/**
+	 * Construction of model using provided package.
+	 * 
+	 * @param descriptorPackages used by Sirius
+	 */
 	new (Iterable<? extends EPackage> descriptorPackages) {
 		factory = EModIt.using(descriptorPackages)
 		
@@ -87,7 +109,12 @@ abstract class SiriusModelProvider implements ModitModel {
 		// Having a overridden method called in constructor is unsafe.
 	}
 	
-	new (Resource rs) { this(DEFAULT_PACKAGES) }
+	/**
+	 * Construction of model using default Sirius package.
+	 */
+	new () { 
+		this(DEFAULT_PACKAGES)
+	}
 	
 	// getter of extras is read-only
 	def Map<String, ? extends EObject> getExtras() {
@@ -98,35 +125,49 @@ abstract class SiriusModelProvider implements ModitModel {
 	
 	def registerContent(Resource container) {
 		// registration use resource uri, it must be set after
-		id = MisActivator.instance.registerProvider(this)
-		buildContent
+		resource.buildContent[ MisActivator.instance.registerProvider(this) ]
 	}
 	
-	override loadContent(Resource resource) {
-		// registration use resource uri, it must be set after
-		id = RESOURCE_MODE
-		#[ buildContent ]
+	override Collection<? extends Group> loadContent(Resource container) {		
+		#[ 
+			container.buildContent[ RESOURCE_MODE ]
+		]
 	}
 	
-	protected def buildContent() {
+	protected def buildContent(Resource container, ()=>int resourcePovider) {
+		resource = container
+		Objects.requireNonNull(resource?.resourceSet, "Building content requires a ResourceSet")
+		
+		// Resource provider may need the resource to be defined
+		id = resourcePovider.apply
 		
 		resource.resourceSet.initExtras
 		rootAlias.alias(value)
+		
+		inlineServiceRequired = false
+		
 		value.initContent
 		
 		// as ownedViewpoints is composition, navigation is safe before assemble
-		value.ownedViewpoints.forEach[
-			ownedJavaExtensions += JavaExtension.create[ 
-				qualifiedClassName = SiriusModelProviderService.name
-			]
-		]
 		value.assemble
+		
+		
+		if (inlineServiceRequired) {
+			value.ownedViewpoints.forEach[
+				ownedJavaExtensions += JavaExtension.create[ 
+					qualifiedClassName = SiriusModelProviderService.name
+				]
+			]
+		}
 
 		// eObjects are not headless: eResource is not null.
 		resource.contents.add(value)
 		value
 	}
 	
+	/**
+	 * 
+	 */
 	protected def void initExtras(ResourceSet it) {
 		// optional abstraction
 	}
@@ -195,19 +236,24 @@ abstract class SiriusModelProvider implements ModitModel {
 		params.createExpression(5, callable)
 	}
 
-
+	/**
+	 * Create an AQL expression for provided call.
+	 * 
+	 * @param signature of function: must provided all used variable
+	 * @param size number of parameters: used as assertion if a parameter is missing, self is assumed.
+	 * @param lambda to call
+	 */
 	private def String createExpression(String signature, int size, Object callable) {
+		inlineServiceRequired = true
+
 		val params = signature.toInvokeParams(size + 1)
 		val methodId = expressions.size
 		expressions += callable
-		
+				
 		SiriusModelProviderService.toAql(this, methodId, params)
 	}
 	
-	
-	
-	
-	def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject value, Object params) {
+	protected def <P0, P1, P2, P3, P4, P5, R> R invoke(int methodId, EObject value, Object params) {
 		val List<Object> values = params as List<Object>
 		values.add(0, value)
 		val it = expressions.get(methodId)

@@ -10,11 +10,17 @@
  * Contributors:
  *    Nicolas PERANSIN - initial API and implementation
  *******************************************************************************/
-package org.mypsycho.modit.emf.sirius
+package org.mypsycho.modit.emf.sirius.internal
 
 import org.eclipse.emf.ecore.EObject
+import org.mypsycho.modit.emf.sirius.MisActivator
+import org.mypsycho.modit.emf.sirius.SiriusModelProvider
 
 class SiriusModelProviderService {
+	
+	interface Callback {
+		def Object invoke(int methodId, EObject value, Object params)
+	}
 	
 	static def Object moditInvoke(EObject it, int providerId, int methodId, Object params) {
 		MisActivator.instance.getProvider(providerId).invoke(methodId, it, params)
@@ -24,7 +30,7 @@ class SiriusModelProviderService {
 		MisActivator.instance.getProvider(provider)?.invoke(methodId, it, params)
 	}
 	
-	protected static def String toAql(SiriusModelProvider it, int methodId, Pair<String, String> params) {
+	static def String toAql(SiriusModelProvider it, int methodId, Pair<String, String> params) {
 		if (id == SiriusModelProvider.RESOURCE_MODE) 
 '''aql:«params.key».moditResInvoke(«class.name», «methodId», Sequence{«params.value»})'''
 		else

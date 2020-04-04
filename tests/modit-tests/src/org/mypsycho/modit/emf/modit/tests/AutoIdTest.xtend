@@ -36,7 +36,7 @@ class AutoIdTest extends ModItTestContext {
 		val it = A.create [
 			name = "AName"
 			autoContainementA += "id0".alias(B.create [
-				referencesNodeA += Node.ref("id1", "id2", "id3", "id4")
+				referencesNodeA += Node.refs("id1", "id2", "id3", "id4")
 			])
 			childrenNodeA += #[
 				Node.create[name = "id1"],

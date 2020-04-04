@@ -132,7 +132,7 @@ class ModIt<T> {
 	 * @param id of the target object
 	 * @throw IllegalArgumentException if type is not handled by the factory.
 	 */
-	def <R extends T> List<R> ref(Class<R> type, String... ids) {
+	def <R extends T> List<R> refs(Class<R> type, String... ids) {
 		ids.map[ ref(type, it, null) ].toList
 	}
 

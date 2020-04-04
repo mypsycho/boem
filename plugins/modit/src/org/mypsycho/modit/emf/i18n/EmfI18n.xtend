@@ -22,11 +22,14 @@ import org.eclipse.emf.ecore.EPackage
 
 class EmfI18n {
 
-	public static val JAVAEXTENSION = "Package" // well-known extension for Java Classname for EPackage
-
-	public static val EXTENSION = "L10n"
+	/** A different package must used to avoid SecurityException[signers informations does not match] */
+	public static val PACKAGE_PATH = ".i18n"
+	
+	public static val CLASS_EXTENSION = "L10n"
+		
 
 	// XXX Improper approach for OSGI ?
+	// Holding instances of classes losing their classbundle origin seems bad.
 	static val DEFAULT_FACTORY = new EmfI18nFactory
 
 	static def EmfI18n get(EPackage it) {
@@ -37,10 +40,37 @@ class EmfI18n {
 		DEFAULT_FACTORY.get(it, locale)
 	}
 
-	abstract interface L10n {
+	static abstract class L10n {
 
-		def void apply(EmfI18n it)
+		protected EmfI18n instance
 
+		def void init(EmfI18n it) {
+			instance = it
+			apply
+		}
+		
+		def void apply()
+		
+		// Write 
+		def String setLabel(ENamedElement it, String value) {
+			instance.labels.put(it, value)
+		}
+		
+		// Shortcut
+		def String ->(ENamedElement it, String value) {
+			label = value
+		}
+		
+		// Write using classes
+		def String setLabel(Class<? extends EObject> it, String value) {
+			instance.toEClass(it).label = value
+		}
+		
+		// Shortcut
+		def String ->(Class<? extends EObject> it, String value) {
+			label = value
+		}
+		
 	}
 
 	public val Locale locale
@@ -62,27 +92,11 @@ class EmfI18n {
 		labels.get(it)
 	}
 
-	// Write
-	def String setLabel(ENamedElement it, String value) {
-		labels.put(it, value)
-	}
-
-	def String ->(ENamedElement it, String value) {
-		label = value
-	}
-
 	// Class short cuts
 	def String getLabel(Class<? extends EObject> it) {
 		toEClass(it).label
 	}
 
-	def String setLabel(Class<? extends EObject> it, String value) {
-		toEClass.label = value
-	}
-
-	def String ->(Class<? extends EObject> it, String value) {
-		toEClass.label = value
-	}
 
 	private def toEClass(Class<? extends EObject> it) {
 		val result = classMap.get(it)

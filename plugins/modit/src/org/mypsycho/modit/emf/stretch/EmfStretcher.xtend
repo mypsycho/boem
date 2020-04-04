@@ -70,9 +70,7 @@ class EmfStretcher {
 			if (extensions.empty) new EClassStretcher(this, EcorePackage.eINSTANCE.EObject)
 	 		else extensions.head.onClass(EcorePackage.eINSTANCE.EObject) // We are exposed to inconsistency
 		)
-		
 	}
-
 
 	def getTargets() { allSources }
 
@@ -100,7 +98,9 @@ class EmfStretcher {
 	}
 
 	def boolean canProvide(EClassifier it) {
-		contents.containsKey(it) || extras.containsKey(it) || extensions.exists[ ext| ext.canProvide(it) ]
+		contents.containsKey(it) 
+			|| extras.containsKey(it) 
+			|| extensions.exists[ ext | ext.canProvide(it) ]
 	}
 
 	def onClass(Class<? extends EObject> it) {
@@ -139,53 +139,46 @@ class EmfStretcher {
 
 	def getAspect(EPackage it) { elements.get(it) }
 
-	static def toFeatID(EmfParticipant ext, EStructuralFeature feat) {
-		ext->feat
-	}
 
-
-	def add(EClassifier it, EmfParticipant.Participation<?> option) {
+	/**
+	 * Add this participation to a classifier.
+	 * 
+	 * @param it classifier
+	 * @param option to add
+	 */
+	protected def add(EClassifier it, EmfParticipant.Participation<?> option) {
 		EPackage.aspect.add(it, option.key, option)
 	}
 
-	def add(Pair<EClass, EStructuralFeature> it, EmfParticipant.Participation<?> option) {
+	/**
+	 * Add this participation to a feature for a class.
+	 * 
+	 * @param it class-&gt;feature
+	 * @param option to add
+	 */
+	protected def add(Pair<EClass, EStructuralFeature> it, EmfParticipant.Participation<?> option) {
 		key.assertApplicable(value)
 		key.EPackage.aspect.add(key, option.key.toFeatID(value), option)
 	}
 
-// bindings shorcuts
-// def <T> operator_add(EClassifier it, EmfContribution.Participation<?> option) {
 
-//	def <T,V extends EObject> operator_add(Class<V> it, EmfExtensions.OBinding<T, V> option) {
-//		option.register(onClass)
-//	}
 	
+	// '->' can be used with '+=' operator of _Binding
 	def <T, O extends EObject, V extends O> operator_mappedTo(Class<V> it, EmfExtensions.XObject<T, O> ext) {
 		ext.bind(this, it)
 	}
 
+	// '->' can be used with '+=' operator of _Binding
 	def <T,V extends EObject> operator_mappedTo(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
 		ext.bind(this, key, value)
 	}
-
-
-
-
-//	def operator_add(EClassifier it, EmfContribution.Participation<?> option) {
-//		add(option)
-//	}
-//
-//	def operator_add(Pair<EClass, EStructuralFeature> it, EmfContribution.Participation<?> option) {
-//		add(option)
-//	}
-
-
 
 	// API is asymmetric on purpose
 
 	// EmfToolings
 	// EmfToolings.XClass
 
+	// '->' can be used with '+=' operator of _Binding
 	def <T> operator_mappedTo(EClass it, EmfToolings.XClass<T> ext) {
 		ext.bind(this, it)
 	}
@@ -194,16 +187,19 @@ class EmfStretcher {
 		part.exec(it, onClass.getThis(part) as EmfToolings.CBinding<T>)
 	}
 	
+	// '*' replace '.' syntax
 	def <T> operator_multiply(EClass it, EmfToolings.XClass<T> part) {
 		getValue(part)
 	}
 
 	// EmfToolings.XFeature
 	
+	// '->' can be used with '+=' operator of _Binding
 	def <T> operator_mappedTo(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> ext) {
 		ext.bind(this, key, value)
 	}
 
+	// '->' can be used with '+=' operator of _Binding
 	def <T> operator_mappedTo(EStructuralFeature it, EmfToolings.XFeature<T> ext) {
 		ext.bind(this, it)
 	}
@@ -212,10 +208,12 @@ class EmfStretcher {
 		part.exec(key, value, key.onClass.getThis(part.toFeatID(value)) as EmfToolings.FBinding<T>)
 	}
 	
+	// '*' replace '.' syntax
 	def <T> operator_multiply(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> part) {
 		getValue(part)
 	}
 
+	// '*' replace '.' syntax
 	def <T> operator_multiply(EStructuralFeature it, EmfToolings.XFeature<T> part) {
 		(eClass->it).getValue(part)
 	}
@@ -258,15 +256,18 @@ class EmfStretcher {
 	}
 	
 	
+	protected static def toFeatID(EmfParticipant ext, EStructuralFeature feat) {
+		ext->feat
+	}
 
 
-	static def assertApplicable(EClassifier it, EStructuralFeature feat) {
+	protected static def assertApplicable(EClassifier it, EStructuralFeature feat) {
 		if (it instanceof EClass) if (!EAllStructuralFeatures.contains(feat)) {
 			throw new IllegalArgumentException(feat.name + ' is not a feature of EClass ' + name)	
 		}
 	}
 
-	static def void assertTree(EmfStretcher it, Deque<EmfStretcher> stack, Collection<EmfStretcher> cumul) {
+	protected static def void assertTree(EmfStretcher it, Deque<EmfStretcher> stack, Collection<EmfStretcher> cumul) {
 		if (cumul.contains(it)) { // been there, done that
 			return
 		}

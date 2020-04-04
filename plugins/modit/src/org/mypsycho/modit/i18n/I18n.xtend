@@ -19,7 +19,9 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.HashMap
+import java.util.List
 import java.util.Locale
+import java.util.Map
 import java.util.ResourceBundle
 import org.eclipse.xtend.lib.annotations.AccessorType
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -62,7 +64,7 @@ abstract class I18n {
 			instance.statics.put(staticKey(hint), value)
 		}
 		
-		private def void update(T it) {
+		private def void init(T it) {
 			instance = it
 			apply
 		}
@@ -86,7 +88,7 @@ abstract class I18n {
 	static val INSTANCES = new HashMap<Pair<Class<? extends I18n>,Locale>,I18n>
 	
 	// Inspired from {@link java.text.MessageFormat#makeFormat(int, int, StringBuilder[])}
-	static val NUMBER_FORMATS = #[
+	static val List<? extends PredefinedFormat<Object, ? extends NumberFormat>> NUMBER_FORMATS = #[
 		new PredefinedFormat(null)       [ it, locale | new DecimalFormat(it, DecimalFormatSymbols.getInstance(locale)) ],
 		new PredefinedFormat("")         [ it, locale | NumberFormat.getInstance(locale) ],
 		new PredefinedFormat("currency") [ it, locale | NumberFormat.getCurrencyInstance(locale) ],
@@ -112,38 +114,128 @@ abstract class I18n {
 	 */
 	package val statics = <Object, String>newHashMap
 	
+	val ThreadLocal<Map<String, (Date)=>String>> dateFormatProvider = ThreadLocal.withInitial[ new HashMap ]
+
+	val ThreadLocal<Map<String, (Number)=>String>> numberFormatProvider = ThreadLocal.withInitial[ new HashMap ]
 	
 	/**
-	 * Return the label associated to this element.
+	 * Returns the label associated to this element.
 	 * 
+	 * @param it to localize
 	 */
-	def String getLabel(Object it) { getLabel(it, null) }
+	def String getLabel(Object it) { 
+		getLabel(it, null)
+	}
 	
+	/**
+	 * Returns the label associated to this element.
+	 * <p>
+	 * If not hint is provided and no value is associated, provide toString value.
+	 * </p>
+	 * 
+	 * @param it to localize
+	 * @param hint of label to find
+	 */
 	def dispatch String getLabel(Object it, String hint) { 
-		statics.get(staticKey(hint)) ?: 
-		if (hint === null) String.valueOf(it)
+		statics.get(staticKey(hint)) 
+			?: if (hint === null) String.valueOf(it)
 	}
 			
+	/**
+	 * Returns the label associated to this enum.
+	 * 
+	 * @param it to localize
+	 * @param hint of label to find
+	 */
 	def dispatch String getLabel(Enum<?> it, String hint) {
 		statics.get(staticKey(hint)) ?: if (hint === null) name
 	}
 		
+	/**
+	 * Returns the label associated to this class.
+	 * 
+	 * @param it to localize
+	 * @param hint of label to find
+	 */
 	def dispatch String getLabel(Class<?> it, String hint) {
 		statics.get(staticKey(hint)) ?: if (hint === null) simpleName
 	}
 	
+	/**
+	 * Returns the localized text of this date.
+	 * 
+	 * @param it to localize
+	 * @param hint of label to find
+	 */
 	def dispatch getLabel(Date it, String hint) {
-		(if (hint === null) 
-			DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale) 
-		else 
-			new SimpleDateFormat(hint, locale)
-		).format(it)
+		hint.dateFormat.apply(it)
 	}
 	
+	/**
+	 * Returns the localized text of this number.
+	 * 
+	 * @param it to localize
+	 * @param hint of label to find
+	 */
 	def dispatch getLabel(Number it, String hint) {
-		if (hint === null) String.valueOf(it)
-		else (NUMBER_FORMATS.findFirst[ hint == pattern ] ?: NUMBER_FORMATS.get(0))
-			.provider.apply(hint, locale).format(it)
+		hint.numberFormat.apply(it)
+	}
+	
+	/**
+	 * Provides a date format to localize a date.
+	 * <p>
+	 * This method can be updated to provide a specific strategy.
+	 * </p>
+	 * @param hint of format
+	 */
+	protected def (Date)=>String getDateFormat(String hint) {
+		dateFormatProvider.get().computeIfAbsent(hint) [ createDateFormat ]
+	}
+	
+	/**
+	 * Create a reusable date format to localize a date.
+	 * <p>
+	 * This method can be updated to provide a specific strategy.
+	 * </p>
+	 * @param hint of format
+	 */
+	protected def (Date)=>String createDateFormat(String hint) {
+		val format = if (hint === null) 
+			DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale)
+		else 
+			new SimpleDateFormat(hint, locale)
+		
+		return [ format.format(it) ]
+	}
+	
+	/**
+	 * Provides a number format to localize a date.
+	 * <p>
+	 * This is based on ThreadLocal&lt;Map&gt;: override for a faster implementation.
+	 * </p>
+	 * @param hint of format
+	 */
+	protected def (Number)=>String getNumberFormat(String hint) {
+		numberFormatProvider.get().computeIfAbsent(hint) [ createNumberFormat ]
+	}
+	
+	
+	/**
+	 * Create a reusable format to localize a number.
+	 * <p>
+	 * This method can be updated to provide a specific strategy.
+	 * </p>
+	 * @param hint of format
+	 */
+	protected def (Number)=>String createNumberFormat(String hint) {
+		if (hint === null) {
+			return [ String.valueOf(it) ]
+		}
+		val format = 
+			(NUMBER_FORMATS.findFirst[ hint == pattern ] ?: NUMBER_FORMATS.get(0))
+			.provider.apply(hint, locale)
+
+		return [ format.format(it) ]
 	}
 	
 
@@ -156,7 +248,9 @@ abstract class I18n {
 	 * @param it class to associate
 	 * @param value associated
 	 */
-	protected def void setLabel(Class<?> it, String value) { setLabel(it, null, value) }
+	protected def void setLabel(Class<?> it, String value) { 
+		setLabel(it, null, value)
+	}
 		
 	/**
 	 * Associate a label to the provided enumeration.
@@ -167,7 +261,9 @@ abstract class I18n {
 	 * @param it enumeration to associate
 	 * @param value associated
 	 */
-	protected def void setLabel(Enum<?> it, String value) { setLabel(it, null, value) }
+	protected def void setLabel(Enum<?> it, String value) { 
+		setLabel(it, null, value)
+	}
 	
 	/**
 	 * Associate a label to the provided class with a specific context.
@@ -200,13 +296,23 @@ abstract class I18n {
 	/** 
 	 * Create a key for this object  
 	 */
-	private def static staticKey(Object it, String hint) { if (hint === null) it else it->hint }
+	private def static staticKey(Object it, String hint) { 
+		if (hint === null) it else it->hint
+	}
 	
 	// We could offer a printf approach for date and number
 	
-	static def <T extends I18n> T get(Class<T> it) { get(Locale.^default) }
+	static def <T extends I18n> T get(Class<T> it) { 
+		get(Locale.^default)
+	}
 	
-	// Improper approach for OSGI: static INSTANCES ruins bundle class loader.
+	/**
+	 * Retrieve or create a I18N instance for this local
+	 * <p>
+	 * Improper approach for OSGI: static field ruins bundle class loader. 
+	 * User must create a specific provider for each bundle.
+	 * </p>
+	 */
 	static def <T extends I18n> T get(Class<T> type, Locale locale) {
 		// may be WeakHashMap<ClassLoader, Map...
 		INSTANCES.computeIfAbsent(type->locale) [
@@ -222,7 +328,7 @@ abstract class I18n {
 		] as T
 	}
 
-	private static def <T extends I18n> T create(Class<T> type, Locale locale) {
+	protected static def <T extends I18n> T create(Class<T> type, Locale locale) {
 		val loader = type.classLoader ?: ClassLoader.systemClassLoader
 		val result = type.newInstance
 		result.locale = locale
@@ -234,7 +340,7 @@ abstract class I18n {
 			.map[ toL10n(basename, loader) ]
 			.filter(L10n)
 			// Xtend bug : it should provide <?> in parameter.
-			.forEach[ Object it | (it as L10n<T>).update(result) ]
+			.forEach[ Object it | (it as L10n<T>).init(result) ]
 		result
 	}
 	
@@ -249,6 +355,7 @@ abstract class I18n {
 			// if (loader.getResource(fullname.replace('.', '/') + '.java') !== null)
 			loader.loadClass(fullname).newInstance
 		} catch(ClassNotFoundException e) {
+			//TODO provided a reflection based on detected properties ??
 			null
 		}	
 	}

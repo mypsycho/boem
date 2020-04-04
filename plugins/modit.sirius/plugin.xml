@@ -4,13 +4,13 @@
 
 	<extension point="org.eclipse.emf.ecore.extension_parser">
 		<parser
-			class="org.mypsycho.modit.emf.sirius.DesignFactory"
+			class="org.mypsycho.modit.emf.sirius.internal.DesignFactory"
 			type="modit_sirius" />
 	</extension>
 
 	<extension point="org.eclipse.sirius.externalJavaAction">
 		<javaActions
-			actionClass="org.mypsycho.modit.emf.sirius.SiriusModelProviderService"
+			actionClass="org.mypsycho.modit.emf.sirius.internal.SiriusModelProviderService"
 			id="org.mypsycho.emf.modit.sirius.service" />
 	</extension>
 

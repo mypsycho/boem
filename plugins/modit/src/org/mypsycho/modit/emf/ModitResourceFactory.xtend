@@ -166,18 +166,50 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	}
 
 
+	/**
+	 * Provides Modit URI for class in a plugin.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @return EMF URI
+	 */
 	static def toUri(String pluginId, Class<? extends ModitModel> clazz) {
 		pluginId.toUri(clazz, DEFAULT_EXTENSION)
 	}
 	
-	static def toPluginPath(String pluginId, Class<? extends ModitModel> clazz) {
-		pluginId.toPluginPath(clazz, DEFAULT_EXTENSION)
-	}
-
+	
+	/**
+	 * Provides URI for class in a plugin using custom extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @param ext extension to use
+	 * @return EMF URI
+	 */
 	static def toUri(String pluginId, Class<?> clazz, String ext) {
 		URI.createPlatformPluginURI(pluginId.toPluginPath(clazz, ext), true)
 	}
 	
+	/**
+	 * Provides path segment for URI of class in a plugin with modit extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @return EMF URI path
+	 */
+	static def toPluginPath(String pluginId, Class<? extends ModitModel> clazz) {
+		pluginId.toPluginPath(clazz, DEFAULT_EXTENSION)
+	}
+
+	
+	/**
+	 * Provides path segment for URI of class in a plugin with custom extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @param ext extension to use
+	 * @return EMF URI path
+	 */
 	static def toPluginPath(String pluginId, Class<?> clazz, String ext) {
 		pluginId + "/" + clazz.name + "." + ext
 	}

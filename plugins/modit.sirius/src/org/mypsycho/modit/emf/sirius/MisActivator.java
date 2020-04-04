@@ -27,13 +27,15 @@ import org.eclipse.sirius.business.api.componentization.ViewpointFileCollector;
 import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
 import org.eclipse.sirius.viewpoint.description.Group;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
+import org.mypsycho.modit.emf.sirius.internal.DesignFactory;
+import org.mypsycho.modit.emf.sirius.internal.SiriusModelProviderService;
 import org.osgi.framework.BundleContext;
 
 
 /**
  * Activator of plugin.
  * <p>
- * It provides in memory Sirius Model registration.
+ * It provides in memory of Sirius Model registering.
  * </p>
  * 
  * @author nperansin
@@ -57,14 +59,15 @@ public class MisActivator extends Plugin {
 	private List<? extends SiriusModelProvider> serviceProviders = null;
 
 	/**
-	 * Returns the shared instance
+	 * Returns loaded instance.
 	 * 
-	 * @return the shared instance
+	 * @return instance
 	 */
 	public static MisActivator getInstance() {
 		return instance;
 	}
 	
+	/** Provide to Sirius viewpoint from dynamic models */
 	private static final ViewpointFileCollector MODEL_PROVIDER_COLLECTOR = 
 			new ViewpointFileCollector() {
 
@@ -79,6 +82,12 @@ public class MisActivator extends Plugin {
 		}
 	};
 
+	/**
+	 * Disposable class registering SiriusModelProvider classes.
+	 * <p>
+	 * User must dispose them when registered classes are no more needed (bundle stop).
+	 * </p>
+	 */
 	class Registration implements IDisposable {
 
 		static final int UNALLOCATED_INDEX = -1;
@@ -128,7 +137,7 @@ public class MisActivator extends Plugin {
 			viewpoints.forEach(it -> vpReg.disposeFromPlugin(it));
 		}
 
-		public void setIndex(int id) {
+		void setIndex(int id) {
 			index = id;
 		}
 
@@ -141,7 +150,7 @@ public class MisActivator extends Plugin {
 		 * @param it instance of register
 		 * @return index
 		 */
-		public int allocated(SiriusModelProvider it) {
+		int allocated(SiriusModelProvider it) {
 			// search free id
 			if (index == Registration.UNALLOCATED_INDEX) {
 				index = 0;
@@ -156,7 +165,7 @@ public class MisActivator extends Plugin {
 			return getIndex();
 		}
 
-		public void initViewpoints() {
+		void initViewpoints() {
 			viewpoints.addAll(ViewpointRegistry.getInstance().registerFromPlugin(siriusPath));			
 		}
 	}
@@ -259,8 +268,8 @@ public class MisActivator extends Plugin {
 	 * @return registered provider (may be null)
 	 * @throws IndexOutOfBoundsException if id does match any existing id
 	 */
-	SiriusModelProvider getProvider(int id) {
-		return serviceProviders.get(id);
+	public SiriusModelProviderService.Callback getProvider(int id) {
+		return serviceProviders.get(id).getCallback();
 	}
 	
 	
@@ -274,8 +283,8 @@ public class MisActivator extends Plugin {
 	 * @return registered provider (may be null)
 	 * @throws IndexOutOfBoundsException if id does match any existing id
 	 */
-	SiriusModelProvider getProvider(String classname) {
-		return implsCache.get(classname);
+	public SiriusModelProviderService.Callback getProvider(String classname) {
+		return implsCache.get(classname).getCallback();
 	}
 
 }

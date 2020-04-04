@@ -23,10 +23,10 @@ import org.eclipse.emf.ecore.EStructuralFeature
  * It must be used with a EMF Stretcher instance.
  * </p>
  * <p>
- * Must be access by byObject, byObjects, byProperty, byProperties.
+ * Must be access by byObject, byObjects, byProperty or byProperties.
  * </p>
  * <p>
- * No <b>overloading</b> to prevent inference error on participant type.
+ * 's' suffix is used to avoid <b>overloading</b> preventing inference error on participant type, .
  * </p>
  * 
  * <T> Type returned by the participant
@@ -50,7 +50,8 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 	}
 	
 	
-		
+	// Class extension
+	//
 	static def <T, O extends EObject> byObject(Class<O> expectedType, T byDefault) { 
 		new XObject<T, O>().asValue(byDefault)
 	}
@@ -63,6 +64,8 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		new XObject<T, O>().asCache(byDefault)
 	}
 
+	// Feature extension
+	//
 	static def <T> byEObject(T byDefault) { 
 		byObject(EObject, byDefault)
 	}
