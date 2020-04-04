@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated EefExtNative -->
+      <package
+            uri="http://www.mypsycho.org/eclipse/eef/ext/native"
+            class="org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage"
+            genModel="model/EefExtNative.genmodel"/>
+   </extension>
+
+
+  <extension
+         point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.EEFNativeWidgetLifecycleManager"
+            class="org.mypsycho.emf.modit.eef.EEFNativeWidgetLifecycleManagerProvider"
+            description="Native widget description"
+            label="Native SWT">
+      </descriptor>
+   </extension>
+
+
+</plugin>
