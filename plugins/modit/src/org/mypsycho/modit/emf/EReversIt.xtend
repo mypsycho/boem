@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.ArrayList
+import java.util.Arrays
 import java.util.Collection
 import java.util.Collections
 import java.util.HashMap
@@ -57,6 +58,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
  */
 class EReversIt {
 
+	/** Set of classes used in main model by the default implementation  */
 	protected static val MAIN_IMPORTS = #{ 
 		HashMap, Class, // java
 		Accessors, // xtend.lib
@@ -65,15 +67,22 @@ class EReversIt {
 		EModIt, ModitModel
 	}
 	
+	/** Set of classes used in sub parts by the default implementation  */
 	protected static val PART_IMPORTS = #{ EObject, EModIt }
 
+	// 
 	// Constructor context
+	//
+	/** Id of main class */
 	protected val ClassId mainClass
 
+	/** Path of generated code to create packages from */
 	protected val Path target
 
+	/** Groups of objects to generate */
 	protected val Map<EObject, ClassId> roots
 
+	/** List of objects to generated: consistent with root but keep order*/
 	protected val List<EObject> orderedRoots
 
 	// Generation parameters
@@ -103,15 +112,32 @@ class EReversIt {
 	protected var Map<EObject, String> implicitExtras
 
 
-	// Reset for each file.
+	// Reset for each generated file.
+	
+	/** Imported Classes for the generated class */
 	val Map<Class<?>, Boolean> currentImports = new HashMap
+
+	/** Current generated Class */
 	var ClassId currentClass
 
-
-	new(String classname, Path dir, Resource... rSet) {
-		this(new ClassId(classname), dir, rSet.map[ it -> new ClassId(new ClassId(classname), URI) ])
+	/**
+	 * Construction of generation context based on content of resources set.
+	 * 
+	 * @param classname of main class
+	 * @param dir folder of generation
+	 * @param res resource to en-code
+	 */
+	new(String classname, Path dir, Resource... res) {
+		this(new ClassId(classname), dir, res.map[ it -> new ClassId(new ClassId(classname), URI) ])
 	}
 
+	/**
+	 * Construction of generation context based on content of resources set.
+	 * 
+	 * @param classname of main class
+	 * @param dir folder of generation
+	 * @param res resource to en-code
+	 */
 	new(ClassId definition, Path dir, Pair<? extends Notifier, ClassId>... values) {
 		mainClass = definition
 		target = dir
@@ -120,7 +146,10 @@ class EReversIt {
 			else values.toMap( [ key.toEObject ], [ value ] )
 	}
 
-
+	/**
+	 * Ensures root, aliases, splits and extras are consistent and valuates
+	 * 'namings' map.
+	 */
 	protected def prepareContext() {
 		// Check alias and splits are defined in the serialized tree.
 		#[
@@ -170,7 +199,7 @@ class EReversIt {
 			aliases
 		]
 		
-		// Checks aliases are a bijection.
+		// Checks mappings are a bijection.
 		#[
 			"Target elements" -> [ Map<EObject, String> it| keySet ],
 			"Names" -> [ Map<EObject, String> it| values ]
@@ -197,7 +226,9 @@ class EReversIt {
 		namings = mappings.map[ entrySet ].flatten.toMap([ key ], [ value ])
 	}
 
-
+	/**
+	 * Generates the classes for the models using EModIt.
+	 */
 	def perform() throws IOException {
 
 		prepareContext
@@ -376,7 +407,6 @@ ENDFOR
 })
 '''
 	}
-
 
 	// xtend
 	protected def String templateExplicitExtras() {
@@ -799,7 +829,9 @@ ENDFOR
 	}
 
 	static def findDeclaringPackage(EObject it) {
-		eClass.EPackage.class.interfaces.findFirst[ interfaces.contains(EPackage) ]
+		eClass.EPackage.class.interfaces.findFirst[ 
+			Arrays.asList(interfaces).contains(EPackage)
+		]
 	}
 
 	dispatch def toJava(Object it) {
