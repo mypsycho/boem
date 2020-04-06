@@ -37,6 +37,7 @@ import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.emf.EReversIt
 import org.mypsycho.modit.emf.ModitModel
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider
+import org.eclipse.sirius.viewpoint.description.Environment
 
 /**
  * 
@@ -110,9 +111,9 @@ class SiriusReverseIt {
 	protected def findDefaultSplits() {
 		(
 			source.ownedViewpoints
-				.map[ ownedRepresentations + ownedRepresentationExtensions ]
-				.flatten
-			+ source.extensions.filter(ViewExtensionDescription)
+				.flatMap[ ownedRepresentations + ownedRepresentationExtensions ]
+			+ source.extensions
+				.filter(ViewExtensionDescription)
 		).toInvertedMap[ 
 			new ClassId(classId.pack, toClassname)
 		]
@@ -150,7 +151,7 @@ class SiriusReverseIt {
 	protected def toVpAlias(Viewpoint it, String prefix) { "VP:" + prefix + "#" + name }
 	
 	protected def createEngine(Resource content, String classname, Path dir) {
-		new Engine(classname, dir, content)
+		new Engine(this, classname, dir, content)
 	}
 	
 	/**
@@ -174,7 +175,9 @@ class SiriusReverseIt {
 		split("\\s+").join("")[ toFirstUpper ]
 	}
 	
-	static def loadSiriusGroup(URI uri, ResourceSet rs) { rs.getResource(uri, true).contents.head as Group }
+	static def loadSiriusGroup(URI uri, ResourceSet rs) { 
+		rs.getResource(uri, true).contents.head as Group
+	}
 	
 	
 	// Only used in SiriusModelProvider class.
@@ -184,14 +187,18 @@ class SiriusReverseIt {
 	 * Override of default reverse for SiriusModelProvider class.
 	 */
 	protected static class Engine extends EReversIt {
-		new(String classname, Path dir, Resource res) {
+		// XTend does not support statefull inner class
+		val SiriusReverseIt container
+		
+		new(SiriusReverseIt container, String classname, Path dir, Resource res) {
 			super(classname, dir, res)
+			this.container = container
 		}
 		
 		override getMainStaticImports() {
 			super.mainStaticImports
 				.filter[ !UNUSED_IMPORTS.contains(it)]
-			+ #[ SiriusModelProvider ]
+			+ #[ SiriusModelProvider, Environment ]
 		}
 		
 		override templateMain(Iterable<Class<?>> packages, ()=>String content) {
@@ -204,6 +211,13 @@ class «mainClass.name» extends SiriusModelProvider {
 «
 IF !implicitExtras.empty || !explicitExtras.empty
 »	override initExtras(ResourceSet it) {
+		// System colors are: blue,chocolate,green,orange,purple,red,yellow
+		// With shade : 'dark_', <default>, 'light_'
+		// And: black,white
+		eObject(«Environment.templateClass», "environment:/viewpoint#/")
+			.systemColors.entries
+			.forEach[ extras.put(name, it) ]
+		
 		«templateExtras»
 	}
 
@@ -221,9 +235,28 @@ ENDIF // extras
 '''
 		}
 		
+
+	// xtend
+	override templateExplicitExtras() {
+		val colors = container.source.systemColorsPalette.entries
+'''extras.putAll(#{ // Named elements
+«
+FOR ext : explicitExtras.entrySet
+	// ignore SystemColors as they are already provided in template.
+	.filter[ !colors.contains(key) ]
+	.toList.sortBy[ value ]
+SEPARATOR ",\n" // cannot include comma in template: improper for last value
+»	«ext.value.toJava» -> «ext.key.templateAlias»«
+ENDFOR
+»
+})
+'''
+	}
+	
 		// Xtend
 		override templateSimpleContent(EObject it) {
-			// inspired from templateInnerCreate
+			// As assemble is performed by SiriusModelProvider
+			// Code from #templateInnerCreate
 '''
 «
 FOR c : innerContent SEPARATOR statementSeparator 
