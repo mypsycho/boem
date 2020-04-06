@@ -16,7 +16,7 @@ import org.eclipse.eef.core.api.controllers.AbstractEEFWidgetController;
 import org.eclipse.eef.core.api.controllers.IEEFWidgetController;
 import org.eclipse.eef.core.api.utils.EvalFactory;
 import org.eclipse.eef.ide.ui.api.widgets.AbstractEEFWidgetLifecycleManager;
-import org.eclipse.eef.ide.ui.internal.widgets.EEFTextMemento;
+import org.eclipse.eef.ide.ui.api.widgets.EEFStyleHelper;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.mypsycho.emf.modit.eef.EEFNativeWidget.ModelListener;
 import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription;
+import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
 import org.osgi.framework.Bundle;
 
 /**
@@ -46,6 +47,7 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 	 * error (as reverting the UI re-triggers the SelectionListener).
 	 */
 	private AtomicBoolean updateInProgress = new AtomicBoolean(false);
+
 	
 	/**
 	 * 
@@ -65,7 +67,7 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 		
 	}
 
-	protected void logError(String message, Throwable cause) {
+	protected static void logError(String message, Throwable cause) {
 		EEFNativeActivator.logError(message, cause);
 	}
 	
@@ -136,13 +138,10 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 	public void aboutToBeShown() {
 		super.aboutToBeShown();
 
-		ModelListener listener = controller.implementation.startEditing(value -> {
-			
-			
-			
-		});
+		controller.listener = controller.implementation
+				.startEditing(value -> editValue(false, value));
 		
-		controller.newValueConsumer = value -> listener.setValue(value);
+		controller.newValueConsumer = value -> controller.listener.setValue(value);
 
 		// addListener on widget.
 		// Prefer listener with a delayed update
@@ -170,26 +169,35 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 		
 	}
 	
+	/**
+	 * Set the style.
+	 */
+	private void setStyle() {
+		EEFStyleHelper styleHelper = new EEFStyleHelper(interpreter, variableManager);
+		controller.listener.setStyle((EEFNativeWidgetStyle) styleHelper.getWidgetStyle(description));
+	}
+	
 	private void editValue(boolean force, Object value) {
 		boolean shouldUpdateWhileRendering = !container.isRenderingInProgress() || force;
 		if (!widget.isDisposed() 
-				
 				&& shouldUpdateWhileRendering 
 				// && isDirty 
 				&& updateInProgress.compareAndSet(false, true)
 				) {
 			try {
 				IStatus result = controller.updateValue(value);
+				
 				if (result != null && result.getSeverity() == IStatus.ERROR) {
 					logError(result.getMessage(), result.getException());
-
-					text.setText(referenceValue);
+					// Restore widget will last value
+					controller.valueForwarder.accept(controller.referenceValue);
 				} else {
-					referenceValue = text.getText();
+					// save value 
+					controller.referenceValue = value; 
+					// maybe useless if refresh callback controller
 					refresh();
 				}
 				// isDirty = false;
-				EEFTextMemento.remove(this.text);
 				setStyle();
 			} finally {
 				updateInProgress.set(false);
@@ -208,10 +216,21 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 	}
 	
 	private class Controller extends AbstractEEFWidgetController {
-
+		
 		EEFNativeWidget implementation;
 		
 		Consumer<Object> newValueConsumer;
+		
+		final Consumer<Object> valueForwarder = value -> {
+			referenceValue = value;
+			newValueConsumer.accept(value);
+			setStyle();
+		};
+		
+		// Not null when shown
+		ModelListener listener;
+		
+		Object referenceValue = null;
 		
 		public Controller(EEFNativeWidget impl) {
 			super(EEFNativeWidgetLifecycleManager.this.variableManager, 
@@ -230,9 +249,9 @@ public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleM
 		public void refresh() {
 			super.refresh();
 
-			String valueExpression = description.getValueExpression();
 			if (newValueConsumer != null) {
-				newEval().call(valueExpression, newValueConsumer);
+				// Writing content into widget
+				newEval().call(description.getValueExpression(), valueForwarder);
 			}
 		}
 		

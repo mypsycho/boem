@@ -7,13 +7,17 @@ import org.eclipse.eef.common.ui.api.EEFWidgetFactory;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
 import org.eclipse.eef.ide.ui.api.widgets.EEFStyleHelper;
 import org.eclipse.eef.ide.ui.api.widgets.EEFStyleHelper.IEEFTextStyleCallback;
+import org.eclipse.eef.ide.ui.internal.widgets.styles.EEFColor;
+import org.eclipse.eef.ide.ui.internal.widgets.styles.EEFFont;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
 
 /**
@@ -47,6 +51,7 @@ public class EEFDefaultNativeWidget implements EEFNativeWidget {
 			setContext(properties);
 		}
 
+		@SuppressWarnings("restriction") // limited commitment on eef mechanisms
 		@Override
 		public void setStyle(EEFNativeWidgetStyle style) {
 			IEEFTextStyleCallback callback = getSyleCallback();
@@ -58,13 +63,26 @@ public class EEFDefaultNativeWidget implements EEFNativeWidget {
 			
 			Font defaultFont = parent.getShell().getFont();
 			
-			styleHelper.applyTextStyle(style.getFontNameExpression(), 
-					style.getFontSizeExpression(), 
-					style.getFontStyleExpression(),
-					defaultFont, 
-					style.getBackgroundColorExpression(), 
-					style.getForegroundColorExpression(), 
-					callback);
+			if (style != null) {
+				styleHelper.applyTextStyle(style.getFontNameExpression(), 
+						style.getFontSizeExpression(), 
+						style.getFontStyleExpression(),
+						defaultFont, 
+						style.getBackgroundColorExpression(), 
+						style.getForegroundColorExpression(), 
+						callback);
+			} else { // no style in model
+				// Set everything back to the default value
+				callback.applyForegroundColor(new EEFColor((Color) null));
+				callback.applyBackgroundColor(new EEFColor((Color) null));
+				callback.applyFontStyle(false, false);
+				callback.applyFont(new EEFFont(null, 0, 0) {
+					@Override
+					public Font getFont() {
+						return null;
+					}
+				});
+			}
 		}
 		
 	}
@@ -103,7 +121,7 @@ public class EEFDefaultNativeWidget implements EEFNativeWidget {
 	}
 	
 	protected void setValueFromModel(Object value) {
-		// nothing by default
+		((Label) widget).setText(String.valueOf(value));
 	}
 	
 	public void setContext(Map<? extends String, ? extends String> properties) {
