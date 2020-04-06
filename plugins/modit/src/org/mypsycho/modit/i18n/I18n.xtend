@@ -31,8 +31,9 @@ import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
 /**
  * Abstract class to declare internationalized elements.
  * <p>
- * Default elements can be defined in a I18n subclass and localization in applied by redefinition
- * in I18n.L10n class following ResourceBundle pattern.
+ * Default elements must be defined in a I18n subclass as not final fields.<br/>
+ * Localization in applied by redefinition by I18n.L10n sub-class applied to I18n class.<br/>
+ * Name of I18n.L10n must ResourceBundle pattern to be recognized.
  * </p>
  * <p>
  * For a faster coding/reading, user should declare accessors as:
@@ -40,13 +41,54 @@ import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
  * @Accessors(#[PUBLIC_GETTER, PACKAGE_SETTER])
  * </pre>
  * </p>
+ * <p>
+ * For OSGI bundle, localized class must be set in the same bundle or in a fragment of the 
+ * one declaring I18n class.
+ * </p>
  */
 abstract class I18n {
 	
 	/**
+	 * Retrieves or creates an I18N instance for default Locale.
+	 * <p>
+	 * Improper approach for OSGI: static field ruins bundle class loader. <br/>
+	 * User must create a specific provider for each bundle using #create method.
+	 * </p>
+	 * @param I18n class to localize
+	 */
+	static def <T extends I18n> T get(Class<T> it) { 
+		get(Locale.^default)
+	}
+	
+		
+	/**
+	 * Retrieves or creates an I18N instance for provided locale.
+	 * <p>
+	 * Improper approach for OSGI: static field ruins bundle class loader. <br/>
+	 * User must create a specific provider for each bundle using #create method.
+	 * </p>
+	 * @param I18n class to localize
+	 * @param Locale of expected
+	 */
+	static def <T extends I18n> T get(Class<T> type, Locale locale) {
+		// may be WeakHashMap<ClassLoader, Map...
+		INSTANCES.computeIfAbsent(type->locale) [
+			// ResourceBundle wraps the system class loader. I don't know why.
+			/*
+			if (System.getSecurityManager() === null) 
+				create(type, locale)
+			else 
+				AccessController.doPrivileged(
+					[ create(type, locale) ] as PrivilegedAction<I18n>
+				) */
+			I18n.create(type, locale)
+		] as T
+	}
+	
+	/**
 	 * Abstract class to provide localized value of an internationalized class.
-
-	 * <T> I18n class to localize
+	 * 
+	 * @param <T> I18n class to localize
 	 */
 	abstract static class L10n<T extends I18n> {
 		
@@ -57,11 +99,11 @@ abstract class I18n {
 		protected def void setLabel(Enum<?> it, String value) { setLabel(it, null, value) }
 		
 		protected def void setLabel(Class<?> it, String hint, String value) { 
-			instance.statics.put(staticKey(hint), value)
+			instance.reflections.put(staticKey(hint), value)
 		}
 		
 		protected def void setLabel(Enum<?> it, String hint, String value) { 
-			instance.statics.put(staticKey(hint), value)
+			instance.reflections.put(staticKey(hint), value)
 		}
 		
 		private def void init(T it) {
@@ -87,6 +129,7 @@ abstract class I18n {
 	// This singleton is an issue for OSGI classloaders.
 	static val INSTANCES = new HashMap<Pair<Class<? extends I18n>,Locale>,I18n>
 	
+	
 	// Inspired from {@link java.text.MessageFormat#makeFormat(int, int, StringBuilder[])}
 	static val List<? extends PredefinedFormat<Object, ? extends NumberFormat>> NUMBER_FORMATS = #[
 		new PredefinedFormat(null)       [ it, locale | new DecimalFormat(it, DecimalFormatSymbols.getInstance(locale)) ],
@@ -94,7 +137,8 @@ abstract class I18n {
 		new PredefinedFormat("currency") [ it, locale | NumberFormat.getCurrencyInstance(locale) ],
 		new PredefinedFormat("percent")  [ it, locale | NumberFormat.getPercentInstance(locale) ],
 		new PredefinedFormat("integer")  [ it, locale | NumberFormat.getIntegerInstance(locale) ]
-	]
+	]	
+	// We could offer a printf approach for date and number ?? 
 	
 	static class PredefinedFormat<T,F> {
 		val String pattern
@@ -112,11 +156,16 @@ abstract class I18n {
 	/** 
 	 * Association of static elements (class and enum) to labels.
 	 */
-	package val statics = <Object, String>newHashMap
+	package val reflections = new HashMap<Object, String>
 	
-	val ThreadLocal<Map<String, (Date)=>String>> dateFormatProvider = ThreadLocal.withInitial[ new HashMap ]
+		
+	/** Provide a date formatter with multi-thread support. */
+	val dateFormatProvider = 
+			ThreadLocal.<Map<String, (Date)=>String>>withInitial[ new HashMap ]
 
-	val ThreadLocal<Map<String, (Number)=>String>> numberFormatProvider = ThreadLocal.withInitial[ new HashMap ]
+	/** Provide a number formatter with multi-thread support. */
+	val numberFormatProvider = 
+			ThreadLocal.<Map<String, (Number)=>String>>withInitial[ new HashMap ]
 	
 	/**
 	 * Returns the label associated to this element.
@@ -137,7 +186,7 @@ abstract class I18n {
 	 * @param hint of label to find
 	 */
 	def dispatch String getLabel(Object it, String hint) { 
-		statics.get(staticKey(hint)) 
+		reflections.get(staticKey(hint)) 
 			?: if (hint === null) String.valueOf(it)
 	}
 			
@@ -148,7 +197,7 @@ abstract class I18n {
 	 * @param hint of label to find
 	 */
 	def dispatch String getLabel(Enum<?> it, String hint) {
-		statics.get(staticKey(hint)) ?: if (hint === null) name
+		reflections.get(staticKey(hint)) ?: if (hint === null) name
 	}
 		
 	/**
@@ -158,7 +207,7 @@ abstract class I18n {
 	 * @param hint of label to find
 	 */
 	def dispatch String getLabel(Class<?> it, String hint) {
-		statics.get(staticKey(hint)) ?: if (hint === null) simpleName
+		reflections.get(staticKey(hint)) ?: if (hint === null) simpleName
 	}
 	
 	/**
@@ -276,7 +325,7 @@ abstract class I18n {
 	 * @param hint of association
 	 */
 	protected def void setLabel(Class<?> it, String hint, String value) { 
-		statics.put(staticKey(hint), value)
+		reflections.put(staticKey(hint), value)
 	}
 	
 	/**
@@ -290,7 +339,7 @@ abstract class I18n {
 	 * @param hint of association
 	 */
 	protected def void setLabel(Enum<?> it, String hint, String value) { 
-		statics.put(staticKey(hint), value)
+		reflections.put(staticKey(hint), value)
 	}
 
 	/** 
@@ -299,36 +348,9 @@ abstract class I18n {
 	private def static staticKey(Object it, String hint) { 
 		if (hint === null) it else it->hint
 	}
-	
-	// We could offer a printf approach for date and number
-	
-	static def <T extends I18n> T get(Class<T> it) { 
-		get(Locale.^default)
-	}
-	
-	/**
-	 * Retrieve or create a I18N instance for this local
-	 * <p>
-	 * Improper approach for OSGI: static field ruins bundle class loader. 
-	 * User must create a specific provider for each bundle.
-	 * </p>
-	 */
-	static def <T extends I18n> T get(Class<T> type, Locale locale) {
-		// may be WeakHashMap<ClassLoader, Map...
-		INSTANCES.computeIfAbsent(type->locale) [
-			// ResourceBundle wraps the system class loader. I don't know why.
-			/*
-			if (System.getSecurityManager() === null) 
-				create(type, locale)
-			else 
-				AccessController.doPrivileged(
-					[ create(type, locale) ] as PrivilegedAction<I18n>
-				) */
-			I18n.create(type, locale)
-		] as T
-	}
 
-	protected static def <T extends I18n> T create(Class<T> type, Locale locale) {
+	
+	static def <T extends I18n> T create(Class<T> type, Locale locale) {
 		val loader = type.classLoader ?: ClassLoader.systemClassLoader
 		val result = type.newInstance
 		result.locale = locale

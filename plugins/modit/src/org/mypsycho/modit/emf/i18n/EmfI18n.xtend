@@ -19,7 +19,19 @@ import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.ENamedElement
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
+import org.eclipse.xtend.lib.annotations.Accessors
 
+/**
+ * Class to access localized text of EMF meta-model elements.
+ * <p>
+ * Localized content is defined in subclass of EmfI18n.L10n declare in i18n subpackage of 
+ * generated EPackage class.<br/>
+ * Sub-classes must follow ResourceBundle convention to identify applicable Locale.</br>
+ * </p>
+ * <p>
+ * To get a Localized instance user must invoke EmfI18n#get(&gt;MM>Package.eINSTANCE).
+ * </p>
+ */
 class EmfI18n {
 
 	/** A different package must used to avoid SecurityException[signers informations does not match] */
@@ -73,9 +85,11 @@ class EmfI18n {
 		
 	}
 
-	public val Locale locale
+	@Accessors
+	val Locale locale
 
-	public val EPackage source
+	@Accessors
+	val EPackage source
 
 	package val Map<Class<?>, EClassifier> classMap // shared by all locales
 
