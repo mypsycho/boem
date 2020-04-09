@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.UMLPackage
-import org.eclipse.uml2.uml.internal.resource.UMLResourceFactoryImpl
 import org.junit.Before
 import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.ModItPool
@@ -41,12 +40,18 @@ class UmlTestContext {
 	    else null
 	}
 	
+	@SuppressWarnings("restriction")
+	def createUmlResFactory() {
+		new org.eclipse.uml2.uml.internal.resource.UMLResourceFactoryImpl
+	}
 
 	@Before
 	def void setup() {
 		rs = new ResourceSetImpl
 		rs.packageRegistry.put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE)
-		rs.resourceFactoryRegistry.extensionToFactoryMap.put("uml", new UMLResourceFactoryImpl)
+		rs.resourceFactoryRegistry.extensionToFactoryMap.put("uml", 
+			createUmlResFactory
+		)
 	}
 
     def <T extends EObject> save(T eObject, ResourceSet rs, URI uri) {

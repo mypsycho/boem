@@ -80,18 +80,46 @@
 					<configuration>
 						<resolver>p2</resolver>
 						<environments>
+						<!-- 
+						Generic cannot be used: swt.widgets are in a fragment.
+						May be only 1 env is required 
+						as produced plugins do not depend of them ?
 							<environment>
 								<os>*</os>
 								<ws>*</ws>
 								<arch>*</arch>
 							</environment>
-							<!-- 
+						 -->
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86</arch>
+							</environment>
 							<environment>
 								<os>win32</os>
 								<ws>win32</ws>
 								<arch>x86_64</arch>
 							</environment>
-							 -->
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
 						</environments>
 						<target>
 							<artifact>
@@ -104,9 +132,10 @@
 					</configuration>
 				</plugin>
 
-
-				<!-- Force the timespan of each build to use the UTC of the last commit
-					on the repo -->
+				<!-- 
+				Force the timespan of each build to use the UTC of the last commit
+				on the repo 
+					-->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-packaging-plugin</artifactId>
@@ -126,7 +155,9 @@
 						 <!-- No expression supported for git.dirty; Use property. -->
 						<jgit.dirtyWorkingTree>${git.dirty}</jgit.dirtyWorkingTree>
 						<!-- Ignore eclipse lazy update confs. -->
-						<jgit.ignore> .* .settings/ pom.xml 
+						<jgit.ignore> 
+						.*
+						.settings/
 						</jgit.ignore>
 					</configuration>
 				</plugin>
@@ -140,7 +171,11 @@
 					<artifactId>tycho-surefire-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
-						<systemProperties> <!-- not sure why. Possibly: as a test write output file, default encoding -->
+						<systemProperties> 
+						<!-- 
+						not sure why...
+						Possibly: as a test write output file, default encoding.
+						-->
 							<file.encoding>${project.build.sourceEncoding}</file.encoding>
 						</systemProperties>
 					</configuration>
@@ -183,8 +218,32 @@
 			</build>
 		</profile>
 		<profile>
+			<id>xtend-nature</id>
+			<activation>
+				<file>
+					<exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.xtend</groupId>
+						<artifactId>xtend-maven-plugin</artifactId>
+						<executions>
+							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
+							<execution>
+								<goals>
+									<goal>compile</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>xcore-nature</id> 
-		<!-- xcore-nature comes before xtend-nature -->
+			<!-- xcore-nature comes before xtend-nature -->
 			<!-- xtext-maven-plugin should be called before xtend-maven-plugin -->
 			<activation>
 				<file>
@@ -313,30 +372,6 @@
 								<version>${xcore.lib.version}</version>
 							</dependency>
 						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>xtend-nature</id>
-			<activation>
-				<file>
-					<exists>.settings/org.eclipse.xtend.core.Xtend.prefs</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.xtend</groupId>
-						<artifactId>xtend-maven-plugin</artifactId>
-						<executions>
-							<!-- About Xtend+tycho : Build.properties must be aligned with output.properties -->
-							<execution>
-								<goals>
-									<goal>compile</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>

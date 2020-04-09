@@ -24,6 +24,7 @@ import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
  *
  * @author nperansin
  */
+@SuppressWarnings("restriction") // EEFColor and EEFFont is part of API and restricted ???
 public class EEFDefaultNativeWidget implements EEFNativeWidget {
 
 	
@@ -51,7 +52,6 @@ public class EEFDefaultNativeWidget implements EEFNativeWidget {
 			setContext(properties);
 		}
 
-		@SuppressWarnings("restriction") // limited commitment on eef mechanisms
 		@Override
 		public void setStyle(EEFNativeWidgetStyle style) {
 			IEEFTextStyleCallback callback = getSyleCallback();

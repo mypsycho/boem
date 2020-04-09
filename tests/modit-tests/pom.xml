@@ -15,6 +15,6 @@
 
 	<artifactId>org.mypsycho.emf.modit.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<name>Mod-It Tests</name>
+	<name>Mod-it Tests</name>
 
 </project>

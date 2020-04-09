@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
+import org.eclipse.sirius.properties.PropertiesPackage
+import org.eclipse.sirius.properties.ext.widgets.reference.propertiesextwidgetsreference.PropertiesExtWidgetsReferencePackage
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.JavaExtension
@@ -64,8 +66,13 @@ abstract class SiriusModelProvider implements ModitModel {
 		
 		org.eclipse.sirius.table.metamodel.table.description.DescriptionPackage.eINSTANCE,
 		// table tools are in same package
-		org.eclipse.sirius.tree.description.DescriptionPackage.eINSTANCE
+		org.eclipse.sirius.tree.description.DescriptionPackage.eINSTANCE,
 		// tree tools are in same package
+		
+		
+		PropertiesPackage.eINSTANCE, 
+		PropertiesExtWidgetsReferencePackage.eINSTANCE
+		// TODO add native EEF when ready
 	}
 	
 	val List<Object> expressions = new ArrayList

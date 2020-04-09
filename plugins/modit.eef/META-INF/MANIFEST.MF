@@ -1,9 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
 Bundle-SymbolicName: org.mypsycho.emf.modit.eef;singleton:=true
-Bundle-Version: 0.3.0.qualifier
-Bundle-ClassPath: .
+Bundle-Version: 0.3.1.qualifier
+Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.xtext.xbase.lib,
@@ -16,6 +15,7 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.sirius.common.interpreter,
  org.eclipse.eef.core,
  org.eclipse.eef.common.ui,
+ org.eclipse.core.runtime,
  org.eclipse.swt,
  org.eclipse.ui.forms,
  org.eclipse.jface
@@ -24,7 +24,6 @@ Export-Package: org.mypsycho.emf.modit.eef.EefExtNative,
  org.mypsycho.emf.modit.eef.EefExtNative.util
 Bundle-Activator: org.mypsycho.emf.modit.eef.EEFNativeActivator
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.mypsycho.emf.modit.eef
 

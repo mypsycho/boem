@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Tests samples of ModIt
 Bundle-SymbolicName: org.mypsycho.emf.modit.sample-tests
 Bundle-Version: 0.3.1.qualifier
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
@@ -12,6 +13,5 @@ Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.emf.codegen.ecore,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.uml2.uml
-Bundle-Vendor: mypsycho
 Automatic-Module-Name: org.mypsycho.emf.modit.sample-tests
 

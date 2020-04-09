@@ -103,7 +103,7 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	final static class XClass<T> extends EmfParticipant {
 		
-		def bind(EmfStretcher it, EClass type) { 
+		def CBinding<T> bind(EmfStretcher it, EClass type) { 
 			new CBinding<T>(this, onClass(type))
 		}
 
@@ -129,12 +129,12 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	final static class XFeature<T> extends EmfParticipant {
 
-		def bind(EmfStretcher it, EClass type, EStructuralFeature feat) { 
+		def FBinding<T> bind(EmfStretcher it, EClass type, EStructuralFeature feat) { 
 			new FBinding<T>(this, onClass(type), feat)
 		}
 
-		def bind(EmfStretcher it, EStructuralFeature feat) { 
-			new FBinding<T>(this, onClass(feat.EContainingClass), feat)
+		def FBinding<T> bind(EmfStretcher it, EStructuralFeature feat) {
+			bind(feat.EContainingClass, feat)
 		}
 
 		def exec(EClass it, EStructuralFeature feat, FBinding<T> impl) {

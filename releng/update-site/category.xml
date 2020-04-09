@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-<!-- Directly edited as Eclipse Category Editor does not handle dynamic version -->
+<!-- CAUTION
+This file is text edited :
+Eclipse Category Editor does not handle dynamic versions.
+-->
    <feature id="org.mypsycho.emf.modit_feature" >
       <category name="emf.modit"/>
    </feature>

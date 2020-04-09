@@ -35,6 +35,7 @@ https://www.eclipse.org/legal/epl-2.0/
 		<module>plugins/modit</module>
 		<module>plugins/modit.sirius</module>
 		<module>plugins/modit.edit</module><!-- Compile only -->
+		<module>plugins/modit.eef</module><!-- Compile only -->
 	</modules>
 	
 	<profiles>

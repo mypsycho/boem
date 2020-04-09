@@ -783,7 +783,7 @@ ENDIF
 			.filter[ pureReference ]
 			.map[ r| eGet(r) ] // only defined
 			.map[
-				if (it instanceof Collection<?>) (it as Collection<? extends EObject>) 
+				if (it instanceof Collection) (it as Collection<? extends EObject>) 
 				else if (it instanceof EObject) #[ it ]
 				else Collections.emptyList
 			]

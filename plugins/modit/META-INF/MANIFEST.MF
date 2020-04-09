@@ -1,9 +1,11 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.mypsycho.emf.modit
 Bundle-ManifestVersion: 2
-Bundle-Name: Mod-It Library
 Bundle-SymbolicName: org.mypsycho.emf.modit;singleton:=true
 Bundle-Version: 0.3.1.qualifier
+Bundle-ActivationPolicy: lazy
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
@@ -15,6 +17,3 @@ Export-Package: org.mypsycho.modit,
  org.mypsycho.modit.i18n,
  org.mypsycho.modit.emf.i18n,
  org.mypsycho.modit.emf.stretch
-Bundle-Vendor: mypsycho
-Bundle-ActivationPolicy: lazy
-

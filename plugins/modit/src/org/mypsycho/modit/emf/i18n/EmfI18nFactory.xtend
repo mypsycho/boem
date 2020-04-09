@@ -13,6 +13,7 @@
 package org.mypsycho.modit.emf.i18n
 
 import java.util.ArrayList
+import java.util.Arrays
 import java.util.Collections
 import java.util.HashMap
 import java.util.Locale
@@ -103,7 +104,8 @@ class EmfI18nFactory {
 
 	static protected def toJavaname(EPackage it) {
 		val javaname = class.interfaces
-			.findFirst[ interfaces.contains(typeof(EPackage)) ]
+		 	// sometimes, xtend fails to infere ArrayExtension#contains
+			.findFirst[ Arrays.asList(interfaces).contains(EPackage) ]
 			.name
 		
 		val pkgName = 

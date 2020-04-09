@@ -2,10 +2,11 @@ target "Mod-it runtime"
 
 with requirements, source
 
-
-//location eclipse-oxygen "http://download.eclipse.org/releases/oxygen/" {
+// WRONG WAY: make an mirror in maven-settings !
 location eclipse_2019_09 "file:/C:/dev/etc/mirrors.p2/eclipse_2019_09/" {
-	
+	// --
+	// -- Local of runtime --
+	// --
 	org.eclipse.emf.feature.group
 	// +-> emf, emf.edit, emf.edit.ui
 	
@@ -14,23 +15,27 @@ location eclipse_2019_09 "file:/C:/dev/etc/mirrors.p2/eclipse_2019_09/" {
 	// +-> org.eclipse.xtend.lib 
 	// +-> org.eclipse.xtend.lib.macro 
 	
-	
-	// org.eclipse.platform.feature.group  // item provider
+	org.eclipse.platform.feature.group
+	// +-> jface, ui.forms
+	// generated item provider
 	
 	org.eclipse.sirius.runtime.feature.group
 	// +-> sirius.diagram
 	org.eclipse.sirius.runtime.aql.feature.group
 	org.eclipse.sirius.specifier.feature.group
 
-	
+	org.eclipse.eef.sdk.feature.feature.group
+	// +-> eef, eef.core, eef.ide.ui
+
+	// --
+	// -- Local of test --
+	// --
 	// required for xcore
 	org.eclipse.emf.ecore.feature.group 
 	org.eclipse.xtext.xbase.feature.group 
 	org.eclipse.emf.ecore.xcore.feature.group 	
 	org.eclipse.emf.ecore.xcore.lib  // Feature contains 1 plugin
 	
-	org.eclipse.platform.feature.group  // item provider
-	
-	org.eclipse.uml2.uml  //tests
+	org.eclipse.uml2.uml // Demo
 	org.junit
 }

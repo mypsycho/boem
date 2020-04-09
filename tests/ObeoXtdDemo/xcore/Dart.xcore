@@ -1,6 +1,6 @@
 @Ecore(nsURI="http://www.obeo.fr/dsl/2014/dart")
 @GenModel(
-	modelDirectory="org.mypsycho.emf.modit.ObeoXtdDemo/target/xcore-gen", // no '/' at start (tycho)
+	modelDirectory="org.mypsycho.emf.modit.ObeoXtdDemo/xcore-gen", // no '/' at start (tycho)
 	operationReflection="false"
 )
 package fr.obeo.dsl.dart.dart

@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Mod-It Edit
 Bundle-SymbolicName: org.mypsycho.emf.modit.edit
 Bundle-Version: 0.3.1.qualifier
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
@@ -11,6 +12,5 @@ Require-Bundle: org.eclipse.xtend.lib,
  org.eclipse.emf.edit.ui;bundle-version="2.13.0",
  org.mypsycho.emf.modit
 Export-Package: org.mypsycho.emf.modit.edit
-Bundle-Vendor: mypsycho
 Automatic-Module-Name: org.mypsycho.emf.modit.edit
 

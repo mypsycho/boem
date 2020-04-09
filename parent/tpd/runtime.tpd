@@ -2,8 +2,6 @@ target "Mod-it runtime"
 
 with requirements, source
 
-
-//location eclipse-oxygen "http://download.eclipse.org/releases/oxygen/" {
 location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	
 	org.eclipse.emf.feature.group
@@ -14,12 +12,16 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	// +-> org.eclipse.xtend.lib 
 	// +-> org.eclipse.xtend.lib.macro 
 	
-	
-	// org.eclipse.platform.feature.group  // item provider
+	org.eclipse.platform.feature.group
+	// +-> jface, ui.forms
+	// generated item provider
 	
 	org.eclipse.sirius.runtime.feature.group
 	// +-> sirius.diagram
 	org.eclipse.sirius.runtime.aql.feature.group
 	org.eclipse.sirius.specifier.feature.group
+
+	org.eclipse.eef.sdk.feature.feature.group
+	// +-> eef, eef.core, eef.ide.ui
 		
 }
