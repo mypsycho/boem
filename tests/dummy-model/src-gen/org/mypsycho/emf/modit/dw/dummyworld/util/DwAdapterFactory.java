@@ -68,6 +68,22 @@ public class DwAdapterFactory extends AdapterFactoryImpl {
 	protected DwSwitch<Adapter> modelSwitch =
 		new DwSwitch<Adapter>() {
 			@Override
+			public Adapter caseWObject(WObject object) {
+				return createWObjectAdapter();
+			}
+			@Override
+			public Adapter caseDetailed(Detailed object) {
+				return createDetailedAdapter();
+			}
+			@Override
+			public Adapter caseNamed(Named object) {
+				return createNamedAdapter();
+			}
+			@Override
+			public Adapter caseTitled(Titled object) {
+				return createTitledAdapter();
+			}
+			@Override
 			public Adapter caseContact(Contact object) {
 				return createContactAdapter();
 			}
@@ -80,32 +96,12 @@ public class DwAdapterFactory extends AdapterFactoryImpl {
 				return createCompanyAdapter();
 			}
 			@Override
-			public Adapter caseDirectory(Directory object) {
-				return createDirectoryAdapter();
-			}
-			@Override
-			public Adapter caseNamed(Named object) {
-				return createNamedAdapter();
-			}
-			@Override
-			public Adapter caseActivity(Activity object) {
-				return createActivityAdapter();
-			}
-			@Override
-			public Adapter caseTitled(Titled object) {
-				return createTitledAdapter();
-			}
-			@Override
-			public Adapter caseLocation(Location object) {
-				return createLocationAdapter();
+			public Adapter caseJob(Job object) {
+				return createJobAdapter();
 			}
 			@Override
 			public Adapter caseOffer(Offer object) {
 				return createOfferAdapter();
-			}
-			@Override
-			public Adapter caseJob(Job object) {
-				return createJobAdapter();
 			}
 			@Override
 			public Adapter caseProduct(Product object) {
@@ -116,20 +112,24 @@ public class DwAdapterFactory extends AdapterFactoryImpl {
 				return createServiceAdapter();
 			}
 			@Override
-			public Adapter caseGood(Good object) {
-				return createGoodAdapter();
-			}
-			@Override
-			public Adapter caseDetailed(Detailed object) {
-				return createDetailedAdapter();
-			}
-			@Override
 			public Adapter casePurchase(Purchase object) {
 				return createPurchaseAdapter();
 			}
 			@Override
-			public Adapter caseWObject(WObject object) {
-				return createWObjectAdapter();
+			public Adapter caseGood(Good object) {
+				return createGoodAdapter();
+			}
+			@Override
+			public Adapter caseActivity(Activity object) {
+				return createActivityAdapter();
+			}
+			@Override
+			public Adapter caseDirectory(Directory object) {
+				return createDirectoryAdapter();
+			}
+			@Override
+			public Adapter caseLocation(Location object) {
+				return createLocationAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {

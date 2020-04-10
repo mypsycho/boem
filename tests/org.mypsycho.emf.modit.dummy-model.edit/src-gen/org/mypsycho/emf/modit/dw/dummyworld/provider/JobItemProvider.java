@@ -47,6 +47,7 @@ public class JobItemProvider extends TitledItemProvider {
 
 			addEmployeePropertyDescriptor(object);
 			addSincePropertyDescriptor(object);
+			addTeamPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -91,6 +92,28 @@ public class JobItemProvider extends TitledItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Team feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTeamPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Job_team_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Job_team_feature", "_UI_Job_type"),
+				 DwPackage.Literals.JOB__TEAM,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

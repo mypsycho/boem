@@ -8,6 +8,19 @@
   <foreignModel>DummyWorld.ecore</foreignModel>
   <genPackages prefix="Dw" basePackage="org.mypsycho.emf.modit.dw" disposableProviderFactory="true"
       extensibleProviderFactory="true" childCreationExtenders="true" ecorePackage="DummyWorld.ecore#/">
+    <genClasses ecoreClass="DummyWorld.ecore#//WObject">
+      <genOperations ecoreOperation="DummyWorld.ecore#//WObject/getParent"/>
+    </genClasses>
+    <genClasses ecoreClass="DummyWorld.ecore#//Detailed">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Detailed/description"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Detailed/hint"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="DummyWorld.ecore#//Named">
+      <genOperations ecoreOperation="DummyWorld.ecore#//Named/getName"/>
+    </genClasses>
+    <genClasses ecoreClass="DummyWorld.ecore#//Titled">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Titled/name"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="DummyWorld.ecore#//Contact">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/locations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/owns"/>
@@ -20,48 +33,37 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Company/employees"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Company/offers"/>
     </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Directory">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Directory/contacts"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="DummyWorld.ecore#//Named">
-      <genOperations ecoreOperation="DummyWorld.ecore#//Named/getName"/>
-    </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Activity">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Activity/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Activity/involveds"/>
-    </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Titled">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Titled/name"/>
-    </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Location">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Location/value"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Location/parent"/>
+    <genClasses ecoreClass="DummyWorld.ecore#//Job">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Job/employee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Job/since"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Job/parent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Job/team"/>
     </genClasses>
     <genClasses image="false" ecoreClass="DummyWorld.ecore#//Offer">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Offer/price"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Offer/parent"/>
     </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Job">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Job/employee"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Job/since"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Job/parent"/>
-    </genClasses>
     <genClasses ecoreClass="DummyWorld.ecore#//Product"/>
     <genClasses ecoreClass="DummyWorld.ecore#//Service"/>
+    <genClasses image="false" ecoreClass="DummyWorld.ecore#//Purchase">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Purchase/parent"/>
+      <genOperations ecoreOperation="DummyWorld.ecore#//Purchase/getType"/>
+    </genClasses>
     <genClasses ecoreClass="DummyWorld.ecore#//Good">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Good/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Good/bought"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Good/cost"/>
     </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//Detailed">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Detailed/hint"/>
+    <genClasses ecoreClass="DummyWorld.ecore#//Activity">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Activity/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Activity/involveds"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="DummyWorld.ecore#//Purchase">
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Purchase/parent"/>
-      <genOperations ecoreOperation="DummyWorld.ecore#//Purchase/getType"/>
+    <genClasses ecoreClass="DummyWorld.ecore#//Directory">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Directory/contacts"/>
     </genClasses>
-    <genClasses ecoreClass="DummyWorld.ecore#//WObject">
-      <genOperations ecoreOperation="DummyWorld.ecore#//WObject/getParent"/>
+    <genClasses ecoreClass="DummyWorld.ecore#//Location">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Location/value"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference DummyWorld.ecore#//Location/parent"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

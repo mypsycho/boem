@@ -32,6 +32,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getHint <em>Hint</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getLocations <em>Locations</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getOwns <em>Owns</em>}</li>
@@ -40,6 +41,26 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  * @generated
  */
 public abstract class ContactImpl extends WObjectImpl implements Contact {
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getHint() <em>Hint</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -87,6 +108,29 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	@Override
 	protected EClass eStaticClass() {
 		return DwPackage.Literals.CONTACT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.CONTACT__DESCRIPTION, oldDescription, description));
 	}
 
 	/**
@@ -209,6 +253,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case DwPackage.CONTACT__DESCRIPTION:
+				return getDescription();
 			case DwPackage.CONTACT__HINT:
 				if (resolve) return getHint();
 				return basicGetHint();
@@ -229,6 +275,9 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case DwPackage.CONTACT__DESCRIPTION:
+				setDescription((String)newValue);
+				return;
 			case DwPackage.CONTACT__HINT:
 				setHint((Map.Entry<String, String>)newValue);
 				return;
@@ -252,6 +301,9 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case DwPackage.CONTACT__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
 			case DwPackage.CONTACT__HINT:
 				setHint((Map.Entry<String, String>)null);
 				return;
@@ -273,6 +325,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case DwPackage.CONTACT__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case DwPackage.CONTACT__HINT:
 				return hint != null;
 			case DwPackage.CONTACT__LOCATIONS:
@@ -292,6 +346,7 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == Detailed.class) {
 			switch (derivedFeatureID) {
+				case DwPackage.CONTACT__DESCRIPTION: return DwPackage.DETAILED__DESCRIPTION;
 				case DwPackage.CONTACT__HINT: return DwPackage.DETAILED__HINT;
 				default: return -1;
 			}
@@ -308,6 +363,7 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == Detailed.class) {
 			switch (baseFeatureID) {
+				case DwPackage.DETAILED__DESCRIPTION: return DwPackage.CONTACT__DESCRIPTION;
 				case DwPackage.DETAILED__HINT: return DwPackage.CONTACT__HINT;
 				default: return -1;
 			}
@@ -327,6 +383,22 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (description: ");
+		result.append(description);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ContactImpl

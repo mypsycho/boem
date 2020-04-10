@@ -13,6 +13,7 @@ import java.util.Map;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getDescription <em>Description</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint <em>Hint</em>}</li>
  * </ul>
  *
@@ -21,6 +22,28 @@ import java.util.Map;
  * @generated
  */
 public interface Detailed extends WObject {
+	/**
+	 * Returns the value of the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Description</em>' attribute.
+	 * @see #setDescription(String)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getDetailed_Description()
+	 * @model
+	 * @generated
+	 */
+	String getDescription();
+
+	/**
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getDescription <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Description</em>' attribute.
+	 * @see #getDescription()
+	 * @generated
+	 */
+	void setDescription(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Hint</b></em>' reference.
 	 * <!-- begin-user-doc -->

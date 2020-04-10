@@ -495,18 +495,18 @@ public class DwItemProviderAdapterFactory extends DwAdapterFactory implements Co
 	 */
 	@Override
 	public void dispose() {
+		if (wObjectItemProvider != null) wObjectItemProvider.dispose();
+		if (detailedItemProvider != null) detailedItemProvider.dispose();
+		if (titledItemProvider != null) titledItemProvider.dispose();
 		if (personItemProvider != null) personItemProvider.dispose();
 		if (companyItemProvider != null) companyItemProvider.dispose();
-		if (directoryItemProvider != null) directoryItemProvider.dispose();
-		if (activityItemProvider != null) activityItemProvider.dispose();
-		if (titledItemProvider != null) titledItemProvider.dispose();
-		if (locationItemProvider != null) locationItemProvider.dispose();
 		if (jobItemProvider != null) jobItemProvider.dispose();
 		if (productItemProvider != null) productItemProvider.dispose();
 		if (serviceItemProvider != null) serviceItemProvider.dispose();
 		if (goodItemProvider != null) goodItemProvider.dispose();
-		if (detailedItemProvider != null) detailedItemProvider.dispose();
-		if (wObjectItemProvider != null) wObjectItemProvider.dispose();
+		if (activityItemProvider != null) activityItemProvider.dispose();
+		if (directoryItemProvider != null) directoryItemProvider.dispose();
+		if (locationItemProvider != null) locationItemProvider.dispose();
 	}
 
 }

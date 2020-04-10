@@ -2,16 +2,19 @@
  */
 package org.mypsycho.emf.modit.dw.dummyworld.impl;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.mypsycho.emf.modit.dw.dummyworld.Company;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
@@ -29,6 +32,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Person;
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getEmployee <em>Employee</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getSince <em>Since</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getTeam <em>Team</em>}</li>
  * </ul>
  *
  * @generated
@@ -63,6 +67,16 @@ public class JobImpl extends TitledImpl implements Job {
 	 * @ordered
 	 */
 	protected Date since = SINCE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getTeam() <em>Team</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTeam()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Job> team;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -195,6 +209,19 @@ public class JobImpl extends TitledImpl implements Job {
 	 * @generated
 	 */
 	@Override
+	public EList<Job> getTeam() {
+		if (team == null) {
+			team = new EObjectResolvingEList<Job>(Job.class, this, DwPackage.JOB__TEAM);
+		}
+		return team;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DwPackage.JOB__PARENT:
@@ -248,6 +275,8 @@ public class JobImpl extends TitledImpl implements Job {
 				return getSince();
 			case DwPackage.JOB__PARENT:
 				return getParent();
+			case DwPackage.JOB__TEAM:
+				return getTeam();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -257,6 +286,7 @@ public class JobImpl extends TitledImpl implements Job {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -268,6 +298,10 @@ public class JobImpl extends TitledImpl implements Job {
 				return;
 			case DwPackage.JOB__PARENT:
 				setParent((Company)newValue);
+				return;
+			case DwPackage.JOB__TEAM:
+				getTeam().clear();
+				getTeam().addAll((Collection<? extends Job>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -290,6 +324,9 @@ public class JobImpl extends TitledImpl implements Job {
 			case DwPackage.JOB__PARENT:
 				setParent((Company)null);
 				return;
+			case DwPackage.JOB__TEAM:
+				getTeam().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -308,6 +345,8 @@ public class JobImpl extends TitledImpl implements Job {
 				return SINCE_EDEFAULT == null ? since != null : !SINCE_EDEFAULT.equals(since);
 			case DwPackage.JOB__PARENT:
 				return getParent() != null;
+			case DwPackage.JOB__TEAM:
+				return team != null && !team.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

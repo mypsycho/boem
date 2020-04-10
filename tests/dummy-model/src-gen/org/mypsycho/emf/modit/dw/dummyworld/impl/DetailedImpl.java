@@ -22,12 +22,31 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl#getHint <em>Hint</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class DetailedImpl extends WObjectImpl implements Detailed {
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getHint() <em>Hint</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -55,6 +74,29 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	@Override
 	protected EClass eStaticClass() {
 		return DwPackage.Literals.DETAILED;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.DETAILED__DESCRIPTION, oldDescription, description));
 	}
 
 	/**
@@ -106,6 +148,8 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case DwPackage.DETAILED__DESCRIPTION:
+				return getDescription();
 			case DwPackage.DETAILED__HINT:
 				if (resolve) return getHint();
 				return basicGetHint();
@@ -122,6 +166,9 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case DwPackage.DETAILED__DESCRIPTION:
+				setDescription((String)newValue);
+				return;
 			case DwPackage.DETAILED__HINT:
 				setHint((Map.Entry<String, String>)newValue);
 				return;
@@ -137,6 +184,9 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case DwPackage.DETAILED__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
 			case DwPackage.DETAILED__HINT:
 				setHint((Map.Entry<String, String>)null);
 				return;
@@ -152,10 +202,28 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case DwPackage.DETAILED__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case DwPackage.DETAILED__HINT:
 				return hint != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (description: ");
+		result.append(description);
+		result.append(')');
+		return result.toString();
 	}
 
 } //DetailedImpl

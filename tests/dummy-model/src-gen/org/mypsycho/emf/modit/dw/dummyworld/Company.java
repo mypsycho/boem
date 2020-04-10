@@ -53,7 +53,7 @@ public interface Company extends Contact, Titled {
 	 * @return the value of the '<em>Offers</em>' containment reference list.
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getCompany_Offers()
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.Offer#getParent
-	 * @model opposite="parent" containment="true"
+	 * @model opposite="parent" containment="true" keys="name"
 	 * @generated
 	 */
 	EList<Offer> getOffers();

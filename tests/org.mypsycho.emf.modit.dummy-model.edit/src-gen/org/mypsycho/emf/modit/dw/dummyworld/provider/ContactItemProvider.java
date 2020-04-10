@@ -10,6 +10,9 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.mypsycho.emf.modit.dw.dummyworld.Contact;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 
 /**
@@ -41,11 +44,34 @@ public class ContactItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addDescriptionPropertyDescriptor(object);
 			addHintPropertyDescriptor(object);
 			addLocationsPropertyDescriptor(object);
 			addOwnsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Description feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDescriptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Detailed_description_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"),
+				 DwPackage.Literals.DETAILED__DESCRIPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -122,7 +148,10 @@ public class ContactItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Contact_type");
+		String label = ((Contact)object).getDescription();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Contact_type") :
+			getString("_UI_Contact_type") + " " + label;
 	}
 
 	/**
@@ -135,6 +164,12 @@ public class ContactItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(Contact.class)) {
+			case DwPackage.CONTACT__DESCRIPTION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

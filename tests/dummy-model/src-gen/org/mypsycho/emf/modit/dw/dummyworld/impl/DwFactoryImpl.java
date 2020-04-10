@@ -56,18 +56,18 @@ public class DwFactoryImpl extends EFactoryImpl implements DwFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case DwPackage.WOBJECT: return createWObject();
+			case DwPackage.DETAILED: return createDetailed();
+			case DwPackage.TITLED: return createTitled();
 			case DwPackage.PERSON: return createPerson();
 			case DwPackage.COMPANY: return createCompany();
-			case DwPackage.DIRECTORY: return createDirectory();
-			case DwPackage.ACTIVITY: return createActivity();
-			case DwPackage.TITLED: return createTitled();
-			case DwPackage.LOCATION: return createLocation();
 			case DwPackage.JOB: return createJob();
 			case DwPackage.PRODUCT: return createProduct();
 			case DwPackage.SERVICE: return createService();
 			case DwPackage.GOOD: return createGood();
-			case DwPackage.DETAILED: return createDetailed();
-			case DwPackage.WOBJECT: return createWObject();
+			case DwPackage.ACTIVITY: return createActivity();
+			case DwPackage.DIRECTORY: return createDirectory();
+			case DwPackage.LOCATION: return createLocation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}

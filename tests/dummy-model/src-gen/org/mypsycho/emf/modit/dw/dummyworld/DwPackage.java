@@ -68,7 +68,7 @@ public interface DwPackage extends EPackage {
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getWObject()
 	 * @generated
 	 */
-	int WOBJECT = 15;
+	int WOBJECT = 0;
 
 	/**
 	 * The number of structural features of the '<em>WObject</em>' class.
@@ -105,7 +105,172 @@ public interface DwPackage extends EPackage {
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getNamed()
 	 * @generated
 	 */
-	int NAMED = 4;
+	int NAMED = 2;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl <em>Contact</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getContact()
+	 * @generated
+	 */
+	int CONTACT = 4;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PersonImpl <em>Person</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.PersonImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getPerson()
+	 * @generated
+	 */
+	int PERSON = 5;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl <em>Titled</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getTitled()
+	 * @generated
+	 */
+	int TITLED = 3;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.CompanyImpl <em>Company</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.CompanyImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getCompany()
+	 * @generated
+	 */
+	int COMPANY = 6;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DirectoryImpl <em>Directory</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DirectoryImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getDirectory()
+	 * @generated
+	 */
+	int DIRECTORY = 14;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl <em>Activity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getActivity()
+	 * @generated
+	 */
+	int ACTIVITY = 13;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl <em>Location</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getLocation()
+	 * @generated
+	 */
+	int LOCATION = 15;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.OfferImpl <em>Offer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.OfferImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getOffer()
+	 * @generated
+	 */
+	int OFFER = 8;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl <em>Job</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getJob()
+	 * @generated
+	 */
+	int JOB = 7;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl <em>Product</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getProduct()
+	 * @generated
+	 */
+	int PRODUCT = 9;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ServiceImpl <em>Service</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ServiceImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getService()
+	 * @generated
+	 */
+	int SERVICE = 10;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl <em>Detailed</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getDetailed()
+	 * @generated
+	 */
+	int DETAILED = 1;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAILED__DESCRIPTION = WOBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAILED__HINT = WOBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Detailed</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAILED_FEATURE_COUNT = WOBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAILED___GET_PARENT = WOBJECT___GET_PARENT;
+
+	/**
+	 * The number of operations of the '<em>Detailed</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAILED_OPERATION_COUNT = WOBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Named</em>' class.
@@ -144,14 +309,58 @@ public interface DwPackage extends EPackage {
 	int NAMED_OPERATION_COUNT = WOBJECT_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl <em>Contact</em>}' class.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getContact()
 	 * @generated
+	 * @ordered
 	 */
-	int CONTACT = 0;
+	int TITLED__NAME = NAMED_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Titled</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TITLED_FEATURE_COUNT = NAMED_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TITLED___GET_PARENT = NAMED___GET_PARENT;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TITLED___GET_NAME = NAMED___GET_NAME;
+
+	/**
+	 * The number of operations of the '<em>Titled</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TITLED_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTACT__DESCRIPTION = NAMED_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Hint</b></em>' reference.
@@ -160,7 +369,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT__HINT = NAMED_FEATURE_COUNT + 0;
+	int CONTACT__HINT = NAMED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Locations</b></em>' containment reference list.
@@ -169,7 +378,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT__LOCATIONS = NAMED_FEATURE_COUNT + 1;
+	int CONTACT__LOCATIONS = NAMED_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Owns</b></em>' containment reference list.
@@ -178,7 +387,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT__OWNS = NAMED_FEATURE_COUNT + 2;
+	int CONTACT__OWNS = NAMED_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Contact</em>' class.
@@ -187,7 +396,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_FEATURE_COUNT = NAMED_FEATURE_COUNT + 3;
+	int CONTACT_FEATURE_COUNT = NAMED_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -217,14 +426,13 @@ public interface DwPackage extends EPackage {
 	int CONTACT_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PersonImpl <em>Person</em>}' class.
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.PersonImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getPerson()
 	 * @generated
+	 * @ordered
 	 */
-	int PERSON = 1;
+	int PERSON__DESCRIPTION = CONTACT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Hint</b></em>' reference.
@@ -308,24 +516,13 @@ public interface DwPackage extends EPackage {
 	int PERSON_OPERATION_COUNT = CONTACT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl <em>Titled</em>}' class.
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getTitled()
 	 * @generated
+	 * @ordered
 	 */
-	int TITLED = 6;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.CompanyImpl <em>Company</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.CompanyImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getCompany()
-	 * @generated
-	 */
-	int COMPANY = 2;
+	int COMPANY__DESCRIPTION = CONTACT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Hint</b></em>' reference.
@@ -418,105 +615,31 @@ public interface DwPackage extends EPackage {
 	int COMPANY_OPERATION_COUNT = CONTACT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DirectoryImpl <em>Directory</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DirectoryImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getDirectory()
-	 * @generated
-	 */
-	int DIRECTORY = 3;
-
-	/**
-	 * The feature id for the '<em><b>Contacts</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTORY__CONTACTS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Directory</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTORY_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Directory</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTORY_OPERATION_COUNT = 0;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TITLED__NAME = NAMED_FEATURE_COUNT + 0;
+	int JOB__NAME = TITLED__NAME;
 
 	/**
-	 * The number of structural features of the '<em>Titled</em>' class.
+	 * The feature id for the '<em><b>Employee</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TITLED_FEATURE_COUNT = NAMED_FEATURE_COUNT + 1;
+	int JOB__EMPLOYEE = TITLED_FEATURE_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * The feature id for the '<em><b>Since</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TITLED___GET_PARENT = NAMED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TITLED___GET_NAME = NAMED___GET_NAME;
-
-	/**
-	 * The number of operations of the '<em>Titled</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TITLED_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl <em>Activity</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getActivity()
-	 * @generated
-	 */
-	int ACTIVITY = 5;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__NAME = TITLED__NAME;
+	int JOB__SINCE = TITLED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -525,34 +648,25 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__PARENT = TITLED_FEATURE_COUNT + 0;
+	int JOB__PARENT = TITLED_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * The feature id for the '<em><b>Team</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__TYPE = TITLED_FEATURE_COUNT + 1;
+	int JOB__TEAM = TITLED_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Involveds</b></em>' reference.
+	 * The number of structural features of the '<em>Job</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__INVOLVEDS = TITLED_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Activity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
+	int JOB_FEATURE_COUNT = TITLED_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -561,7 +675,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY___GET_PARENT = TITLED___GET_PARENT;
+	int JOB___GET_PARENT = TITLED___GET_PARENT;
 
 	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
@@ -570,108 +684,16 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY___GET_NAME = TITLED___GET_NAME;
+	int JOB___GET_NAME = TITLED___GET_NAME;
 
 	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
+	 * The number of operations of the '<em>Job</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY___GET_TYPE = TITLED_OPERATION_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>Activity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_OPERATION_COUNT = TITLED_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl <em>Location</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getLocation()
-	 * @generated
-	 */
-	int LOCATION = 7;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION__NAME = TITLED__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION__VALUE = TITLED_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Parent</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION__PARENT = TITLED_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Location</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION_FEATURE_COUNT = TITLED_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Parent</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION___GET_PARENT = TITLED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION___GET_NAME = TITLED___GET_NAME;
-
-	/**
-	 * The number of operations of the '<em>Location</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.OfferImpl <em>Offer</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.OfferImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getOffer()
-	 * @generated
-	 */
-	int OFFER = 8;
+	int JOB_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -737,98 +759,6 @@ public interface DwPackage extends EPackage {
 	int OFFER_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl <em>Job</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getJob()
-	 * @generated
-	 */
-	int JOB = 9;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB__NAME = TITLED__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Employee</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB__EMPLOYEE = TITLED_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Since</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB__SINCE = TITLED_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Parent</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB__PARENT = TITLED_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Job</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Parent</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB___GET_PARENT = TITLED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB___GET_NAME = TITLED___GET_NAME;
-
-	/**
-	 * The number of operations of the '<em>Job</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl <em>Product</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getProduct()
-	 * @generated
-	 */
-	int PRODUCT = 10;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -890,16 +820,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRODUCT_OPERATION_COUNT = OFFER_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ServiceImpl <em>Service</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.ServiceImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getService()
-	 * @generated
-	 */
-	int SERVICE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -965,52 +885,6 @@ public interface DwPackage extends EPackage {
 	int SERVICE_OPERATION_COUNT = OFFER_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl <em>Detailed</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getDetailed()
-	 * @generated
-	 */
-	int DETAILED = 13;
-
-	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DETAILED__HINT = WOBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Detailed</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DETAILED_FEATURE_COUNT = WOBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Parent</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DETAILED___GET_PARENT = WOBJECT___GET_PARENT;
-
-	/**
-	 * The number of operations of the '<em>Detailed</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DETAILED_OPERATION_COUNT = WOBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl <em>Good</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1019,6 +893,61 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	int GOOD = 12;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PurchaseImpl <em>Purchase</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.PurchaseImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getPurchase()
+	 * @generated
+	 */
+	int PURCHASE = 11;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE__PARENT = 0;
+
+	/**
+	 * The number of structural features of the '<em>Purchase</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_FEATURE_COUNT = 1;
+
+	/**
+	 * The operation id for the '<em>Get Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE___GET_TYPE = 0;
+
+	/**
+	 * The number of operations of the '<em>Purchase</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_OPERATION_COUNT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GOOD__DESCRIPTION = DETAILED__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Hint</b></em>' reference.
@@ -1102,14 +1031,13 @@ public interface DwPackage extends EPackage {
 	int GOOD_OPERATION_COUNT = DETAILED_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PurchaseImpl <em>Purchase</em>}' class.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.PurchaseImpl
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getPurchase()
 	 * @generated
+	 * @ordered
 	 */
-	int PURCHASE = 14;
+	int ACTIVITY__NAME = TITLED__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -1118,16 +1046,52 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE__PARENT = 0;
+	int ACTIVITY__PARENT = TITLED_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Purchase</em>' class.
+	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_FEATURE_COUNT = 1;
+	int ACTIVITY__TYPE = TITLED_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Involveds</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INVOLVEDS = TITLED_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Activity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___GET_PARENT = TITLED___GET_PARENT;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___GET_NAME = TITLED___GET_NAME;
 
 	/**
 	 * The operation id for the '<em>Get Type</em>' operation.
@@ -1136,16 +1100,106 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE___GET_TYPE = 0;
+	int ACTIVITY___GET_TYPE = TITLED_OPERATION_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Purchase</em>' class.
+	 * The number of operations of the '<em>Activity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_OPERATION_COUNT = 1;
+	int ACTIVITY_OPERATION_COUNT = TITLED_OPERATION_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Contacts</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__CONTACTS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__NAME = TITLED__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__VALUE = TITLED_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__PARENT = TITLED_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Location</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION_FEATURE_COUNT = TITLED_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___GET_PARENT = TITLED___GET_PARENT;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION___GET_NAME = TITLED___GET_NAME;
+
+	/**
+	 * The number of operations of the '<em>Location</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
 
 
 	/**
@@ -1446,6 +1500,17 @@ public interface DwPackage extends EPackage {
 	EReference getJob_Parent();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getTeam <em>Team</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Team</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Job#getTeam()
+	 * @see #getJob()
+	 * @generated
+	 */
+	EReference getJob_Team();
+
+	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Product <em>Product</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1517,6 +1582,17 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDetailed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Detailed#getDescription()
+	 * @see #getDetailed()
+	 * @generated
+	 */
+	EAttribute getDetailed_Description();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint <em>Hint</em>}'.
@@ -1848,6 +1924,14 @@ public interface DwPackage extends EPackage {
 		EReference JOB__PARENT = eINSTANCE.getJob_Parent();
 
 		/**
+		 * The meta object literal for the '<em><b>Team</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOB__TEAM = eINSTANCE.getJob_Team();
+
+		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl <em>Product</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1910,6 +1994,14 @@ public interface DwPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DETAILED = eINSTANCE.getDetailed();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DETAILED__DESCRIPTION = eINSTANCE.getDetailed_Description();
 
 		/**
 		 * The meta object literal for the '<em><b>Hint</b></em>' reference feature.

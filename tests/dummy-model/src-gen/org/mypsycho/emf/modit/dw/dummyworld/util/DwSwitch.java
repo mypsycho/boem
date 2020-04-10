@@ -66,6 +66,34 @@ public class DwSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case DwPackage.WOBJECT: {
+				WObject wObject = (WObject)theEObject;
+				T result = caseWObject(wObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DwPackage.DETAILED: {
+				Detailed detailed = (Detailed)theEObject;
+				T result = caseDetailed(detailed);
+				if (result == null) result = caseWObject(detailed);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DwPackage.NAMED: {
+				Named named = (Named)theEObject;
+				T result = caseNamed(named);
+				if (result == null) result = caseWObject(named);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DwPackage.TITLED: {
+				Titled titled = (Titled)theEObject;
+				T result = caseTitled(titled);
+				if (result == null) result = caseNamed(titled);
+				if (result == null) result = caseWObject(titled);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DwPackage.CONTACT: {
 				Contact contact = (Contact)theEObject;
 				T result = caseContact(contact);
@@ -96,43 +124,12 @@ public class DwSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DwPackage.DIRECTORY: {
-				Directory directory = (Directory)theEObject;
-				T result = caseDirectory(directory);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DwPackage.NAMED: {
-				Named named = (Named)theEObject;
-				T result = caseNamed(named);
-				if (result == null) result = caseWObject(named);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DwPackage.ACTIVITY: {
-				Activity activity = (Activity)theEObject;
-				T result = caseActivity(activity);
-				if (result == null) result = caseTitled(activity);
-				if (result == null) result = casePurchase(activity);
-				if (result == null) result = caseNamed(activity);
-				if (result == null) result = caseWObject(activity);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DwPackage.TITLED: {
-				Titled titled = (Titled)theEObject;
-				T result = caseTitled(titled);
-				if (result == null) result = caseNamed(titled);
-				if (result == null) result = caseWObject(titled);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DwPackage.LOCATION: {
-				Location location = (Location)theEObject;
-				T result = caseLocation(location);
-				if (result == null) result = caseTitled(location);
-				if (result == null) result = caseNamed(location);
-				if (result == null) result = caseWObject(location);
+			case DwPackage.JOB: {
+				Job job = (Job)theEObject;
+				T result = caseJob(job);
+				if (result == null) result = caseTitled(job);
+				if (result == null) result = caseNamed(job);
+				if (result == null) result = caseWObject(job);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -142,15 +139,6 @@ public class DwSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTitled(offer);
 				if (result == null) result = caseNamed(offer);
 				if (result == null) result = caseWObject(offer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DwPackage.JOB: {
-				Job job = (Job)theEObject;
-				T result = caseJob(job);
-				if (result == null) result = caseTitled(job);
-				if (result == null) result = caseNamed(job);
-				if (result == null) result = caseWObject(job);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -174,6 +162,12 @@ public class DwSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DwPackage.PURCHASE: {
+				Purchase purchase = (Purchase)theEObject;
+				T result = casePurchase(purchase);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DwPackage.GOOD: {
 				Good good = (Good)theEObject;
 				T result = caseGood(good);
@@ -183,22 +177,28 @@ public class DwSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DwPackage.DETAILED: {
-				Detailed detailed = (Detailed)theEObject;
-				T result = caseDetailed(detailed);
-				if (result == null) result = caseWObject(detailed);
+			case DwPackage.ACTIVITY: {
+				Activity activity = (Activity)theEObject;
+				T result = caseActivity(activity);
+				if (result == null) result = caseTitled(activity);
+				if (result == null) result = casePurchase(activity);
+				if (result == null) result = caseNamed(activity);
+				if (result == null) result = caseWObject(activity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DwPackage.PURCHASE: {
-				Purchase purchase = (Purchase)theEObject;
-				T result = casePurchase(purchase);
+			case DwPackage.DIRECTORY: {
+				Directory directory = (Directory)theEObject;
+				T result = caseDirectory(directory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DwPackage.WOBJECT: {
-				WObject wObject = (WObject)theEObject;
-				T result = caseWObject(wObject);
+			case DwPackage.LOCATION: {
+				Location location = (Location)theEObject;
+				T result = caseLocation(location);
+				if (result == null) result = caseTitled(location);
+				if (result == null) result = caseNamed(location);
+				if (result == null) result = caseWObject(location);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

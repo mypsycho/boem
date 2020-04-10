@@ -4,7 +4,6 @@ package org.mypsycho.emf.modit.dw.dummyworld.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -138,8 +137,7 @@ public class GoodItemProvider extends DetailedItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((Good)object).getBought();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((Good)object).getDescription();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Good_type") :
 			getString("_UI_Good_type") + " " + label;

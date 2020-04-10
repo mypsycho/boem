@@ -499,6 +499,16 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getJob_Team() {
+		return (EReference)jobEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getProduct() {
 		return productEClass;
 	}
@@ -569,8 +579,18 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDetailed_Description() {
+		return (EAttribute)detailedEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getDetailed_Hint() {
-		return (EReference)detailedEClass.getEStructuralFeatures().get(0);
+		return (EReference)detailedEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -652,6 +672,19 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		wObjectEClass = createEClass(WOBJECT);
+		createEOperation(wObjectEClass, WOBJECT___GET_PARENT);
+
+		detailedEClass = createEClass(DETAILED);
+		createEAttribute(detailedEClass, DETAILED__DESCRIPTION);
+		createEReference(detailedEClass, DETAILED__HINT);
+
+		namedEClass = createEClass(NAMED);
+		createEOperation(namedEClass, NAMED___GET_NAME);
+
+		titledEClass = createEClass(TITLED);
+		createEAttribute(titledEClass, TITLED__NAME);
+
 		contactEClass = createEClass(CONTACT);
 		createEReference(contactEClass, CONTACT__LOCATIONS);
 		createEReference(contactEClass, CONTACT__OWNS);
@@ -664,50 +697,39 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		createEReference(companyEClass, COMPANY__EMPLOYEES);
 		createEReference(companyEClass, COMPANY__OFFERS);
 
-		directoryEClass = createEClass(DIRECTORY);
-		createEReference(directoryEClass, DIRECTORY__CONTACTS);
-
-		namedEClass = createEClass(NAMED);
-		createEOperation(namedEClass, NAMED___GET_NAME);
-
-		activityEClass = createEClass(ACTIVITY);
-		createEReference(activityEClass, ACTIVITY__TYPE);
-		createEReference(activityEClass, ACTIVITY__INVOLVEDS);
-
-		titledEClass = createEClass(TITLED);
-		createEAttribute(titledEClass, TITLED__NAME);
-
-		locationEClass = createEClass(LOCATION);
-		createEAttribute(locationEClass, LOCATION__VALUE);
-		createEReference(locationEClass, LOCATION__PARENT);
+		jobEClass = createEClass(JOB);
+		createEReference(jobEClass, JOB__EMPLOYEE);
+		createEAttribute(jobEClass, JOB__SINCE);
+		createEReference(jobEClass, JOB__PARENT);
+		createEReference(jobEClass, JOB__TEAM);
 
 		offerEClass = createEClass(OFFER);
 		createEAttribute(offerEClass, OFFER__PRICE);
 		createEReference(offerEClass, OFFER__PARENT);
 
-		jobEClass = createEClass(JOB);
-		createEReference(jobEClass, JOB__EMPLOYEE);
-		createEAttribute(jobEClass, JOB__SINCE);
-		createEReference(jobEClass, JOB__PARENT);
-
 		productEClass = createEClass(PRODUCT);
 
 		serviceEClass = createEClass(SERVICE);
+
+		purchaseEClass = createEClass(PURCHASE);
+		createEReference(purchaseEClass, PURCHASE__PARENT);
+		createEOperation(purchaseEClass, PURCHASE___GET_TYPE);
 
 		goodEClass = createEClass(GOOD);
 		createEReference(goodEClass, GOOD__TYPE);
 		createEAttribute(goodEClass, GOOD__BOUGHT);
 		createEAttribute(goodEClass, GOOD__COST);
 
-		detailedEClass = createEClass(DETAILED);
-		createEReference(detailedEClass, DETAILED__HINT);
+		activityEClass = createEClass(ACTIVITY);
+		createEReference(activityEClass, ACTIVITY__TYPE);
+		createEReference(activityEClass, ACTIVITY__INVOLVEDS);
 
-		purchaseEClass = createEClass(PURCHASE);
-		createEReference(purchaseEClass, PURCHASE__PARENT);
-		createEOperation(purchaseEClass, PURCHASE___GET_TYPE);
+		directoryEClass = createEClass(DIRECTORY);
+		createEReference(directoryEClass, DIRECTORY__CONTACTS);
 
-		wObjectEClass = createEClass(WOBJECT);
-		createEOperation(wObjectEClass, WOBJECT___GET_PARENT);
+		locationEClass = createEClass(LOCATION);
+		createEAttribute(locationEClass, LOCATION__VALUE);
+		createEReference(locationEClass, LOCATION__PARENT);
 	}
 
 	/**
@@ -741,27 +763,42 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		detailedEClass.getESuperTypes().add(this.getWObject());
+		namedEClass.getESuperTypes().add(this.getWObject());
+		titledEClass.getESuperTypes().add(this.getNamed());
 		contactEClass.getESuperTypes().add(this.getNamed());
 		contactEClass.getESuperTypes().add(this.getDetailed());
 		personEClass.getESuperTypes().add(this.getContact());
 		personEClass.getESuperTypes().add(this.getDetailed());
 		companyEClass.getESuperTypes().add(this.getContact());
 		companyEClass.getESuperTypes().add(this.getTitled());
-		namedEClass.getESuperTypes().add(this.getWObject());
-		activityEClass.getESuperTypes().add(this.getTitled());
-		activityEClass.getESuperTypes().add(this.getPurchase());
-		titledEClass.getESuperTypes().add(this.getNamed());
-		locationEClass.getESuperTypes().add(this.getTitled());
-		locationEClass.getESuperTypes().add(this.getWObject());
-		offerEClass.getESuperTypes().add(this.getTitled());
 		jobEClass.getESuperTypes().add(this.getTitled());
+		offerEClass.getESuperTypes().add(this.getTitled());
 		productEClass.getESuperTypes().add(this.getOffer());
 		serviceEClass.getESuperTypes().add(this.getOffer());
 		goodEClass.getESuperTypes().add(this.getDetailed());
 		goodEClass.getESuperTypes().add(this.getPurchase());
-		detailedEClass.getESuperTypes().add(this.getWObject());
+		activityEClass.getESuperTypes().add(this.getTitled());
+		activityEClass.getESuperTypes().add(this.getPurchase());
+		locationEClass.getESuperTypes().add(this.getTitled());
+		locationEClass.getESuperTypes().add(this.getWObject());
 
 		// Initialize classes, features, and operations; add parameters
+		initEClass(wObjectEClass, WObject.class, "WObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEOperation(getWObject__GetParent(), this.getWObject(), "getParent", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(detailedEClass, Detailed.class, "Detailed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDetailed_Description(), theEcorePackage.getEString(), "description", null, 0, 1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDetailed_Hint(), theEcorePackage.getEStringToStringMapEntry(), null, "hint", null, 0, 1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(namedEClass, Named.class, "Named", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEOperation(getNamed__GetName(), ecorePackage.getEString(), "getName", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(titledEClass, Titled.class, "Titled", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTitled_Name(), ecorePackage.getEString(), "name", null, 1, 1, Titled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(contactEClass, Contact.class, "Contact", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContact_Locations(), this.getLocation(), this.getLocation_Parent(), "locations", null, 0, -1, Contact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContact_Owns(), this.getPurchase(), this.getPurchase_Parent(), "owns", null, 0, -1, Contact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -773,54 +810,42 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEClass(companyEClass, Company.class, "Company", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCompany_Employees(), this.getJob(), this.getJob_Parent(), "employees", null, 0, -1, Company.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCompany_Offers(), this.getOffer(), this.getOffer_Parent(), "offers", null, 0, -1, Company.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDirectory_Contacts(), this.getContact(), null, "contacts", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(namedEClass, Named.class, "Named", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEOperation(getNamed__GetName(), ecorePackage.getEString(), "getName", 0, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getActivity_Type(), this.getService(), null, "type", null, 1, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getActivity_Involveds(), this.getJob(), null, "involveds", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(titledEClass, Titled.class, "Titled", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTitled_Name(), ecorePackage.getEString(), "name", null, 1, 1, Titled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLocation_Value(), ecorePackage.getEString(), "value", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLocation_Parent(), this.getContact(), this.getContact_Locations(), "parent", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(offerEClass, Offer.class, "Offer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOffer_Price(), theEcorePackage.getEBigDecimal(), "price", null, 0, -1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOffer_Parent(), this.getCompany(), this.getCompany_Offers(), "parent", null, 0, 1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getCompany_Offers().getEKeys().add(this.getTitled_Name());
 
 		initEClass(jobEClass, Job.class, "Job", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJob_Employee(), this.getPerson(), null, "employee", null, 1, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJob_Since(), theEcorePackage.getEDate(), "since", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJob_Parent(), this.getCompany(), this.getCompany_Employees(), "parent", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJob_Team(), this.getJob(), null, "team", null, 0, -1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(offerEClass, Offer.class, "Offer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getOffer_Price(), theEcorePackage.getEBigDecimal(), "price", null, 0, -1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOffer_Parent(), this.getCompany(), this.getCompany_Offers(), "parent", null, 0, 1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(goodEClass, Good.class, "Good", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getGood_Type(), this.getProduct(), null, "type", null, 0, 1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getGood_Bought(), ecorePackage.getEDate(), "bought", null, 0, 1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getGood_Cost(), theEcorePackage.getEBigDecimal(), "cost", null, 0, -1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(detailedEClass, Detailed.class, "Detailed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDetailed_Hint(), theEcorePackage.getEStringToStringMapEntry(), null, "hint", null, 0, 1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(purchaseEClass, Purchase.class, "Purchase", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPurchase_Parent(), this.getContact(), this.getContact_Owns(), "parent", null, 0, 1, Purchase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getPurchase__GetType(), this.getOffer(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(wObjectEClass, WObject.class, "WObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(goodEClass, Good.class, "Good", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getGood_Type(), this.getProduct(), null, "type", null, 0, 1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGood_Bought(), ecorePackage.getEDate(), "bought", null, 0, 1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGood_Cost(), theEcorePackage.getEBigDecimal(), "cost", null, 0, -1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getWObject__GetParent(), this.getWObject(), "getParent", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getActivity_Type(), this.getService(), null, "type", null, 1, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getActivity_Involveds(), this.getJob(), null, "involveds", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDirectory_Contacts(), this.getContact(), null, "contacts", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLocation_Value(), ecorePackage.getEString(), "value", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLocation_Parent(), this.getContact(), this.getContact_Locations(), "parent", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

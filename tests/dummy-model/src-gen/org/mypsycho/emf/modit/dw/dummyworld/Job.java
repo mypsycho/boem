@@ -3,6 +3,7 @@
 package org.mypsycho.emf.modit.dw.dummyworld;
 
 import java.util.Date;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +17,7 @@ import java.util.Date;
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getEmployee <em>Employee</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getSince <em>Since</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getTeam <em>Team</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getJob()
@@ -102,5 +104,17 @@ public interface Job extends Titled {
 	 * @generated
 	 */
 	void setParent(Company value);
+
+	/**
+	 * Returns the value of the '<em><b>Team</b></em>' reference list.
+	 * The list contents are of type {@link org.mypsycho.emf.modit.dw.dummyworld.Job}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Team</em>' reference list.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getJob_Team()
+	 * @model
+	 * @generated
+	 */
+	EList<Job> getTeam();
 
 } // Job
