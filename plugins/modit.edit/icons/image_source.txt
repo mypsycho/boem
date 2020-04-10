@@ -1,0 +1,3 @@
+Identification of image source
+
+* defaultImage.png : platform:/plugin/org.eclipse.ui.ide/icons/full/obj16/fileType_filter.png

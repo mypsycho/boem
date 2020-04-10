@@ -16,6 +16,12 @@ import java.util.Map
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.xtext.xbase.lib.Functions.Function1
+import org.eclipse.xtext.xbase.lib.Functions.Function2
+import org.eclipse.xtext.xbase.lib.Functions.Function3
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure2
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
 
 /**
  * Class providing extensive methods for EMF instance.
@@ -60,11 +66,27 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		new XObject<T, O>().asFct(byDefault)
 	}
 
-	static def <T, O extends EObject, C> byObjects((O, Map<EClass, C>)=>T byDefault) { 
-		new XObject<T, O>().asCache(byDefault)
+	static def <T, O extends EObject> byObjects((O, EmfStretcher)=>T byDefault) { 
+		new XObject<T, O>().asFct(byDefault)
+	}
+	
+	static def <T, O extends EObject, C> byObjects((O, EmfStretcher, Map<EClass, C>)=>T byDefault) { 
+		new XObject<T, O>().asFct(byDefault)
+	}
+	
+	static def <O extends EObject> onObjects((O)=>void byDefault) { 
+		new XObject<Void, O>().asFct(byDefault)
 	}
 
-	// Feature extension
+	static def <O extends EObject, C> onObjects((O, EmfStretcher)=>void byDefault) { 
+		new XObject<Void, O>().asFct(byDefault)
+	}
+
+	static def <O extends EObject, C> onObjects((O, EmfStretcher, Map<EClass, C>)=>void byDefault) { 
+		new XObject<Void, O>().asFct(byDefault)
+	}
+
+	// Class extension for all models
 	//
 	static def <T> byEObject(T byDefault) { 
 		byObject(EObject, byDefault)
@@ -74,11 +96,29 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		byObjects(byDefault)
 	}
 
-	static def <T,C> byEObjects((EObject, Map<EClass, C>)=>T byDefault) { 
+	static def <T> byEObjects((EObject, EmfStretcher)=>T byDefault) { 
 		byObjects(byDefault)
 	}
 
+	static def <T, C> byEObjects((EObject, EmfStretcher, Map<EClass, C>)=>T byDefault) { 
+		byObjects(byDefault)
+	}
 
+	static def byEObjects((EObject)=>void byDefault) { 
+		onObjects(byDefault)
+	}
+
+	static def byEObjects((EObject, EmfStretcher)=>void byDefault) { 
+		onObjects(byDefault)
+	}
+
+	static def <C> byEObjects((EObject, EmfStretcher, Map<EClass, C>)=>void byDefault) { 
+		onObjects(byDefault)
+	}
+
+
+	// Feature extension
+	//
 	static def <T> byProperty(T byDefault) { 
 		new XValue<T>().asValue(byDefault)
 	}
@@ -91,8 +131,28 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		new XValue<T>().asFct(byDefault)
 	}
 
-	static def <T,C> byProperties((EObject, EStructuralFeature, Map<EClass, C>)=>T byDefault) { 
-		new XValue<T>().asCache(byDefault)
+	static def <T,C> byProperties((EObject, EStructuralFeature, EmfStretcher)=>T byDefault) { 
+		new XValue<T>().asFct(byDefault)
+	}
+
+	static def <T,C> byProperties((EObject, EStructuralFeature, EmfStretcher, Map<EClass, C>)=>T byDefault) { 
+		new XValue<T>().asFct(byDefault)
+	}
+
+	static def byProperties((EObject)=>void byDefault) { 
+		new XValue<Void>().asFct(byDefault)
+	}
+
+	static def onProperties((EObject, EStructuralFeature)=>void byDefault) { 
+		new XValue<Void>().asFct(byDefault)
+	}
+
+	static def <C> onProperties((EObject, EStructuralFeature, EmfStretcher)=>void byDefault) { 
+		new XValue<Void>().asFct(byDefault)
+	}
+
+	static def <C> onProperties((EObject, EStructuralFeature, EmfStretcher, Map<EClass, C>)=>void byDefault) { 
+		new XValue<Void>().asFct(byDefault)
 	}
 
 
@@ -112,49 +172,47 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 		target.context.register()
 	}
 
-	/**
-	 * 
-	 * <C> Cache content
-	 * 
-	 */
-	def <C> operator_add((V, Map<EClass, C>)=>T it) { impl }
-	def <C> impl((V, Map<EClass, C>)=>T provider) { 
-		asCache(provider)
+	def operator_add((V, EmfStretcher)=>T it) { impl }
+	def impl((V, EmfStretcher)=>T provider) { 
+		asFct(provider)
 		target.context.register()
 	}
 
+	def <C> operator_add((V, EmfStretcher, Map<EClass, C>)=>T it) { impl }
+	def <C> impl((V, EmfStretcher, Map<EClass, C>)=>T provider) { 
+		asFct(provider)
+		target.context.register()
+	}
+
+
 	
-	def apply(EObject it) {
-		if (cache !== null) 
-			(value as (V, Map<EClass, Object>)=>T).apply(it as V, cache)
-		else if (direct) value as T
-		else (value as (V)=>T).apply(it as V)
+	private static def Object apply(PartImplementation it, EObject obj, EmfStretcher ctxt) {
+		if (direct) value
+		else if (value instanceof Function1) 
+			(value as (Object)=>Object).apply(obj)
+		else if (value instanceof Function2) 
+			(value as (Object, EmfStretcher)=>Object).apply(obj, ctxt)
+		else if (value instanceof Function3) 
+			(value as (Object, EmfStretcher, Map<EClass, Object>)=>Object).apply(obj, ctxt, cache)
+		else {
+			if (value instanceof Procedure1) 
+				(value as (Object)=>void).apply(obj)
+			else if (value instanceof Procedure2) 
+				(value as (Object, EmfStretcher)=>void).apply(obj, ctxt)
+			else if (value instanceof Procedure3) 
+				(value as (Object, EmfStretcher, Map<EClass, Object>)=>void).apply(obj, ctxt, cache)
+			null
+		}
 	}
 		
 	final static class XObject<T, O extends EObject> extends EmfParticipant {
-
+		
 		def <V extends O> bind(EmfStretcher it, Class<V> type) { 
 			new OBinding<T, O, V>(this, onClass(type))
 		}
 
-//		def <V extends EObject> operator_mappedTo(T value) {
-//			new OBinding<T, V>(this, null).asValue(value)
-//		}
-//		
-//		def <V extends EObject> operator_mappedTo((V)=>T provider) {
-//			new OBinding<T, V>(this, null).asFct(value)
-//		}
-//		
-//		def <V extends EObject, C> operator_mappedTo((V, Map<EClass, C>)=>T provider) {
-//			new OBinding<T, V>(this, null).asCache(value)
-//		}
-
-		def <V extends O> exec(V it, OBinding<T, ?, ? super V> impl) {
-			if (impl !== null) impl.apply(it)
-			else if (cache !== null) 
-				(value as (EObject, Map<EClass, Object>)=>T).apply(it, cache)
-			else if (direct) value as T
-			else (value as (EObject)=>T).apply(it)
+		def <V extends O> exec(V it, EmfStretcher ctxt, OBinding<T, ?, ? super V> impl) {
+			(impl ?: this).apply(it, ctxt) as T
 		}
 
 	}
@@ -174,16 +232,8 @@ abstract class EmfExtensions<T, V extends EObject, P extends EmfParticipant> ext
 			new VBinding<T, V>(this, onClass(type), feat)
 		}
 
-		def <V extends EObject> exec(V it, EStructuralFeature feat, VBinding<T, ? super V> impl) {
-			if (impl !== null) impl.apply(it)
-			else if (cache !== null) 
-				(value as (EObject, EStructuralFeature, Map<EClass, Object>)=>T).apply(it, feat,  cache)
-			else if (direct) value as T
-			else switch(value) {
-				(EObject)=>T : value.apply(it)
-				(EObject, EStructuralFeature)=>T : value.apply(it, feat)
-				default: throw new ClassCastException("Implementation is ill-typed: " + value?.class)
-			}
+		def <V extends EObject> exec(V it, EStructuralFeature feat, EmfStretcher ctxt, VBinding<T, ? super V> impl) {
+			(impl ?: this).apply(it, ctxt) as T
 		}
 	}
 

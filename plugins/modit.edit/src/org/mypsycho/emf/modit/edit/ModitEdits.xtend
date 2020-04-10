@@ -12,7 +12,11 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.edit;
 
+import org.eclipse.emf.ecore.EPackage
 import org.mypsycho.modit.emf.stretch.EmfExtensions
+import org.mypsycho.modit.emf.stretch.EmfStretcher
+import org.mypsycho.modit.emf.stretch.EmfToolings
+import org.eclipse.emf.ecore.EClass
 
 class ModitEdits {
 	
@@ -20,11 +24,22 @@ class ModitEdits {
 	//// Class level
 
 	// Issue: no local access by default ?
-	public static val TEXT = EmfExtensions.byEObjects[ it, cache | ModitItemProviderAdapter.getTextFromDefaultFeature(it, cache) ]
+	public static val TEXT = EmfExtensions.byEObjects[ it, ctxt, cache | 
+		ModitItemProviderAdapter.getTextFromDefaultFeature(it, cache)
+	]
+
+	public static val IMAGE_FROM_NAME = EmfToolings.byClass(false)
 	
-	public static val IMAGE = EmfExtensions.byEObjects[ DEFAULT_ICON_PATH + eClass.name ]
+	// Keep in mind it is the default implementation
+	public static val IMAGE_PATH = EmfExtensions.byEObjects[ it, extension ctxt |
+		if (eClass*IMAGE_FROM_NAME) DEFAULT_ICON_PATH + eClass.name
+	]
 	
-	
+	static def void allImagesFromName(extension EmfStretcher ctxt, EPackage it) {
+		EClassifiers.filter(EClass).forEach[
+			it<<IMAGE_FROM_NAME += true 
+		]
+	}
 		
 	// Properties for property descriptor
 	

@@ -12,16 +12,16 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.edit
 
+import java.util.Map
+import org.eclipse.emf.common.command.Command
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.edit.command.CommandParameter
+import org.eclipse.emf.edit.domain.EditingDomain
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider
 import org.eclipse.emf.edit.provider.ItemProviderAdapter
 import org.mypsycho.modit.emf.i18n.EmfI18n
 import org.mypsycho.modit.emf.stretch.EmfStretcher
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider
-import org.eclipse.emf.edit.domain.EditingDomain
-import org.eclipse.emf.common.command.Command
-import org.eclipse.emf.edit.command.CommandParameter
-import java.util.Map
 
 class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDomainItemProvider/* , 
         ITreeItemContentProvider, IStructuredItemContentProvider,  
@@ -115,7 +115,11 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 	}
     
     override getImage(Object it) {
-    	overlayImage(resourceLocator.getImage((it as EObject)*ModitEdits.IMAGE))
+    	val path = (it as EObject)*ModitEdits.IMAGE_PATH
+    	overlayImage(
+    		if (path !== null) resourceLocator.getImage(path)
+    		else ModitEditPlugin.INSTANCE.getImage("obj16/EObject.png")
+    	)
     }
 
 

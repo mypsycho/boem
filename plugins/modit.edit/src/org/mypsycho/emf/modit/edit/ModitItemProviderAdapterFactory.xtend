@@ -49,7 +49,7 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 
 	val Map<? extends EPackage, ? extends EmfI18n> metaLabels
 
-	var providers = new HashMap<EClass, ModitItemProviderAdapter>
+	val Map<EClass, ModitItemProviderAdapter> providers = new HashMap
 
 	val List<ChildCreationExtenderManager> ccExtManagers
 
@@ -64,10 +64,20 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 
 		ccExtManagers = newArrayList(descriptor.allSources.map[ new ChildCreationExtenderManager(anchor, nsURI) ])
 
-		metaLabels = descriptor.allSources.toInvertedMap[ EmfI18n.get(it, locale) ]
+		metaLabels = descriptor.allSources
+			.toInvertedMap[ EmfI18n.get(it, locale) ]
 		
 		MINUMUM_SUPPORTED_TYPES.forEach[ supportedTypes.add(it) ]
 
+// minimum
+//		supportedTypes.add(IEditingDomainItemProvider.class);
+//		supportedTypes.add(IStructuredItemContentProvider.class);
+//		supportedTypes.add(ITreeItemContentProvider.class);
+//		supportedTypes.add(IItemLabelProvider.class);
+//		supportedTypes.add(IItemPropertySource.class);
+//		supportedTypes.add(IItemColorProvider.class);
+
+// extra
 		// supportedTypes.add(IItemColorProvider.class);
 		// supportedTypes.add(IItemFontProvider.class);
 		// supportedTypes.add(IItemStyledLabelProvider.class);
@@ -87,7 +97,9 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 			descriptor.allSources.contains(it) || super.isFactoryForType(it)
 	}
 
+	
 	override getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+		// classic implements also create a new list each time.
 		ccExtManagers.map[ getNewChildDescriptors(object, editingDomain) ].flatten.toList
 	}
 

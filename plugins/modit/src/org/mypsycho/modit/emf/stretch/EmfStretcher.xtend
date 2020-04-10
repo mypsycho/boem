@@ -163,13 +163,13 @@ class EmfStretcher {
 
 
 	
-	// '->' can be used with '+=' operator of _Binding
-	def <T, O extends EObject, V extends O> operator_mappedTo(Class<V> it, EmfExtensions.XObject<T, O> ext) {
+	// '<<' can be used with '+=' operator of _Binding
+	def <T, O extends EObject, V extends O> operator_doubleLessThan(Class<V> it, EmfExtensions.XObject<T, O> ext) {
 		ext.bind(this, it)
 	}
 
-	// '->' can be used with '+=' operator of _Binding
-	def <T,V extends EObject> operator_mappedTo(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
+	// '<<' can be used with '+=' operator of _Binding
+	def <T,V extends EObject> operator_doubleLessThan(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
 		ext.bind(this, key, value)
 	}
 
@@ -178,8 +178,8 @@ class EmfStretcher {
 	// EmfToolings
 	// EmfToolings.XClass
 
-	// '->' can be used with '+=' operator of _Binding
-	def <T> operator_mappedTo(EClass it, EmfToolings.XClass<T> ext) {
+	// '<<' can be used with '+=' operator of _Binding
+	def <T> operator_doubleLessThan(EClass it, EmfToolings.XClass<T> ext) {
 		ext.bind(this, it)
 	}
 	
@@ -194,13 +194,13 @@ class EmfStretcher {
 
 	// EmfToolings.XFeature
 	
-	// '->' can be used with '+=' operator of _Binding
-	def <T> operator_mappedTo(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> ext) {
+	// '<<' can be used with '+=' operator of _Binding
+	def <T> operator_doubleLessThan(Pair<EClass, EStructuralFeature> it, EmfToolings.XFeature<T> ext) {
 		ext.bind(this, key, value)
 	}
 
-	// '->' can be used with '+=' operator of _Binding
-	def <T> operator_mappedTo(EStructuralFeature it, EmfToolings.XFeature<T> ext) {
+	// '<<' can be used with '+=' operator of _Binding
+	def <T> operator_doubleLessThan(EStructuralFeature it, EmfToolings.XFeature<T> ext) {
 		ext.bind(this, it)
 	}
 	
@@ -222,7 +222,7 @@ class EmfStretcher {
 	// EmfExtensions
 	// EmfExtensions.XObject
 	def <T, O extends EObject, V extends O> getValue(V it, EmfExtensions.XObject<T, O> part) {
-		part.exec(it, eClass.onClass.getThis(part) as EmfExtensions.OBinding<T, O, ? super V>)
+		part.exec(it, this, eClass.onClass.getThis(part) as EmfExtensions.OBinding<T, O, ? super V>)
 	}
 
 	def <T, O extends EObject, V extends O> operator_multiply(V it, EmfExtensions.XObject<T, O> part) {
@@ -230,13 +230,13 @@ class EmfStretcher {
 	}
 
 	def <T, O extends EObject, V extends O, C extends V> T getSuper(C it, Class<V> type, EmfExtensions.XObject<T, O> part) {
-		part.exec(it, eClass.onClass.getSuper(type, part) as EmfExtensions.OBinding<T, O, ? super V>)
+		part.exec(it, this, eClass.onClass.getSuper(type, part) as EmfExtensions.OBinding<T, O, ? super V>)
 	}
 	
 
 	// EmfExtensions.XValue
 	def <T, V extends EObject> getValue(V it, EStructuralFeature feat, EmfExtensions.XValue<T> part) {
-		part.exec(it, feat, eClass.onClass.getThis(part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
+		part.exec(it, feat, this, eClass.onClass.getThis(part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
 	}
 	
 	def <T, V extends EObject> getValue(Pair<V, EStructuralFeature> it, EmfExtensions.XValue<T> part) {
@@ -248,7 +248,7 @@ class EmfStretcher {
 	}
 
 	def <T, V extends EObject, C extends V> getSuper(C it, EStructuralFeature feat, Class<V> type, EmfExtensions.XValue<T> part) {
-		part.exec(it, feat, eClass.onClass.getSuper(type, part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
+		part.exec(it, feat, this, eClass.onClass.getSuper(type, part.toFeatID(feat)) as EmfExtensions.VBinding<T, ? super V>)
 	}
 
 	def <T, V extends EObject, C extends V> T getSuper(Pair<C, EStructuralFeature> it, Class<V> type, EmfExtensions.XValue<T> part) {

@@ -29,7 +29,7 @@ class DartStretchTest extends DartTestContext {
 	def void testLoading() {
 		
 		"Loaded elements".assertEquals(25, content.onAll.size)
-		"Loaded elements".assertEquals(
+		"Loaded elements".assertArrayEquals(
 '''<Project> Dart
 <Package> Dart Standard Library
 <Folder> dart:collection
@@ -51,10 +51,12 @@ class DartStretchTest extends DartTestContext {
 <Metadata> proxy
 <Folder> dart:math
 <Library> math.dart'''
-				.toString.split("\\R").toList, 
-				content.onAll.map[ it -> toName ].filter[ value !== null ]
-				 .map[ "<" + key.eClass.name + "> " + value ].toList)
-		}
+			.toString.split("\\R"), 
+			content.onAll
+				.map[ it -> toName ]
+				.filter[ value !== null ] // on  a pair do not mistake for filterNull
+				.map[ '''<«key.eClass.name»> «value»''' ].toList)
+	}
 		
 		
 	/**
@@ -73,7 +75,7 @@ class DartStretchTest extends DartTestContext {
 	def void testToString() {
 		content.appendContent
 
-		"Labels of elements".assertEquals(
+		"Labels of elements".assertArrayEquals(
 '''Dart
  Dart Standard Library
   dart:collection
@@ -111,7 +113,7 @@ class DartStretchTest extends DartTestContext {
    <unnamed-Function>() : List
    stop()
    isRunning() : bool'''.toString
-			.split("\\R").toList, 
+			.split("\\R"), 
 			content.onAll.map[
 				val result = indent + it * DartContribution.LABEL
 				System.err.println(result)
@@ -126,7 +128,7 @@ class DartStretchTest extends DartTestContext {
 	def void testQualifiedNames() {
 		content.appendContent
 
-		"Labels of elements".assertEquals(
+		"Labels of elements".assertArrayEquals(
 '''Dart
 Dart/Dart Standard Library
 Dart/Dart Standard Library/dart:collection
@@ -153,15 +155,16 @@ Dart/myBusiness/MyCoreSystem
 Dart/myBusiness/MyCoreSystem/doRun()
 Dart/myShared
 Dart/myShared/AbtractComponent
-Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)
-Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)/args
-Dart/myShared/AbtractComponent/init(List,#MISSING_TYPE)/context
+Dart/myShared/AbtractComponent/init(List,<untyped>)
+Dart/myShared/AbtractComponent/init(List,<untyped>)/args
+Dart/myShared/AbtractComponent/init(List,<untyped>)/context
 Dart/myShared/AbtractComponent/start()
 Dart/myShared/AbtractComponent/<unnamed-Function>()
 Dart/myShared/AbtractComponent/stop()
 Dart/myShared/AbtractComponent/isRunning()'''
-			.toString.split("\\R").toList, 
-			content.onAll.map[ it * DartContribution.QNAME ].filterNull.toList)
+			.toString.split("\\R"), 
+			content.onAll
+				.map[ it * DartContribution.QNAME ].filterNull.toList)
 	}
 
 

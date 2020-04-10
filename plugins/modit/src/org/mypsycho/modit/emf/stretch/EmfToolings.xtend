@@ -45,19 +45,27 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	// Class extension
 	//
-	static def <T> byClass(T byDefault) { new XClass<T>().asValue(byDefault) }
+	static def <T> byClass(T byDefault) { 
+		new XClass<T>().asValue(byDefault)
+	}
 
-	static def <T> byClasses((EClass)=>T byDefault) { new XClass<T>().asFct(byDefault) }
+	static def <T> byClasses((EClass)=>T byDefault) { 
+		new XClass<T>().asFct(byDefault)
+	}
 
-	static def <T,C> byClasses((EClass, Map<EClass, C>)=>T byDefault) { new XClass<T>().asCache(byDefault) }
+	static def <T,C> byClasses((EClass, Map<EClass, C>)=>T byDefault) { 
+		new XClass<T>().asCache(byDefault)
+	}
 
 	// Feature extension
 	//
-	static def <T> byFeature(T byDefault) { new XFeature<T>().asValue(byDefault) }
+	static def <T> byFeature(T byDefault) { 
+		new XFeature<T>().asValue(byDefault)
+	}
 
 	// note: byFeatures((EClass)=>T) is useless; unlike all feature of a class 
 	static def <T> byFeatures((EClass, EStructuralFeature)=>T byDefault) { 
-		new XFeature<T>().asValue(byDefault)
+		new XFeature<T>().asFct(byDefault)
 	}
 
 	static def <T, C> byFeatures((EClass, EStructuralFeature, Map<EClass, C>)=>T byDefault) { 
@@ -65,8 +73,9 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 	}
 
 
-	private new(P key, EClassStretcher target) { super(key, target) }
-
+	private new(P key, EClassStretcher target) { 
+		super(key, target)
+	}
 
 
 	// += 
@@ -82,22 +91,17 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 		target.context.register()
 	}
 
-	/**
-	 * 
-	 * <C> Cache content
-	 * 
-	 */
 	def <C> operator_add((EClass, Map<EClass, C>)=>T it) { impl }
 	def <C> impl((EClass, Map<EClass, C>)=>T provider) { 
 		asCache(provider)
 		target.context.register()
 	}
 	
-	def apply(EClass it) {
+	static def apply(PartImplementation it, EClass type) {
 		if (cache !== null) 
-			(value as (EClass, Map<EClass, Object>)=>T).apply(it, cache)
-		else if (direct) value as T
-		else (value as (EClass)=>T).apply(it)
+			(value as (EClass, Map<EClass, Object>)=>Object).apply(type, cache)
+		else if (direct) value
+		else (value as (EClass)=>Object).apply(type)
 	}
 
 
@@ -107,12 +111,8 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 			new CBinding<T>(this, onClass(type))
 		}
 
-		def exec(EClass it, CBinding<T> impl) {
-			if (impl !== null) impl.apply(it)
-			else if (cache !== null) 
-				(value as (EClass, Map<EClass, Object>)=>T).apply(it, cache)
-			else if (direct) value as T
-			else (value as (EClass)=>T).apply(it)
+		def T exec(EClass it, CBinding<T> impl) {
+			(impl ?: this).apply(it) as T
 		}
 	}
 
@@ -137,8 +137,9 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 			bind(feat.EContainingClass, feat)
 		}
 
-		def exec(EClass it, EStructuralFeature feat, FBinding<T> impl) {
-			if (cache !== null) 
+		def T exec(EClass it, EStructuralFeature feat, FBinding<T> impl) {
+			if (impl !== null) impl.apply(it) as T
+			else if (cache !== null) 
 				(value as (EClass, EStructuralFeature, Map<EClass, Object>)=>T).apply(it, feat,  cache)
 			else if (direct) value as T
 			else switch(value) {

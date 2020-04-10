@@ -4,15 +4,17 @@ import fr.obeo.dsl.dart.dart.DartPackage
 import fr.obeo.dsl.dart.dart.Named
 import org.eclipse.emf.ecore.EObject
 import org.mypsycho.modit.emf.EModIt
-import org.mypsycho.modit.emf.stretch.EmfContribution
 import org.mypsycho.modit.emf.stretch.EmfStretcher
 
 class DartTestContext {
 	
 	
-	protected static val extension EmfStretcher STRETCHER = EmfContribution.createStretcher(#{
-		DartPackage.eINSTANCE -> DartContribution
-	})
+	protected static val extension EmfStretcher STRETCHER = 
+		new EmfStretcher(DartPackage.eINSTANCE) => [
+			initialize
+			DartContribution.init(it)
+		]
+
 
 	
 	protected static extension final EModIt factory = EModIt.using(DartPackage.eINSTANCE) [ desc|
