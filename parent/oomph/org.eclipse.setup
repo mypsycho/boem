@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+	xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0" name="mypsycho"
+	label="Eclipse develpment Profile"
+>
+	<annotation source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+		<detail key="folderName">
+			<value>eclipse</value>
+		</detail>
+		<detail key="folderName.macosx">
+			<value>Eclipse</value>
+		</detail>
+	</annotation>
+	<setupTask xsi:type="setup.p2:P2Task">
+		<requirement name="org.eclipse.oomph.setup.feature.group" />
+		<repository url="${oomph.update.url}" />
+	</setupTask>
+	<setupTask xsi:type="setup:EclipseIniTask" option="-Xmx" value="2048m" vm="true" />
+	<setupTask xsi:type="setup:InstallationTask" id="installation" />
+	<setupTask xsi:type="setup:CompoundTask" name="preferences">
+		<setupTask xsi:type="setup:PreferenceTask"
+			key="/instance/org.eclipse.ui.editors/lineNumberRuler" value="true" />
+		<setupTask xsi:type="setup:PreferenceTask"
+			key="/instance/org.eclipse.core.resources/refresh.enabled" value="true" />
+		<setupTask xsi:type="setup:PreferenceTask"
+			key="/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled" value="java.awt.*;" />
+		<setupTask xsi:type="setup:PreferenceTask"
+			key="/instance/org.eclipse.core.resources/encoding" value="UTF-8" />
+		<setupTask xsi:type="setup:PreferenceTask"
+			key="/instance/org.eclipse.pde.ui/Preferences.MainPage.addToJavaSearch" value="true" />
+	</setupTask>
+	<setupTask xsi:type="setup:ResourceCreationTask" excludedTriggers="STARTUP MANUAL"
+		filter="(osgi.os=linux)"
+		content="[Desktop Entry]&#xA;Type=Application&#xA;Name=${scope.product.label} - ${scope.product.version.label}&#xA;Exec=${product.location/}eclipse&#xA;Icon=${product.location/}icon.xpm&#xA;Terminal=false&#xA;Categories=Development;IDE;"
+		targetURL="${product.location|uri}/eclipse.desktop" />
+	<setupTask xsi:type="setup:VariableTask" name="product.location"
+		value="${installation.location/}${installation.relativeProductFolder}" />
+	<version name="latest" label="Latest" requiredJavaVersion="1.8">
+		<description><![CDATA[
+		P2Tasks can be very messy.
+		Try to keep requirements and associated repository close like in Target Platform Definitions.
+		Organize groups of features by theme using different P2Task.
+		]]></description>
+		<setupTask xsi:type="setup:CompoundTask" name="User Preferences">
+			<annotation source="http://www.eclipse.org/oomph/setup/UserPreferences">
+				<detail key="/instance/org.eclipse.pde.ds.annotations/validationErrorLevel">
+					<value>record</value>
+				</detail>
+				<detail key="/instance/org.eclipse.pde.ds.annotations/enabled">
+					<value>record</value>
+				</detail>
+				<detail key="/instance/org.eclipse.pde.ds.annotations/path">
+					<value>record</value>
+				</detail>
+				<detail
+					key="/instance/org.eclipse.pde.ds.annotations/validationErrorLevel.missingImplicitUnbindMethod"
+				>
+					<value>record</value>
+				</detail>
+				<detail key="/instance/org.eclipse.pde.ds.annotations/generateBundleActivationPolicyLazy">
+					<value>record</value>
+				</detail>
+			</annotation>
+			<setupTask xsi:type="setup:CompoundTask" name="org.eclipse.pde.ds.annotations">
+				<setupTask xsi:type="setup:PreferenceTask"
+					key="/instance/org.eclipse.pde.ds.annotations/enabled" value="true" />
+				<setupTask xsi:type="setup:PreferenceTask"
+					key="/instance/org.eclipse.pde.ds.annotations/generateBundleActivationPolicyLazy" value="true" />
+				<setupTask xsi:type="setup:PreferenceTask"
+					key="/instance/org.eclipse.pde.ds.annotations/path" value="OSGI-INF" />
+				<setupTask xsi:type="setup:PreferenceTask"
+					key="/instance/org.eclipse.pde.ds.annotations/validationErrorLevel" value="error" />
+				<setupTask xsi:type="setup:PreferenceTask"
+					key="/instance/org.eclipse.pde.ds.annotations/validationErrorLevel.missingImplicitUnbindMethod"
+					value="error" />
+			</setupTask>
+		</setupTask>
+		<setupTask xsi:type="setup.p2:P2Task" id="eclipse" label="Eclipse basic">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+			<repository url="http://download.eclipse.org/technology/epp/packages/2019-12" />
+			<repository url="http://download.eclipse.org/rt/rap/tools/3.9" />
+			<requirement name="epp.package.modeling" versionRange="[4.6.0,5.0.0)" />
+			<requirement name="org.eclipse.platform.feature.group" versionRange="[4.6.0,5.0.0)" />
+			<requirement name="org.eclipse.rcp.feature.group" versionRange="[4.6.0,5.0.0)" />
+			<requirement name="org.eclipse.sdk.feature.group" />
+			<requirement name="org.eclipse.e4.core.tools.feature.feature.group" />
+			<requirement name="org.eclipse.egit.feature.group" />
+			<requirement name="org.eclipse.m2e.feature.feature.group" />
+			<requirement name="org.eclipse.oomph.setup.ui.ide.feature.group" />
+
+      <!-- Doc -->
+			<repository url="https://dl.bintray.com/de-jcup/asciidoctoreditor" />
+			<requirement name="de.jcup.asciidoctoreditor.feature.group" />
+      
+      <!-- Image browser -->
+			<repository url="http://manu26.manufrog.com/~psnetnu/eclipse/updates/" />
+			<requirement name="nu.psnet.quickimage.feature.group" />
+      
+      <!--  java dev -->
+			<requirement name="org.eclipse.xsd.sdk.feature.group" />
+			<requirement name="org.eclipse.jdt.feature.group" />
+			<requirement name="org.eclipse.pde.feature.group" />
+			<requirement name="org.eclipse.rap.tools.feature.feature.group" />
+
+	  <!-- P2 Target platform editor -->
+			<repository url="http://download.eclipse.org/cbi/tpd/3.0.0-SNAPSHOT/" />
+			<requirement name="org.eclipse.cbi.targetplatform-feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.bugzilla_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.context_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.ide_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.java_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.pde_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn.wikitext_feature.feature.group" />
+			<requirement name="org.eclipse.mylyn_feature.feature.group" />
+			<requirement name="org.eclipse.egit.mylyn.feature.group" />
+
+      <!--  xml and web -->
+			<requirement name="org.eclipse.wst.web_ui.feature.feature.group" />
+			<requirement name="org.eclipse.wst.xml_ui.feature.feature.group" />
+			<requirement name="org.eclipse.pde.api.tools.ee.feature.feature.group" />
+			      
+      <!--  javafx: why not -->
+			<repository url="http://download.eclipse.org/efxclipse/updates-released/3.6.0/site/" />
+			<requirement name="org.eclipse.fx.ide.feature.feature.group" />
+		</setupTask>
+		
+		<setupTask xsi:type="setup.p2:P2Task" id="langs" label="Language">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+		
+			  <!-- Java language -->
+			<requirement name="org.eclipse.xtend.sdk.feature.group" />
+			<requirement name="org.eclipse.xtext.sdk.feature.group" />
+			
+			<!-- No release of kotlin eclipse ! 2020-03 -->
+			<repository url="https://dl.bintray.com/jetbrains/kotlin/eclipse-plugin/last/" />
+      
+			<requirement name="org.eclipse.equinox.weaving.sdk.feature.group" />
+			<requirement name="org.jetbrains.kotlin.feature.feature.group" />
+			<requirement name="org.jetbrains.kotlin.gradle.feature.feature.group" />
+			<requirement name="org.jetbrains.kotlin.policy.feature.group" />
+			<requirement name="org.jetbrains.kotlin.weaving.feature.feature.group" />
+		
+		
+		</setupTask>
+		
+		<setupTask xsi:type="setup.p2:P2Task" id="quality" label="Quality tool">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+			<requirement name="org.eclipse.eclemma.feature.feature.group" /> <!-- from eclipse dist -->
+<!-- no sure what it is: 
+			<repository url="http://eclipse.pitest.org/release" />
+			<requirement name="org.pitest.pitclipse.feature.feature.group" />
+ -->
+			<repository url="https://checkstyle.github.io/eclipse-cs/update" />
+			<requirement name="net.sf.eclipsecs.feature.group" />
+		
+		    <repository url="http://www.acanda.ch/eclipse-pmd/release/latest" />
+		    <requirement name="ch.acanda.eclipse.pmd.feature.feature.group" />
+
+			<repository url="https://ecd-plugin.github.io/update/" />
+			<requirement name="org.sf.feeling.decompiler.cfr.feature.group" />
+			<requirement name="org.sf.feeling.decompiler.feature.group" />
+			<requirement name="org.sf.feeling.decompiler.jad.feature.group" />
+			<requirement name="org.sf.feeling.decompiler.jd.feature.group" />
+			<requirement name="org.sf.feeling.decompiler.procyon.feature.group" />
+		</setupTask>
+		
+		<setupTask xsi:type="setup.p2:P2Task" id="modeling" label="Eclipse Modeling">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+			<repository url="http://download.eclipse.org/technology/epp/packages/2019-12" />
+			<repository url="https://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" />
+			
+			<requirement name="org.eclipse.emf.query.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.transaction.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.validation.sdk.feature.group" />
+			<requirement name="org.eclipse.gef.sdk.feature.group" />
+			<requirement name="org.eclipse.gmf.runtime.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.cdo.epp.feature.group" />
+			<requirement name="org.eclipse.emf.ecoretools.design.feature.group" />
+			<requirement name="org.eclipse.xtext.sdk.feature.group" />
+			
+			<requirement name="org.eclipse.sirius.specifier.source.feature.group" />
+			<requirement name="org.eclipse.sirius.specifier.ide.ui.source.feature.group" />
+			<requirement name="org.eclipse.acceleo.ui.interpreter.feature.group" />
+			<requirement name="org.eclipse.eef.ext.widgets.reference.feature.source.feature.group" />
+			<requirement name="org.eclipse.eef.sdk.feature.source.feature.group" />
+			
+			<requirement name="org.eclipse.emf.ecore.xcore.sdk.feature.group" />
+			
+			<requirement name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group" />
+			
+		</setupTask>
+		<setupTask xsi:type="setup.p2:P2Task" id="modeling-extras" label="Eclipse Modeling extra">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+			<repository url="http://download.eclipse.org/technology/epp/packages/2019-12" />
+			<requirement name="org.eclipse.ocl.all.sdk.feature.group" />
+<!-- ??? no source except for zip at
+https://www.eclipse.org/modeling/mdt/downloads/
+ -->
+			<requirement name="org.eclipse.uml2.sdk.feature.group" />
+		</setupTask>
+    
+    
+    <!-- I prefer text compare
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        id="modeling"
+        label="Eclipse Modeling compare">
+        
+      <repository
+          url="http://download.eclipse.org/releases/2019-12"/>
+      <repository
+          url="http://download.eclipse.org/technology/epp/packages/2019-12"/>
+
+      <requirement
+          name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+      <requirement
+          name="org.eclipse.emf.compare.egit.feature.group"/>
+      <requirement
+          name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+      <requirement
+          name="org.eclipse.emf.compare.source.feature.group"/>
+
+    </setupTask>
+     -->
+
+	</version>
+	<description><![CDATA[
+	    Configuration for advanced Java developers.</br>
+	    It includes:
+	    <li>
+	    <ul>SDK for different target environment: J2EE and Eclipse.</ul>
+	    <ul>Team tools: Git, maven, oomph, mylyn</ul>
+	    <ul>Documentation and quality: Asciidoc, Checkstyle.</ul>
+	    <ul>Extra JVM language: Kotlin</ul>
+	    </li>
+	    <br/>
+		Thanks to EclipseSource for providing the base of this configuration.<br/>
+		Check following page for more info.<br/>
+		<a href='http://eclipsesource.com/blogs/2015/08/17/introducing-the-eclipsesource-oomph-profile/' >Oomph by eclipsesource</a>
+	]]></description>
+</setup:Product>
