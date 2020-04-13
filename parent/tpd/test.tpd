@@ -1,6 +1,6 @@
 target "Mod-it test" 
 
-with requirements, source
+with requirements
 
 location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	

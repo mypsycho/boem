@@ -1,6 +1,6 @@
 target "Mod-it runtime" 
 
-with requirements, source
+with requirements
 
 location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	
@@ -21,7 +21,7 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	org.eclipse.sirius.runtime.aql.feature.group
 	org.eclipse.sirius.specifier.feature.group
 
-	org.eclipse.eef.sdk.feature.feature.group
+	org.eclipse.eef.feature.feature.group
 	// +-> eef, eef.core, eef.ide.ui
 		
 }
