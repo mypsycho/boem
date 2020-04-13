@@ -1,12 +1,14 @@
-= Mod-it (Refactoring in progress)
+= Mod-it
 
 Mod-it library provides an API to ease creations of EMF Models in XTend.
 
+== Using for tests
+
 EMod-it extension frees developers of tedious EMF factory syntax making model description close to JSon file.
 
-It also suppresses the sequential constraint of code by providing a registry and resolving references afterward.
+It also suppresses the constraint of sequencing code by providing a registry and resolving references during an assembling phase.
 
-It comes with reverse engine EReversIt which generated Xtend class from existing models.  
+It is provided with reverse engine EReversIt which generates Xtend classes from existing models.  
 
 Using such syntax helps to:
 
@@ -19,6 +21,13 @@ Using such syntax helps to:
  * Ease the creation of inter-connected models
 
 It has been created and used in industrial project to ease the creation input for JUnit tests on the metamodel and business rules.
+
+
+== Using as 
+
+Going further is it possible to reference dynamic model from EMF api.
+
+For example, Eclipse Sirius or E4 descriptors can be generated and loaded at runtime avoiding static XML.
 
 == Installation
 

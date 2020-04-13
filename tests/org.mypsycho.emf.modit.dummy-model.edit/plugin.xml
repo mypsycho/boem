@@ -10,13 +10,27 @@
       <!-- @generated-not DummyWorld -->
       <factory
             uri="https://github.com/mypsycho/modit/tests/dummy-world/1.0"
-            class="org.mypsycho.emf.modit.dw.dummyworld.provider.DwModitIPAdapterFactory"
+            class="org.mypsycho.emf.modit.dw.dummyworld.provider.DwIpAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider
                org.eclipse.emf.edit.provider.ITreeItemContentProvider
                org.eclipse.emf.edit.provider.IItemLabelProvider
                org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated DummyWorld -->
+      <factory
+            uri="https://github.com/mypsycho/modit/tests/dummy-world/1.0"
+            class="org.mypsycho.emf.modit.dw.dummyworld.provider.DwItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource
+               org.eclipse.emf.edit.provider.IItemColorProvider"/>
    </extension>
 
 </plugin>

@@ -21,4 +21,11 @@
             genModel="model/DummyWorld.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated DummyWorld -->
+      <parser
+            type="dw"
+            class="org.mypsycho.emf.modit.dw.dummyworld.util.DwResourceFactoryImpl"/>
+   </extension>
+
 </plugin>

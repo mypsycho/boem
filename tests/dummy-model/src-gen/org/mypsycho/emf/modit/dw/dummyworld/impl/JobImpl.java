@@ -190,7 +190,7 @@ public class JobImpl extends TitledImpl implements Job {
 	public void setParent(Company newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.JOB__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -361,7 +361,7 @@ public class JobImpl extends TitledImpl implements Job {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (since: ");
+		result.append(" (since: "); //$NON-NLS-1$
 		result.append(since);
 		result.append(')');
 		return result.toString();

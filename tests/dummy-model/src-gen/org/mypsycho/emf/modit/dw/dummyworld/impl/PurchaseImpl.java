@@ -83,7 +83,7 @@ public abstract class PurchaseImpl extends MinimalEObjectImpl.Container implemen
 	public void setParent(Contact newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.PURCHASE__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -102,7 +102,7 @@ public abstract class PurchaseImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
-	public Offer getType() {
+	public Offer getOffer() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -218,8 +218,8 @@ public abstract class PurchaseImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case DwPackage.PURCHASE___GET_TYPE:
-				return getType();
+			case DwPackage.PURCHASE___GET_OFFER:
+				return getOffer();
 		}
 		return super.eInvoke(operationID, arguments);
 	}

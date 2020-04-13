@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.mypsycho.emf.modit.dummy-model.edit;singleton:=true
 Automatic-Module-Name: org.mypsycho.emf.modit.dummy-model.edit
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: org.mypsycho.emf.modit.dw.dummyworld.provider.DummyWorldEditPlugin$Implementation
+Bundle-Activator: org.mypsycho.emf.modit.dw.dummyworld.provider.DwEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

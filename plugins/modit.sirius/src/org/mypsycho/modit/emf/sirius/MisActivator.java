@@ -42,7 +42,6 @@ import org.osgi.framework.BundleContext;
  */
 public class MisActivator extends Plugin {
 
-	
 	/** The plug-in ID */
 	public static final String PLUGIN_ID = "org.mypsycho.emf.modit.sirius";
 

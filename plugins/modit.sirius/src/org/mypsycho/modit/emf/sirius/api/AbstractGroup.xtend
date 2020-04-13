@@ -13,15 +13,12 @@
 package org.mypsycho.modit.emf.sirius.api
 
 import java.util.ArrayList
+import java.util.Collection
 import java.util.List
-import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
-import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.emf.ecore.util.EcoreEList
 import org.eclipse.sirius.viewpoint.description.Environment
-import org.eclipse.sirius.viewpoint.description.IdentifiedElement
 import org.eclipse.sirius.viewpoint.description.UserFixedColor
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider
 
@@ -32,14 +29,24 @@ import org.mypsycho.modit.emf.sirius.SiriusModelProvider
  */
 abstract class AbstractGroup extends SiriusModelProvider {
 	
+	/** Packages used in design */
 	protected val List<EPackage> businessPackages = new ArrayList
 	
+	/**
+	 * Construction of model using provided packages.
+	 * 
+	 * @param descriptorPackages used by Sirius
+	 */
+	new (Iterable<? extends EPackage> descriptorPackages) {
+		super(descriptorPackages)
+	}
+		
 	/**
 	 * Construction of model using provided package.
 	 * 
 	 * @param descriptorPackages used by Sirius
 	 */
-	new (Iterable<? extends EPackage> descriptorPackages) {
+	new (EPackage... descriptorPackages) {
 		super(descriptorPackages)
 	}
 	
@@ -47,6 +54,25 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	 * Construction of model using default Sirius package.
 	 */
 	new () { }
+	
+	var String iplExpression
+	def getItemProviderLabel() {
+		if (iplExpression === null) {
+			iplExpression = expression[ EObject it | SiriusDesigns.getItemProvider(it).getText(it) ]
+		}
+		iplExpression
+	}
+	
+	
+	/**
+	 * Returns packages used in the design.
+	 * 
+	 * @returns the registered packages
+	 */
+	def Collection<? extends EPackage> getBusinessPackages() {
+		businessPackages
+	}
+	
 	
 	override protected initExtras(ResourceSet it) {
 		// System colors are: blue,chocolate,green,orange,purple,red,yellow
@@ -57,7 +83,15 @@ abstract class AbstractGroup extends SiriusModelProvider {
 			.forEach[ extras.put(name, it) ]
 	}
 	
-	
+	/**
+	 * Creates a fixed color.
+	 * 
+	 * @param colorName used to be referenced as 'color:&lt;colorName>'
+	 * @param r red from 0..255
+	 * @param g green from 0..255
+	 * @param b blue from 0..255
+	 * @return UserFixedColor
+	 */
 	def color(String colorname, int r, int g, int b) {
 		UserFixedColor.createAs("color:" + colorname)[
 			name = colorname
@@ -65,18 +99,6 @@ abstract class AbstractGroup extends SiriusModelProvider {
 			green = g
 			blue = b
 		]
-	}
-	
-	/**
-	 * Remove all return carriages from an expression.
-	 * <p>
-	 * Odesign editor fails to handle multi-line in expression.
-	 * </p>
-	 * @param text to trim
-	 * @param text but '\n' is 'space'
-	 */
-	def String trimAql(CharSequence text) {
-		text.toString.replaceAll("\\R", " ") // 
 	}
 	
 	/**
@@ -91,10 +113,11 @@ abstract class AbstractGroup extends SiriusModelProvider {
 			.findFirst[ instanceClass == type ]
 		if (type === null) {
 			throw new UnsupportedOperationException(
-			'''EClass of «type» is not defined in packages [«businessPackages.join(',')[ name ]»]''')
+			'''EClass of «type» is not defined in packages [«businessPackages
+				.join(',')[ name ]»]''')
 		}
 		
-		'''«eClass.EPackage.name».«eClass.name»'''
+		SiriusDesigns.encode(eClass)
 	}
 	
 	/**
@@ -105,31 +128,9 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	 * @param key of value
 	 * @return value
 	 */
-	def <T> T fromExtra(Class<T> type, String key) {
+	def <T> T extraRef(Class<T> type, String key) {
 		extras.get(key) as T
 	}
+
 	
-	// Only works for feature with keys
-	static def <R extends EObject> R at(EList<?> values, Class<R> type, Object... keys) {
-		val attKeys = ((values as EcoreEList<?>).feature as EReference).EKeys
-		val keyValues = keys.toList
-		
-		if (keyValues.size != attKeys.size) {
-			throw new IllegalArgumentException("Wrong args size: " 
-				+ keyValues.size + " instead of " + attKeys.size
-			)	
-		}
-		values.filter(type).findFirst[ r|
-			attKeys.map[ r.eGet(it) ] == keyValues
-		] as R
-	}
-	
-	// Only works for feature with keys
-	static def <R extends EObject> R at(EList<R> values, Object... keys) {
-		values.at(EObject, keys) as R
-	}
-	
-	static def <T extends IdentifiedElement> atIdentifiedElement(Iterable<T> values, Object key) {
-		values.findFirst[ name == key ]
-	}
 }

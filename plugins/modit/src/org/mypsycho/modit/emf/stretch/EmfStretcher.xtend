@@ -103,18 +103,29 @@ class EmfStretcher {
 			|| extensions.exists[ ext | ext.canProvide(it) ]
 	}
 
-	def onClass(Class<? extends EObject> it) {
+	def toEClass(Class<? extends EObject> it) {
 		assertInit
 		// We won't reach extensions
 		// User is supposed to know the structure
-		val eClass = (contents.keySet + extras.keySet).findFirst[ t| t.instanceClass == it ]
-		if (eClass === null) throw new IllegalArgumentException(name + ' is not defined in this context.')
-		eClass.onClass
+		val eClass = (contents.keySet + extras.keySet)
+			.findFirst[ t| t.instanceClass == it ]
+		
+		if (eClass === null) {
+			throw new IllegalArgumentException(name + ' is not defined in this context.')
+		} 
+		eClass
+	}
+
+
+	def onClass(Class<? extends EObject> it) {
+		toEClass.onClass
 	}
 
 	def onClass(EClassifier it) {
 		val result = tryOnClass
-		if (result === null) throw new IllegalArgumentException(name + ' is not defined in this context.')
+		if (result === null) {
+			throw new IllegalArgumentException(name + ' is not defined in this context.')
+		}	
 		result
 	}
 
@@ -162,15 +173,38 @@ class EmfStretcher {
 	}
 
 
-	
-	// '<<' can be used with '+=' operator of _Binding
-	def <T, O extends EObject, V extends O> operator_doubleLessThan(Class<V> it, EmfExtensions.XObject<T, O> ext) {
+	/**
+	 * Returns an implementation binding to this class.
+	 * 
+	 * @param it class to bind
+	 * @param ext extension to assign
+	 * @param extension binding
+	 */	
+	def <T, O extends EObject, V extends O> with(Class<V> it, EmfExtensions.XObject<T, O> ext) {
 		ext.bind(this, it)
 	}
 
+	/**
+	 * Returns an implementation binding to this class.
+	 * <p>
+	 * For compressed syntax, '<<' can be used with '+=' operator of OBinding
+	 * </p>
+	 * 
+	 * @param it class to bind
+	 * @param ext extension to assign
+	 * @param extension binding
+	 */	
+	def <T, O extends EObject, V extends O> operator_doubleLessThan(Class<V> it, EmfExtensions.XObject<T, O> ext) {
+		with(ext)
+	}
+
+	def <T,V extends EObject> with(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
+		ext.bind(this, key, value)
+	}
+	
 	// '<<' can be used with '+=' operator of _Binding
 	def <T,V extends EObject> operator_doubleLessThan(Pair<Class<V>, EStructuralFeature> it, EmfExtensions.XValue<T> ext) {
-		ext.bind(this, key, value)
+		with(ext)
 	}
 
 	// API is asymmetric on purpose
@@ -179,8 +213,20 @@ class EmfStretcher {
 	// EmfToolings.XClass
 
 	// '<<' can be used with '+=' operator of _Binding
-	def <T> operator_doubleLessThan(EClass it, EmfToolings.XClass<T> ext) {
+	def <T> with(EClassifier it, EmfToolings.XClass<T> ext) {
 		ext.bind(this, it)
+	}
+	
+	def <T> operator_doubleLessThan(EClassifier it, EmfToolings.XClass<T> ext) {
+		with(ext)
+	}
+	
+	def <T> with(Class<? extends EObject> it, EmfToolings.XClass<T> ext) {
+		toEClass.with(ext)
+	}
+	
+	def <T> operator_doubleLessThan(Class<? extends EObject> it, EmfToolings.XClass<T> ext) {
+		with(ext)
 	}
 	
 	def <T> getValue(EClass it, EmfToolings.XClass<T> part) {

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.edit
 
+import java.util.Collections
 import java.util.Map
 import org.eclipse.emf.common.command.Command
 import org.eclipse.emf.ecore.EClass
@@ -22,8 +23,10 @@ import org.eclipse.emf.edit.provider.IEditingDomainItemProvider
 import org.eclipse.emf.edit.provider.ItemProviderAdapter
 import org.mypsycho.modit.emf.i18n.EmfI18n
 import org.mypsycho.modit.emf.stretch.EmfStretcher
+import org.eclipse.xtend.lib.annotations.Accessors
 
-class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDomainItemProvider/* , 
+class ModitItemProviderAdapter extends ItemProviderAdapter 
+	implements IEditingDomainItemProvider/* , 
         ITreeItemContentProvider, IStructuredItemContentProvider,  
         IItemLabelProvider, IItemPropertySource */{
 	
@@ -31,13 +34,15 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 	
 	static val DEFAULT_LABEL_FEATNAMES = #[ "name", "label", "text" ]
 	
+	
 	static def String getTextFromDefaultFeature(EObject it, Map<EClass, (EObject)=>String> cache) {
 		// Very slow implementation
 		cache.computeIfAbsent(eClass) [
 			// Search usual feature
 			val feat = DEFAULT_LABEL_FEATNAMES.map[known|
-				eClass.EAllAttributes.findFirst[ known == name 
-					&& EAttributeType.instanceClass == String
+				eClass.EAllAttributes.findFirst[ 
+					known == name 
+						&& EAttributeType.instanceClass == String
 				]
 			].filterNull.head
 			
@@ -76,16 +81,49 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 //		protected val EmfAspect<EClassifier> aspect
 	
 	public val EClass type
+	
 	protected val extension EmfStretcher context
+	
+	
+	package val ModitItemProviderForwarder forwarder
 	
     new(ModitItemProviderAdapterFactory adapterFactory, EClass type) {
         super(adapterFactory)
         this.type = type
         context = adapterFactory.descriptor
+        
+        // Inspired from EMF Recipe
+        // https://wiki.eclipse.org/EMF/Recipes#Recipe:_Custom_Labels
+        if (adapterFactory.isForwarderRequired(type)) {
+        	forwarder = adapterFactory.createForwarder(this, type)
+        	adapterFactory.addListener(forwarder) 
+        } else {
+        	forwarder = null
+        }
+        
+        
         //        aspect = context.descriptor.onClass(type).aspect
 //        
 //        ID.values.forEach[ impls.put(it, createImplementation) ]
     } 
+    
+    
+	override dispose() {
+		super.dispose();
+		if (forwarder !== null) {
+			getAdapterFactory().removeListener(forwarder);
+		}
+	}
+    
+    override ModitItemProviderAdapterFactory getAdapterFactory() {
+    	super.adapterFactory as ModitItemProviderAdapterFactory
+    }
+    
+    package def getOtherTargets() {
+    	super.targets ?: Collections.emptyList
+    }
+    
+    
 //        
 //    def createImplementation(Object id) {
 //    	if (id == ID.text) createTextGetter
@@ -106,16 +144,18 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 //    }
 //        
 
+
+
 	override protected getResourceLocator() {
 		(adapterFactory as ModitItemProviderAdapterFactory).resourceLocator
 	}
 
 	override getText(Object it) {
-		(it as EObject)*ModitEdits.TEXT
+		(it as EObject)*ModitEditLabels.TEXT
 	}
     
     override getImage(Object it) {
-    	val path = (it as EObject)*ModitEdits.IMAGE_PATH
+    	val path = (it as EObject)*ModitEditLabels.IMAGE_PATH
     	overlayImage(
     		if (path !== null) resourceLocator.getImage(path)
     		else ModitEditPlugin.INSTANCE.getImage("obj16/EObject.png")
@@ -145,6 +185,9 @@ class ModitItemProviderAdapter extends ItemProviderAdapter implements IEditingDo
 	}
 
 // Special behavior for create 
+
+
+
 
 
 }

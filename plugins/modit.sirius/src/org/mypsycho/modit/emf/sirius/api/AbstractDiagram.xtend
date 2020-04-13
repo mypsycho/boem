@@ -13,71 +13,48 @@
  package org.mypsycho.modit.emf.sirius.api
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
 import org.eclipse.sirius.diagram.description.AbstractNodeMapping
 import org.eclipse.sirius.diagram.description.DiagramDescription
+import org.eclipse.sirius.diagram.description.DiagramElementMapping
+import org.eclipse.sirius.diagram.description.Layer
 import org.eclipse.sirius.diagram.description.style.BorderedStyleDescription
+import org.eclipse.sirius.diagram.description.style.BundledImageDescription
 import org.eclipse.sirius.diagram.description.style.FlatContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.NodeStyleDescription
 import org.eclipse.sirius.diagram.description.style.WorkspaceImageDescription
 import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.style.BasicLabelStyleDescription
-import org.mypsycho.modit.emf.EModIt
 
 /**
  * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
  * 
  * @author nicolas.peransin
  */
-abstract class AbstractDiagram {
+abstract class AbstractDiagram extends AbstractRepresentation<DiagramDescription> {
 
-	/** Main container */
-	protected val AbstractGroup context
-	
-	/** Factory of Sirius elements */
-	protected val extension EModIt factory
 
 	/**
 	 * Create a factory for a diagram description
 	 * 
 	 * @param parent of diagram
 	 */
-	new(AbstractGroup parent) {
-		this.context = parent
-		this.factory = parent.factory
+	new(AbstractGroup parent, String dLabel, Class<? extends EObject> dClass) {
+		super(DiagramDescription, parent, dLabel)
+		
+		creationTasks.add[
+			domainClass = context.asDomainClass(dClass)
+		]
 	}
-	
+		
 	/**
-	 * Returns alias for the created descriptor.
-	 * <p>
-	 * Default implementation is based on class name.
-	 * </p>
+	 * Initializes the content of the created diagram.
 	 * 
-	 * @return alias
+	 * @param it to initialize
 	 */
-	protected def getContentAlias() {
-		getClass().simpleName
-	}
-	
-	
-	/**
-	 * Gets a reference from current diagram.
-	 * 
-	 * @param <R> result type
-	 * @param type to return
-	 * @param path in diagram
-	 */
-	def <R extends EObject> R ref(Class<R> type, (DiagramDescription)=>R path) {
-		type.ref(contentAlias) [ path.apply(it as DiagramDescription) ]
-	}
-	
-	/**
-	 * Creates a diagram description
-	 * 
-	 * @return new description
-	 */
-	def DiagramDescription createContent() {
-		DiagramDescription.createAs(contentAlias) [
-			name = contentAlias
+	override initContent(DiagramDescription it) {
+		defaultLayer = Layer.create[
+			name = "Default"
 			initContent
 		]
 	}
@@ -87,26 +64,14 @@ abstract class AbstractDiagram {
 	 * 
 	 * @param it to initialize
 	 */
-	def abstract void initContent(DiagramDescription it)
+	def void initContent(Layer it)
 	
-	def getExtras() { context.extras }
-	
-	def <T> T fromExtra(Class<T> type, String key) {
-		context.fromExtra(type, key)
-	}
 	
 	/**
 	 * Sets the domain class of a description.
-	 * 
-	 * @param it description to define
-	 * @param type of the description
-	 */
-	def void setDomainClass(DiagramDescription it, Class<? extends EObject> type) {
-		domainClass = context.asDomainClass(type)
-	}
-	
-	/**
-	 * Sets the domain class of a description.
+	 * <p>
+	 * EClass is resolved using businessPackages of AbstractGroup.
+	 * </p>
 	 * 
 	 * @param it description to define
 	 * @param type of the description
@@ -114,61 +79,64 @@ abstract class AbstractDiagram {
 	def void setDomainClass(AbstractNodeMapping it, Class<? extends EObject> type) {
 		domainClass = context.asDomainClass(type)
 	}
-	
+
 	/**
-	 * Remove all return carriages from an expression.
+	 * Sets the candidate expression of a description.
 	 * <p>
-	 * Odesign editor fails to handle multi-line in expression.
+	 * If domain class and/or name is not set, a derived value is provided
 	 * </p>
-	 * @param text to trim
-	 * @param text but '\n' is 'space'
+	 * 
+	 * @param it description to define
+	 * @param type of the description
 	 */
-	def String trimAql(CharSequence text) {
-		context.trimAql(text)
+	def void setSemanticCandidatesExpression(AbstractNodeMapping it, EReference ref) {
+		(it as DiagramElementMapping).semanticCandidatesExpression = ref
+		if (domainClass === null) {
+			domainClass = SiriusDesigns.encode(ref.EType)
+		}
 	}
 
 	/**
-	 * Creates a Style with common default values.
+	 * Sets the candidate expression of a description.
+	 * <p>
+	 * If name is not set, a derived value is provided
+	 * </p>
 	 * 
-	 * @param <T> type of style
-	 * @param type of Style
-	 * @param init custom initialization of style
-	 * @return created Style
+	 * @param it description to define
+	 * @param type of the description
 	 */
-	protected def <T extends BasicLabelStyleDescription> T createStyle(Class<T> type, (T)=>void init) {
-		type.create[
-			initDefaultStyle
-			init?.apply(it)
-		]
+	def void setSemanticCandidatesExpression(DiagramElementMapping it, EReference ref) {
+		semanticCandidatesExpression = "feature:" + ref.name
+		if (name === null) {
+			name = ref.name
+		}
 	}
-	
-	/**
-	 * Initialize a Style with common default values.
-	 * 
-	 * @param <T> type of style
-	 * @param type of Style
-	 * @param init custom initialization of style
-	 * @return created Style
-	 */
-	protected def void initDefaultStyle(BasicLabelStyleDescription it) {
-		labelSize = 10 // ODesign is provide 12, but eclipse default is Segoe:9
-		labelColor = SystemColor.fromExtra("color:black")
+
+	override initDefaultStyle(BasicLabelStyleDescription it) {
+		super.initDefaultStyle(it)
 		
 		if (it instanceof BorderedStyleDescription) {
 			borderSizeComputationExpression = "1" // default
-			borderColor = SystemColor.fromExtra("color:black")
+			borderColor = SystemColor.extraRef("color:black")
 		}
 		
 		if (it instanceof FlatContainerStyleDescription) {
-			backgroundColor = SystemColor.fromExtra("color:white")
+			backgroundColor = SystemColor.extraRef("color:white")
 		}
+
 		if (it instanceof NodeStyleDescription) {
 			sizeComputationExpression = "2"
 		}
-		if (it instanceof WorkspaceImageDescription) {
+
+		if (it instanceof WorkspaceImageDescription) { // extends BorderedStyleDescription
 			// when using a image in node, 
 			// we usually don't want icon on label
 			showIcon = false
+			borderSizeComputationExpression = "0" // hide border
+		}
+
+		if (it instanceof BundledImageDescription) {
+			color = (extras.get("color:black") as SystemColor)
 		}
 	}
 	

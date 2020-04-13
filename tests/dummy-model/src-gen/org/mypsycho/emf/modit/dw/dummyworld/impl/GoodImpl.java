@@ -35,7 +35,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  * </p>
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl#getParent <em>Parent</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl#getOffer <em>Offer</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl#getBought <em>Bought</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl#getCost <em>Cost</em>}</li>
  * </ul>
@@ -44,14 +44,14 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  */
 public class GoodImpl extends DetailedImpl implements Good {
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+	 * The cached value of the '{@link #getOffer() <em>Offer</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getType()
+	 * @see #getOffer()
 	 * @generated
 	 * @ordered
 	 */
-	protected Product type;
+	protected Product offer;
 
 	/**
 	 * The default value of the '{@link #getBought() <em>Bought</em>}' attribute.
@@ -132,7 +132,7 @@ public class GoodImpl extends DetailedImpl implements Good {
 	public void setParent(Contact newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.GOOD__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -151,16 +151,16 @@ public class GoodImpl extends DetailedImpl implements Good {
 	 * @generated
 	 */
 	@Override
-	public Product getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (Product)eResolveProxy(oldType);
-			if (type != oldType) {
+	public Product getOffer() {
+		if (offer != null && offer.eIsProxy()) {
+			InternalEObject oldOffer = (InternalEObject)offer;
+			offer = (Product)eResolveProxy(oldOffer);
+			if (offer != oldOffer) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.GOOD__TYPE, oldType, type));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.GOOD__OFFER, oldOffer, offer));
 			}
 		}
-		return type;
+		return offer;
 	}
 
 	/**
@@ -168,8 +168,8 @@ public class GoodImpl extends DetailedImpl implements Good {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Product basicGetType() {
-		return type;
+	public Product basicGetOffer() {
+		return offer;
 	}
 
 	/**
@@ -178,11 +178,11 @@ public class GoodImpl extends DetailedImpl implements Good {
 	 * @generated
 	 */
 	@Override
-	public void setType(Product newType) {
-		Product oldType = type;
-		type = newType;
+	public void setOffer(Product newOffer) {
+		Product oldOffer = offer;
+		offer = newOffer;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.GOOD__TYPE, oldType, type));
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.GOOD__OFFER, oldOffer, offer));
 	}
 
 	/**
@@ -275,9 +275,9 @@ public class GoodImpl extends DetailedImpl implements Good {
 		switch (featureID) {
 			case DwPackage.GOOD__PARENT:
 				return getParent();
-			case DwPackage.GOOD__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
+			case DwPackage.GOOD__OFFER:
+				if (resolve) return getOffer();
+				return basicGetOffer();
 			case DwPackage.GOOD__BOUGHT:
 				return getBought();
 			case DwPackage.GOOD__COST:
@@ -298,8 +298,8 @@ public class GoodImpl extends DetailedImpl implements Good {
 			case DwPackage.GOOD__PARENT:
 				setParent((Contact)newValue);
 				return;
-			case DwPackage.GOOD__TYPE:
-				setType((Product)newValue);
+			case DwPackage.GOOD__OFFER:
+				setOffer((Product)newValue);
 				return;
 			case DwPackage.GOOD__BOUGHT:
 				setBought((Date)newValue);
@@ -323,8 +323,8 @@ public class GoodImpl extends DetailedImpl implements Good {
 			case DwPackage.GOOD__PARENT:
 				setParent((Contact)null);
 				return;
-			case DwPackage.GOOD__TYPE:
-				setType((Product)null);
+			case DwPackage.GOOD__OFFER:
+				setOffer((Product)null);
 				return;
 			case DwPackage.GOOD__BOUGHT:
 				setBought(BOUGHT_EDEFAULT);
@@ -346,8 +346,8 @@ public class GoodImpl extends DetailedImpl implements Good {
 		switch (featureID) {
 			case DwPackage.GOOD__PARENT:
 				return getParent() != null;
-			case DwPackage.GOOD__TYPE:
-				return type != null;
+			case DwPackage.GOOD__OFFER:
+				return offer != null;
 			case DwPackage.GOOD__BOUGHT:
 				return BOUGHT_EDEFAULT == null ? bought != null : !BOUGHT_EDEFAULT.equals(bought);
 			case DwPackage.GOOD__COST:
@@ -398,9 +398,9 @@ public class GoodImpl extends DetailedImpl implements Good {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (bought: ");
+		result.append(" (bought: "); //$NON-NLS-1$
 		result.append(bought);
-		result.append(", cost: ");
+		result.append(", cost: "); //$NON-NLS-1$
 		result.append(cost);
 		result.append(')');
 		return result.toString();

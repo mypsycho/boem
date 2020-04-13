@@ -55,6 +55,6 @@ public interface Purchase extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Offer getType();
+	Offer getOffer();
 
 } // Purchase

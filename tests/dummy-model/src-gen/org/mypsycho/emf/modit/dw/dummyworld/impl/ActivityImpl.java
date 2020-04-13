@@ -27,32 +27,32 @@ import org.mypsycho.emf.modit.dw.dummyworld.Service;
  * </p>
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl#getParent <em>Parent</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl#getInvolveds <em>Involveds</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl#getOffer <em>Offer</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl#getSupportedBy <em>Supported By</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ActivityImpl extends TitledImpl implements Activity {
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+	 * The cached value of the '{@link #getOffer() <em>Offer</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getType()
+	 * @see #getOffer()
 	 * @generated
 	 * @ordered
 	 */
-	protected Service type;
+	protected Service offer;
 
 	/**
-	 * The cached value of the '{@link #getInvolveds() <em>Involveds</em>}' reference.
+	 * The cached value of the '{@link #getSupportedBy() <em>Supported By</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getInvolveds()
+	 * @see #getSupportedBy()
 	 * @generated
 	 * @ordered
 	 */
-	protected Job involveds;
+	protected Job supportedBy;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -103,7 +103,7 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	public void setParent(Contact newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.ACTIVITY__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -122,16 +122,16 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * @generated
 	 */
 	@Override
-	public Service getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (Service)eResolveProxy(oldType);
-			if (type != oldType) {
+	public Service getOffer() {
+		if (offer != null && offer.eIsProxy()) {
+			InternalEObject oldOffer = (InternalEObject)offer;
+			offer = (Service)eResolveProxy(oldOffer);
+			if (offer != oldOffer) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.ACTIVITY__TYPE, oldType, type));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.ACTIVITY__OFFER, oldOffer, offer));
 			}
 		}
-		return type;
+		return offer;
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Service basicGetType() {
-		return type;
+	public Service basicGetOffer() {
+		return offer;
 	}
 
 	/**
@@ -149,11 +149,11 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * @generated
 	 */
 	@Override
-	public void setType(Service newType) {
-		Service oldType = type;
-		type = newType;
+	public void setOffer(Service newOffer) {
+		Service oldOffer = offer;
+		offer = newOffer;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.ACTIVITY__TYPE, oldType, type));
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.ACTIVITY__OFFER, oldOffer, offer));
 	}
 
 	/**
@@ -162,16 +162,16 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * @generated
 	 */
 	@Override
-	public Job getInvolveds() {
-		if (involveds != null && involveds.eIsProxy()) {
-			InternalEObject oldInvolveds = (InternalEObject)involveds;
-			involveds = (Job)eResolveProxy(oldInvolveds);
-			if (involveds != oldInvolveds) {
+	public Job getSupportedBy() {
+		if (supportedBy != null && supportedBy.eIsProxy()) {
+			InternalEObject oldSupportedBy = (InternalEObject)supportedBy;
+			supportedBy = (Job)eResolveProxy(oldSupportedBy);
+			if (supportedBy != oldSupportedBy) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.ACTIVITY__INVOLVEDS, oldInvolveds, involveds));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.ACTIVITY__SUPPORTED_BY, oldSupportedBy, supportedBy));
 			}
 		}
-		return involveds;
+		return supportedBy;
 	}
 
 	/**
@@ -179,8 +179,8 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Job basicGetInvolveds() {
-		return involveds;
+	public Job basicGetSupportedBy() {
+		return supportedBy;
 	}
 
 	/**
@@ -189,11 +189,11 @@ public class ActivityImpl extends TitledImpl implements Activity {
 	 * @generated
 	 */
 	@Override
-	public void setInvolveds(Job newInvolveds) {
-		Job oldInvolveds = involveds;
-		involveds = newInvolveds;
+	public void setSupportedBy(Job newSupportedBy) {
+		Job oldSupportedBy = supportedBy;
+		supportedBy = newSupportedBy;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.ACTIVITY__INVOLVEDS, oldInvolveds, involveds));
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.ACTIVITY__SUPPORTED_BY, oldSupportedBy, supportedBy));
 	}
 
 	/**
@@ -250,12 +250,12 @@ public class ActivityImpl extends TitledImpl implements Activity {
 		switch (featureID) {
 			case DwPackage.ACTIVITY__PARENT:
 				return getParent();
-			case DwPackage.ACTIVITY__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
-			case DwPackage.ACTIVITY__INVOLVEDS:
-				if (resolve) return getInvolveds();
-				return basicGetInvolveds();
+			case DwPackage.ACTIVITY__OFFER:
+				if (resolve) return getOffer();
+				return basicGetOffer();
+			case DwPackage.ACTIVITY__SUPPORTED_BY:
+				if (resolve) return getSupportedBy();
+				return basicGetSupportedBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -271,11 +271,11 @@ public class ActivityImpl extends TitledImpl implements Activity {
 			case DwPackage.ACTIVITY__PARENT:
 				setParent((Contact)newValue);
 				return;
-			case DwPackage.ACTIVITY__TYPE:
-				setType((Service)newValue);
+			case DwPackage.ACTIVITY__OFFER:
+				setOffer((Service)newValue);
 				return;
-			case DwPackage.ACTIVITY__INVOLVEDS:
-				setInvolveds((Job)newValue);
+			case DwPackage.ACTIVITY__SUPPORTED_BY:
+				setSupportedBy((Job)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -292,11 +292,11 @@ public class ActivityImpl extends TitledImpl implements Activity {
 			case DwPackage.ACTIVITY__PARENT:
 				setParent((Contact)null);
 				return;
-			case DwPackage.ACTIVITY__TYPE:
-				setType((Service)null);
+			case DwPackage.ACTIVITY__OFFER:
+				setOffer((Service)null);
 				return;
-			case DwPackage.ACTIVITY__INVOLVEDS:
-				setInvolveds((Job)null);
+			case DwPackage.ACTIVITY__SUPPORTED_BY:
+				setSupportedBy((Job)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -312,10 +312,10 @@ public class ActivityImpl extends TitledImpl implements Activity {
 		switch (featureID) {
 			case DwPackage.ACTIVITY__PARENT:
 				return getParent() != null;
-			case DwPackage.ACTIVITY__TYPE:
-				return type != null;
-			case DwPackage.ACTIVITY__INVOLVEDS:
-				return involveds != null;
+			case DwPackage.ACTIVITY__OFFER:
+				return offer != null;
+			case DwPackage.ACTIVITY__SUPPORTED_BY:
+				return supportedBy != null;
 		}
 		return super.eIsSet(featureID);
 	}

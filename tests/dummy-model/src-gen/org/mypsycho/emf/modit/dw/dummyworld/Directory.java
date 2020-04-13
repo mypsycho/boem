@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * youpi
+ * Group of social interactions.
  * <!-- end-model-doc -->
  *
  * <p>

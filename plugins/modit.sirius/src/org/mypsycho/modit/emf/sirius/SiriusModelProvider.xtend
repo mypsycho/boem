@@ -91,7 +91,7 @@ abstract class SiriusModelProvider implements ModitModel {
 	
 	@Accessors(#[ AccessorType.PUBLIC_GETTER ])
 	package var Integer id
-	val Group value
+	val Group content
 	/** Flag defined when building and a lamba is used */
 	var inlineServiceRequired = false
 	
@@ -110,7 +110,7 @@ abstract class SiriusModelProvider implements ModitModel {
 	new (Iterable<? extends EPackage> descriptorPackages) {
 		factory = EModIt.using(descriptorPackages)
 		
-		value = Group.create
+		content = Group.create
 		// Init cannot happen in constructor 
 		// as calling init(Group) must be overridden.
 		// Having a overridden method called in constructor is unsafe.
@@ -149,18 +149,21 @@ abstract class SiriusModelProvider implements ModitModel {
 		id = resourcePovider.apply
 		
 		resource.resourceSet.initExtras
-		rootAlias.alias(value)
+		rootAlias.alias(content)
 		
 		inlineServiceRequired = false
 		
-		value.initContent
+		// default name and version; can be overridden by user.
+		content.name = class.simpleName
+		content.version = "12.0.0.2017041100"
+		content.initContent
 		
 		// as ownedViewpoints is composition, navigation is safe before assemble
-		value.assemble
+		content.assemble
 		
 		
 		if (inlineServiceRequired) {
-			value.ownedViewpoints.forEach[
+			content.ownedViewpoints.forEach[
 				ownedJavaExtensions += JavaExtension.create[ 
 					qualifiedClassName = SiriusModelProviderService.name
 				]
@@ -168,12 +171,18 @@ abstract class SiriusModelProvider implements ModitModel {
 		}
 
 		// eObjects are not headless: eResource is not null.
-		resource.contents.add(value)
-		value
+		resource.contents.add(content)
+		content
 	}
+
 	
 	/**
+	 * Initialize map of external references with resource set
+	 * <p>
+	 * By default, map is empty.
+	 * </p>
 	 * 
+	 * @param it resourse set
 	 */
 	protected def void initExtras(ResourceSet it) {
 		// optional abstraction

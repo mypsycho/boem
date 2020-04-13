@@ -101,7 +101,7 @@ public class DirectoryItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Directory"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Directory")); //$NON-NLS-1$
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class DirectoryItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Directory_type");
+		return getString("_UI_Directory_type"); //$NON-NLS-1$
 	}
 
 	/**

@@ -13,12 +13,5 @@ package org.mypsycho.emf.modit.dw.dummyworld;
  * @generated
  */
 public interface Named extends WObject {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	String getName();
 
 } // Named

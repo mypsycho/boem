@@ -62,8 +62,8 @@ public class PersonItemProvider extends ContactItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Person_firstname_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Person_firstname_feature", "_UI_Person_type"),
+				 getString("_UI_Person_firstname_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Person_firstname_feature", "_UI_Person_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.PERSON__FIRSTNAME,
 				 true,
 				 false,
@@ -84,8 +84,8 @@ public class PersonItemProvider extends ContactItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Person_lastname_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Person_lastname_feature", "_UI_Person_type"),
+				 getString("_UI_Person_lastname_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Person_lastname_feature", "_UI_Person_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.PERSON__LASTNAME,
 				 true,
 				 false,
@@ -103,7 +103,7 @@ public class PersonItemProvider extends ContactItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Person"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Person")); //$NON-NLS-1$
 	}
 
 	/**
@@ -116,8 +116,8 @@ public class PersonItemProvider extends ContactItemProvider {
 	public String getText(Object object) {
 		String label = ((Person)object).getFirstname();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Person_type") :
-			getString("_UI_Person_type") + " " + label;
+			getString("_UI_Person_type") : //$NON-NLS-1$
+			getString("_UI_Person_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

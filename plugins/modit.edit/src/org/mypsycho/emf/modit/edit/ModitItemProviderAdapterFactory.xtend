@@ -32,20 +32,27 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory
 import org.mypsycho.modit.emf.i18n.EmfI18n
 import org.mypsycho.modit.emf.stretch.EmfStretcher
+import org.eclipse.xtend.lib.annotations.Accessors
 
-class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFactory implements IChildCreationExtender {
+class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFactory 
+		implements IChildCreationExtender {
 
 	static val MINUMUM_SUPPORTED_TYPES = #[
-		IEditingDomainItemProvider, IStructuredItemContentProvider, //
-		ITreeItemContentProvider, IItemPropertySource, //
+		IEditingDomainItemProvider, 
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider, 
+		IItemPropertySource,
 		IItemLabelProvider
 	]
 
-	public val Locale locale
+	@Accessors
+	val Locale locale
 
-	public val EMFPlugin anchor
+	@Accessors
+	val EMFPlugin anchor
 
-	public val EmfStretcher descriptor
+	@Accessors
+	protected val extension EmfStretcher descriptor
 
 	val Map<? extends EPackage, ? extends EmfI18n> metaLabels
 
@@ -53,6 +60,15 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 
 	val List<ChildCreationExtenderManager> ccExtManagers
 
+
+	new(AbstractEmfModitPlugin<?> plugin) {
+		this(plugin, Locale.^default)
+	}
+	
+	new(AbstractEmfModitPlugin<?> plugin, Locale locale) {
+		this(plugin, plugin.stretcher, locale)
+	}
+	
 	new(EMFPlugin resLoc, EmfStretcher descr) {
 		this(resLoc, descr, Locale.^default)
 	}
@@ -62,7 +78,10 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 		this.anchor = resLoc
 		this.descriptor = descr
 
-		ccExtManagers = newArrayList(descriptor.allSources.map[ new ChildCreationExtenderManager(anchor, nsURI) ])
+		ccExtManagers = newArrayList(descriptor.allSources
+			.map[ 
+				new ChildCreationExtenderManager(anchor, nsURI)
+			])
 
 		metaLabels = descriptor.allSources
 			.toInvertedMap[ EmfI18n.get(it, locale) ]
@@ -108,7 +127,8 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 	}
 
 	override createAdapter(Notifier target) {
-		if (target instanceof EObject) providers.computeIfAbsent(target.eClass)[ createProvider(it) ]
+		if (target instanceof EObject) 
+			providers.computeIfAbsent(target.eClass)[ createProvider(it) ]
 		/* else unexpected: null is default result */
 	}
 
@@ -116,4 +136,14 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 		new ModitItemProviderAdapter(this, it)
 	}
 
+	
+
+	protected def createForwarder(ModitItemProviderAdapter parent, EClass it) {
+		new ModitItemProviderForwarder(descriptor, parent, it)
+	}
+
+
+	protected def isForwarderRequired(EClass it) {
+		(it * ModitEditListeners.DEPENDENCIES).empty
+	}
 }

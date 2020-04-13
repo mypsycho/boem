@@ -45,7 +45,7 @@ public class GoodItemProvider extends DetailedItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addTypePropertyDescriptor(object);
+			addOfferPropertyDescriptor(object);
 			addBoughtPropertyDescriptor(object);
 			addCostPropertyDescriptor(object);
 		}
@@ -53,19 +53,19 @@ public class GoodItemProvider extends DetailedItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Type feature.
+	 * This adds a property descriptor for the Offer feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTypePropertyDescriptor(Object object) {
+	protected void addOfferPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Good_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Good_type_feature", "_UI_Good_type"),
-				 DwPackage.Literals.GOOD__TYPE,
+				 getString("_UI_Good_offer_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Good_offer_feature", "_UI_Good_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.GOOD__OFFER,
 				 true,
 				 false,
 				 true,
@@ -85,8 +85,8 @@ public class GoodItemProvider extends DetailedItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Good_bought_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Good_bought_feature", "_UI_Good_type"),
+				 getString("_UI_Good_bought_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Good_bought_feature", "_UI_Good_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.GOOD__BOUGHT,
 				 true,
 				 false,
@@ -107,8 +107,8 @@ public class GoodItemProvider extends DetailedItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Good_cost_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Good_cost_feature", "_UI_Good_type"),
+				 getString("_UI_Good_cost_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Good_cost_feature", "_UI_Good_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.GOOD__COST,
 				 true,
 				 false,
@@ -126,7 +126,7 @@ public class GoodItemProvider extends DetailedItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Good"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Good")); //$NON-NLS-1$
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class GoodItemProvider extends DetailedItemProvider {
 	public String getText(Object object) {
 		String label = ((Good)object).getDescription();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Good_type") :
-			getString("_UI_Good_type") + " " + label;
+			getString("_UI_Good_type") : //$NON-NLS-1$
+			getString("_UI_Good_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

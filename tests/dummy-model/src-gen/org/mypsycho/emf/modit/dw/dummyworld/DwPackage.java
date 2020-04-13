@@ -21,7 +21,8 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  * <!-- end-user-doc -->
  * <!-- begin-model-doc -->
- * carioca
+ * Model for demonstration and validation.
+ * It tracks social relationships.
  * <!-- end-model-doc -->
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwFactory
  * @model kind="package"
@@ -291,22 +292,13 @@ public interface DwPackage extends EPackage {
 	int NAMED___GET_PARENT = WOBJECT___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED___GET_NAME = WOBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The number of operations of the '<em>Named</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_OPERATION_COUNT = WOBJECT_OPERATION_COUNT + 1;
+	int NAMED_OPERATION_COUNT = WOBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -334,15 +326,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int TITLED___GET_PARENT = NAMED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TITLED___GET_NAME = NAMED___GET_NAME;
 
 	/**
 	 * The number of operations of the '<em>Titled</em>' class.
@@ -406,15 +389,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTACT___GET_PARENT = NAMED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT___GET_NAME = NAMED___GET_NAME;
 
 	/**
 	 * The number of operations of the '<em>Contact</em>' class.
@@ -496,15 +470,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int PERSON___GET_PARENT = CONTACT___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PERSON___GET_NAME = CONTACT___GET_NAME;
 
 	/**
 	 * The number of operations of the '<em>Person</em>' class.
@@ -597,15 +562,6 @@ public interface DwPackage extends EPackage {
 	int COMPANY___GET_PARENT = CONTACT___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPANY___GET_NAME = CONTACT___GET_NAME;
-
-	/**
 	 * The number of operations of the '<em>Company</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -678,15 +634,6 @@ public interface DwPackage extends EPackage {
 	int JOB___GET_PARENT = TITLED___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOB___GET_NAME = TITLED___GET_NAME;
-
-	/**
 	 * The number of operations of the '<em>Job</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -739,15 +686,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int OFFER___GET_PARENT = TITLED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OFFER___GET_NAME = TITLED___GET_NAME;
 
 	/**
 	 * The number of operations of the '<em>Offer</em>' class.
@@ -804,15 +742,6 @@ public interface DwPackage extends EPackage {
 	int PRODUCT___GET_PARENT = OFFER___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRODUCT___GET_NAME = OFFER___GET_NAME;
-
-	/**
 	 * The number of operations of the '<em>Product</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -867,15 +796,6 @@ public interface DwPackage extends EPackage {
 	int SERVICE___GET_PARENT = OFFER___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_NAME = OFFER___GET_NAME;
-
-	/**
 	 * The number of operations of the '<em>Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -923,13 +843,13 @@ public interface DwPackage extends EPackage {
 	int PURCHASE_FEATURE_COUNT = 1;
 
 	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
+	 * The operation id for the '<em>Get Offer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE___GET_TYPE = 0;
+	int PURCHASE___GET_OFFER = 0;
 
 	/**
 	 * The number of operations of the '<em>Purchase</em>' class.
@@ -968,13 +888,13 @@ public interface DwPackage extends EPackage {
 	int GOOD__PARENT = DETAILED_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * The feature id for the '<em><b>Offer</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GOOD__TYPE = DETAILED_FEATURE_COUNT + 1;
+	int GOOD__OFFER = DETAILED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Bought</b></em>' attribute.
@@ -1013,13 +933,13 @@ public interface DwPackage extends EPackage {
 	int GOOD___GET_PARENT = DETAILED___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
+	 * The operation id for the '<em>Get Offer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GOOD___GET_TYPE = DETAILED_OPERATION_COUNT + 0;
+	int GOOD___GET_OFFER = DETAILED_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Good</em>' class.
@@ -1049,22 +969,22 @@ public interface DwPackage extends EPackage {
 	int ACTIVITY__PARENT = TITLED_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * The feature id for the '<em><b>Offer</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__TYPE = TITLED_FEATURE_COUNT + 1;
+	int ACTIVITY__OFFER = TITLED_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Involveds</b></em>' reference.
+	 * The feature id for the '<em><b>Supported By</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__INVOLVEDS = TITLED_FEATURE_COUNT + 2;
+	int ACTIVITY__SUPPORTED_BY = TITLED_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Activity</em>' class.
@@ -1085,22 +1005,13 @@ public interface DwPackage extends EPackage {
 	int ACTIVITY___GET_PARENT = TITLED___GET_PARENT;
 
 	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
+	 * The operation id for the '<em>Get Offer</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY___GET_NAME = TITLED___GET_NAME;
-
-	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_TYPE = TITLED_OPERATION_COUNT + 0;
+	int ACTIVITY___GET_OFFER = TITLED_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Activity</em>' class.
@@ -1182,15 +1093,6 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOCATION___GET_PARENT = TITLED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCATION___GET_NAME = TITLED___GET_NAME;
 
 	/**
 	 * The number of operations of the '<em>Location</em>' class.
@@ -1330,16 +1232,6 @@ public interface DwPackage extends EPackage {
 	EClass getNamed();
 
 	/**
-	 * Returns the meta object for the '{@link org.mypsycho.emf.modit.dw.dummyworld.Named#getName() <em>Get Name</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Name</em>' operation.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Named#getName()
-	 * @generated
-	 */
-	EOperation getNamed__GetName();
-
-	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity <em>Activity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1350,26 +1242,26 @@ public interface DwPackage extends EPackage {
 	EClass getActivity();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getType <em>Type</em>}'.
+	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer <em>Offer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getType()
+	 * @return the meta object for the reference '<em>Offer</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer()
 	 * @see #getActivity()
 	 * @generated
 	 */
-	EReference getActivity_Type();
+	EReference getActivity_Offer();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getInvolveds <em>Involveds</em>}'.
+	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getSupportedBy <em>Supported By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Involveds</em>'.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getInvolveds()
+	 * @return the meta object for the reference '<em>Supported By</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getSupportedBy()
 	 * @see #getActivity()
 	 * @generated
 	 */
-	EReference getActivity_Involveds();
+	EReference getActivity_SupportedBy();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Titled <em>Titled</em>}'.
@@ -1541,15 +1433,15 @@ public interface DwPackage extends EPackage {
 	EClass getGood();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getType <em>Type</em>}'.
+	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getOffer <em>Offer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Good#getType()
+	 * @return the meta object for the reference '<em>Offer</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Good#getOffer()
 	 * @see #getGood()
 	 * @generated
 	 */
-	EReference getGood_Type();
+	EReference getGood_Offer();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getBought <em>Bought</em>}'.
@@ -1627,14 +1519,14 @@ public interface DwPackage extends EPackage {
 	EReference getPurchase_Parent();
 
 	/**
-	 * Returns the meta object for the '{@link org.mypsycho.emf.modit.dw.dummyworld.Purchase#getType() <em>Get Type</em>}' operation.
+	 * Returns the meta object for the '{@link org.mypsycho.emf.modit.dw.dummyworld.Purchase#getOffer() <em>Get Offer</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Type</em>' operation.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Purchase#getType()
+	 * @return the meta object for the '<em>Get Offer</em>' operation.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Purchase#getOffer()
 	 * @generated
 	 */
-	EOperation getPurchase__GetType();
+	EOperation getPurchase__GetOffer();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.WObject <em>WObject</em>}'.
@@ -1786,14 +1678,6 @@ public interface DwPackage extends EPackage {
 		EClass NAMED = eINSTANCE.getNamed();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation NAMED___GET_NAME = eINSTANCE.getNamed__GetName();
-
-		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ActivityImpl <em>Activity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1804,20 +1688,20 @@ public interface DwPackage extends EPackage {
 		EClass ACTIVITY = eINSTANCE.getActivity();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Offer</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ACTIVITY__TYPE = eINSTANCE.getActivity_Type();
+		EReference ACTIVITY__OFFER = eINSTANCE.getActivity_Offer();
 
 		/**
-		 * The meta object literal for the '<em><b>Involveds</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Supported By</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ACTIVITY__INVOLVEDS = eINSTANCE.getActivity_Involveds();
+		EReference ACTIVITY__SUPPORTED_BY = eINSTANCE.getActivity_SupportedBy();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl <em>Titled</em>}' class.
@@ -1962,12 +1846,12 @@ public interface DwPackage extends EPackage {
 		EClass GOOD = eINSTANCE.getGood();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Offer</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference GOOD__TYPE = eINSTANCE.getGood_Type();
+		EReference GOOD__OFFER = eINSTANCE.getGood_Offer();
 
 		/**
 		 * The meta object literal for the '<em><b>Bought</b></em>' attribute feature.
@@ -2030,12 +1914,12 @@ public interface DwPackage extends EPackage {
 		EReference PURCHASE__PARENT = eINSTANCE.getPurchase_Parent();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Type</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Offer</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation PURCHASE___GET_TYPE = eINSTANCE.getPurchase__GetType();
+		EOperation PURCHASE___GET_OFFER = eINSTANCE.getPurchase__GetOffer();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.WObjectImpl <em>WObject</em>}' class.

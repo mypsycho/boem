@@ -64,7 +64,7 @@ public class PurchaseItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Purchase_type");
+		return getString("_UI_Purchase_type"); //$NON-NLS-1$
 	}
 
 	/**

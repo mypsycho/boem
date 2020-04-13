@@ -198,14 +198,6 @@ public class PersonImpl extends ContactImpl implements Person {
 		return super.eIsSet(featureID);
 	}
 
-	/**
-	 * Return the name.
-	 * @generated NOT
-	 */
-	@Override
-	public String getName() {
-		return getFirstname() + " " + getLastname();
-	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,9 +209,9 @@ public class PersonImpl extends ContactImpl implements Person {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (firstname: ");
+		result.append(" (firstname: "); //$NON-NLS-1$
 		result.append(firstname);
-		result.append(", lastname: ");
+		result.append(", lastname: "); //$NON-NLS-1$
 		result.append(lastname);
 		result.append(')');
 		return result.toString();

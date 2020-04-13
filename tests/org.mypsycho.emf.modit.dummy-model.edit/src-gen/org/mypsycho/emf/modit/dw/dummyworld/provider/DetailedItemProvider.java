@@ -61,8 +61,8 @@ public class DetailedItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_description_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"),
+				 getString("_UI_Detailed_description_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DETAILED__DESCRIPTION,
 				 true,
 				 false,
@@ -83,8 +83,8 @@ public class DetailedItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_hint_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hint_feature", "_UI_Detailed_type"),
+				 getString("_UI_Detailed_hint_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hint_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DETAILED__HINT,
 				 true,
 				 false,
@@ -102,7 +102,7 @@ public class DetailedItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Detailed"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Detailed")); //$NON-NLS-1$
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class DetailedItemProvider
 	public String getText(Object object) {
 		String label = ((Detailed)object).getDescription();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Detailed_type") :
-			getString("_UI_Detailed_type") + " " + label;
+			getString("_UI_Detailed_type") : //$NON-NLS-1$
+			getString("_UI_Detailed_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

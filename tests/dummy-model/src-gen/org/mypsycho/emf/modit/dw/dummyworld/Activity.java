@@ -1,4 +1,5 @@
-/**
+/*
+ * 
  */
 package org.mypsycho.emf.modit.dw.dummyworld;
 
@@ -12,8 +13,8 @@ package org.mypsycho.emf.modit.dw.dummyworld;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getType <em>Type</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getInvolveds <em>Involveds</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer <em>Offer</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getSupportedBy <em>Supported By</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getActivity()
@@ -22,55 +23,47 @@ package org.mypsycho.emf.modit.dw.dummyworld;
  */
 public interface Activity extends Titled, Purchase {
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' reference.
+	 * Returns the value of the '<em><b>Offer</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type</em>' reference.
-	 * @see #setType(Service)
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getActivity_Type()
+	 * @return the value of the '<em>Offer</em>' reference.
+	 * @see #setOffer(Service)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getActivity_Offer()
 	 * @model required="true"
 	 * @generated
 	 */
-	Service getType();
+	Service getOffer();
 
 	/**
-	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getType <em>Type</em>}' reference.
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer <em>Offer</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type</em>' reference.
-	 * @see #getType()
+	 * @param value the new value of the '<em>Offer</em>' reference.
+	 * @see #getOffer()
 	 * @generated
 	 */
-	void setType(Service value);
+	void setOffer(Service value);
 
 	/**
-	 * Returns the value of the '<em><b>Involveds</b></em>' reference.
+	 * Returns the value of the '<em><b>Supported By</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Involveds</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Involveds</em>' reference.
-	 * @see #setInvolveds(Job)
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getActivity_Involveds()
+	 * @return the value of the '<em>Supported By</em>' reference.
+	 * @see #setSupportedBy(Job)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getActivity_SupportedBy()
 	 * @model
 	 * @generated
 	 */
-	Job getInvolveds();
+	Job getSupportedBy();
 
 	/**
-	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getInvolveds <em>Involveds</em>}' reference.
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getSupportedBy <em>Supported By</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Involveds</em>' reference.
-	 * @see #getInvolveds()
+	 * @param value the new value of the '<em>Supported By</em>' reference.
+	 * @see #getSupportedBy()
 	 * @generated
 	 */
-	void setInvolveds(Job value);
+	void setSupportedBy(Job value);
 
 } // Activity

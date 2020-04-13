@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see fr.obeo.dsl.dart.dart.DartFactory
  * @model kind="package"
- *        annotation="http://www.eclipse.org/emf/2002/GenModel modelDirectory='org.mypsycho.emf.modit.ObeoXtdDemo/target/xcore-gen' operationReflection='false' basePackage='fr.obeo.dsl.dart'"
  *        annotation="http://www.eclipse.org/emf/2011/Xcore GenModel='http://www.eclipse.org/emf/2002/GenModel' Ecore='http://www.eclipse.org/emf/2002/Ecore'"
  * @generated
  */

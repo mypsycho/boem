@@ -42,26 +42,26 @@ public class ActivityItemProvider extends TitledItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addTypePropertyDescriptor(object);
-			addInvolvedsPropertyDescriptor(object);
+			addOfferPropertyDescriptor(object);
+			addSupportedByPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Type feature.
+	 * This adds a property descriptor for the Offer feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTypePropertyDescriptor(Object object) {
+	protected void addOfferPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Activity_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Activity_type_feature", "_UI_Activity_type"),
-				 DwPackage.Literals.ACTIVITY__TYPE,
+				 getString("_UI_Activity_offer_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Activity_offer_feature", "_UI_Activity_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.ACTIVITY__OFFER,
 				 true,
 				 false,
 				 true,
@@ -71,19 +71,19 @@ public class ActivityItemProvider extends TitledItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Involveds feature.
+	 * This adds a property descriptor for the Supported By feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addInvolvedsPropertyDescriptor(Object object) {
+	protected void addSupportedByPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Activity_involveds_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Activity_involveds_feature", "_UI_Activity_type"),
-				 DwPackage.Literals.ACTIVITY__INVOLVEDS,
+				 getString("_UI_Activity_supportedBy_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Activity_supportedBy_feature", "_UI_Activity_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.ACTIVITY__SUPPORTED_BY,
 				 true,
 				 false,
 				 true,
@@ -100,7 +100,7 @@ public class ActivityItemProvider extends TitledItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Activity"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Activity")); //$NON-NLS-1$
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class ActivityItemProvider extends TitledItemProvider {
 	public String getText(Object object) {
 		String label = ((Activity)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Activity_type") :
-			getString("_UI_Activity_type") + " " + label;
+			getString("_UI_Activity_type") : //$NON-NLS-1$
+			getString("_UI_Activity_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

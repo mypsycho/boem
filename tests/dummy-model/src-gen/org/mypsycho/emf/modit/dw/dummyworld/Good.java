@@ -17,7 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getType <em>Type</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getOffer <em>Offer</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getBought <em>Bought</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getCost <em>Cost</em>}</li>
  * </ul>
@@ -28,30 +28,26 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Good extends Detailed, Purchase {
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' reference.
+	 * Returns the value of the '<em><b>Offer</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type</em>' reference.
-	 * @see #setType(Product)
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getGood_Type()
+	 * @return the value of the '<em>Offer</em>' reference.
+	 * @see #setOffer(Product)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getGood_Offer()
 	 * @model
 	 * @generated
 	 */
-	Product getType();
+	Product getOffer();
 
 	/**
-	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getType <em>Type</em>}' reference.
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Good#getOffer <em>Offer</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type</em>' reference.
-	 * @see #getType()
+	 * @param value the new value of the '<em>Offer</em>' reference.
+	 * @see #getOffer()
 	 * @generated
 	 */
-	void setType(Product value);
+	void setOffer(Product value);
 
 	/**
 	 * Returns the value of the '<em><b>Bought</b></em>' attribute.

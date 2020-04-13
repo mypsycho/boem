@@ -61,8 +61,8 @@ public class OfferItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Offer_price_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Offer_price_feature", "_UI_Offer_type"),
+				 getString("_UI_Offer_price_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Offer_price_feature", "_UI_Offer_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.OFFER__PRICE,
 				 true,
 				 false,
@@ -82,8 +82,8 @@ public class OfferItemProvider
 	public String getText(Object object) {
 		String label = ((Offer)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Offer_type") :
-			getString("_UI_Offer_type") + " " + label;
+			getString("_UI_Offer_type") : //$NON-NLS-1$
+			getString("_UI_Offer_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

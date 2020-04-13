@@ -63,8 +63,8 @@ public class ContactItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_description_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"),
+				 getString("_UI_Detailed_description_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DETAILED__DESCRIPTION,
 				 true,
 				 false,
@@ -85,8 +85,8 @@ public class ContactItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_hint_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hint_feature", "_UI_Detailed_type"),
+				 getString("_UI_Detailed_hint_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hint_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DETAILED__HINT,
 				 true,
 				 false,
@@ -107,8 +107,8 @@ public class ContactItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Contact_locations_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_locations_feature", "_UI_Contact_type"),
+				 getString("_UI_Contact_locations_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_locations_feature", "_UI_Contact_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.CONTACT__LOCATIONS,
 				 true,
 				 false,
@@ -129,8 +129,8 @@ public class ContactItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Contact_owns_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_owns_feature", "_UI_Contact_type"),
+				 getString("_UI_Contact_owns_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_owns_feature", "_UI_Contact_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.CONTACT__OWNS,
 				 true,
 				 false,
@@ -150,8 +150,8 @@ public class ContactItemProvider
 	public String getText(Object object) {
 		String label = ((Contact)object).getDescription();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Contact_type") :
-			getString("_UI_Contact_type") + " " + label;
+			getString("_UI_Contact_type") : //$NON-NLS-1$
+			getString("_UI_Contact_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

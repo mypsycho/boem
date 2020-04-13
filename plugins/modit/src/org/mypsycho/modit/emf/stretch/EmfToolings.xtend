@@ -14,6 +14,7 @@ package org.mypsycho.modit.emf.stretch
 
 import java.util.Map
 import org.eclipse.emf.ecore.EClass
+import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EStructuralFeature
 
 /**
@@ -107,7 +108,7 @@ abstract class EmfToolings<T, P extends EmfParticipant> extends EmfParticipant.P
 
 	final static class XClass<T> extends EmfParticipant {
 		
-		def CBinding<T> bind(EmfStretcher it, EClass type) { 
+		def CBinding<T> bind(EmfStretcher it, EClassifier type) { 
 			new CBinding<T>(this, onClass(type))
 		}
 

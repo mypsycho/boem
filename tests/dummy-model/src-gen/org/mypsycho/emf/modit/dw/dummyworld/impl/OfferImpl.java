@@ -108,7 +108,7 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 	public void setParent(Company newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.OFFER__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
@@ -245,7 +245,7 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (price: ");
+		result.append(" (price: "); //$NON-NLS-1$
 		result.append(price);
 		result.append(')');
 		return result.toString();

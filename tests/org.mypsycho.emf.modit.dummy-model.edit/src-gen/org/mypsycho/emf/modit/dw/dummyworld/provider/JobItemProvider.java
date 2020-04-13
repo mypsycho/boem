@@ -63,8 +63,8 @@ public class JobItemProvider extends TitledItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Job_employee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Job_employee_feature", "_UI_Job_type"),
+				 getString("_UI_Job_employee_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Job_employee_feature", "_UI_Job_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.JOB__EMPLOYEE,
 				 true,
 				 false,
@@ -85,8 +85,8 @@ public class JobItemProvider extends TitledItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Job_since_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Job_since_feature", "_UI_Job_type"),
+				 getString("_UI_Job_since_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Job_since_feature", "_UI_Job_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.JOB__SINCE,
 				 true,
 				 false,
@@ -107,8 +107,8 @@ public class JobItemProvider extends TitledItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Job_team_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Job_team_feature", "_UI_Job_type"),
+				 getString("_UI_Job_team_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Job_team_feature", "_UI_Job_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.JOB__TEAM,
 				 true,
 				 false,
@@ -126,7 +126,7 @@ public class JobItemProvider extends TitledItemProvider {
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Job"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Job")); //$NON-NLS-1$
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class JobItemProvider extends TitledItemProvider {
 	public String getText(Object object) {
 		String label = ((Job)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Job_type") :
-			getString("_UI_Job_type") + " " + label;
+			getString("_UI_Job_type") : //$NON-NLS-1$
+			getString("_UI_Job_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
