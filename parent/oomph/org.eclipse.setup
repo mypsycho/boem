@@ -105,8 +105,12 @@
 			<requirement name="org.eclipse.rap.tools.feature.feature.group" />
 
 	  <!-- P2 Target platform editor -->
+			<requirement name="org.eclipse.epp.mpc.feature.group" /> 
+			<!-- market place is fine to search, but use oomph to trace installation -->
 			<repository url="http://download.eclipse.org/cbi/tpd/3.0.0-SNAPSHOT/" />
 			<requirement name="org.eclipse.cbi.targetplatform-feature.feature.group" />
+			
+	  <!-- Team work -->
 			<requirement name="org.eclipse.mylyn.bugzilla_feature.feature.group" />
 			<requirement name="org.eclipse.mylyn.context_feature.feature.group" />
 			<requirement name="org.eclipse.mylyn.ide_feature.feature.group" />
@@ -168,33 +172,32 @@
 		
 		<setupTask xsi:type="setup.p2:P2Task" id="modeling" label="Eclipse Modeling">
 			<repository url="http://download.eclipse.org/releases/2019-12" />
-			<repository url="http://download.eclipse.org/technology/epp/packages/2019-12" />
-			<repository url="https://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" />
-			
-			<requirement name="org.eclipse.emf.query.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.query.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.transaction.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.validation.sdk.feature.group" />
 			<requirement name="org.eclipse.gef.sdk.feature.group" />
 			<requirement name="org.eclipse.gmf.runtime.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.cdo.epp.feature.group" />
+
 			<requirement name="org.eclipse.emf.ecoretools.design.feature.group" />
+
 			<requirement name="org.eclipse.xtext.sdk.feature.group" />
+			<requirement name="org.eclipse.emf.ecore.xcore.sdk.feature.group" />
 			
+			<!-- We do not reference Sirius from Eclipse release as source in not available -->
+			<repository url="https://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" />
 			<requirement name="org.eclipse.sirius.specifier.source.feature.group" />
 			<requirement name="org.eclipse.sirius.specifier.ide.ui.source.feature.group" />
 			<requirement name="org.eclipse.acceleo.ui.interpreter.feature.group" />
 			<requirement name="org.eclipse.eef.ext.widgets.reference.feature.source.feature.group" />
 			<requirement name="org.eclipse.eef.sdk.feature.source.feature.group" />
-			
-			<requirement name="org.eclipse.emf.ecore.xcore.sdk.feature.group" />
-			
 			<requirement name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group" />
 			
 		</setupTask>
 		<setupTask xsi:type="setup.p2:P2Task" id="modeling-extras" label="Eclipse Modeling extra">
 			<repository url="http://download.eclipse.org/releases/2019-12" />
-			<repository url="http://download.eclipse.org/technology/epp/packages/2019-12" />
+
 			<requirement name="org.eclipse.ocl.all.sdk.feature.group" />
 <!-- ??? no source except for zip at
 https://www.eclipse.org/modeling/mdt/downloads/
