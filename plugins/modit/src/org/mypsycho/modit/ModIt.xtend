@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.mypsycho.modit
 
-import java.util.Collection
 import java.util.Collections
 import java.util.List
-import org.eclipse.emf.ecore.EObject
-import java.util.ArrayList
 import java.util.Objects
+import org.eclipse.emf.ecore.EObject
 
 /**
  * Utility class that contains the Mod-it abstraction.
@@ -31,7 +29,7 @@ import java.util.Objects
 class ModIt<T> {
 
 	/** How to create element and references */
-	protected val ModItImplementation<T, ?> impl
+	protected val ModItImplementation<T, ?> impl // Not an extension: API conflict
 
 	/** Description of the factory */
 	protected val ModItDescriptor<T> description
@@ -100,9 +98,43 @@ class ModIt<T> {
 		it
 	}
 	
+	
+	
 	/**
-	 * Builds a proxy to be resolved
-	 * when {@link ModIt#assemble(T)} is called.
+	 * Attaches more initialization task on element.
+	 * <p>
+	 * If a task was already attached, provided task is run afterward.
+	 * </p>
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	def <R extends T> andThen(R it, (R)=>void task) {
+		compose[it, previous| 
+			previous?.apply(it)
+			task.apply(it)
+		]
+	}
+
+	/**
+	 * Compose an new initialization task on element controlling previous task execution.
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	def <R extends T> compose(R it, (R, (R)=>void)=>void task) {
+		Objects.requireNonNull(task, "Task undefined")
+		val previous = impl.unbindInit(it)
+		impl.bindInit(it) [ task.apply(it, previous) ]
+		it
+	}
+	
+	
+	
+	/**
+	 * Builds a proxy to be resolved when {@link ModIt#assemble(T)} is called.
 	 * 
 	 * @param type of proxy to build (the interface of the EClass to build)
 	 * @param id of the target object
@@ -113,8 +145,7 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds a proxy to be resolved
-	 * when {@link ModIt#assemble(T)} is called.
+	 * Builds a proxy to be resolved when {@link ModIt#assemble(T)} is called.
 	 * 
 	 * @param type of proxy to build (the interface of the EClass to build)
 	 * @param id of the target object
@@ -125,8 +156,7 @@ class ModIt<T> {
 	}
 
 	/**
-	 * Builds a proxy to be resolved
-	 * when {@link ModIt#assemble(T)} is called.
+	 * Builds a proxy to be resolved when {@link ModIt#assemble(T)} is called.
 	 * 
 	 * @param type of proxy to build (the interface of the EClass to build)
 	 * @param id of the target object
@@ -192,7 +222,11 @@ class ModIt<T> {
 	/**
 	 * Attaches an assembly task on element.
 	 * <p>
-	 * If a task was already attached, provided task is run afterward.
+	 * If a task was already attached, provided task is executed afterward.
+	 * </p>
+	 * <p>
+	 * Warning: creating an element or a reference will be ignored in this phase,
+	 * use #onAssembledWith() to attach an new element into the assembl phase.
 	 * </p>
 	 * 
 	 * @param <R> type of Object to build
@@ -208,6 +242,10 @@ class ModIt<T> {
 
 	/**
 	 * Attaches an assembly task on element controlling previous task execution.
+	 * <p>
+	 * Warning: creating an element or a reference will be ignored in this phase,
+	 * use #onAssembledWith() to attach an new element at the #assemble() execution.
+	 * </p>
 	 * 
 	 * @param <R> type of Object to build
 	 * @param it object to complete during assembling
@@ -217,6 +255,55 @@ class ModIt<T> {
 		Objects.requireNonNull(task, "Task undefined")
 		val previous = impl.unbindAssemble(it)
 		impl.bindAssemble(it) [ task.apply(it, previous) ]
+		it
+	}
+
+
+	/**
+	 * Attaches an element not contain in assemble tree without .
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	protected def <R extends T> associateWith(R it, T ref) {
+		Objects.requireNonNull(ref, "Reference undefined")		
+		impl.bindReference(it, ref)
+		ModItAssembler.candidate(it)	
+		it
+	}
+
+	/**
+	 * Attaches an assembly task on element and associate to the assembling of 
+	 * another element.
+	 * <p>
+	 * When assembling elements, only sub-elements tree can build.</br>
+	 * To create an element that is not sub-elements, it must be associated to built
+	 * elements (any ancestor of currently build element).</br>
+	 * Provided task must indicated in newly created tree where to add element.
+	 * </p>
+	 * <p>
+	 * If a task was already attached, provided task is run afterward.
+	 * </p>
+	 * 
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	def <R extends T> onAssembledWith(R it, T ref, (R)=>void task) {
+		onAssembled(task).associateWith(ref)
+	}
+
+	/**
+	 * Attaches an assembly task on element controlling previous task execution.
+	 * 
+	 * @param <R> type of Object to build
+	 * @param it object to complete during assembling
+	 * @param task to run once object is assembled
+	 */
+	def <R extends T> onAssembledWith(R it, T ref, (R, (R)=>void)=>void task) {
+		onAssembled(task).associateWith(ref)
 	}
 
 	/**
@@ -254,8 +341,8 @@ class ModIt<T> {
 	 * @throw ClassCastException if a reference target an incompatible type
 	 * @throw IllegalStateException if a id defined used more than once
 	 */
-	def <R extends T> assemble(Collection<R> values) {
-		val builts = new ArrayList(values) /* isolate source and Fix order */
+	def <R extends T> assemble(Iterable<R> values) {
+		val builts = <R>newArrayList(values) /* isolate source and Fix order */
 		createPool(builts, createAssembler().perform(builts))
 	}
 

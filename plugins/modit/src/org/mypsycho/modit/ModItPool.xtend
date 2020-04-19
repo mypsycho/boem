@@ -104,11 +104,10 @@ class ModItPool<T, R extends T> {
 		update(access(type, id), filler)
 	}
 
-	static def <I, R extends I, A extends R, B extends R> aggregate(ModItPool<I, A> pool, Collection<B> values) {
-		val all = new ArrayList<R>()
-		all += pool.roots
-		all += values
+	static def <I, R extends I> aggregate(ModItPool<I, ? extends R> pool, Iterable<? extends R> values) {
+		val all = (pool.roots + values).toList
 		pool.context.perform(all)
+		new ModItPool(all, pool.context)
 	}
 
 }

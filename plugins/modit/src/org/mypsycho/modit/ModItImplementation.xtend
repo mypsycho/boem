@@ -259,4 +259,35 @@ abstract class ModItImplementation<T, F> {
 	 */
     def <R extends T> (R)=>void unbindAssemble(T it)
     
+	/**
+	 * Attaches an on-assembly task on the given value.
+	 * 
+	 * @param <R> type of it
+	 * @param it to attach
+	 * @param task action to perform 
+	 */
+	def void bindReference(T it, T ref)
+    
+    /**
+	 * Attaches an on-assembly task on the given value.
+	 * 
+	 * @param <R> type of it
+	 * @param it to attach
+	 * @param task action to perform 
+	 */
+	def T unbindReference(T it)
+    
+    
+    
+ 	/**
+	 * Detaches any on-assembly task from the object.
+	 * <p>
+	 * To run it or to amend it.
+	 * </p>
+	 * 
+	 * @param it the targeted EObject
+	 * @return task or null
+	 */
+    def T reference(T it)
+    
 }

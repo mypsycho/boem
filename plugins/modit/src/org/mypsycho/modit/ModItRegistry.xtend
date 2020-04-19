@@ -40,6 +40,10 @@ class ModItRegistry<T> {
 		explicits.get(key) ?: delegation?.apply(this, key)
 	}
 
+	def isRegistered(T it) {
+		explicits.values.contains(it)
+	}
+
 	protected def put(String key, T value) {
 		explicits.put(key, value)
 	}

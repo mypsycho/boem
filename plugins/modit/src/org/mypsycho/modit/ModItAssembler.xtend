@@ -14,7 +14,6 @@ package org.mypsycho.modit
 
 import java.util.Collection
 import java.util.LinkedList
-import java.util.List
 import java.util.NoSuchElementException
 
 /**
@@ -48,15 +47,18 @@ class ModItAssembler<T, F> {
 	 * @throw ClassCastException if a reference target an incompatible type
 	 * @throw IllegalStateException if a id defined used more than once
 	 */
-	def <R extends T> perform(List<R> values) {
+	def perform(Iterable<? extends T> values) {
 		if (CURRENT_RUN.get !== null) throw new IllegalStateException("No inception supported, sorry")
 
 		try {
 			CURRENT_RUN.set(this)
 
 			val onAssemblies = new LinkedList<Pair<T, (T)=>void>>
+			
+			val builtValues = <T>newArrayList(values)
+			
 			// Builds all contents
-			val stack = new LinkedList<T>(values)
+			val stack = <T>newLinkedList(builtValues)
 			while (!stack.empty || !onFlies.empty) {
 				if (!stack.empty) {
 					stack.applyPopAll[ 
@@ -72,31 +74,29 @@ class ModItAssembler<T, F> {
 						onFlies.remove(it) // if already attached
 					]
 				} else {
-					stack += onFlies.filter[ containedBy(it, values)  ]
+					onFlies.forEach[
+						if (containedBy(builtValues)) {
+							stack += it
+						} else if (reference.containedBy(builtValues)) {
+							builtValues += it
+							stack += it
+							unbindReference
+						}
+					]
+
 					onFlies.clear
 				}
 			}
 
 			// Builds all IDs
-			stack += values
+			stack += builtValues
 			while (!stack.empty) {
-				stack.applyPopAll[ 
-					var String id = unbindAlias ?: context.description.idProvider?.apply(it)
-					if (id !== null) {
-						val registered = registry.get(id)
-						if ((registered !== null) && (registered !== it)) {
-							throw new IllegalStateException("Duplicated id '" + id + "'")
-						}
-						registry.put(id, it)
-					}
-				]
+				stack.applyPopAll[ registerOnAlias ]
 			}
 
-			stack += values
+			stack += builtValues
 			while (!stack.empty) {
-				stack.applyPopAll[ 
-					allReferences(it).forEach[ ref | updateRef(ref) ]
-				]
+				stack.applyPopAll[ susbtituteAliases ]
 			}
 			
 			// At the end, perform assembly tasks
@@ -110,6 +110,26 @@ class ModItAssembler<T, F> {
 		this
 	}
 	
+	private def registerOnAlias(T it) {
+		if (registry.isRegistered(it)) {
+			return // already done
+		}
+		var String id = unbindAlias ?: context.description.idProvider?.apply(it)
+		if (id === null) {
+			return
+		}
+		val registered = registry.get(id)
+		if ((registered !== null) && (registered !== it)) {
+			throw new IllegalStateException("Duplicated id '" + id + "'")
+		}
+		registry.put(id, it)
+	}
+	
+	private def susbtituteAliases(T it) {
+		allReferences(it).forEach[ ref | updateRef(ref) ]
+	}
+	
+	
 	private def void applyPopAll(LinkedList<T> it, (T)=>void action) {
 		val head = pop
 		if (!contains(head)) { // Ensure uniqueness of work
@@ -118,11 +138,12 @@ class ModItAssembler<T, F> {
 		}
 	}
 
+	
 	private def boolean containedBy(T it, Collection<?> pool) {
-		(it !== null) && (pool.contains(it) || containedBy(implementation.containerOf(it), pool))
+		(it !== null) // null must be handled when testing reference
+			&& (pool.contains(it) || containedBy(implementation.containerOf(it), pool))
 	}
 	
-
 	package static def <T> void candidate(T element) {
 		(ModItAssembler.CURRENT_RUN.get as ModItAssembler<T, ?>)?.onFlies?.add(element)
 	}
@@ -132,14 +153,13 @@ class ModItAssembler<T, F> {
 		val values = getValues(container, prop)
 		if (values === null) return;
 
-		values.filter[isProxy].forEach [
+		values.filter[ proxy ].forEach [
 
 			var targetValue = registry.get(proxyId);
 			if (targetValue === null) { // assert found
 				registry.debug
 				throw new NoSuchElementException(
-'''Unknown «proxyId» for «prop.propName»«««
- of «registry.getQName(container)»'''
+'''Unknown «proxyId» for «prop.propName» of «registry.getQName(container)»'''
  				)
 			}
 			val path = getProxyPath 
@@ -152,16 +172,14 @@ class ModItAssembler<T, F> {
 			if (targetValue !== null && !targetValue.assignableTo(prop)) {
 				throw new ClassCastException(
 '''At «registry.getQName(container)».«prop.propName», «««
-«proxyId» targets a «targetValue.typeName» «««
-incompatible with «prop.refTypeName»'''
+«proxyId» targets a «targetValue.typeName» incompatible with «prop.refTypeName»'''
 				)
 			}
 
 			val fail = container.replaceResolved(prop, it, targetValue)
 			if (fail !== null) {
 				throw new IllegalStateException(
-'''At «registry.getQName(container)».«prop.propName», «««
-«proxyId» value fails because «fail»'''
+'''At «registry.getQName(container)».«prop.propName», «proxyId» value fails because «fail»'''
 				)
 			}
 		]

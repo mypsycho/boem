@@ -26,7 +26,7 @@ class EModItProcInfo extends AdapterImpl {
 	
 	/** Possible types of attachment */
 	enum PiType { 
-		alias, path, content, init, assemble
+		alias, path, content, init, assemble, reference
 	}
 
 	/** type of attachment */
@@ -87,5 +87,16 @@ class EModItProcInfo extends AdapterImpl {
 		previous.value as S
 	}
 
+	
+	/**
+	 * Detaches any id from the object and returns it.
+	 *
+	 * @param type of attachment
+	 * @param it to detach
+	 * @return attached value or null
+	 */
+	 static def <S> S test(PiType type, EObject it) {
+		(EcoreUtil.getAdapter(eAdapters, type) as EModItProcInfo)?.value as S
+	}
 
 }

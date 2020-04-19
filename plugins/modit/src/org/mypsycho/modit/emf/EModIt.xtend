@@ -25,13 +25,13 @@ import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.InternalEObject
 import org.eclipse.emf.ecore.util.FeatureMapUtil
 import org.eclipse.emf.ecore.util.InternalEList
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.mypsycho.modit.ModIt
 import org.mypsycho.modit.ModItDescriptor
 import org.mypsycho.modit.ModItImplementation
 import org.mypsycho.modit.emf.EModItProcInfo.PiType
 
 import static extension org.mypsycho.modit.emf.EModItProcInfo.*
-import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * Mod-it implementation for Ecore Modeling Framework.
@@ -226,7 +226,6 @@ class EModIt extends ModIt<EObject> {
 			PiType.init.unbind(it)
 		}
 		
-		
 		override <R extends EObject> bindAssemble(R it, (R)=>void task) {
 			PiType.assemble.bind(it, task)
 		}
@@ -234,6 +233,19 @@ class EModIt extends ModIt<EObject> {
 		override <R extends EObject> unbindAssemble(EObject it) {
 			PiType.assemble.unbind(it)
 		}
+
+		override bindReference(EObject it, EObject ref) {
+			PiType.reference.bind(it, ref)
+		}
+	
+		override unbindReference(EObject it) {
+			PiType.reference.unbind(it)
+		}
+	
+		override reference(EObject it) {
+			PiType.reference.test(it)
+		}
+
 	}
    
 }
