@@ -12,23 +12,25 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.edit
 
+import java.util.Arrays
+import java.util.Collections
+import java.util.List
 import org.eclipse.emf.common.EMFPlugin
+import org.eclipse.emf.common.util.ResourceLocator
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.provider.EcoreEditPlugin
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.mypsycho.modit.emf.stretch.EmfStretcher
 import org.eclipse.emf.common.EMFPlugin.EclipsePlugin
-import org.eclipse.emf.common.util.ResourceLocator
 
 /**
  * Common abstraction for EMF Plugin using EmfStretcher.
  * 
  * @author nperansin
  */
-abstract class AbstractEmfModitPlugin<E extends EclipsePlugin> extends EMFPlugin {
+abstract class ModitEmfPlugin<E extends EclipsePlugin> extends EMFPlugin {
 	
 	@Accessors
-	val EmfStretcher stretcher
+	val List<? extends EPackage> editedPackages
 	
 	/**
 	 * Create an instance using default delegate resource locator.
@@ -46,7 +48,7 @@ abstract class AbstractEmfModitPlugin<E extends EclipsePlugin> extends EMFPlugin
 	 */
 	new(ResourceLocator[] delegateResLocators, EPackage... packages) {
 		super(delegateResLocators)
-		stretcher = new EmfStretcher(packages)
+		editedPackages = Collections.unmodifiableList(Arrays.asList(packages));
 	}
 	
 	

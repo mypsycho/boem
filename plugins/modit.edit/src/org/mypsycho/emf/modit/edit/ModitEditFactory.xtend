@@ -34,7 +34,7 @@ import org.mypsycho.modit.emf.i18n.EmfI18n
 import org.mypsycho.modit.emf.stretch.EmfStretcher
 import org.eclipse.xtend.lib.annotations.Accessors
 
-class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFactory 
+class ModitEditFactory extends ReflectiveItemProviderAdapterFactory 
 		implements IChildCreationExtender {
 
 	static val MINUMUM_SUPPORTED_TYPES = #[
@@ -61,12 +61,12 @@ class ModitItemProviderAdapterFactory extends ReflectiveItemProviderAdapterFacto
 	val List<ChildCreationExtenderManager> ccExtManagers
 
 
-	new(AbstractEmfModitPlugin<?> plugin) {
+	new(ModitEmfPlugin<?> plugin) {
 		this(plugin, Locale.^default)
 	}
 	
-	new(AbstractEmfModitPlugin<?> plugin, Locale locale) {
-		this(plugin, plugin.stretcher, locale)
+	new(ModitEmfPlugin<?> plugin, Locale locale) {
+		this(plugin, new EmfStretcher(plugin.editedPackages), locale)
 	}
 	
 	new(EMFPlugin resLoc, EmfStretcher descr) {

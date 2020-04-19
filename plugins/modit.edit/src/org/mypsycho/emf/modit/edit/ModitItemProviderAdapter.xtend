@@ -13,47 +13,19 @@
 package org.mypsycho.emf.modit.edit
 
 import java.util.Collections
-import java.util.Map
-import org.eclipse.emf.common.command.Command
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.edit.command.CommandParameter
-import org.eclipse.emf.edit.domain.EditingDomain
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+import org.eclipse.emf.edit.provider.IItemLabelProvider
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider
 import org.eclipse.emf.edit.provider.ItemProviderAdapter
-import org.mypsycho.modit.emf.i18n.EmfI18n
 import org.mypsycho.modit.emf.stretch.EmfStretcher
-import org.eclipse.xtend.lib.annotations.Accessors
 
 class ModitItemProviderAdapter extends ItemProviderAdapter 
-	implements IEditingDomainItemProvider/* , 
-        ITreeItemContentProvider, IStructuredItemContentProvider,  
-        IItemLabelProvider, IItemPropertySource */{
-	
-	public static val DEFAULT_ICON_PATH = "icons/full/obj16/"
-	
-	static val DEFAULT_LABEL_FEATNAMES = #[ "name", "label", "text" ]
-	
-	
-	static def String getTextFromDefaultFeature(EObject it, Map<EClass, (EObject)=>String> cache) {
-		// Very slow implementation
-		cache.computeIfAbsent(eClass) [
-			// Search usual feature
-			val feat = DEFAULT_LABEL_FEATNAMES.map[known|
-				eClass.EAllAttributes.findFirst[ 
-					known == name 
-						&& EAttributeType.instanceClass == String
-				]
-			].filterNull.head
-			
-			if (feat !== null) { // use found feature
-				[ eGet(feat) as String ]
-			} else { // use class name as label
-				val classLabel = EmfI18n.get(eClass.EPackage).getLabel(eClass);
-				[ classLabel ]
-			}
-		].apply(it)
-	}
+	implements IEditingDomainItemProvider, IItemLabelProvider, 
+        ITreeItemContentProvider , IStructuredItemContentProvider/*,	
+        IItemPropertySource */{ // analyse org.eclipse.emf.edit.provider.ReflectiveItemProvider 
 
 	
     // gen model : package
@@ -87,7 +59,7 @@ class ModitItemProviderAdapter extends ItemProviderAdapter
 	
 	package val ModitItemProviderForwarder forwarder
 	
-    new(ModitItemProviderAdapterFactory adapterFactory, EClass type) {
+    new(ModitEditFactory adapterFactory, EClass type) {
         super(adapterFactory)
         this.type = type
         context = adapterFactory.descriptor
@@ -115,8 +87,8 @@ class ModitItemProviderAdapter extends ItemProviderAdapter
 		}
 	}
     
-    override ModitItemProviderAdapterFactory getAdapterFactory() {
-    	super.adapterFactory as ModitItemProviderAdapterFactory
+    override ModitEditFactory getAdapterFactory() {
+    	super.adapterFactory as ModitEditFactory
     }
     
     package def getOtherTargets() {
@@ -144,29 +116,31 @@ class ModitItemProviderAdapter extends ItemProviderAdapter
 //    }
 //        
 
-
-
 	override protected getResourceLocator() {
-		(adapterFactory as ModitItemProviderAdapterFactory).resourceLocator
+		(adapterFactory as ModitEditFactory).resourceLocator
 	}
 
+
+	//
+	// IItemLabelProvider
+	// 
+
 	override getText(Object it) {
-		(it as EObject)*ModitEditLabels.TEXT
+		(it as EObject).eClass*ModitEditLabels.TEXT
 	}
     
     override getImage(Object it) {
     	val path = (it as EObject)*ModitEditLabels.IMAGE_PATH
     	overlayImage(
     		if (path !== null) resourceLocator.getImage(path)
-    		else ModitEditPlugin.INSTANCE.getImage("obj16/EObject.png")
+    		else ModitEditPlugin.INSTANCE.getImage(ModitEditLabels.UNDEFINED_ICON)
     	)
     }
 
-
-	override createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter) {
-		super.createCommand(object, domain, commandClass, commandParameter)
-	}
-
+	//
+	// IEditingDomainItemProvider, ITreeItemContentProvider, IStructuredItemContentProvider
+	//   Mostly inherited from ItemProviderAdapter TODO customize for virtual node.
+	
 
     // icon
     // decoration
@@ -175,7 +149,7 @@ class ModitItemProviderAdapter extends ItemProviderAdapter
     
 	override getChildren(Object object) {
 		super.getChildren(object)
-		// For virtual node, modify getAnyChildrenFeatures to has virtual feature ??
+		// For virtual node, modify getAnyChildrenFeatures and getValue to add virtual feature ??
 		
 		// Check each feature value is always get through 
 		// #getValue(

@@ -72,7 +72,6 @@ class ModitItemProviderForwarder implements INotifyChangedListener {
 	def Set<EObject> accumulateAssociatedElements(EObject target, Set<EObject> accuml) {
 		val elements = target.directAssociateds.toSet
 			// using a flat map ensure an editable set is returned
-
 		
 		// keep only not accumulated
 		elements -= accuml
@@ -107,7 +106,7 @@ class ModitItemProviderForwarder implements INotifyChangedListener {
 	
 		
 	private def notifyChanged(Notification it, EObject target) {
-		if(notifier !== null && target.directAssociateds.contains(notifier)) {
+		if(notifier !== null && target.directAssociateds.toList.contains(notifier)) {
 			forwarding = true // enough to cascade every time ??
 			parent.fireNotifyChanged(new ViewerNotification(it, target, false, true))
 			forwarding = false
