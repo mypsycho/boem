@@ -20,7 +20,6 @@ import org.eclipse.sirius.diagram.description.ContainerMapping
 import org.eclipse.sirius.diagram.description.EdgeMapping
 import org.eclipse.sirius.diagram.description.Layer
 import org.eclipse.sirius.diagram.description.NodeMapping
-import org.eclipse.sirius.diagram.description.style.CenterLabelStyleDescription
 import org.eclipse.sirius.diagram.description.style.ContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.EdgeStyleDescription
 import org.eclipse.sirius.diagram.description.style.SquareDescription
@@ -56,6 +55,8 @@ class CompanyDiagram extends AbstractDiagram {
 			subNodeMappings += NodeMapping.create[
 				domainClass = Service	
 			
+				// Cross Reference fails !!
+				// associated elements will always be wrong !!!
 				semanticCandidatesExpression = context.expression[ Job it |
 					SessionManager.INSTANCE.getSession(it)
 						.semanticCrossReferencer.getNonNavigableInverseReferences(it)
