@@ -31,7 +31,9 @@ https://www.eclipse.org/legal/epl-2.0/
 	</licenses>
 	
 	<modules>
+		<!-- Types of project -->
 		<module>parent</module>
+		<!-- Regular components -->
 		<module>plugins/modit</module>
 		<module>plugins/modit.sirius</module>
 		<module>plugins/modit.edit</module><!-- Compile only -->
@@ -39,6 +41,7 @@ https://www.eclipse.org/legal/epl-2.0/
 	</modules>
 	
 	<profiles>
+	
 		<profile>
 			<id>tests-modules</id>
 			<activation>
@@ -86,9 +89,21 @@ https://www.eclipse.org/legal/epl-2.0/
 		</profile>
 
 	</profiles>
+	
 	<build>
+	
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-versions-plugin</artifactId>
+					<version>1.5.1</version>
+					<configuration>
+						<!-- List of ArtifactIds reachable by this pom. -->
+						<!-- Only the ones without project.parent. -->
+						<artifacts>container,parent</artifacts>
+					</configuration>
+				</plugin>
 				<plugin>
 					<!-- Configuration to update version -->
 					<!-- Command reminder:
@@ -114,17 +129,8 @@ https://www.eclipse.org/legal/epl-2.0/
 						<origin>origin</origin>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-versions-plugin</artifactId>
-					<version>1.5.1</version>
-					<configuration>
-						<!-- List of ArtifactIds reachable by this pom. -->
-						<!-- Only the ones without project.parent. -->
-						<artifacts>container,parent,publish</artifacts>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
+		
 	</build>
 </project>
