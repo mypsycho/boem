@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Contact#getLocations <em>Locations</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Contact#getOwns <em>Owns</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Contact#getParent <em>Parent</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getContact()
@@ -32,10 +33,13 @@ public interface Contact extends Named, Detailed {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * 
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Locations</em>' containment reference list.
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getContact_Locations()
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.Location#getParent
-	 * @model opposite="parent" containment="true"
+	 * @model opposite="parent" containment="true" keys="name"
 	 * @generated
 	 */
 	EList<Location> getLocations();
@@ -57,5 +61,29 @@ public interface Contact extends Named, Detailed {
 	 * @generated
 	 */
 	EList<Purchase> getOwns();
+
+	/**
+	 * Returns the value of the '<em><b>Parent</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.mypsycho.emf.modit.dw.dummyworld.Directory#getContacts <em>Contacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Parent</em>' container reference.
+	 * @see #setParent(Directory)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getContact_Parent()
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Directory#getContacts
+	 * @model opposite="contacts" transient="false"
+	 * @generated
+	 */
+	Directory getParent();
+
+	/**
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Contact#getParent <em>Parent</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Parent</em>' container reference.
+	 * @see #getParent()
+	 * @generated
+	 */
+	void setParent(Directory value);
 
 } // Contact

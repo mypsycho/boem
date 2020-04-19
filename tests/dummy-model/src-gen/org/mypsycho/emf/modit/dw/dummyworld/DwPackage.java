@@ -373,13 +373,22 @@ public interface DwPackage extends EPackage {
 	int CONTACT__OWNS = NAMED_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTACT__PARENT = NAMED_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Contact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_FEATURE_COUNT = NAMED_FEATURE_COUNT + 4;
+	int CONTACT_FEATURE_COUNT = NAMED_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -434,6 +443,15 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int PERSON__OWNS = CONTACT__OWNS;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__PARENT = CONTACT__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Firstname</b></em>' attribute.
@@ -515,6 +533,15 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPANY__OWNS = CONTACT__OWNS;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPANY__PARENT = CONTACT__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -652,7 +679,7 @@ public interface DwPackage extends EPackage {
 	int OFFER__NAME = TITLED__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute list.
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -706,7 +733,7 @@ public interface DwPackage extends EPackage {
 	int PRODUCT__NAME = OFFER__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute list.
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -760,7 +787,7 @@ public interface DwPackage extends EPackage {
 	int SERVICE__NAME = OFFER__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute list.
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1023,13 +1050,40 @@ public interface DwPackage extends EPackage {
 	int ACTIVITY_OPERATION_COUNT = TITLED_OPERATION_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__NAME = TITLED__NAME;
+
+	/**
 	 * The feature id for the '<em><b>Contacts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY__CONTACTS = 0;
+	int DIRECTORY__CONTACTS = TITLED_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Directories</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__DIRECTORIES = TITLED_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__PARENT = TITLED_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Directory</em>' class.
@@ -1038,7 +1092,16 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_FEATURE_COUNT = 1;
+	int DIRECTORY_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY___GET_PARENT = TITLED___GET_PARENT;
 
 	/**
 	 * The number of operations of the '<em>Directory</em>' class.
@@ -1047,7 +1110,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_OPERATION_COUNT = 0;
+	int DIRECTORY_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1137,6 +1200,17 @@ public interface DwPackage extends EPackage {
 	EReference getContact_Owns();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Contact#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Contact#getParent()
+	 * @see #getContact()
+	 * @generated
+	 */
+	EReference getContact_Parent();
+
+	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Person <em>Person</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1220,6 +1294,28 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDirectory_Contacts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.mypsycho.emf.modit.dw.dummyworld.Directory#getDirectories <em>Directories</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Directories</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Directory#getDirectories()
+	 * @see #getDirectory()
+	 * @generated
+	 */
+	EReference getDirectory_Directories();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Directory#getParent <em>Parent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Directory#getParent()
+	 * @see #getDirectory()
+	 * @generated
+	 */
+	EReference getDirectory_Parent();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Named <em>Named</em>}'.
@@ -1327,10 +1423,10 @@ public interface DwPackage extends EPackage {
 	EClass getOffer();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.mypsycho.emf.modit.dw.dummyworld.Offer#getPrice <em>Price</em>}'.
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.dw.dummyworld.Offer#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Price</em>'.
+	 * @return the meta object for the attribute '<em>Price</em>'.
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.Offer#getPrice()
 	 * @see #getOffer()
 	 * @generated
@@ -1598,6 +1694,14 @@ public interface DwPackage extends EPackage {
 		EReference CONTACT__OWNS = eINSTANCE.getContact_Owns();
 
 		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTACT__PARENT = eINSTANCE.getContact_Parent();
+
+		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PersonImpl <em>Person</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1666,6 +1770,22 @@ public interface DwPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DIRECTORY__CONTACTS = eINSTANCE.getDirectory_Contacts();
+
+		/**
+		 * The meta object literal for the '<em><b>Directories</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIRECTORY__DIRECTORIES = eINSTANCE.getDirectory_Directories();
+
+		/**
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIRECTORY__PARENT = eINSTANCE.getDirectory_Parent();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.Named <em>Named</em>}' class.
@@ -1758,7 +1878,7 @@ public interface DwPackage extends EPackage {
 		EClass OFFER = eINSTANCE.getOffer();
 
 		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

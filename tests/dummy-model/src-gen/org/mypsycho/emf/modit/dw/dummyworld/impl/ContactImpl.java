@@ -15,9 +15,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.mypsycho.emf.modit.dw.dummyworld.Contact;
 import org.mypsycho.emf.modit.dw.dummyworld.Detailed;
+import org.mypsycho.emf.modit.dw.dummyworld.Directory;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 import org.mypsycho.emf.modit.dw.dummyworld.Location;
 import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
@@ -34,6 +36,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getHint <em>Hint</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getLocations <em>Locations</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getOwns <em>Owns</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getParent <em>Parent</em>}</li>
  * </ul>
  *
  * @generated
@@ -203,6 +206,49 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public Directory getParent() {
+		if (eContainerFeatureID() != DwPackage.CONTACT__PARENT) return null;
+		return (Directory)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetParent(Directory newParent, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newParent, DwPackage.CONTACT__PARENT, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setParent(Directory newParent) {
+		if (newParent != eInternalContainer() || (eContainerFeatureID() != DwPackage.CONTACT__PARENT && newParent != null)) {
+			if (EcoreUtil.isAncestor(this, newParent))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newParent != null)
+				msgs = ((InternalEObject)newParent).eInverseAdd(this, DwPackage.DIRECTORY__CONTACTS, Directory.class, msgs);
+			msgs = basicSetParent(newParent, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.CONTACT__PARENT, newParent, newParent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -211,6 +257,10 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLocations()).basicAdd(otherEnd, msgs);
 			case DwPackage.CONTACT__OWNS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOwns()).basicAdd(otherEnd, msgs);
+			case DwPackage.CONTACT__PARENT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetParent((Directory)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -227,8 +277,24 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				return ((InternalEList<?>)getLocations()).basicRemove(otherEnd, msgs);
 			case DwPackage.CONTACT__OWNS:
 				return ((InternalEList<?>)getOwns()).basicRemove(otherEnd, msgs);
+			case DwPackage.CONTACT__PARENT:
+				return basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case DwPackage.CONTACT__PARENT:
+				return eInternalContainer().eInverseRemove(this, DwPackage.DIRECTORY__CONTACTS, Directory.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -248,6 +314,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				return getLocations();
 			case DwPackage.CONTACT__OWNS:
 				return getOwns();
+			case DwPackage.CONTACT__PARENT:
+				return getParent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -275,6 +343,9 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				getOwns().clear();
 				getOwns().addAll((Collection<? extends Purchase>)newValue);
 				return;
+			case DwPackage.CONTACT__PARENT:
+				setParent((Directory)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -299,6 +370,9 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 			case DwPackage.CONTACT__OWNS:
 				getOwns().clear();
 				return;
+			case DwPackage.CONTACT__PARENT:
+				setParent((Directory)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -319,6 +393,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 				return locations != null && !locations.isEmpty();
 			case DwPackage.CONTACT__OWNS:
 				return owns != null && !owns.isEmpty();
+			case DwPackage.CONTACT__PARENT:
+				return getParent() != null;
 		}
 		return super.eIsSet(featureID);
 	}

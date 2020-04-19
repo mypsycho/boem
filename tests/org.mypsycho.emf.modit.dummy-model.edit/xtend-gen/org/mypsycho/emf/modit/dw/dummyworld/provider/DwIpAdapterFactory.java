@@ -13,9 +13,9 @@ import org.mypsycho.emf.modit.dw.dummyworld.Job;
 import org.mypsycho.emf.modit.dw.dummyworld.Person;
 import org.mypsycho.emf.modit.dw.dummyworld.Titled;
 import org.mypsycho.emf.modit.dw.dummyworld.provider.DwEditPlugin;
+import org.mypsycho.emf.modit.edit.ModitEditFactory;
 import org.mypsycho.emf.modit.edit.ModitEditLabels;
 import org.mypsycho.emf.modit.edit.ModitEditListeners;
-import org.mypsycho.emf.modit.edit.ModitItemProviderAdapterFactory;
 import org.mypsycho.modit.emf.stretch.EmfExtensions;
 import org.mypsycho.modit.emf.stretch.EmfToolings;
 
@@ -28,7 +28,7 @@ import org.mypsycho.modit.emf.stretch.EmfToolings;
  * </p>
  */
 @SuppressWarnings("all")
-public class DwIpAdapterFactory extends ModitItemProviderAdapterFactory {
+public class DwIpAdapterFactory extends ModitEditFactory {
   private static final DwPackage PKG = DwPackage.eINSTANCE;
   
   /**

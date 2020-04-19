@@ -4,12 +4,12 @@ package org.mypsycho.emf.modit.dw.dummyworld.provider;
 
 import org.eclipse.emf.common.EMFPlugin.EclipsePlugin;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
-import org.mypsycho.emf.modit.edit.AbstractEmfModitPlugin;
+import org.mypsycho.emf.modit.edit.ModitEmfPlugin;
 
 /**
  * This is the central singleton for the DummyWorld edit plugin.
  */
-public final class DwEditPlugin extends AbstractEmfModitPlugin<DwEditPlugin.Implementation> {
+public final class DwEditPlugin extends ModitEmfPlugin<DwEditPlugin.Implementation> {
 
 	/** The EMF singleton. */
 	public static final DwEditPlugin INSTANCE = new DwEditPlugin();

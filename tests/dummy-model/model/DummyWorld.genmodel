@@ -22,8 +22,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Titled/name"/>
     </genClasses>
     <genClasses image="false" ecoreClass="DummyWorld.ecore#//Contact">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/locations"/>
+      <genFeatures documentation="" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/locations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/owns"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Contact/parent"/>
     </genClasses>
     <genClasses ecoreClass="DummyWorld.ecore#//Person">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Person/firstname"/>
@@ -60,6 +62,8 @@
     </genClasses>
     <genClasses ecoreClass="DummyWorld.ecore#//Directory">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Directory/contacts"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Directory/directories"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DummyWorld.ecore#//Directory/parent"/>
     </genClasses>
     <genClasses ecoreClass="DummyWorld.ecore#//Location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DummyWorld.ecore#//Location/value"/>

@@ -6,11 +6,10 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
 import org.mypsycho.emf.modit.dw.dummyworld.Job
 import org.mypsycho.emf.modit.dw.dummyworld.Person
 import org.mypsycho.emf.modit.dw.dummyworld.Titled
-import org.mypsycho.emf.modit.edit.ModitItemProviderAdapterFactory
+import org.mypsycho.emf.modit.edit.ModitEditFactory
 
 import static org.mypsycho.emf.modit.edit.ModitEditLabels.*
 import static org.mypsycho.emf.modit.edit.ModitEditListeners.*
-
 
 /** 
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -20,7 +19,7 @@ import static org.mypsycho.emf.modit.edit.ModitEditListeners.*
  * Note that most of the adapters are shared among multiple instances.
  * </p>
  */
-class DwIpAdapterFactory extends ModitItemProviderAdapterFactory {
+class DwIpAdapterFactory extends ModitEditFactory {
 	
 	static val PKG = DwPackage.eINSTANCE
 	
@@ -33,10 +32,11 @@ class DwIpAdapterFactory extends ModitItemProviderAdapterFactory {
 	new() {
 		super(DwEditPlugin.INSTANCE)
 		
-		// this should be static but if static on to get a locale ??
+		// this should be static but if static, how to get locale from this instance ?
+		// Major tradeback, to have typed and 
 		Titled<<TEXT += [ name ]
 		Person<<TEXT += [ firstname + ' ' + lastname ]
-		Job<<TEXT += [ //
+		Job<<TEXT += [ 
 			if (employee !== null) '''«employee*TEXT» («name»)'''
 			else '''unaffected «name»'''
 		]

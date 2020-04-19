@@ -3,19 +3,12 @@
 package org.mypsycho.emf.modit.dw.dummyworld.impl;
 
 import java.math.BigDecimal;
-
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.mypsycho.emf.modit.dw.dummyworld.Company;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
@@ -37,14 +30,23 @@ import org.mypsycho.emf.modit.dw.dummyworld.Offer;
  */
 public abstract class OfferImpl extends TitledImpl implements Offer {
 	/**
-	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute list.
+	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getPrice()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<BigDecimal> price;
+	protected static final BigDecimal PRICE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected BigDecimal price = PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -71,11 +73,21 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 	 * @generated
 	 */
 	@Override
-	public EList<BigDecimal> getPrice() {
-		if (price == null) {
-			price = new EDataTypeUniqueEList<BigDecimal>(BigDecimal.class, this, DwPackage.OFFER__PRICE);
-		}
+	public BigDecimal getPrice() {
 		return price;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPrice(BigDecimal newPrice) {
+		BigDecimal oldPrice = price;
+		price = newPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.OFFER__PRICE, oldPrice, price));
 	}
 
 	/**
@@ -191,8 +203,7 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DwPackage.OFFER__PRICE:
-				getPrice().clear();
-				getPrice().addAll((Collection<? extends BigDecimal>)newValue);
+				setPrice((BigDecimal)newValue);
 				return;
 			case DwPackage.OFFER__PARENT:
 				setParent((Company)newValue);
@@ -210,7 +221,7 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case DwPackage.OFFER__PRICE:
-				getPrice().clear();
+				setPrice(PRICE_EDEFAULT);
 				return;
 			case DwPackage.OFFER__PARENT:
 				setParent((Company)null);
@@ -228,7 +239,7 @@ public abstract class OfferImpl extends TitledImpl implements Offer {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case DwPackage.OFFER__PRICE:
-				return price != null && !price.isEmpty();
+				return PRICE_EDEFAULT == null ? price != null : !PRICE_EDEFAULT.equals(price);
 			case DwPackage.OFFER__PARENT:
 				return getParent() != null;
 		}

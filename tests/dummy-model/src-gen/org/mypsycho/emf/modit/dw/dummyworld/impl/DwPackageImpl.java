@@ -249,6 +249,16 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getContact_Parent() {
+		return (EReference)contactEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPerson() {
 		return personEClass;
 	}
@@ -321,6 +331,26 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	@Override
 	public EReference getDirectory_Contacts() {
 		return (EReference)directoryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDirectory_Directories() {
+		return (EReference)directoryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDirectory_Parent() {
+		return (EReference)directoryEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -677,6 +707,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		contactEClass = createEClass(CONTACT);
 		createEReference(contactEClass, CONTACT__LOCATIONS);
 		createEReference(contactEClass, CONTACT__OWNS);
+		createEReference(contactEClass, CONTACT__PARENT);
 
 		personEClass = createEClass(PERSON);
 		createEAttribute(personEClass, PERSON__FIRSTNAME);
@@ -715,6 +746,8 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 
 		directoryEClass = createEClass(DIRECTORY);
 		createEReference(directoryEClass, DIRECTORY__CONTACTS);
+		createEReference(directoryEClass, DIRECTORY__DIRECTORIES);
+		createEReference(directoryEClass, DIRECTORY__PARENT);
 
 		locationEClass = createEClass(LOCATION);
 		createEAttribute(locationEClass, LOCATION__VALUE);
@@ -769,6 +802,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		goodEClass.getESuperTypes().add(this.getPurchase());
 		activityEClass.getESuperTypes().add(this.getTitled());
 		activityEClass.getESuperTypes().add(this.getPurchase());
+		directoryEClass.getESuperTypes().add(this.getTitled());
 		locationEClass.getESuperTypes().add(this.getTitled());
 		locationEClass.getESuperTypes().add(this.getWObject());
 
@@ -788,7 +822,9 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 
 		initEClass(contactEClass, Contact.class, "Contact", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getContact_Locations(), this.getLocation(), this.getLocation_Parent(), "locations", null, 0, -1, Contact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		getContact_Locations().getEKeys().add(this.getTitled_Name());
 		initEReference(getContact_Owns(), this.getPurchase(), this.getPurchase_Parent(), "owns", null, 0, -1, Contact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getContact_Parent(), this.getDirectory(), this.getDirectory_Contacts(), "parent", null, 0, 1, Contact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(personEClass, Person.class, "Person", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getPerson_Firstname(), ecorePackage.getEString(), "firstname", null, 0, 1, Person.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -806,7 +842,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEReference(getJob_Team(), this.getJob(), null, "team", null, 0, -1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(offerEClass, Offer.class, "Offer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getOffer_Price(), theEcorePackage.getEBigDecimal(), "price", null, 0, -1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getOffer_Price(), theEcorePackage.getEBigDecimal(), "price", null, 0, 1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getOffer_Parent(), this.getCompany(), this.getCompany_Offers(), "parent", null, 0, 1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -828,11 +864,14 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEReference(getActivity_SupportedBy(), this.getJob(), null, "supportedBy", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getDirectory_Contacts(), this.getContact(), null, "contacts", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getDirectory_Contacts(), this.getContact(), this.getContact_Parent(), "contacts", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getDirectory_Directories(), this.getDirectory(), this.getDirectory_Parent(), "directories", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		getDirectory_Directories().getEKeys().add(this.getTitled_Name());
+		initEReference(getDirectory_Parent(), this.getDirectory(), this.getDirectory_Directories(), "parent", null, 0, 1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getLocation_Value(), ecorePackage.getEString(), "value", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getLocation_Parent(), this.getContact(), this.getContact_Locations(), "parent", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getLocation_Parent(), this.getContact(), this.getContact_Locations(), "parent", null, 1, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

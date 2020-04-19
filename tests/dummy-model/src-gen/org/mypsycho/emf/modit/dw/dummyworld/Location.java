@@ -65,7 +65,7 @@ public interface Location extends Titled, WObject {
 	 * @see #setParent(Contact)
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getLocation_Parent()
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.Contact#getLocations
-	 * @model opposite="locations" transient="false"
+	 * @model opposite="locations" required="true" transient="false"
 	 * @generated
 	 */
 	Contact getParent();

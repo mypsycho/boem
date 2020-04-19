@@ -190,6 +190,9 @@ public class DwSwitch<T> extends Switch<T> {
 			case DwPackage.DIRECTORY: {
 				Directory directory = (Directory)theEObject;
 				T result = caseDirectory(directory);
+				if (result == null) result = caseTitled(directory);
+				if (result == null) result = caseNamed(directory);
+				if (result == null) result = caseWObject(directory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
