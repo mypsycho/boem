@@ -13,15 +13,16 @@
  package org.mypsycho.modit.emf.sirius.api
 
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.sirius.table.metamodel.table.description.CrossTableDescription
-import org.eclipse.sirius.table.metamodel.table.description.ElementColumnMapping
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.sirius.table.metamodel.table.description.EditionTableDescription
+import org.eclipse.sirius.table.metamodel.table.description.FeatureColumnMapping
 
 /**
  * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
  * 
  * @author nicolas.peransin
  */
-abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
+abstract class AbstractEditionTable extends AbstractTable<EditionTableDescription> {
 
 	/**
 	 * Create a factory for a diagram description
@@ -29,21 +30,12 @@ abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
 	 * @param parent of diagram
 	 */
 	new(AbstractGroup parent, String dLabel, Class<? extends EObject> dClass) {
-		super(CrossTableDescription, parent, dLabel, dClass)
+		super(EditionTableDescription, parent, dLabel, dClass)
 	}
-	
-	
-	/**
-	 * Sets the domain class of a description.
-	 * <p>
-	 * EClass is resolved using businessPackages of AbstractGroup.
-	 * </p>
-	 * 
-	 * @param it description to define
-	 * @param type of the description
-	 */
-	def void setDomainClass(ElementColumnMapping it, Class<? extends EObject> type) {
-		domainClass = context.asDomainClass(type)
+
+
+	def void setFeature(FeatureColumnMapping it, EStructuralFeature feat) {
+		featureName = feat.name
 	}
 	
 }

@@ -15,11 +15,14 @@
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.sirius.diagram.description.AbstractNodeMapping
+import org.eclipse.sirius.diagram.description.ConditionalContainerStyleDescription
+import org.eclipse.sirius.diagram.description.ConditionalNodeStyleDescription
 import org.eclipse.sirius.diagram.description.DiagramDescription
 import org.eclipse.sirius.diagram.description.DiagramElementMapping
 import org.eclipse.sirius.diagram.description.Layer
 import org.eclipse.sirius.diagram.description.style.BorderedStyleDescription
 import org.eclipse.sirius.diagram.description.style.BundledImageDescription
+import org.eclipse.sirius.diagram.description.style.ContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.FlatContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.NodeStyleDescription
 import org.eclipse.sirius.diagram.description.style.WorkspaceImageDescription
@@ -110,6 +113,20 @@ abstract class AbstractDiagram extends AbstractRepresentation<DiagramDescription
 		if (name === null) {
 			name = ref.name
 		}
+	}
+	
+	def <T extends ContainerStyleDescription> caseContainerStyle(String condition, Class<T> type, (T)=>void init) {
+		ConditionalContainerStyleDescription.create[
+			predicateExpression = condition
+			style = type.createStyle(init)
+		]
+	}
+	
+	def <T extends NodeStyleDescription> caseNodeStyle(String condition, Class<T> type, (T)=>void init) {
+		ConditionalNodeStyleDescription.create[
+			predicateExpression = condition
+			style = type.createStyle(init)
+		]
 	}
 
 	override initDefaultStyle(BasicLabelStyleDescription it) {

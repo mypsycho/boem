@@ -12,13 +12,14 @@
  *******************************************************************************/
  package org.mypsycho.modit.emf.sirius.api
 
+import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.sirius.viewpoint.description.RepresentationDescription
 import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.style.BasicLabelStyleDescription
 import org.mypsycho.modit.emf.EModIt
-import java.util.ArrayList
+import org.mypsycho.modit.emf.sirius.SiriusModelProvider
 
 /**
  * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
@@ -148,6 +149,17 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 		labelColor = SystemColor.extraRef("color:black")
 		
 		labelExpression = context.itemProviderLabel
+	}
+	
+	
+	/**
+	 * Create a string from expression from a sequence of parameter names.
+	 * 
+	 * @param params names
+	 * @return string of parameters
+	 */
+	static def params(String... params) { 
+		params.join(SiriusModelProvider.PARAM_SEP)
 	}
 	
 }

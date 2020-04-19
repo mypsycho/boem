@@ -15,7 +15,6 @@ package org.mypsycho.modit.emf.sirius.api
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EClassifier
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.util.EcoreEList
 import org.eclipse.emf.edit.provider.IItemLabelProvider
@@ -28,9 +27,17 @@ import org.eclipse.sirius.viewpoint.description.IdentifiedElement
  * @author nperansin
  */
 class SiriusDesigns {
-		
 	
+	/** Expression for return semantic container */
+	public static val IDENTITY = "aql:self"
+
 	
+	/**
+	 * Return the default item provider of an element
+	 * 
+	 * @param it to adapt
+	 * @return item provider
+	 */
 	static def getItemProvider(EObject it) {
 		DiagramUIPlugin.plugin.itemProvidersAdapterFactory
 			.adapt(it, IItemLabelProvider) as IItemLabelProvider
