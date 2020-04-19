@@ -24,7 +24,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
 class DummyWorldDesign extends AbstractGroup {
 	
 	new () {
-		super(DwPackage.eINSTANCE)
+		businessPackages += DwPackage.eINSTANCE
 	}
 	
 	override protected initContent(Group it) {

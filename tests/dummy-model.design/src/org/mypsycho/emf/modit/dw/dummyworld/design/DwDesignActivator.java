@@ -24,20 +24,20 @@ public class DwDesignActivator extends AbstractUIPlugin {
     public static final String PLUGIN_ID = "org.mypsycho.emf.modit.dummy-model.design";
 
     // The shared instance
-    private static DwDesignActivator plugin;
+    private static DwDesignActivator instance;
 
     private IDisposable vpReference; 
 
     @Override
     public void start(BundleContext context) throws Exception {
       super.start(context);
-	  plugin = this;
+      instance = this;
 	  vpReference = MisActivator.getInstance().registerGroups(PLUGIN_ID, DummyWorldDesign.class);
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-		plugin = null;
+    	instance = null;
 		if (vpReference != null) {
 			vpReference.dispose();
 			vpReference = null; 
@@ -51,6 +51,6 @@ public class DwDesignActivator extends AbstractUIPlugin {
      * @return the shared instance
      */
     public static DwDesignActivator getInstance() {
-    	return plugin;
+    	return instance;
     }
 }

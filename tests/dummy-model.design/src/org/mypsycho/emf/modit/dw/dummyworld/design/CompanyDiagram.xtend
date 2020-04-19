@@ -33,7 +33,7 @@ import org.mypsycho.modit.emf.sirius.api.AbstractDiagram
 import org.mypsycho.modit.emf.sirius.api.SiriusDesigns
 
 /**
- * Organization chart of company
+ * Organization chart of Company.
  *
  * @author nperansin
  */
@@ -46,7 +46,8 @@ class CompanyDiagram extends AbstractDiagram {
 	}
 	
 	override initContent(Layer it) {
-		containerMappings += ContainerMapping.createAs("company_Employees") [
+		
+		containerMappings += ContainerMapping.createAs("node:company_Employees") [
 			semanticCandidatesExpression = PKG.company_Employees
 			childrenPresentation = ContainerLayout.LIST
 			
@@ -70,9 +71,9 @@ class CompanyDiagram extends AbstractDiagram {
 			
 		]
 		
-		edgeMappings += EdgeMapping.create[
-			sourceMapping += ContainerMapping.ref("company_Employees")
-			targetMapping += ContainerMapping.ref("company_Employees")
+		edgeMappings += EdgeMapping.createAs("edge:company_team")[
+			sourceMapping += ContainerMapping.ref("node:company_Employees")
+			targetMapping += ContainerMapping.ref("node:company_Employees")
 			targetFinderExpression = SiriusDesigns.encode(PKG.job_Team)
 			
 			style = EdgeStyleDescription.create [
