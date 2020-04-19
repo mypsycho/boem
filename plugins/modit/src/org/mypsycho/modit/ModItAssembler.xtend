@@ -53,8 +53,6 @@ class ModItAssembler<T, F> {
 		try {
 			CURRENT_RUN.set(this)
 
-			val onAssemblies = new LinkedList<Pair<T, (T)=>void>>
-			
 			val builtValues = <T>newArrayList(values)
 			
 			// Builds all contents
@@ -67,16 +65,13 @@ class ModItAssembler<T, F> {
 							context.description.contentProvider.accept(content, it)	
 						}
 						unbindInit?.apply(it)
-						val onAssembly = unbindAssemble
-						if (onAssembly !== null) {
-							onAssemblies.add(0, it->onAssembly)
-						}
 						onFlies.remove(it) // if already attached
 					]
 				} else {
 					onFlies.forEach[
 						if (containedBy(builtValues)) {
 							stack += it
+							unbindReference
 						} else if (reference.containedBy(builtValues)) {
 							builtValues += it
 							stack += it
@@ -99,8 +94,23 @@ class ModItAssembler<T, F> {
 				stack.applyPopAll[ susbtituteAliases ]
 			}
 			
+			// For post-action, we want deeper first and last (attached) first
+			val onAssemblies = new LinkedList<Pair<T, (T)=>void>>
+			
+			
+			stack += builtValues
+			while (!stack.empty) {
+				stack.applyPopAll[ // Store execution order to reverse it.
+					val onAssembly = unbindAssemble
+					if (onAssembly !== null) {
+						onAssemblies.add(0, it->onAssembly)
+					}
+				]
+			}
+			
 			// At the end, perform assembly tasks
 			onAssemblies.forEach[ value.apply(key) ]
+			
 
 		} finally {
 			onFlies.clear

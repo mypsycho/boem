@@ -269,7 +269,7 @@ abstract class ModItImplementation<T, F> {
 	def void bindReference(T it, T ref)
     
     /**
-	 * Attaches an on-assembly task on the given value.
+	 * Detaches an on-assembly task on the given value.
 	 * 
 	 * @param <R> type of it
 	 * @param it to attach
@@ -280,7 +280,7 @@ abstract class ModItImplementation<T, F> {
     
     
  	/**
-	 * Detaches any on-assembly task from the object.
+	 * Test an existing reference any on-assembly task from the object.
 	 * <p>
 	 * To run it or to amend it.
 	 * </p>
