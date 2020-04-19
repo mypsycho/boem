@@ -3,16 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
 	xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0" name="mypsycho"
-	label="Eclipse develpment Profile"
+	label="Eclipse development Profile"
 >
 	<annotation source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-		<detail key="folderName">
-			<value>eclipse</value>
-		</detail>
-		<detail key="folderName.macosx">
-			<value>Eclipse</value>
-		</detail>
+		<detail key="folderName"><value>eclipse</value></detail>
+		<detail key="folderName.macosx"><value>Eclipse</value></detail>
 	</annotation>
+	
 	<setupTask xsi:type="setup.p2:P2Task">
 		<requirement name="org.eclipse.oomph.setup.feature.group" />
 		<repository url="${oomph.update.url}" />
@@ -105,7 +102,9 @@
 			<requirement name="org.eclipse.rap.tools.feature.feature.group" />
 
 	  <!-- P2 Target platform editor -->
-			<requirement name="org.eclipse.epp.mpc.feature.group" /> 
+			<requirement name="org.eclipse.epp.mpc.feature.group" /> <!-- no transivity ?? -->
+			<requirement name="org.eclipse.equinox.p2.discovery.feature.feature.group" />
+			<requirement name="org.eclipse.userstorage.feature.group" />
 			<!-- market place is fine to search, but use oomph to trace installation -->
 			<repository url="http://download.eclipse.org/cbi/tpd/3.0.0-SNAPSHOT/" />
 			<requirement name="org.eclipse.cbi.targetplatform-feature.feature.group" />
@@ -125,19 +124,44 @@
 			<requirement name="org.eclipse.wst.xml_ui.feature.feature.group" />
 			<requirement name="org.eclipse.pde.api.tools.ee.feature.feature.group" />
 			      
-      <!--  javafx: why not -->
+		</setupTask>
+		
+				
+		<setupTask xsi:type="setup.p2:P2Task" id="langs" label="UI designer">
+			<repository url="http://download.eclipse.org/releases/2019-12" />
+			
+      		<!-- javafx -->
 			<repository url="http://download.eclipse.org/efxclipse/updates-released/3.6.0/site/" />
 			<requirement name="org.eclipse.fx.ide.feature.feature.group" />
+			
+			<!-- swt or swing -->
+			<repository url="http://download.eclipse.org/windowbuilder/latest/" />
+			<requirement name="org.eclipse.wb.core.feature.feature.group" />
+			<requirement name="org.eclipse.wb.core.java.feature.feature.group" />
+			<requirement name="org.eclipse.wb.core.ui.feature.feature.group" />
+			<requirement name="org.eclipse.wb.core.xml.feature.feature.group" />
+			<requirement name="org.eclipse.wb.doc.user.feature.feature.group" />
+			<requirement name="org.eclipse.wb.layout.group.feature.feature.group" />
+			<requirement name="org.eclipse.wb.rcp.doc.user.feature.feature.group" />
+			<requirement name="org.eclipse.wb.rcp.feature.feature.group" />
+			<requirement name="org.eclipse.wb.rcp.SWT_AWT_support.feature.group" />
+			<requirement name="org.eclipse.wb.swing.doc.user.feature.feature.group" />
+			<requirement name="org.eclipse.wb.swing.feature.feature.group" />
+			<requirement name="org.eclipse.wb.swt.feature.feature.group" />
+			<requirement name="org.eclipse.wb.xwt.feature.feature.group" />
+			
+			
 		</setupTask>
+		
 		
 		<setupTask xsi:type="setup.p2:P2Task" id="langs" label="Language">
 			<repository url="http://download.eclipse.org/releases/2019-12" />
 		
-			  <!-- Java language -->
+			 <!-- Java language -->
 			<requirement name="org.eclipse.xtend.sdk.feature.group" />
 			<requirement name="org.eclipse.xtext.sdk.feature.group" />
 			
-			<!-- No release of kotlin eclipse ! 2020-03 -->
+			<!-- No release of kotlin eclipse (2020-03) -->
 			<repository url="https://dl.bintray.com/jetbrains/kotlin/eclipse-plugin/last/" />
       
 			<requirement name="org.eclipse.equinox.weaving.sdk.feature.group" />
@@ -146,6 +170,12 @@
 			<requirement name="org.jetbrains.kotlin.policy.feature.group" />
 			<requirement name="org.jetbrains.kotlin.weaving.feature.feature.group" />
 		
+			<!-- Devstyle (Darkest theme) -->
+			<repository url="http://www.genuitec.com/updates/devstyle/ci/" />
+			<requirement name="com.genuitec.eclipse.theming.dependencies.feature.feature.group" />
+			<requirement name="com.genuitec.eclipse.theming.designer.feature.feature.group" />
+			<requirement name="com.genuitec.eclipse.theming.oss.feature.group" />
+			<requirement name="com.genuitec.eclipse.common.explorer.jdt.feature.feature.group" />
 		
 		</setupTask>
 		
@@ -156,6 +186,7 @@
 			<repository url="http://eclipse.pitest.org/release" />
 			<requirement name="org.pitest.pitclipse.feature.feature.group" />
  -->
+ 			
 			<repository url="https://checkstyle.github.io/eclipse-cs/update" />
 			<requirement name="net.sf.eclipsecs.feature.group" />
 		
@@ -168,6 +199,12 @@
 			<requirement name="org.sf.feeling.decompiler.jad.feature.group" />
 			<requirement name="org.sf.feeling.decompiler.jd.feature.group" />
 			<requirement name="org.sf.feeling.decompiler.procyon.feature.group" />
+			
+			<!-- TODO SonarLint
+			
+			<repository url="https://eclipse-uc.sonarlint.org" />
+			-->
+			
 		</setupTask>
 		
 		<setupTask xsi:type="setup.p2:P2Task" id="modeling" label="Eclipse Modeling">

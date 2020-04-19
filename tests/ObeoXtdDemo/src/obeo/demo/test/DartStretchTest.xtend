@@ -116,7 +116,7 @@ class DartStretchTest extends DartTestContext {
 			.split("\\R"), 
 			content.onAll.map[
 				val result = indent + it * DartContribution.LABEL
-				System.err.println(result)
+				// System.err.println(result)
 				result
 			].toList)
 	}
