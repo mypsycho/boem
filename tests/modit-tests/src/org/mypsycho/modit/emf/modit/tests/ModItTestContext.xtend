@@ -15,6 +15,10 @@ package org.mypsycho.modit.emf.modit.tests
 import java.util.Collection
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.InternalEObject
+import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
+import org.mypsycho.emf.modit.dw.dummyworld.Named
+import org.mypsycho.emf.modit.dw.dummyworld.Person
+import org.mypsycho.emf.modit.dw.dummyworld.Titled
 import org.mypsycho.modit.emf.EModIt
 
 import static org.junit.Assert.*
@@ -24,6 +28,49 @@ import static org.junit.Assert.*
  */
 abstract class ModItTestContext {
 	
+	protected val extension EModIt factory = // tested 
+		EModIt.using(DwPackage.eINSTANCE) [
+        	idProvider = [ provideId ]
+        	contentProvider = [ text, it |
+        		if (it instanceof Titled) {
+        			name = text
+        		} else if (it instanceof Person) {
+        			val space = text.indexOf(" ")
+        			firstname = if (space != -1) text.substring(0, space) else text
+        			lastname =  if (space != -1) text.substring(space + 1) else null
+        		}
+        	]
+		]
+	
+	
+
+	
+	def static onAll(EObject it) { #[ it ] + [ eAllContents() ] }
+	
+	static def String indent(EObject it) {
+		if (eContainer === null) "" else " " + eContainer.indent
+	}
+	
+	
+	/**
+	 * Create an id recursively.
+	 * <p>
+	 * Test of containment on 
+	 * </p>
+	 * 
+	 */
+	static def String provideId(EObject it) {
+		// testing auto alias with recursivity
+		if (it instanceof Named) {
+        	val path = 
+        		(if (parent !== null) parent.provideId?.concat("/")) ?: ""
+        	
+        	if (it instanceof Titled) (if (name !== null) path + name)
+        	else if (it instanceof Person) 
+        		if (firstname !== null && lastname !== null)
+        			'''«path»«firstname».«lastname»'''
+        }
+	}
 	
 	/**
 	 * Checks that there is not adapter lest in the model (some adapters are added while building the model)
@@ -47,8 +94,7 @@ abstract class ModItTestContext {
 				.map[ 
 					if (many) eObject.eGet(it, false) as Collection<InternalEObject>
 					else #[ eObject.eGet(it, false) as InternalEObject ]
-				].flatten
-				.filter[
+				].flatten.filter[
 					if (it instanceof InternalEObject) 
 						eIsProxy && EModIt.PROXY_URI_SCHEME == eProxyURI.scheme
 					else false

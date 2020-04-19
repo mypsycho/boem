@@ -27,10 +27,15 @@ class EmfI18nTest {
     @Test
     def void defaultLabels() {
     	val extension EmfI18n it = EmfI18n.get(EMF, Locale.US)
+    	// Test label from java reflection
 		assertEquals("EMF class", EClass.label)
+		
+		// Test label from emf reflection 
 		assertEquals("EMF data type", EMF.EDataType.label)
+		
+		// Test default label
 		assertEquals("name", EMF.ENamedElement_Name.label)
-		assertEquals("EMF model element", EMF.EAnnotation_EModelElement.label)
+		assertEquals("model element", EMF.EAnnotation_EModelElement.label)
     }
 	
     @Test

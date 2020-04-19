@@ -10,7 +10,7 @@
  * Contributors:
  *    Nicolas PERANSIN - initial API and implementation
  *******************************************************************************/
-package org.mypsycho.modit.emf.modit.tests
+package org.mypsycho.modit.emf.modit.tests.legacy
 
 import fr.ibp.odv.boem.mm.test.BoemTest.A
 import fr.ibp.odv.boem.mm.test.BoemTest.B
@@ -19,6 +19,7 @@ import fr.ibp.odv.boem.mm.test.BoemTest.NamedElement
 import fr.ibp.odv.boem.mm.test.BoemTest.Node
 import org.junit.Test
 import org.mypsycho.modit.emf.EModIt
+import org.mypsycho.modit.emf.modit.tests.ModItTestContext
 
 import static org.junit.Assert.*
 
@@ -29,7 +30,7 @@ class AutoIdTest extends ModItTestContext {
 	
 	extension EModIt factory = EModIt.using(BoemTestPackage.eINSTANCE) [
         idProvider = [ if (it instanceof NamedElement) name else null ]
-	] 
+	]
 	
 	@Test
 	def void testNominal() {

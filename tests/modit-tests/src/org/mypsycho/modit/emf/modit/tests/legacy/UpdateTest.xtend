@@ -10,19 +10,20 @@
  * Contributors:
  *    Nicolas PERANSIN - initial API and implementation
  *******************************************************************************/
-package org.mypsycho.modit.emf.modit.tests
+package org.mypsycho.modit.emf.modit.tests.legacy
 
 import fr.ibp.odv.boem.mm.test.BoemTest.A
 import fr.ibp.odv.boem.mm.test.BoemTest.B
 import fr.ibp.odv.boem.mm.test.BoemTest.BoemTestPackage
 import fr.ibp.odv.boem.mm.test.BoemTest.C
 import fr.ibp.odv.boem.mm.test.BoemTest.NamedElement
+import java.util.NoSuchElementException
 import org.eclipse.emf.ecore.EObject
 import org.junit.Test
 import org.mypsycho.modit.emf.EModIt
+import org.mypsycho.modit.emf.modit.tests.ModItTestContext
 
 import static org.junit.Assert.*
-import java.util.NoSuchElementException
 
 /**
  * Tests updates.
