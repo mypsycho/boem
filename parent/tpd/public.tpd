@@ -1,6 +1,8 @@
 target "Mod-it build" 
 
-with requirements, source
+with requirements
+
+environment JavaSE-1.8
 
 include "runtime.tpd"
 include "test.tpd"

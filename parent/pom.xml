@@ -90,21 +90,23 @@
 								<arch>*</arch>
 							</environment>
 						 -->
+						 <!-- x86 is not more supported: it cause swt fails
 							<environment>
 								<os>win32</os>
 								<ws>win32</ws>
 								<arch>x86</arch>
-							</environment>
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86_64</arch>
 							</environment>
 							<environment>
 								<os>linux</os>
 								<ws>gtk</ws>
 								<arch>x86</arch>
+							</environment> -->
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
 							</environment>
+
 							<environment>
 								<os>linux</os>
 								<ws>gtk</ws>
@@ -113,11 +115,6 @@
 							<environment>
 								<os>macosx</os>
 								<ws>cocoa</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
 								<arch>x86_64</arch>
 							</environment>
 						</environments>
@@ -149,10 +146,10 @@
 					</dependencies>
 					<configuration>
 						<strictBinIncludes>false</strictBinIncludes>
-						<!-- 'v' prefix in commun usage in eclipse -->
+						<!-- 'v' prefix in common usage in eclipse -->
 						<format>'v'yyyyMMdd-HHmm</format>
 						<timestampProvider>jgit</timestampProvider>
-						 <!-- No expression supported for git.dirty; Use property. -->
+						<!-- No expression supported for git.dirty; Use property. -->
 						<jgit.dirtyWorkingTree>${git.dirty}</jgit.dirtyWorkingTree>
 						<!-- Ignore eclipse lazy update confs. -->
 						<jgit.ignore> 
@@ -181,16 +178,34 @@
 					</configuration>
 				</plugin>
 				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+			    <plugin>
+			      <groupId>org.eclipse.tycho</groupId>
+			      <artifactId>tycho-p2-plugin</artifactId>
+			      <version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+			      <groupId>org.eclipse.tycho.extras</groupId>
+			      <artifactId>tycho-source-feature-plugin</artifactId>
+			      <version>${tycho.version}</version>
+				</plugin>
+				<plugin>
 					<groupId>org.eclipse.xtend</groupId>
 					<artifactId>xtend-maven-plugin</artifactId>
 					<version>${xtend.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
 	</build>
+
 	<profiles>
+
 		<profile>
-			<id>tycho-source</id>
+			<id>tycho-plugin-source</id>
 			<activation>
 				<file><!-- Active for bundle and tests, neither feature, site nor product -->
 					<exists>META-INF/MANIFEST.MF</exists>
@@ -207,16 +222,69 @@
                         http://www.eclipse.org/tycho/sitedocs/tycho-source-plugin/plugin-source-mojo.html
                          -->
 							<execution>
-								<phase>prepare-package</phase>
+							<!-- 	<phase>prepare-package</phase>  -->
 								<goals>
 									<goal>plugin-source</goal>
 								</goals>
 							</execution>
 						</executions>
 					</plugin>
+					<!--
+					        <excludes>
+          <exclude>**/*.bmp</exclude>
+          <exclude>**/*.jpg</exclude>
+          <exclude>**/*.jpeg</exclude>
+          <exclude>**/*.gif</exclude>
+        </excludes>
+					-->
+					
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>tycho-feature-source</id>
+			<activation>
+				<file><!-- Active for bundle and tests, neither feature, site nor product -->
+					<exists>feature.xml</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+				    <plugin>
+				      <groupId>org.eclipse.tycho.extras</groupId>
+				      <artifactId>tycho-source-feature-plugin</artifactId>
+				      <executions>
+				        <execution>
+				          <id>source-feature</id>
+				          <phase>package</phase>
+				          <goals>
+				            <goal>source-feature</goal>
+				          </goals>
+				        </execution>
+				      </executions>
+				    </plugin>
+				    <plugin>
+<!-- 
+See https://wiki.eclipse.org/Tycho/Reference_Card#Source_Features
+for p2-metadata in feature
+ -->
+				      <groupId>org.eclipse.tycho</groupId>
+				      <artifactId>tycho-p2-plugin</artifactId>
+				      <executions>
+				        <execution>
+				          <id>attach-p2-metadata</id>
+				          <phase>package</phase>
+				          <goals>
+				            <goal>p2-metadata</goal>
+				          </goals>
+				        </execution>
+				      </executions>
+				    </plugin>
+    				</plugins>
+			</build>
+		</profile>
+		
 		<profile>
 			<id>xtend-nature</id>
 			<activation>
@@ -225,6 +293,32 @@
 				</file>
 			</activation>
 			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-compiler-plugin</artifactId>
+						
+							<configuration>
+								<excludeResources><!-- xtend is source -->
+									<excludeResource>**/*.xtend</excludeResource>
+								</excludeResources>
+							</configuration>
+						</plugin>
+						<!-- Xtend files should be there according to doc.
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-source-plugin</artifactId>
+							<configuration>
+								<excludeResources>
+									<excludeResource>**/*.xtend</excludeResource>
+								</excludeResources>
+							</configuration>
+							
+						</plugin>
+						 -->
+					</plugins>
+				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.eclipse.xtend</groupId>

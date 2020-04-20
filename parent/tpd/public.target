@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="Mod-it build" sequenceNumber="1586371246">
+<target name="Mod-it build" sequenceNumber="1587419474">
   <locations>
-    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="false" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.emf.ecore.feature.group" version="2.19.0.v20190822-1451"/>
       <unit id="org.eclipse.xtext.xbase.feature.group" version="2.19.0.v20190902-1322"/>
       <unit id="org.eclipse.emf.ecore.xcore.feature.group" version="1.11.0.v20190822-1451"/>
@@ -20,4 +20,5 @@
       <repository id="eclipse_2019_09" location="http://download.eclipse.org/releases/2019-09/"/>
     </location>
   </locations>
+  <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 </target>

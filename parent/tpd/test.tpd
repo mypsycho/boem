@@ -2,6 +2,8 @@ target "Mod-it test"
 
 with requirements
 
+environment JavaSE-1.8
+
 location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	
 	// required for xcore
@@ -14,3 +16,4 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	org.junit
 	
 }
+
