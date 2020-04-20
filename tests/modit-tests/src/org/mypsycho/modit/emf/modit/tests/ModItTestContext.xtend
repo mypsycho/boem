@@ -30,10 +30,26 @@ import static org.junit.Assert.*
  */
 abstract class ModItTestContext {
 	
+	/** Factory with recursive identification and Named fillling pattern */
 	protected val extension EModIt factory = // tested 
-		EModIt.using(DwPackage.eINSTANCE) [
-        	idProvider = [ provideId ]
-        	contentProvider = [ text, it |
+		EModIt.using(DwPackage.eINSTANCE) [ descr |
+        	
+        	descr.idProvider = [ // Create an id recursively.
+		        // testing auto alias with recursivity
+				if (it instanceof Job || it instanceof Location) null // job and location not unique
+				else if (it instanceof Named) {
+		        	val path = 
+		        		(if (parent !== null) descr.idProvider.apply(parent)?.concat("/")) 
+		        		?: ""
+		        	
+		        	if (it instanceof Titled) (if (name !== null) path + name)
+		        	else if (it instanceof Person) 
+		        		if (firstname !== null && lastname !== null)
+		        			'''«path»«firstname».«lastname»'''
+		        }
+        	]
+        	
+        	descr.contentProvider = [ text, it |
         		if (it instanceof Titled) {
         			name = text
         		} else if (it instanceof Person) {
@@ -45,28 +61,6 @@ abstract class ModItTestContext {
 		]
 	
 	
-
-	
-	/**
-	 * Create an id recursively.
-	 * <p>
-	 * Test of containment on 
-	 * </p>
-	 * 
-	 */
-	static def String provideId(EObject it) {
-		// testing auto alias with recursivity
-		if (it instanceof Job || it instanceof Location) null // job and location not unique
-		else if (it instanceof Named) {
-        	val path = 
-        		(if (parent !== null) parent.provideId?.concat("/")) ?: ""
-        	
-        	if (it instanceof Titled) (if (name !== null) path + name)
-        	else if (it instanceof Person) 
-        		if (firstname !== null && lastname !== null)
-        			'''«path»«firstname».«lastname»'''
-        }
-	}
 	
 	def static onAll(EObject it) { #[ it ] + [ eAllContents() ] }
 	
