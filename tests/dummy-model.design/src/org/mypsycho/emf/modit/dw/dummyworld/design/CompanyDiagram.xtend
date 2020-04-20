@@ -20,8 +20,8 @@ import org.eclipse.sirius.diagram.description.ContainerMapping
 import org.eclipse.sirius.diagram.description.EdgeMapping
 import org.eclipse.sirius.diagram.description.Layer
 import org.eclipse.sirius.diagram.description.NodeMapping
-import org.eclipse.sirius.diagram.description.style.ContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.EdgeStyleDescription
+import org.eclipse.sirius.diagram.description.style.FlatContainerStyleDescription
 import org.eclipse.sirius.diagram.description.style.SquareDescription
 import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.mypsycho.emf.modit.dw.dummyworld.Activity
@@ -51,7 +51,7 @@ class CompanyDiagram extends AbstractDiagram {
 			semanticCandidatesExpression = PKG.company_Employees
 			childrenPresentation = ContainerLayout.LIST
 			
-			style = ContainerStyleDescription.createStyle
+			style = FlatContainerStyleDescription.createStyle
 			
 			subNodeMappings += NodeMapping.create[
 				domainClass = Service	

@@ -14,7 +14,6 @@ package org.mypsycho.emf.modit.dw.dummyworld.design;
 
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.mypsycho.modit.emf.sirius.MisActivator;
 import org.osgi.framework.BundleContext;
 
 
@@ -32,7 +31,7 @@ public class DwDesignActivator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
       super.start(context);
       instance = this;
-	  vpReference = MisActivator.getInstance().registerGroups(PLUGIN_ID, DummyWorldDesign.class);
+	  // vpReference = MisActivator.getInstance().registerGroups(PLUGIN_ID, DummyWorldDesign.class);
     }
 
     @Override

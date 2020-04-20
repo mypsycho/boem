@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="org.eclipse.emf.ecore.protocol_parser">
+      <parser
+            class="factory.Factory1"
+            protocolName="org.mypsycho.emf.modit.dummy-model.design.tests.parser1">
+      </parser>
+   </extension>
+
+</fragment>

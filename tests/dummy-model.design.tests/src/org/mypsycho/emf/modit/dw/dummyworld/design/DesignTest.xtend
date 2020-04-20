@@ -2,16 +2,19 @@ package org.mypsycho.emf.modit.dw.dummyworld.design
 
 import java.nio.file.Paths
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.XMIResource
 import org.junit.Test
 import org.mypsycho.modit.emf.sirius.tool.SiriusReverseIt
+import org.eclipse.sirius.viewpoint.SiriusPlugin
 
 /**
  * Test model generation and reverse.
  * 
  * @author nperansin
  */
+// Plugin-test: Sirius needs a lot dependencies to load odesign.
 class DesignTest {
 
 	// Specific
@@ -34,10 +37,17 @@ class DesignTest {
     	val rs = new ResourceSetImpl()
     	
     	// plugin test is required: Sirius drags indirect dependencies.
-//    	rs.resourceFactoryRegistry.extensionToFactoryMap.put("odesign", 
-//    		new DescriptionResourceFactoryImpl()
-//    	)
-		
+    	rs.resourceFactoryRegistry.extensionToFactoryMap.put("odesign", 
+    		new ResourceFactoryImpl() // replace 
+    		// org.eclipse.sirius.viewpoint.description.util.DescriptionResourceFactoryImpl
+    	)
+    	
+    	
+    	rs.URIConverter.URIMap.put(
+    		URI.createURI("environment:/viewpoint"),
+    		URI.createPlatformPluginURI(SiriusPlugin.ID + "/model/Environment.odesign", true)
+    	)
+    	
 		// new ResourceSetImpl().resourceFactoryRegistry.extensionToFactoryMap
         val res = rs.createResource(URI.createFileURI(TEST_PATH.resolve(DESIGN_FILENAME).toString))
         

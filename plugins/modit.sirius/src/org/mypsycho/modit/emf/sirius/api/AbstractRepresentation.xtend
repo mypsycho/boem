@@ -133,7 +133,8 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 	 * @return created Style
 	 */
 	protected def <T extends BasicLabelStyleDescription> T createStyle(Class<T> it) {
-		createStyle(null)
+		// explicit it is required to avoid infinite loop
+		it.createStyle(null)
 	}
 	
 	/**

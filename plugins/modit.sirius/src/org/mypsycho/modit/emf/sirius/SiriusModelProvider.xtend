@@ -58,16 +58,18 @@ abstract class SiriusModelProvider implements ModitModel {
 		
 		// Should be a separated plugin
 		org.eclipse.sirius.diagram.description.DescriptionPackage.eINSTANCE,
+		org.eclipse.sirius.diagram.description.style.StylePackage.eINSTANCE,
 		org.eclipse.sirius.diagram.description.tool.ToolPackage.eINSTANCE,
 		
 		// Should be a separated plugin
 		org.eclipse.sirius.diagram.sequence.description.DescriptionPackage.eINSTANCE,
+		// no style for Sequence diagram.
 		org.eclipse.sirius.diagram.sequence.description.tool.ToolPackage.eINSTANCE,
 		
 		org.eclipse.sirius.table.metamodel.table.description.DescriptionPackage.eINSTANCE,
-		// table tools are in same package
+		// table tools are in same package.
 		org.eclipse.sirius.tree.description.DescriptionPackage.eINSTANCE,
-		// tree tools are in same package
+		// tree tools are in same package.
 		
 		
 		PropertiesPackage.eINSTANCE, 
