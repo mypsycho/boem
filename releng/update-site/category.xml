@@ -10,5 +10,11 @@ Eclipse Category Editor does not handle dynamic versions.
    <feature id="org.mypsycho.emf.modit.sirius_feature" >
       <category name="emf.modit"/>
    </feature>
+   <feature id="org.mypsycho.emf.modit_feature.source" >
+      <category name="emf.modit"/>
+   </feature>
+   <feature id="org.mypsycho.emf.modit.sirius_feature.source" >
+      <category name="emf.modit"/>
+   </feature>
    <category-def name="emf.modit" label="EMF Mod-It"/>
 </site>
