@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.mypsycho.emf.modit.sirius;singleton:=true
-Bundle-Version: 0.4.0
+Bundle-Version: 0.4.1.qualifier
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Require-Bundle: com.google.guava,
