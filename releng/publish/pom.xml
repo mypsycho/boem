@@ -8,10 +8,10 @@
 	<groupId>org.mypsycho.emf.modit</groupId>
 	<artifactId>publish</artifactId>
 	<packaging>pom</packaging>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.4.0</version>
 	<name>Mod-it Publish</name>
 	<properties>
-		<mvn.build.maturity>nightly</mvn.build.maturity>
+		<mvn.build.maturity>milestone</mvn.build.maturity>
 	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mvn.build.date>${maven.build.timestamp}</mvn.build.date>

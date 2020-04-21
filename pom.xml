@@ -7,7 +7,7 @@
 	<groupId>org.mypsycho.emf.modit</groupId>
 	<artifactId>container</artifactId>
 	<packaging>pom</packaging>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.4.0</version>
 	<name>Mod-it Container</name>
 	
 	<!-- 
@@ -101,7 +101,7 @@ https://www.eclipse.org/legal/epl-2.0/
 					<configuration>
 						<!-- List of ArtifactIds reachable by this pom. -->
 						<!-- Only the ones without project.parent. -->
-						<artifacts>container,parent</artifacts>
+						<artifacts>container,parent,publish</artifacts>
 					</configuration>
 				</plugin>
 				<plugin>
