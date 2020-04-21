@@ -11,8 +11,11 @@
 	<version>0.4.1-SNAPSHOT</version>
 	<name>Mod-it Publish</name>
 	<properties>
+	<!--
 		<mvn.build.maturity>nightly</mvn.build.maturity>
-	
+		<mvn.build.maturity>milestone</mvn.build.maturity>
+	-->
+		<mvn.build.maturity>milestone</mvn.build.maturity>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mvn.build.date>${maven.build.timestamp}</mvn.build.date>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
