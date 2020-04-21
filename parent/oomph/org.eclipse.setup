@@ -14,7 +14,10 @@
 		<requirement name="org.eclipse.oomph.setup.feature.group" />
 		<repository url="${oomph.update.url}" />
 	</setupTask>
-	<setupTask xsi:type="setup:EclipseIniTask" option="-Xmx" value="2048m" vm="true" />
+
+	<!-- Java does not support an high value of memory start -->
+	<setupTask xsi:type="setup:EclipseIniTask" option="-Xms" value="512m" vm="true" />	
+	<setupTask xsi:type="setup:EclipseIniTask" option="-Xmx" value="4096m" vm="true" />
 	<setupTask xsi:type="setup:InstallationTask" id="installation" />
 	<setupTask xsi:type="setup:CompoundTask" name="preferences">
 		<setupTask xsi:type="setup:PreferenceTask"
