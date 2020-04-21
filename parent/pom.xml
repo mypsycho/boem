@@ -14,6 +14,7 @@
 		<tp.mode>public</tp.mode>
 		<tycho.version>1.5.1</tycho.version>
 		<xtend.version>2.20.0</xtend.version>
+		<mvn-plugin.version></mvn-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- supported: warning|error|ignore -->
@@ -23,10 +24,9 @@
 		<module>tpd</module>
 	</modules>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src</sourceDirectory> <!-- if not set xtend fails (at least) -->
 		<plugins>
-
-		  <!-- All inheriting projects are eclipse project. -->
+		
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -40,9 +40,52 @@
 					<skip>false</skip>
 				</configuration>
 			</plugin>
+			
 		</plugins>
+		
 		<pluginManagement>
 			<plugins>
+			
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<target>
+							<artifact>
+								<groupId>org.mypsycho.emf.modit</groupId>
+								<artifactId>tpd</artifactId>
+								<version>${tp.version}</version>
+								<classifier>${tp.mode}</classifier>
+							</artifact>
+						</target>
+						<resolver>p2</resolver>
+						<environments>
+						<!-- 
+						Generic cannot be used: swt.widgets are in a fragment.
+						May be only 1 env is required 
+						as produced plugins do not depend of them ?
+							<environment> <os>*</os> <ws>*</ws> <arch>*</arch> </environment>
+						 -->
+						 <!-- x86 is not more supported: it cause swt fails  -->
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
@@ -73,66 +116,11 @@
 					<artifactId>tycho-maven-plugin</artifactId>
 					<version>${tycho.version}</version>
 				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>target-platform-configuration</artifactId>
-					<version>${tycho.version}</version>
-					<configuration>
-						<resolver>p2</resolver>
-						<environments>
-						<!-- 
-						Generic cannot be used: swt.widgets are in a fragment.
-						May be only 1 env is required 
-						as produced plugins do not depend of them ?
-							<environment>
-								<os>*</os>
-								<ws>*</ws>
-								<arch>*</arch>
-							</environment>
-						 -->
-						 <!-- x86 is not more supported: it cause swt fails
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86</arch>
-							</environment>
-							<environment>
-								<os>linux</os>
-								<ws>gtk</ws>
-								<arch>x86</arch>
-							</environment> -->
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86_64</arch>
-							</environment>
-
-							<environment>
-								<os>linux</os>
-								<ws>gtk</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>macosx</os>
-								<ws>cocoa</ws>
-								<arch>x86_64</arch>
-							</environment>
-						</environments>
-						<target>
-							<artifact>
-								<groupId>org.mypsycho.emf.modit</groupId>
-								<artifactId>tpd</artifactId>
-								<version>${tp.version}</version>
-								<classifier>${tp.mode}</classifier>
-							</artifact>
-						</target>
-					</configuration>
-				</plugin>
 
 				<!-- 
 				Force the timespan of each build to use the UTC of the last commit
 				on the repo 
-					-->
+				-->
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-packaging-plugin</artifactId>
@@ -151,7 +139,7 @@
 						<timestampProvider>jgit</timestampProvider>
 						<!-- No expression supported for git.dirty; Use property. -->
 						<jgit.dirtyWorkingTree>${git.dirty}</jgit.dirtyWorkingTree>
-						<!-- Ignore eclipse lazy update confs. -->
+						<!-- Ignore files eclipse may update. -->
 						<jgit.ignore> 
 						.*
 						.settings/
@@ -197,6 +185,7 @@
 					<artifactId>xtend-maven-plugin</artifactId>
 					<version>${xtend.version}</version>
 				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
@@ -205,11 +194,16 @@
 	<profiles>
 
 		<profile>
-			<id>tycho-plugin-source</id>
+			<id>tycho-plugin-source</id> <!-- By default, there is no source in tycho -->
 			<activation>
-				<file><!-- Active for bundle and tests, neither feature, site nor product -->
+				<!-- Active for bundle and tests, neither feature, site nor product -->
+				<file>
 					<exists>META-INF/MANIFEST.MF</exists>
 				</file>
+				<property>
+					<name>tycho.releng.skip</name>
+					<value>!true</value>
+				</property>
 			</activation>
 			<build>
 				<plugins>
@@ -217,27 +211,13 @@
 						<groupId>org.eclipse.tycho</groupId>
 						<artifactId>tycho-source-plugin</artifactId>
 						<executions>
-                        <!-- 
-                        Bug ? Default binding in doc seems missing in 0.26.0
-                        http://www.eclipse.org/tycho/sitedocs/tycho-source-plugin/plugin-source-mojo.html
-                         -->
 							<execution>
-							<!-- 	<phase>prepare-package</phase>  -->
 								<goals>
 									<goal>plugin-source</goal>
 								</goals>
 							</execution>
 						</executions>
 					</plugin>
-					<!--
-					        <excludes>
-          <exclude>**/*.bmp</exclude>
-          <exclude>**/*.jpg</exclude>
-          <exclude>**/*.jpeg</exclude>
-          <exclude>**/*.gif</exclude>
-        </excludes>
-					-->
-					
 				</plugins>
 			</build>
 		</profile>
@@ -251,6 +231,7 @@
 			</activation>
 			<build>
 				<plugins>
+				
 				    <plugin>
 				      <groupId>org.eclipse.tycho.extras</groupId>
 				      <artifactId>tycho-source-feature-plugin</artifactId>
@@ -281,7 +262,8 @@ for p2-metadata in feature
 				        </execution>
 				      </executions>
 				    </plugin>
-    				</plugins>
+
+    			</plugins>
 			</build>
 		</profile>
 		
@@ -293,32 +275,39 @@ for p2-metadata in feature
 				</file>
 			</activation>
 			<build>
+			
 				<pluginManagement>
 					<plugins>
+						
 						<plugin>
 							<groupId>org.eclipse.tycho</groupId>
 							<artifactId>tycho-compiler-plugin</artifactId>
 						
 							<configuration>
-								<excludeResources><!-- xtend is source -->
+								<excludeResources>  <!-- xtend is part of sources -->
 									<excludeResource>**/*.xtend</excludeResource>
+									<!-- xtend files only used at generation -->
+									<excludeResource>**/.*.xtendbin</excludeResource>
+									<excludeResource>**/.*.java._trace</excludeResource>
 								</excludeResources>
 							</configuration>
 						</plugin>
-						<!-- Xtend files should be there according to doc.
+
 						<plugin>
 							<groupId>org.eclipse.tycho</groupId>
 							<artifactId>tycho-source-plugin</artifactId>
 							<configuration>
-								<excludeResources>
-									<excludeResource>**/*.xtend</excludeResource>
-								</excludeResources>
+								<excludes>
+									<!-- xtend files only used at generation -->
+									<excludes>**/.*.xtendbin</excludes>
+									<!-- We keep **/.*.java._trace, used by debugger -->
+								</excludes>
 							</configuration>
-							
 						</plugin>
-						 -->
+
 					</plugins>
 				</pluginManagement>
+				
 				<plugins>
 					<plugin>
 						<groupId>org.eclipse.xtend</groupId>
@@ -333,8 +322,10 @@ for p2-metadata in feature
 						</executions>
 					</plugin>
 				</plugins>
+				
 			</build>
 		</profile>
+		
 		<profile>
 			<id>xcore-nature</id> 
 			<!-- xcore-nature comes before xtend-nature -->
@@ -470,5 +461,7 @@ for p2-metadata in feature
 				</plugins>
 			</build>
 		</profile>
+		
 	</profiles>
+	
 </project>
