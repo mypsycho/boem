@@ -13,9 +13,9 @@
 		<relativePath>../../parent</relativePath>
 	</parent>
 
-	<artifactId>org.mypsycho.emf.modit.dummy-model.design.tests</artifactId>
-	<packaging>eclipse-test-plugin</packaging>
-	<name>Dw Design tests</name>
+	<artifactId>org.mypsycho.emf.modit.dummy-model.edit</artifactId>
+	<packaging>eclipse-plugin</packaging>
+	<name>Dummy World Edit</name>
 
 
 </project>

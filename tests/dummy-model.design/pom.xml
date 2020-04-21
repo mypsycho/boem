@@ -9,13 +9,13 @@
 	<parent>
 		<groupId>org.mypsycho.emf.modit</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.3.1-SNAPSHOT</version>
+		<version>0.4.1-SNAPSHOT</version>
 		<relativePath>../../parent</relativePath>
 	</parent>
 
 	<artifactId>org.mypsycho.emf.modit.dummy-model.design</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Dummy model for tests</name>
+	<name>Dummy World Design</name>
 
 
 </project>

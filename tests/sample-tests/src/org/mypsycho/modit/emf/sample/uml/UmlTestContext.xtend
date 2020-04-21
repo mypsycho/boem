@@ -1,6 +1,5 @@
 package org.mypsycho.modit.emf.sample.uml
 
-import org.mypsycho.modit.emf.sample.uml.text.UmlSimpleSyntax
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
@@ -8,8 +7,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.uml2.uml.NamedElement
 import org.eclipse.uml2.uml.UMLPackage
 import org.junit.Before
-import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.ModItPool
+import org.mypsycho.modit.emf.EModIt
+import org.mypsycho.modit.emf.sample.uml.text.UmlSimpleSyntax
 
 /**
  * Abstraction to provide common functions for tests.
@@ -39,18 +39,14 @@ class UmlTestContext {
 	    if (it instanceof NamedElement) name 
 	    else null
 	}
-	
-	@SuppressWarnings("restriction")
-	def createUmlResFactory() {
-		new org.eclipse.uml2.uml.internal.resource.UMLResourceFactoryImpl
-	}
+
 
 	@Before
 	def void setup() {
 		rs = new ResourceSetImpl
 		rs.packageRegistry.put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE)
 		rs.resourceFactoryRegistry.extensionToFactoryMap.put("uml", 
-			createUmlResFactory
+			Umls.createResourceFactory
 		)
 	}
 

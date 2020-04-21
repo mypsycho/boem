@@ -57,6 +57,10 @@ https://www.eclipse.org/legal/epl-2.0/
 				<module>tests/dummy-model</module>
 				<module>tests/sample-tests</module>
 				<module>tests/modit-tests</module>
+				<!-- EMF Genmodel doesn't handle a project not name as the folder -->
+				<module>tests/org.mypsycho.emf.modit.dummy-model.edit</module>
+				<module>tests/dummy-model.design</module>
+				<module>tests/dummy-model.design.tests</module>
 			</modules>
 		</profile>
 		
@@ -72,18 +76,6 @@ https://www.eclipse.org/legal/epl-2.0/
 				<module>releng/modit-feature</module>
 				<module>releng/modit-sirius-feature</module>
 				<module>releng/update-site</module>
-			</modules>
-		</profile>
-		
-		<profile>
-			<id>docs-modules</id>
-			<activation>
-				<property>
-					<name>tycho.docs.skip</name>
-					<value>!true</value>
-				</property>
-			</activation>
-			<modules>
 				<module>releng/publish</module>
 			</modules>
 		</profile>
@@ -97,7 +89,7 @@ https://www.eclipse.org/legal/epl-2.0/
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-versions-plugin</artifactId>
-					<version>1.5.1</version>
+					<version>1.6.0</version>
 					<configuration>
 						<!-- List of ArtifactIds reachable by this pom. -->
 						<!-- Only the ones without project.parent. -->

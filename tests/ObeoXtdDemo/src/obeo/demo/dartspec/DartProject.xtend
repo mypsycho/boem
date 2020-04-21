@@ -1,12 +1,9 @@
 package obeo.demo.dartspec
 
-import fr.obeo.dsl.dart.dart.Folder
-import fr.obeo.dsl.dart.dart.Import
-import fr.obeo.dsl.dart.dart.Library
-import fr.obeo.dsl.dart.dart.Metadata
+import fr.obeo.dsl.dart.dart.DartPackage
+import fr.obeo.dsl.dart.dart.Named
 import fr.obeo.dsl.dart.dart.Package
 import fr.obeo.dsl.dart.dart.Project
-import java.lang.Class
 import java.util.HashMap
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
@@ -26,7 +23,7 @@ class DartProject implements ModitModel {
 
 	@Accessors
 	protected val extension EModIt factory = EModIt.using(
-		fr.obeo.dsl.dart.dart.DartPackage.eINSTANCE
+		DartPackage.eINSTANCE
 	)
 
 	override loadContent(Resource it) {
@@ -83,7 +80,7 @@ class DartProject implements ModitModel {
 		values.at(EObject, keys) as R
 	}
 	
-	static def <T extends fr.obeo.dsl.dart.dart.Named> atNamed(Iterable<T> values, Object key) {
+	static def <T extends Named> atNamed(Iterable<T> values, Object key) {
 		values.findFirst[ name == key ]
 	}
 }

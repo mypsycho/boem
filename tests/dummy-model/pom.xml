@@ -15,7 +15,7 @@
 
 	<artifactId>org.mypsycho.emf.modit.dummy-model</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>Dummy model for tests</name>
+	<name>Dummy World model (tests)</name>
 
 
 </project>

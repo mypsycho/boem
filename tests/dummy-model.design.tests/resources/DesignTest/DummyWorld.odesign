@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" name="DummyWorldDesign" version="12.0.0.2017041100">
+  <ownedViewpoints name="DummyWorld" modelFileExtension="*.dw">
+    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="CompanyDiagram" label="Organization chart" domainClass="dummyworld.Company">
+      <metamodel href="https://github.com/mypsycho/modit/tests/dummy-world/1.0#/"/>
+      <defaultLayer name="Default">
+        <edgeMappings sourceMapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='CompanyDiagram']/@defaultLayer/@containerMappings[name='']" targetMapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='CompanyDiagram']/@defaultLayer/@containerMappings[name='']" targetFinderExpression="feature:team">
+          <style lineStyle="dash" sourceArrow="InputArrow" targetArrow="NoDecoration"/>
+        </edgeMappings>
+        <containerMappings semanticCandidatesExpression="feature:employees" domainClass="dummyworld.Job" childrenPresentation="List">
+          <subNodeMappings semanticCandidatesExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 0, Sequence{})" domainClass="dummyworld.Service">
+            <style xsi:type="style:SquareDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 1, Sequence{})" sizeComputationExpression="2">
+              <color xsi:type="description:SystemColor" href="environment:/viewpoint#/0/@systemColors/@entries[name='gray']"/>
+            </style>
+          </subNodeMappings>
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 1, Sequence{})">
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#/0/@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
+      </defaultLayer>
+    </ownedRepresentations>
+    <ownedJavaExtensions/>
+  </ownedViewpoints>
+</description:Group>
