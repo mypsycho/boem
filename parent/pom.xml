@@ -11,7 +11,7 @@
 	<name>Mod-it Parent</name>
 	<properties>
 		<tp.version>1.0.0-SNAPSHOT</tp.version>
-		<tp.mode>public</tp.mode>
+		<tp.mode>build</tp.mode>
 		<tycho.version>1.6.0</tycho.version>
 		<xtend.version>2.20.0</xtend.version>
 		<mvn-plugin.version></mvn-plugin.version>
@@ -24,7 +24,12 @@
 		<module>tpd</module>
 	</modules>
 	<build>
-		<sourceDirectory>src</sourceDirectory> <!-- if not set xtend fails (at least) -->
+		<sourceDirectory>src</sourceDirectory> 
+	    <!-- 
+	    when sourceDirectory not set, 
+	    xtend fails (at least): it search src/main/java; not tycho.
+	    -->
+
 		<plugins>
 		
 			<plugin>

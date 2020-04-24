@@ -19,7 +19,7 @@
 	
 	<properties>
 		<tp.version>1.0.0-SNAPSHOT</tp.version>
-		<tp.mode>public</tp.mode>
+		<tp.mode>build</tp.mode>
 	</properties>
 
 	<build>

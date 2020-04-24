@@ -17,6 +17,12 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	org.eclipse.platform.feature.group
 	// +-> jface, ui.forms
 	// generated item provider
+
+}
+
+
+location emf_sirius "https://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" {
+	// Sirius 2019-06 has later versions, do not reference any plugins in eclipse release 
 	
 	org.eclipse.sirius.runtime.feature.group
 	// +-> sirius.diagram
@@ -26,10 +32,5 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	
 	org.eclipse.eef.sdk.feature.feature.group // eef is only in SDK
 	// +-> eef, eef.core, eef.ide.ui
-	
-	// required for tycho to find widgets ?
-	//epp.package.java
-	
 }
-
 
