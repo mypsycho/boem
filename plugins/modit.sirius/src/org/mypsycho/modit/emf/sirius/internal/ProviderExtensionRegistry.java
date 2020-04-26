@@ -10,77 +10,107 @@
  * Contributors:
  *    Nicolas PERANSIN - initial API and implementation
  *******************************************************************************/
-package org.mypsycho.modit.emf.sirius;
+package org.mypsycho.modit.emf.sirius.internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.Plugin;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IRegistryEventListener;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.IDisposable;
-import org.eclipse.sirius.business.api.componentization.ViewpointFileCollector;
 import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
-import org.eclipse.sirius.viewpoint.description.Group;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
-import org.mypsycho.modit.emf.sirius.internal.DesignFactory;
-import org.mypsycho.modit.emf.sirius.internal.SiriusModelProviderService;
-import org.osgi.framework.BundleContext;
-
+import org.mypsycho.modit.emf.sirius.ModitSiriusPlugin;
+import org.mypsycho.modit.emf.sirius.SiriusModelProvider;
+import org.mypsycho.modit.emf.sirius.SiriusModelProviderService;
 
 /**
- * Activator of plugin.
- * <p>
- * It provides in memory of Sirius Model registering.
- * </p>
- * 
+ *
  * @author nperansin
  */
-public class MisActivator extends Plugin {
+public class ProviderExtensionRegistry implements IRegistryEventListener {
 
-	/** The plug-in ID */
-	public static final String PLUGIN_ID = "org.mypsycho.emf.modit.sirius";
+	public static final String EXTENSION_POINT = ModitSiriusPlugin.PLUGIN_ID  + ".componentization";
 
-	/** The shared instance */
-	private static MisActivator instance;
+	private static final String CLASS_ATT = "class";
+
+	
+	
+	private final IExtensionRegistry eclipseRegistry = Platform.getExtensionRegistry();
+
+	
+	public void init() {
+		eclipseRegistry.addListener(this,
+				ProviderExtensionRegistry.EXTENSION_POINT);
+		
+		added(eclipseRegistry.getExtensionPoint(EXTENSION_POINT).getExtensions());
+	}
+
 
 	// registereds protects itself and serviceProviders content.
-	private Map<String/*URI*/, Registration> registereds = null;
+	private Map<URI, Registration> registereds = new HashMap<>();
 	
 	// registereds protects itself and serviceProviders content.
-	private Map<String/*classname*/, SiriusModelProvider> implsCache = null;
+	private Map<String/*classname*/, SiriusModelProvider> implsCache = new HashMap<>();
 	
 	// Providers are index for a better performance. Otherwise key would be enough.
-	private List<? extends SiriusModelProvider> serviceProviders = null;
-
-	/**
-	 * Returns loaded instance.
-	 * 
-	 * @return instance
-	 */
-	public static MisActivator getInstance() {
-		return instance;
+	private List<? extends SiriusModelProvider> serviceProviders = Collections.emptyList();
+	
+	@Override
+	public synchronized void added(IExtension[] extensions) {
+		Stream.of(extensions)
+			.flatMap(it -> Stream.of(it.getConfigurationElements()))
+			.forEach(it -> registerGroups(toRegistration(it)));
 	}
 	
-	/** Provide to Sirius viewpoint from dynamic models */
-	private static final ViewpointFileCollector MODEL_PROVIDER_COLLECTOR = 
-			new ViewpointFileCollector() {
-
-		@Override
-		public boolean isValid(EObject root) {
-			return root instanceof Group;
+	private Registration toRegistration(IConfigurationElement it) {
+		String pluginId = it.getContributor().getName();
+		String classname = it.getAttribute(CLASS_ATT).trim();
+		int index = classname.indexOf('/');
+		if (index != -1) {
+			pluginId = classname.substring(0, index).trim();
+			classname = classname.substring(index + 1).trim();
 		}
+		return new Registration(pluginId, classname);
+	}
 
-		@Override
-		public Collection<Viewpoint> collect(EObject root) {
-			return new ArrayList<>(((Group) root).getOwnedViewpoints());
-		}
-	};
+	@Override
+	public synchronized void removed(IExtension[] extensions) {
+		Stream.of(extensions)
+			.flatMap(it -> Stream.of(it.getConfigurationElements()))
+			.map(it -> {
+				synchronized (registereds) {
+					return registereds.get(toRegistration(it).getKey());
+				}
+			})
+			.filter(Objects::nonNull)
+			.forEach(it -> it.dispose());
+	}
 
+	@Override
+	public void added(IExtensionPoint[] extensionPoints) {
+		// Not listened
+	}
+
+	@Override
+	public void removed(IExtensionPoint[] extensionPoints) {
+		// Not listened
+	}
+
+	
 	/**
 	 * Disposable class registering SiriusModelProvider classes.
 	 * <p>
@@ -94,20 +124,23 @@ public class MisActivator extends Plugin {
 		private Set<Viewpoint> viewpoints = new HashSet<>();
 
 		private final String siriusPath;
-
+		private final URI key; 
+		
 		private final String implClass;
 
 		private int index = UNALLOCATED_INDEX;
 
 		private SiriusModelProvider instance = null;
 
-		public Registration(String pluginId, Class<? extends SiriusModelProvider> mpClass) {
-			implClass = mpClass.getName();
-			siriusPath = DesignFactory.toSiriusPluginPath(pluginId, mpClass);
+
+		public Registration(String pluginId, String classname) {
+			implClass = classname;
+			key = DesignFactory.toSiriusUri(pluginId, classname);
+			siriusPath = DesignFactory.toSiriusPluginPath(pluginId, classname);
 		}
 
-		public String getKey() {
-			return siriusPath;
+		public URI getKey() {
+			return key;
 		}
 
 		public int getIndex() {
@@ -119,7 +152,6 @@ public class MisActivator extends Plugin {
 			synchronized (registereds) {
 				if (registereds.get(getKey()) == this) {
 					registereds.remove(getKey());
-					implsCache.remove(implClass);
 				}
 				
 				if (implsCache.get(implClass) == instance) {
@@ -142,9 +174,6 @@ public class MisActivator extends Plugin {
 
 		/**
 		 * Allocated the provider
-		 * <p>
-		 * 
-		 * </p>
 		 *
 		 * @param it instance of register
 		 * @return index
@@ -168,35 +197,8 @@ public class MisActivator extends Plugin {
 			viewpoints.addAll(ViewpointRegistry.getInstance().registerFromPlugin(siriusPath));			
 		}
 	}
-
-	@SuppressWarnings("restriction")
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		instance = this;
-
-		
-		((org.eclipse.sirius.business.internal.componentization.ViewpointRegistryImpl) 
-				ViewpointRegistry.getInstance())
-		// Seriously, internal ??? Refactor issue.
-			.addViewpointFileCollector(DesignFactory.EXTENSION, 
-					MODEL_PROVIDER_COLLECTOR);
-		
-		registereds = new HashMap<String, Registration>();
-		implsCache = new HashMap<String, SiriusModelProvider>();
-		serviceProviders = new ArrayList<>();
-	}
-
-	public void stop(BundleContext context) throws Exception {
-		instance = null;
-		
-		// Registration.dispose changes registereds
-		// A copy is required.
-		new ArrayList<>(registereds.values()).forEach(it -> it.dispose());
-		registereds = null;
-		serviceProviders = null;
-		
-		super.stop(context);
-	}
+	
+	
 
 	/**
 	 * Update the list of provider.
@@ -228,31 +230,27 @@ public class MisActivator extends Plugin {
 	 * @param mpClass to instantiate
 	 * @return anchor to unregister the model
 	 */
-	public IDisposable registerGroups(String pluginId, Class<? extends SiriusModelProvider> mpClass) {
-		Registration result;
+	private void registerGroups(Registration contrib) {
 		synchronized (registereds) {
-			String key = DesignFactory.toSiriusPluginPath(pluginId, mpClass);
-			result = registereds.get(key);
-			if (result != null) {
-				result.dispose();
+			
+			// do not combine with 'put', cleaning checks 
+			Registration old = registereds.get(contrib.getKey());
+			if (old != null) {
+				old.dispose();
 			}
-			result = new Registration(pluginId, mpClass);
-			registereds.put(key, result);
+			registereds.put(contrib.getKey(), contrib);
 		}
-		result.initViewpoints();
-
-		return result;
+		contrib.initViewpoints();
 	}
 
-	int registerProvider(SiriusModelProvider it) {
+	public int registerProvider(SiriusModelProvider it, Resource at) {
 		Registration reg;
 		synchronized (registereds) {
-			String uriPath = it.getResource().getURI().path();
-			reg = registereds.get(uriPath);
+			reg = registereds.get(at.getURI());
 			if (reg == null) { // reloading
-				throw new IllegalStateException("Unregistered model provider " + uriPath);
+				throw new IllegalStateException("Unregistered model provider " + at.getURI());
 			}
-
+			// inside synch to protect implsCache and serviceProviders
 			return reg.allocated(it);
 		}
 	}
@@ -286,4 +284,12 @@ public class MisActivator extends Plugin {
 		return implsCache.get(classname).getCallback();
 	}
 
+
+	public void dispose() {
+		Platform.getExtensionRegistry().removeListener(this);
+		
+		// Registration.dispose changes registereds
+		// A copy is required.
+		new ArrayList<>(registereds.values()).forEach(it -> it.dispose());
+	}
 }

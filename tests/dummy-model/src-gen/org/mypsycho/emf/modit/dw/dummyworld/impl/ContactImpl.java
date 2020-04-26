@@ -5,16 +5,16 @@ package org.mypsycho.emf.modit.dw.dummyworld.impl;
 import java.util.Collection;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.mypsycho.emf.modit.dw.dummyworld.Contact;
@@ -33,7 +33,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
  * </p>
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getHint <em>Hint</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getHints <em>Hints</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getLocations <em>Locations</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getOwns <em>Owns</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ContactImpl#getParent <em>Parent</em>}</li>
@@ -63,14 +63,14 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getHint() <em>Hint</em>}' reference.
+	 * The cached value of the '{@link #getHints() <em>Hints</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHint()
+	 * @see #getHints()
 	 * @generated
 	 * @ordered
 	 */
-	protected Map.Entry<String, String> hint;
+	protected EList<Map.Entry<String, String>> hints;
 
 	/**
 	 * The cached value of the '{@link #getLocations() <em>Locations</em>}' containment reference list.
@@ -139,40 +139,12 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map.Entry<String, String> getHint() {
-		if (hint != null && ((EObject)hint).eIsProxy()) {
-			InternalEObject oldHint = (InternalEObject)hint;
-			hint = (Map.Entry<String, String>)eResolveProxy(oldHint);
-			if (hint != oldHint) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.CONTACT__HINT, oldHint, hint));
-			}
+	public EList<Map.Entry<String, String>> getHints() {
+		if (hints == null) {
+			hints = new EObjectResolvingEList<Map.Entry<String, String>>(Entry.class, this, DwPackage.CONTACT__HINTS);
 		}
-		return hint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, String> basicGetHint() {
-		return hint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setHint(Map.Entry<String, String> newHint) {
-		Map.Entry<String, String> oldHint = hint;
-		hint = newHint;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.CONTACT__HINT, oldHint, hint));
+		return hints;
 	}
 
 	/**
@@ -307,9 +279,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 		switch (featureID) {
 			case DwPackage.CONTACT__DESCRIPTION:
 				return getDescription();
-			case DwPackage.CONTACT__HINT:
-				if (resolve) return getHint();
-				return basicGetHint();
+			case DwPackage.CONTACT__HINTS:
+				return getHints();
 			case DwPackage.CONTACT__LOCATIONS:
 				return getLocations();
 			case DwPackage.CONTACT__OWNS:
@@ -332,8 +303,9 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 			case DwPackage.CONTACT__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case DwPackage.CONTACT__HINT:
-				setHint((Map.Entry<String, String>)newValue);
+			case DwPackage.CONTACT__HINTS:
+				getHints().clear();
+				getHints().addAll((Collection<? extends Map.Entry<String, String>>)newValue);
 				return;
 			case DwPackage.CONTACT__LOCATIONS:
 				getLocations().clear();
@@ -361,8 +333,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 			case DwPackage.CONTACT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case DwPackage.CONTACT__HINT:
-				setHint((Map.Entry<String, String>)null);
+			case DwPackage.CONTACT__HINTS:
+				getHints().clear();
 				return;
 			case DwPackage.CONTACT__LOCATIONS:
 				getLocations().clear();
@@ -387,8 +359,8 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 		switch (featureID) {
 			case DwPackage.CONTACT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case DwPackage.CONTACT__HINT:
-				return hint != null;
+			case DwPackage.CONTACT__HINTS:
+				return hints != null && !hints.isEmpty();
 			case DwPackage.CONTACT__LOCATIONS:
 				return locations != null && !locations.isEmpty();
 			case DwPackage.CONTACT__OWNS:
@@ -409,7 +381,7 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 		if (baseClass == Detailed.class) {
 			switch (derivedFeatureID) {
 				case DwPackage.CONTACT__DESCRIPTION: return DwPackage.DETAILED__DESCRIPTION;
-				case DwPackage.CONTACT__HINT: return DwPackage.DETAILED__HINT;
+				case DwPackage.CONTACT__HINTS: return DwPackage.DETAILED__HINTS;
 				default: return -1;
 			}
 		}
@@ -426,7 +398,7 @@ public abstract class ContactImpl extends WObjectImpl implements Contact {
 		if (baseClass == Detailed.class) {
 			switch (baseFeatureID) {
 				case DwPackage.DETAILED__DESCRIPTION: return DwPackage.CONTACT__DESCRIPTION;
-				case DwPackage.DETAILED__HINT: return DwPackage.CONTACT__HINT;
+				case DwPackage.DETAILED__HINTS: return DwPackage.CONTACT__HINTS;
 				default: return -1;
 			}
 		}

@@ -32,6 +32,8 @@ class DummyWorldDesign extends AbstractGroup {
 			name = "DummyWorld"
 			modelFileExtension = "*.dw"
 			ownedRepresentations += new CompanyDiagram(this).createContent
+			ownedRepresentations += new DirectoryTable(this).createContent
+			
 		]
 	}
 	

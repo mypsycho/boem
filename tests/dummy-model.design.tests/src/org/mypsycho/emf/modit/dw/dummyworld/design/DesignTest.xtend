@@ -19,9 +19,6 @@ class DesignTest {
 	protected static val TEST_PATH = Paths.get("target/test-run")
 		.resolve(DesignTest.simpleName).toAbsolutePath
 
-		
-	protected static val CLASS_SIMPLENAME = DummyWorldDesign.simpleName
-	
     	// Derived
 	protected static val CLASS_NAME = DummyWorldDesign.name
 	protected static val DESIGN_FILENAME = "DummyWorld.odesign"

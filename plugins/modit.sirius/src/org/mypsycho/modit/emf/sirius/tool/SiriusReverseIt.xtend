@@ -12,21 +12,19 @@
  *******************************************************************************/
 package org.mypsycho.modit.emf.sirius.tool;
 
-import java.lang.reflect.Modifier
 import java.nio.file.Path
 import java.util.ArrayList
 import java.util.Collections
 import java.util.HashMap
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.emf.ecore.EPackage
-import org.eclipse.emf.ecore.impl.EPackageImpl
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.sirius.properties.ViewExtensionDescription
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
+import org.eclipse.sirius.viewpoint.description.Environment
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.RepresentationDescription
 import org.eclipse.sirius.viewpoint.description.RepresentationExtensionDescription
@@ -37,7 +35,6 @@ import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.emf.EReversIt
 import org.mypsycho.modit.emf.ModitModel
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider
-import org.eclipse.sirius.viewpoint.description.Environment
 
 /**
  * 
@@ -51,8 +48,6 @@ import org.eclipse.sirius.viewpoint.description.Environment
 class SiriusReverseIt {
 
 	val ResourceSet rs
-	
-	
 	val Group source
 	val ClassId classId
 	
@@ -100,7 +95,7 @@ class SiriusReverseIt {
 			// Split RepresentationDescription DiagramExtensionDescription
 			splits.putAll(findDefaultSplits)
 			 
-			explicitExtras.putAll(usedMetamodels)
+			// explicitExtras.putAll(usedMetamodels)
 
 			explicitExtras.putAll(source.systemColorsPalette.entries.toInvertedMap[ "color:" + name ])
 
@@ -119,7 +114,7 @@ class SiriusReverseIt {
 		]
 	}
 	
-	
+	@Deprecated
 	protected def getUsedMetamodels() {		
 		// we need a copy as resources list is extended by navigation
 		new ArrayList(rs.resources)
@@ -135,6 +130,7 @@ class SiriusReverseIt {
 			]
 	}
 	
+	@Deprecated
 	protected def getMetamodels(Object it) {
 		if (it instanceof RepresentationExtensionDescription) metamodel
 		else if (it instanceof RepresentationDescription) metamodel
@@ -160,15 +156,22 @@ class SiriusReverseIt {
 	def perform() { engine.perform }
 	
 	protected def dispatch toClassname(RepresentationDescription it) {
-		name.camel
+		name.camel + aliasSuffix
 	}	
 	
 	protected def dispatch toClassname(RepresentationExtensionDescription it) {
-		name.camel
+		name.camel + aliasSuffix
 	}
 	
 	protected def dispatch toClassname(ViewExtensionDescription it) {
-		name.camel
+		name.camel + aliasSuffix
+	}
+	
+	protected def getAliasSuffix(EObject it) {
+		val className = eClass.name
+		if (className.endsWith("Description")) // trim Sirius Object end.
+			className.substring(0, className.length - "Description".length) 
+		else className
 	}
 	
 	static def camel(String it) {
@@ -183,9 +186,7 @@ class SiriusReverseIt {
 	// Only used in SiriusModelProvider class.
 	static val UNUSED_IMPORTS = #[ HashMap, ResourceSetImpl, Accessors, EModIt, ModitModel ]
 	
-	/**
-	 * Override of default reverse for SiriusModelProvider class.
-	 */
+	/** Override of default reverse for SiriusModelProvider class. */
 	protected static class Engine extends EReversIt {
 		// XTend does not support statefull inner class
 		val SiriusReverseIt container
@@ -196,11 +197,11 @@ class SiriusReverseIt {
 		}
 		
 		override getMainStaticImports() {
-			super.mainStaticImports
-				.filter[ !UNUSED_IMPORTS.contains(it)]
+			super.mainStaticImports.filter[ !UNUSED_IMPORTS.contains(it) ]
 			+ #[ SiriusModelProvider, Environment ]
 		}
 		
+		// Xtend
 		override templateMain(Iterable<Class<?>> packages, ()=>String content) {
 '''package «mainClass.pack»
 
@@ -208,37 +209,34 @@ class SiriusReverseIt {
 
 class «mainClass.name» extends SiriusModelProvider {
 
-«
+	override initContent(Group it) {
+		«content.apply»
+	}
+
+« // initExtras must be performed AFTER model exploration
 IF !implicitExtras.empty || !explicitExtras.empty
 »	override initExtras(ResourceSet it) {
-		// System colors are: blue,chocolate,green,orange,purple,red,yellow
-		// With shade : 'dark_', <default>, 'light_'
-		// And: black,white
-		eObject(«Environment.templateClass», "environment:/viewpoint#/")
-			.systemColors.entries
-			.forEach[ extras.put(name, it) ]
+		super.initExtras(it)
 		
 		«templateExtras»
 	}
 
 «
 ENDIF // extras
-»	override initContent(Group it) {
-		«content.apply»
-	}
-
+»
 	def context() { this }
-
-	«templateCommonQueries»
-
+	
+	«templateShorcuts»
 }
 '''
 		}
-		
 
-	// xtend
-	override templateExplicitExtras() {
-		val colors = container.source.systemColorsPalette.entries
+		// Xtend
+		override templateExplicitExtras() {
+			val colors = container.source.systemColorsPalette.entries
+			if (explicitExtras.keySet.toList.equals(colors)) {
+				return "" // no named element
+			}
 '''extras.putAll(#{ // Named elements
 «
 FOR ext : explicitExtras.entrySet
@@ -251,7 +249,12 @@ ENDFOR
 »
 })
 '''
-	}
+		}
+	
+		// Xtend
+		override templateExplicitAlias(EObject it) {
+'''«templateClass».eObject(«toUri.toJava »)'''	
+		}
 	
 		// Xtend
 		override templateSimpleContent(EObject it) {
@@ -265,19 +268,6 @@ ENDFOR
 »'''
 		}
 
-		override templateAlias(EObject it) {
-			if (it instanceof EPackage && getClass() != EPackageImpl) {
-				val eINSTANCE = class.declaredFields.findFirst[
-					Modifier.isStatic(modifiers)
-					&& name == "eINSTANCE"
-					&& Modifier.isPublic(modifiers)
-				]
-				if (eINSTANCE?.get(null) == it) {
-					return class.name + ".eINSTANCE"
-				}
-			}
-			super.templateAlias(it)
-		}
 
 	
 	}

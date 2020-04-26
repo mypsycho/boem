@@ -609,7 +609,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getDetailed_Hint() {
+	public EReference getDetailed_Hints() {
 		return (EReference)detailedEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -697,7 +697,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 
 		detailedEClass = createEClass(DETAILED);
 		createEAttribute(detailedEClass, DETAILED__DESCRIPTION);
-		createEReference(detailedEClass, DETAILED__HINT);
+		createEReference(detailedEClass, DETAILED__HINTS);
 
 		namedEClass = createEClass(NAMED);
 
@@ -813,7 +813,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 
 		initEClass(detailedEClass, Detailed.class, "Detailed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getDetailed_Description(), theEcorePackage.getEString(), "description", null, 0, 1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getDetailed_Hint(), theEcorePackage.getEStringToStringMapEntry(), null, "hint", null, 0, 1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getDetailed_Hints(), theEcorePackage.getEStringToStringMapEntry(), null, "hints", null, 0, -1, Detailed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(namedEClass, Named.class, "Named", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

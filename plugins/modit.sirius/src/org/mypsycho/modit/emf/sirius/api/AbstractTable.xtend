@@ -12,6 +12,7 @@
  *******************************************************************************/
  package org.mypsycho.modit.emf.sirius.api
 
+import java.util.Objects
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.sirius.table.metamodel.table.description.CreateLineTool
@@ -24,34 +25,31 @@ import org.eclipse.sirius.viewpoint.description.tool.EditMaskVariables
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
 
 /**
- * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
+ * Class adapting Sirius model into Java and EClass reflection s
+ * for tables.
  * 
  * @author nicolas.peransin
  */
 abstract class AbstractTable<T extends TableDescription> extends AbstractRepresentation<T>{
 
-	/** Current DTable. */
-	public static val TABLE = "table"
+	/** Namespaces for identification */
+	enum Ns { // namespace for identication
+		line, column
+	}
 
-	/** semantic target of the current DTable. */
-	public static val ROOT = "root"
-	
-	/** DLine of the current DCell: table.DLine */
-	public static val LINE_VIEW = "line"
-	
-	/** semantic target of line */
-	public static val LINE = "lineSemantic"
-	
-	/** DColumn of the current DCell: table.DColumn */
-	public static val COl_VIEW = "column"
-	
-	/** semantic target of column */
-	public static val COLUMN = "columnSemantic"
+	enum EditArg {
+		/** Current DTable. */ table, 
+		/** semantic target of the current DTable. */root, 
+		/** DLine of the current DCell: table.DLine */line, 
+		/** semantic target of line */lineSemantic, 
+		/** DColumn of the current DCell: table.DColumn */column, 
+		/** semantic target of column */columnSemantic
+	}
+
 	
 	/** Value return by field edit */
 	public static val EDIT_VALUE = "arg0"
 	
-	static val LABEL_EDIT_VARS = #[ TABLE, ROOT, LINE_VIEW, LINE, COl_VIEW, COLUMN ]
 	
 	// root='ecore.EObject | semantic target of the current DTable.' 
 // line='table.DLine | DLine of the current DCell.'
@@ -60,13 +58,12 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 // column='table.DColumn | DColumn of the current DCell.' 
 // columnSemantic='ecore.EObject | semantic target of $column'
 	
-	
-	static val CREATE_MAPPING_ARG_DESCRS = #[ 
-		"root" -> "The semantic root element of the table.",
-		"element" -> "The semantic currently edited element.",
-		"container" -> "The semantic element corresponding to the view container."
-	]
-	static val CREATE_MAPPING_ARGS = CREATE_MAPPING_ARG_DESCRS.join(",")[ key ]
+	enum CreateMappingArg {
+		root, // "The semantic root element of the table.",
+		element, //"The semantic currently edited element.",
+		container // The semantic element corresponding to the view container."
+	}
+	static val CREATE_MAPPING_ARGS = CreateMappingArg.values.params
 
 	/**
 	 * Create a factory for a diagram description
@@ -104,7 +101,19 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	 */
 
 	def void setSemanticCandidatesExpression(LineMapping it, EReference ref) {
-		semanticCandidatesExpression = ref
+		semanticCandidatesExpression = SiriusDesigns.encode(ref)
+	}
+
+	protected def line(String id, (LineMapping)=>void initializer) {
+		Objects.requireNonNull(initializer)
+		LineMapping.createAs(Ns.line.id(id)) [
+			name = id
+			initializer.apply(it)
+		]
+ 	}
+
+	protected def lineRef(String id) {
+		LineMapping.ref(Ns.line.id(id))
 	}
 
 	
@@ -113,8 +122,8 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 			// Built-in variables, 
 			// required to handle scope in interperter
 			// (seems like a dirty hack)
-			LABEL_EDIT_VARS.forEach[ v |
-				variables += TableVariable.create[ name = v ]
+			EditArg.values.forEach[ arg |
+				variables += TableVariable.create[ name = arg.name ]
 			]
 			mask = EditMaskVariables.create[ mask = "{0}" ]
 			firstModelOperation = ChangeContext.create(operation)
@@ -123,20 +132,22 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	
 	def createLabelEdit(Procedure3<EObject, EObject, Object> operation) {
 		createLabelEdit[
-			browseExpression = context.expression(params(LINE, COLUMN, EDIT_VALUE), operation)
+			browseExpression = context.expression(
+				params(EditArg.line, EditArg.column, EDIT_VALUE), 
+				operation
+			)
 		]
 	}
 	
-	def addLineCreation(LineMapping it, String toolLabel, String ref, 
+	def addLineCreation(LineMapping it, String toolLabel, String createdLine, 
 		(CreateLineTool)=>void init, Procedure3<EObject, EObject, EObject> action
 	) {
 		create += CreateLineTool.create[
 			label = toolLabel
-			mapping = LineMapping.ref(ref)
-			variables += CREATE_MAPPING_ARG_DESCRS.map[ descr |
+			mapping = createdLine.lineRef
+			variables += CreateMappingArg.values.map[ descr |
 				TableVariable.create[
-					name = descr.key
-					documentation = descr.value
+					name = descr.name
 				]
 			]
 			firstModelOperation = ChangeContext.create[
@@ -146,10 +157,10 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		]
 	}
 
-	def addLineCreation(LineMapping it, String toolLabel, String ref, 
+	def addLineCreation(LineMapping it, String toolLabel, String createdLine, 
 		Procedure3<EObject, EObject, EObject> action
 	) {
-		addLineCreation(toolLabel, ref, null, action)
+		addLineCreation(toolLabel, createdLine, null, action)
 	}
 
 

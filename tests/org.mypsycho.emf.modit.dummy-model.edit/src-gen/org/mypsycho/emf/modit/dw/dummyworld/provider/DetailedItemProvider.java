@@ -45,7 +45,7 @@ public class DetailedItemProvider
 			super.getPropertyDescriptors(object);
 
 			addDescriptionPropertyDescriptor(object);
-			addHintPropertyDescriptor(object);
+			addHintsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,29 +68,29 @@ public class DetailedItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
+				 getString("_UI_CommentsPropertyCategory"), //$NON-NLS-1$
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Hint feature.
+	 * This adds a property descriptor for the Hints feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addHintPropertyDescriptor(Object object) {
+	protected void addHintsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_hint_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hint_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.DETAILED__HINT,
+				 getString("_UI_Detailed_hints_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hints_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.DETAILED__HINTS,
 				 true,
 				 false,
 				 true,
 				 null,
-				 null,
+				 getString("_UI_CommentsPropertyCategory"), //$NON-NLS-1$
 				 null));
 	}
 

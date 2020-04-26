@@ -13,7 +13,13 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
 	org.eclipse.emf.ecore.xcore.lib  // Feature contains 1 plugin
 		
 	org.eclipse.uml2.uml // Demo
-	org.junit
+	org.eclipse.jdt.feature.group
+	// +-> org.junit
+	org.eclipse.pde.feature.group
+	// +-> org.eclipse.pde.junit.runtime
+	
+	// Required to tests EReverseIt 
+    org.eclipse.emf.ecoretools.design.feature.group
 	
 }
 

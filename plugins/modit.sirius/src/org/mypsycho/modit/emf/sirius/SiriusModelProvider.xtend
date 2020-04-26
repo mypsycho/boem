@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.sirius.properties.PropertiesPackage
 import org.eclipse.sirius.properties.ext.widgets.reference.propertiesextwidgetsreference.PropertiesExtWidgetsReferencePackage
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
+import org.eclipse.sirius.viewpoint.description.Environment
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.JavaExtension
 import org.eclipse.sirius.viewpoint.description.style.StylePackage
@@ -34,7 +35,6 @@ import org.eclipse.xtend.lib.annotations.AccessorType
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.emf.ModitModel
-import org.mypsycho.modit.emf.sirius.internal.SiriusModelProviderService
 
 import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
 
@@ -97,7 +97,7 @@ abstract class SiriusModelProvider implements ModitModel {
 	/** Flag defined when building and a lamba is used */
 	var inlineServiceRequired = false
 	
-	@Accessors(#[ AccessorType.PACKAGE_GETTER ])
+	@Accessors
 	val SiriusModelProviderService.Callback callback = new SiriusModelProviderService.Callback {
 		override invoke(int methodId, EObject value, Object params) {
 			SiriusModelProvider.this.invoke(methodId, value, params)
@@ -125,16 +125,11 @@ abstract class SiriusModelProvider implements ModitModel {
 		this(DEFAULT_PACKAGES)
 	}
 	
-	// getter of extras is read-only
-	def Map<String, ? extends EObject> getExtras() {
-		extras
-	}
-	
 	def getRootAlias() { class.simpleName }
 	
 	def registerContent(Resource container) {
 		// registration use resource uri, it must be set after
-		resource.buildContent[ MisActivator.instance.registerProvider(this) ]
+		container.buildContent[ ModitSiriusPlugin.instance.registry.registerProvider(this, resource) ]
 	}
 	
 	override Collection<? extends Group> loadContent(Resource container) {		
@@ -181,19 +176,43 @@ abstract class SiriusModelProvider implements ModitModel {
 	/**
 	 * Initialize map of external references with resource set
 	 * <p>
-	 * By default, map is empty.
+	 * By default, it only contains colors.
 	 * </p>
 	 * 
 	 * @param it resourse set
 	 */
 	protected def void initExtras(ResourceSet it) {
-		// optional abstraction
+		// System colors are: blue,chocolate,green,orange,purple,red,yellow
+		// With shade : 'dark_', <default>, 'light_'
+		// And: black,white
+		Environment.eObject("environment:/viewpoint#/")
+			.systemColors.entries
+			.forEach[ extras.put("color:" + name, it) ]
 	}
 	
-	static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
-		rs.getEObject(URI.createURI(uri), true) as T
+	/**
+	 * Get an object from the resourceset of resource using it URI.
+	 * 
+	 * @param <T> expected type
+	 * @param uri of value
+	 * @return value
+	 */
+	def <T extends EObject> eObject(Class<T> type, String uri) {
+		resource.resourceSet.getEObject(URI.createURI(uri), true) as T
 	}
 	
+		
+	/**
+	 * Get value from extras using key.
+	 * 
+	 * @param <T> expected type
+	 * @param type expected
+	 * @param key of value
+	 * @return value
+	 */
+	def <T> T extraRef(Class<T> type, String key) {
+		extras.get(key) as T
+	}
 	
 	protected def void initContent(Group it)
 

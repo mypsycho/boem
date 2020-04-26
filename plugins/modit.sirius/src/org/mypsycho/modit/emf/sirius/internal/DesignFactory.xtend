@@ -34,11 +34,11 @@ class DesignFactory extends ModitResourceFactory {
 	}
 
 
-	def static toSiriusUri(String pluginId, Class<? extends SiriusModelProvider> clazz) {
-		pluginId.toUri(clazz, EXTENSION)
+	def static toSiriusUri(String pluginId, String classname) {
+		pluginId.toUri(classname, EXTENSION)
 	}
 	
-	def static toSiriusPluginPath(String pluginId, Class<? extends SiriusModelProvider> clazz) {
-		pluginId.toPluginPath(clazz, EXTENSION)
+	def static toSiriusPluginPath(String pluginId, String classname) {
+		pluginId.toPluginPath(classname, EXTENSION)
 	}  
 }

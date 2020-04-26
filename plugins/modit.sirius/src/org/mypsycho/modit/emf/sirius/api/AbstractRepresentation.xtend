@@ -20,9 +20,11 @@ import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.style.BasicLabelStyleDescription
 import org.mypsycho.modit.emf.EModIt
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider
+import java.util.Objects
 
 /**
- * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
+ * Adaptation of Sirius model into Java and EClass reflections API
+ * for representation.
  * 
  * @author nicolas.peransin
  */
@@ -98,7 +100,6 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 	 */
 	def void initContent(T it)
 	
-	
 	/**
 	 * Returns a reference from extra elements.
 	 * 
@@ -152,6 +153,18 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 		labelExpression = context.itemProviderLabel
 	}
 	
+	/**
+	 * Creates an identification with provided category.
+	 * <p>
+	 * This method has no side-effect, no id is reserved.
+	 * </p>
+	 * 
+	 * @param cat of identification
+	 * @param path 
+	 */
+	protected def String id(Enum<?> cat, String path) {
+		'''«cat.name»:«contentAlias».«Objects.requireNonNull(path).toLowerCase.replace(" ", "_")»'''
+	}
 	
 	/**
 	 * Create a string from expression from a sequence of parameter names.
@@ -163,4 +176,13 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 		params.join(SiriusModelProvider.PARAM_SEP)
 	}
 	
+	/**
+	 * Create a string from expression from a sequence of parameter names.
+	 * 
+	 * @param params names
+	 * @return string of parameters
+	 */
+	static def params(Object... params) { 
+		params.join(SiriusModelProvider.PARAM_SEP)
+	}
 }

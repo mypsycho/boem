@@ -238,13 +238,13 @@ public interface DwPackage extends EPackage {
 	int DETAILED__DESCRIPTION = WOBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DETAILED__HINT = WOBJECT_FEATURE_COUNT + 1;
+	int DETAILED__HINTS = WOBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Detailed</em>' class.
@@ -346,13 +346,13 @@ public interface DwPackage extends EPackage {
 	int CONTACT__DESCRIPTION = NAMED_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT__HINT = NAMED_FEATURE_COUNT + 1;
+	int CONTACT__HINTS = NAMED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Locations</b></em>' containment reference list.
@@ -418,13 +418,13 @@ public interface DwPackage extends EPackage {
 	int PERSON__DESCRIPTION = CONTACT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PERSON__HINT = CONTACT__HINT;
+	int PERSON__HINTS = CONTACT__HINTS;
 
 	/**
 	 * The feature id for the '<em><b>Locations</b></em>' containment reference list.
@@ -508,13 +508,13 @@ public interface DwPackage extends EPackage {
 	int COMPANY__DESCRIPTION = CONTACT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPANY__HINT = CONTACT__HINT;
+	int COMPANY__HINTS = CONTACT__HINTS;
 
 	/**
 	 * The feature id for the '<em><b>Locations</b></em>' containment reference list.
@@ -897,13 +897,13 @@ public interface DwPackage extends EPackage {
 	int GOOD__DESCRIPTION = DETAILED__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Hint</b></em>' reference.
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GOOD__HINT = DETAILED__HINT;
+	int GOOD__HINTS = DETAILED__HINTS;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -1583,15 +1583,15 @@ public interface DwPackage extends EPackage {
 	EAttribute getDetailed_Description();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint <em>Hint</em>}'.
+	 * Returns the meta object for the reference list '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHints <em>Hints</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Hint</em>'.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint()
+	 * @return the meta object for the reference list '<em>Hints</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHints()
 	 * @see #getDetailed()
 	 * @generated
 	 */
-	EReference getDetailed_Hint();
+	EReference getDetailed_Hints();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Purchase <em>Purchase</em>}'.
@@ -2008,12 +2008,12 @@ public interface DwPackage extends EPackage {
 		EAttribute DETAILED__DESCRIPTION = eINSTANCE.getDetailed_Description();
 
 		/**
-		 * The meta object literal for the '<em><b>Hint</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Hints</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DETAILED__HINT = eINSTANCE.getDetailed_Hint();
+		EReference DETAILED__HINTS = eINSTANCE.getDetailed_Hints();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.PurchaseImpl <em>Purchase</em>}' class.

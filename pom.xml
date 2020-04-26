@@ -57,6 +57,7 @@ https://www.eclipse.org/legal/epl-2.0/
 				<module>tests/dummy-model</module>
 				<module>tests/sample-tests</module>
 				<module>tests/modit-tests</module>
+				<module>tests/modit-sirius-tests</module>
 				<!-- EMF Genmodel doesn't handle a project not name as the folder -->
 				<module>tests/org.mypsycho.emf.modit.dummy-model.edit</module>
 				<module>tests/dummy-model.design</module>

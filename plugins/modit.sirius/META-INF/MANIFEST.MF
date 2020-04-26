@@ -22,7 +22,7 @@ Require-Bundle: com.google.guava,
 Export-Package: org.mypsycho.modit.emf.sirius,
  org.mypsycho.modit.emf.sirius.tool, 
  org.mypsycho.modit.emf.sirius.api
-Bundle-Activator: org.mypsycho.modit.emf.sirius.MisActivator
+Bundle-Activator: org.mypsycho.modit.emf.sirius.ModitSiriusPlugin
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

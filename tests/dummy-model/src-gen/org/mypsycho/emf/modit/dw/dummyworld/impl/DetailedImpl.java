@@ -2,15 +2,16 @@
  */
 package org.mypsycho.emf.modit.dw.dummyworld.impl;
 
+import java.util.Collection;
 import java.util.Map;
 
+import java.util.Map.Entry;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.mypsycho.emf.modit.dw.dummyworld.Detailed;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 
@@ -23,7 +24,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
  * </p>
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl#getHint <em>Hint</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.DetailedImpl#getHints <em>Hints</em>}</li>
  * </ul>
  *
  * @generated
@@ -48,15 +49,14 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getHint() <em>Hint</em>}' reference.
+	 * The cached value of the '{@link #getHints() <em>Hints</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHint()
+	 * @see #getHints()
 	 * @generated
 	 * @ordered
 	 */
-	protected Map.Entry<String, String> hint;
-
+	protected EList<Map.Entry<String, String>> hints;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -104,40 +104,12 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map.Entry<String, String> getHint() {
-		if (hint != null && ((EObject)hint).eIsProxy()) {
-			InternalEObject oldHint = (InternalEObject)hint;
-			hint = (Map.Entry<String, String>)eResolveProxy(oldHint);
-			if (hint != oldHint) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DwPackage.DETAILED__HINT, oldHint, hint));
-			}
+	public EList<Map.Entry<String, String>> getHints() {
+		if (hints == null) {
+			hints = new EObjectResolvingEList<Map.Entry<String, String>>(Entry.class, this, DwPackage.DETAILED__HINTS);
 		}
-		return hint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, String> basicGetHint() {
-		return hint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setHint(Map.Entry<String, String> newHint) {
-		Map.Entry<String, String> oldHint = hint;
-		hint = newHint;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.DETAILED__HINT, oldHint, hint));
+		return hints;
 	}
 
 	/**
@@ -150,9 +122,8 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 		switch (featureID) {
 			case DwPackage.DETAILED__DESCRIPTION:
 				return getDescription();
-			case DwPackage.DETAILED__HINT:
-				if (resolve) return getHint();
-				return basicGetHint();
+			case DwPackage.DETAILED__HINTS:
+				return getHints();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,8 +140,9 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 			case DwPackage.DETAILED__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case DwPackage.DETAILED__HINT:
-				setHint((Map.Entry<String, String>)newValue);
+			case DwPackage.DETAILED__HINTS:
+				getHints().clear();
+				getHints().addAll((Collection<? extends Map.Entry<String, String>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -187,8 +159,8 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 			case DwPackage.DETAILED__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case DwPackage.DETAILED__HINT:
-				setHint((Map.Entry<String, String>)null);
+			case DwPackage.DETAILED__HINTS:
+				getHints().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -204,8 +176,8 @@ public class DetailedImpl extends WObjectImpl implements Detailed {
 		switch (featureID) {
 			case DwPackage.DETAILED__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case DwPackage.DETAILED__HINT:
-				return hint != null;
+			case DwPackage.DETAILED__HINTS:
+				return hints != null && !hints.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

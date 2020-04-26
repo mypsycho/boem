@@ -12,18 +12,16 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.dw.dummyworld.design
 
+import java.util.concurrent.atomic.AtomicBoolean
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.sirius.table.metamodel.table.DColumn
 import org.eclipse.sirius.table.metamodel.table.description.EditionTableDescription
-import org.eclipse.sirius.table.metamodel.table.description.FeatureColumnMapping
-import org.eclipse.sirius.table.metamodel.table.description.LineMapping
 import org.mypsycho.emf.modit.dw.dummyworld.Contact
 import org.mypsycho.emf.modit.dw.dummyworld.Directory
 import org.mypsycho.emf.modit.dw.dummyworld.DwFactory
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
 import org.mypsycho.modit.emf.sirius.api.AbstractEditionTable
 import org.mypsycho.modit.emf.sirius.api.AbstractGroup
-import org.mypsycho.modit.emf.sirius.api.SiriusDesigns
 
 /**
  * Create a table of contact location.
@@ -37,69 +35,86 @@ class DirectoryTable extends AbstractEditionTable {
 	
 	static val PKG = DwPackage.eINSTANCE
 
+	static val LINE_GROUPS = #[ // header   -> add.title -> add.task
+		'Companies' -> 'Company' -> [ DwFactory it | createCompany ],
+		'People' -> 'Person' -> [ DwFactory it | createPerson ]
+	]
 	
 	new(AbstractGroup context) {
 		super(context, "Directory", Directory)
 	}
 	
 	override initContent(EditionTableDescription it) {
-		val first = #[ true ]
-		#[ // header   -> add.title -> add.task
-			'Companies' -> 'Company' -> [ DwFactory it | createCompany ],
-			'People' -> 'Person' -> [ DwFactory it | createPerson ]
-		].forEach[ descr |
+		
+		ownedLineMappings += "subDir".line [
+			domainClass = Directory
+			semanticCandidatesExpression = PKG.directory_Directories
+			headerLabelExpression = context.expression[ (it as Directory).name ] // could be localized
+			reusedSubLines += "subDir".lineRef
+			
+			reusedSubLines += LINE_GROUPS.map[ key.value.lineRef ]
+		]
+		
+		
+		val first = new AtomicBoolean(true) // create contact line once
+		LINE_GROUPS.forEach[ descr |
 			val title = descr.key.key
 			val creationTitle = descr.key.value
 			val doCreate = descr.value
 			
-			ownedLineMappings += LineMapping.create[
+			ownedLineMappings += creationTitle.line [
 				domainClass = Directory
-				semanticCandidatesExpression = SiriusDesigns.IDENTITY
+				semanticCandidatesExpression = PKG.directory_Directories
 				headerLabelExpression = title // could be localized
 				
-				if (first.head) {
-					ownedSubLines += LineMapping.createAs("DirectoryContact") [
+				if (first.get) {
+					ownedSubLines += "contact".line [
+						name = creationTitle
 						domainClass = Contact
 						semanticCandidatesExpression = PKG.directory_Contacts
 						headerLabelExpression = context.itemProviderLabel
 					]
-					first.set(0, false)
+					first.set(false)
 				} else {
-					reusedSubLines += LineMapping.ref("DirectoryContact")
+					reusedSubLines += "contact".lineRef
 				}
 				
-				addLineCreation(creationTitle, "DirectoryContact") [
+				addLineCreation(creationTitle, "contact") [
 					root, element, container |
-					element?.toString()
 					(root as Directory).contacts += doCreate.apply(PKG.dwFactory)
 				]
 			]
 		]
 		
+		
+		// expression should be out of loop
+		val columnLabel = context.expression(params(EditArg.lineSemantic, EditArg.column))
+			[ EObject it, DColumn col |
+				if (it instanceof Contact) locations.findFirst[ name == col.label ]?.value
+			]
+		val cellEditable = context.expression(EditArg.lineSemantic.name)[ it instanceof Contact ]
+		val cellEdit = context.expression(params(EditArg.lineSemantic, EditArg.column, EDIT_VALUE)) [
+				Contact it, DColumn col, String value |
+				
+				(locations.findFirst[ name == col.label ] ?: {
+					val newLoc = PKG.dwFactory.createLocation
+					newLoc.name = col.label
+					locations += newLoc
+					newLoc
+				}).value = value
+			]
+		
+		
 		// well-known location
 		"Mail,Phone,Address,Web site".split(",").forEach[ locationId |
-			ownedColumnMappings += FeatureColumnMapping.create[
-				name = locationId
+			ownedColumnMappings += locationId.column [
+
 				feature = PKG.contact_Locations // any valid property but is useless in all examples.
 				headerLabelExpression = locationId
-				labelExpression = context.expression(params(LINE, COl_VIEW))
-					[ EObject it, DColumn col |
-						if (it instanceof Contact) locations.findFirst[ name == col.label ]?.value
-					]
+				labelExpression = columnLabel
 				
-				canEdit = context.expression(LINE)[ it instanceof Contact ]
-				directEdit = createLabelEdit[
-					browseExpression = context.expression(params(LINE, COl_VIEW, EDIT_VALUE)) [
-						Contact it, DColumn col, String value |
-						
-						(locations.findFirst[ name == col.label ] ?: {
-							val newLoc = PKG.dwFactory.createLocation
-							newLoc.name = col.label
-							locations += newLoc
-							newLoc
-						}).value = value
-					]
-				]
+				canEdit = cellEditable
+				directEdit = createLabelEdit[ browseExpression = cellEdit ]
 			]
 		]
 		

@@ -17,7 +17,8 @@ import org.eclipse.sirius.table.metamodel.table.description.CrossTableDescriptio
 import org.eclipse.sirius.table.metamodel.table.description.ElementColumnMapping
 
 /**
- * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
+ * Adaptation of Sirius model into Java and EClass reflections API
+ * for Cross tables.
  * 
  * @author nicolas.peransin
  */

@@ -30,13 +30,19 @@ import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.style.BasicLabelStyleDescription
 
 /**
- * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
+ * Adaptation of Sirius model into Java and EClass reflections API
+ * for Diagrams.
  * 
  * @author nicolas.peransin
  */
 abstract class AbstractDiagram extends AbstractRepresentation<DiagramDescription> {
 
-
+	/** Namespaces for identification */
+	enum Ns { // namespace for identication
+		node, creation, del,
+		edge, connect, disconnect, reconnect
+	}
+	
 	/**
 	 * Create a factory for a diagram description
 	 * 

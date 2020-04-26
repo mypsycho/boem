@@ -3,6 +3,7 @@
 package org.mypsycho.emf.modit.dw.dummyworld;
 
 import java.util.Map;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,7 +15,7 @@ import java.util.Map;
  * </p>
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getDescription <em>Description</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint <em>Hint</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHints <em>Hints</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getDetailed()
@@ -45,30 +46,16 @@ public interface Detailed extends WObject {
 	void setDescription(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Hint</b></em>' reference.
+	 * Returns the value of the '<em><b>Hints</b></em>' reference list.
+	 * The list contents are of type {@link java.util.Map.Entry}<code>&lt;java.lang.String, java.lang.String&gt;</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Hint</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Hint</em>' reference.
-	 * @see #setHint(Map.Entry)
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getDetailed_Hint()
+	 * @return the value of the '<em>Hints</em>' reference list.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getDetailed_Hints()
 	 * @model mapType="org.eclipse.emf.ecore.EStringToStringMapEntry&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString&gt;"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel"
 	 * @generated
 	 */
-	Map.Entry<String, String> getHint();
-
-	/**
-	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Detailed#getHint <em>Hint</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Hint</em>' reference.
-	 * @see #getHint()
-	 * @generated
-	 */
-	void setHint(Map.Entry<String, String> value);
+	EList<Map.Entry<String, String>> getHints();
 
 } // Detailed

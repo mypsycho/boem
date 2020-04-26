@@ -13,6 +13,7 @@
 package org.mypsycho.modit.emf
 
 import java.io.IOException
+import java.lang.reflect.Modifier
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -336,7 +337,10 @@ class «name» {
 		«content.templateInnerCreate»
 	}
 
-	def getExtras() { context.extras }
+	def <T> T extraRef(Class<T> type, String key) {
+		context.extraRef(type, key)
+	}
+	
 }
 '''
 	}
@@ -373,26 +377,30 @@ class «mainClass.name» implements ModitModel {
 		createContent
 	}
 
-	protected def void initExtras(ResourceSet it) {
-		«templateExtras»
-	}
-
 	protected def createContent() {
 		// provide a ModitPool
 		«content.apply»
 	}
 
-	def context() { this }
+	protected def void initExtras(ResourceSet it) {
+		«templateExtras /* extras must happen AFTER model exploration */ »
+	}
 
-	«templateCommonQueries»
+	def <T> T extraRef(Class<T> type, String key) {
+		extras.get(key) as T
+	}
+	
+	«templateShorcuts»
 }
 '''
 	}
 
 	// xtend
 	protected def String templateExtras() {
-		if (!implicitExtras.empty) templateImplicitExtras else ""
-		+ if (!explicitExtras.empty) templateExplicitExtras else ""
+		// 
+		(if (!implicitExtras.empty) templateImplicitExtras else "")
+		+ 
+		(if (!explicitExtras.empty) templateExplicitExtras else "")
 	}
 
 	// xtend
@@ -401,7 +409,7 @@ class «mainClass.name» implements ModitModel {
 «
 FOR ext : implicitExtras.entrySet.map[ value -> key ].toList.sortBy[ key ]
 SEPARATOR ",\n" // cannot include comma in template: improper for last value
-»	"«ext.key»" -> eObject(« ext.value.templateClass», «ext.value.toUri.toString.toJava»)«
+»	"«ext.key»" -> eObject(«ext.value.templateClass», «ext.value.toUri.toString.toJava»)«
 ENDFOR
 »
 })
@@ -422,46 +430,17 @@ ENDFOR
 	}
 
 	// xtend
-	protected def String templateCommonQueries() {
-'''
-// Only works for feature with keys
-static def <R extends EObject> R at(EList<?> values, Class<R> type, Object... keys) {
-	val attKeys = ((values as EcoreEList<?>).feature as EReference).EKeys
-	val keyValues = keys.toList
-	
-	if (keyValues.size != attKeys.size) {
-		throw new IllegalArgumentException("Wrong args size: " 
-			+ keyValues.size + " instead of " + attKeys.size
-		)	
-	}
-	values.filter(type).findFirst[ r|
-		attKeys.map[ r.eGet(it) ] == keyValues
-	] as R
-}
-
-// Only works for feature with keys
-static def <R extends EObject> R at(EList<R> values, Object... keys) {
-	values.at(EObject, keys) as R
-}
-
-«
-IF !implicitExtras.empty || !explicitExtras.empty
-»static def <T extends EObject> eObject(ResourceSet rs, Class<T> type, String uri) {
-	rs.getEObject(URI.createURI(uri), true) as T
-}
-
-«
-ENDIF // extras
-»«
+	protected def String templateShorcuts() {
+'''«
 FOR shortcut : shortcuts 
-SEPARATOR ',\n'
-»static def <T extends «shortcut.EContainingClass.templateClass
+»
+static def <T extends «shortcut.EContainingClass.templateClass
 »> at«shortcut.EContainingClass.instanceClass.simpleName
 »(Iterable<T> values, Object key) {
 	values.findFirst[ «shortcut.name» == key ]
 }
 «
-ENDFOR // shortcuts
+ENDFOR
 »
 '''
 	}
@@ -553,15 +532,17 @@ ENDIF
 		val base = path.src
 		
 		path.templateExpr(
-			if (implicitExtras.containsKey(base)) implicitExtras.get(base).templateExtra
+			if (implicitExtras.containsKey(base))
+			 	// FIXME suspicious: how to get an element not included ? (require test)
+				base.templateExtra(implicitExtras.get(base))
 			else base.templateExplicitAlias
 		)
 	}
 	
 	// Xtend
-	protected def String templateExtra(String it) {
-'''extras.get(«it»)'''	
-	}	
+	protected def String templateExtra(EObject it, String key) {
+'''«templateClass».extraRef("«key»")'''	
+	}
 	
 	// Xtend
 	protected def String templateExplicitAlias(EObject it) {
@@ -583,12 +564,12 @@ ENDIF
 		if (alias !== null)
 			templateSimpleRef(path, alias, cast)
 		else if (explicitExtras.containsKey(path.src))
-			path.templateExpr(explicitExtras.get(path.src).toJava.templateExtra)
-				.templateCast(cast)
+			path.templateExpr(path.src.templateExtra(explicitExtras.get(path.src))).templateCast(cast)
+		else if (path.src.generatedEPackage)
+			path.templateExpr(templateEPackage(path.src as EPackage)) // no cast required
 		else if (path.src.eResource !== null)
-			path.templateExpr(identifyImplicitExtra(path.src).templateExtra)
-				.templateCast(cast)
-		else null // Headless
+			path.templateExpr(path.src.templateExtra(identifyImplicitExtra(path.src))).templateCast(cast)
+		else "// headless object" // throw or generate invalid statement ?
 	}
 	
 	// Xtend
@@ -599,6 +580,24 @@ IF !path.empty
 ENDIF
 »'''		
 	}	
+
+	protected def isGeneratedEPackage(EObject it) {
+		if (it instanceof EPackage) 
+			class.fields.exists[ // all public 
+				Modifier.isStatic(modifiers)
+				&& name == "eINSTANCE"
+			]
+		else false
+	}
+
+	// xtend (possibly the same for all packages)
+	protected def templateEPackage(EPackage it) {
+		class.fields.findFirst[
+			Modifier.isStatic(modifiers)
+			&& Modifier.isPublic(modifiers)
+			&& name == "eINSTANCE"
+		].declaringClass.name + ".eINSTANCE"
+	}
 
 	protected def identifyImplicitExtra(EObject it) {
 		implicitExtras.computeIfAbsent(it) [ "$" + implicitExtras.size ]
@@ -616,7 +615,7 @@ ENDIF
 			return new Expr(it, #[ eClass.instanceClass, eClass.instanceClass ])
 
 		if (eContainer === null || (withExtras && explicitExtras.containsKey(it))) // To extras
-			return new Expr(it, #[ EObject, eClass.instanceClass ])
+			return new Expr(it, #[ eClass.instanceClass, eClass.instanceClass ])
 
 		val feat = eContainingFeature as EReference		
 		val casted = feat.isReferenceSegmentCasted(it)

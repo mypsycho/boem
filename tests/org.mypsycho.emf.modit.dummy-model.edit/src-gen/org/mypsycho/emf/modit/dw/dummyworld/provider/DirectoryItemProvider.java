@@ -47,7 +47,6 @@ public class DirectoryItemProvider
 			super.getPropertyDescriptors(object);
 
 			addDirectoriesPropertyDescriptor(object);
-			addParentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -66,28 +65,6 @@ public class DirectoryItemProvider
 				 getString("_UI_Directory_directories_feature"), //$NON-NLS-1$
 				 getString("_UI_PropertyDescriptor_description", "_UI_Directory_directories_feature", "_UI_Directory_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DIRECTORY__DIRECTORIES,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Parent feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addParentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Directory_parent_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Directory_parent_feature", "_UI_Directory_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.DIRECTORY__PARENT,
 				 true,
 				 false,
 				 true,

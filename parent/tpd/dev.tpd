@@ -23,8 +23,6 @@ location eclipse_2019_09 "http://download.eclipse.org/releases/2019-09/" {
     // - team detect egit but cannot deal with it.
     org.eclipse.platform.ide
     
-    // Required to tests Ecore i18n
-    org.eclipse.emf.ecoretools.design.feature.group
 }
 
 

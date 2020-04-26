@@ -16,9 +16,11 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.sirius.table.metamodel.table.description.EditionTableDescription
 import org.eclipse.sirius.table.metamodel.table.description.FeatureColumnMapping
+import java.util.Objects
 
 /**
- * Class regrouping a common adaptation of Sirius into Java and EClass reflection for Diagram.
+ * Adaptation of Sirius model into Java and EClass reflections API
+ * for Edition Tables.
  * 
  * @author nicolas.peransin
  */
@@ -37,5 +39,20 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 	def void setFeature(FeatureColumnMapping it, EStructuralFeature feat) {
 		featureName = feat.name
 	}
+	
+	def column(String id, (FeatureColumnMapping)=>void initializer) {
+		Objects.requireNonNull(initializer)
+		FeatureColumnMapping.createAs(Ns.column.id(id)) [ 
+			name = id
+			initializer.apply(it)
+		]
+	}
+	
+	protected def columnRef(String id) {
+		FeatureColumnMapping.ref(Ns.column.id(id))
+	}
+
+	
+	
 	
 }

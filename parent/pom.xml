@@ -13,7 +13,7 @@
 		<tp.version>1.0.0-SNAPSHOT</tp.version>
 		<tp.mode>build</tp.mode>
 		<tycho.version>1.6.0</tycho.version>
-		<xtend.version>2.20.0</xtend.version>
+		<xtend.version>2.19.0</xtend.version>
 		<mvn-plugin.version></mvn-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		

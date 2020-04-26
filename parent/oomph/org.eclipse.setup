@@ -39,8 +39,8 @@
 		value="${installation.location/}${installation.relativeProductFolder}" />
 	<version name="latest" label="Latest" requiredJavaVersion="1.8">
 		<description><![CDATA[
-		P2Tasks can be very messy.
-		Try to keep requirements and associated repository close like in Target Platform Definitions.
+		P2Tasks can be very messy.<br/>
+		Try to keep requirements and associated repository close like in Target Platform Definitions.<br/>
 		Organize groups of features by theme using different P2Task.
 		]]></description>
 		<setupTask xsi:type="setup:CompoundTask" name="User Preferences">
@@ -219,15 +219,12 @@
 			<requirement name="org.eclipse.gef.sdk.feature.group" />
 			<requirement name="org.eclipse.gmf.runtime.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.cdo.epp.feature.group" />
-
 			<requirement name="org.eclipse.emf.ecoretools.design.feature.group" />
-
 			<requirement name="org.eclipse.xtext.sdk.feature.group" />
 			<requirement name="org.eclipse.emf.ecore.xcore.sdk.feature.group" />
 			
 			<!-- We do not reference Sirius from Eclipse release as source in not available -->
 			<repository url="https://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" />
-			<requirement name="org.eclipse.sirius.specifier.source.feature.group" />
 			<requirement name="org.eclipse.sirius.specifier.ide.ui.source.feature.group" />
 			<requirement name="org.eclipse.acceleo.ui.interpreter.feature.group" />
 			<requirement name="org.eclipse.eef.ext.widgets.reference.feature.source.feature.group" />
@@ -271,7 +268,7 @@ https://www.eclipse.org/modeling/mdt/downloads/
 
 	</version>
 	<description><![CDATA[
-	    Configuration for advanced Java developers.</br>
+	    Configuration for advanced Java developers.<br/>
 	    It includes:
 	    <li>
 	    <ul>SDK for different target environment: J2EE and Eclipse.</ul>

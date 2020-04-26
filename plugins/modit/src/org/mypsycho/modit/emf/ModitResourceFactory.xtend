@@ -33,9 +33,10 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	
 	static val PLUGIN_PATH = "plugin/" // used in URI, but not public.
 	
-	/** Extension used by EMF parser to find this Factory */
+	/** Default Extension used to identify model class */
 	public static val DEFAULT_EXTENSION = "modit"
 	
+	/** Extension used by EMF parser to find this Factory */
 	val String fileExtension
 
 	/**
@@ -58,9 +59,7 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 		new ClassResource(this, uri)
 	}
 
-	/**
-	 * Diagnostic used where model creation fails.
-	 */
+	/** Diagnostic of model creation failures.  */
 	static class ClassDiagnostic extends Exception implements Diagnostic {
 	// No basic Resource.Diagnostic
 
@@ -68,6 +67,7 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 
 		new(URI uri, String text, Throwable cause) {
 			super(text, cause)
+			cause.printStackTrace()
 			location = uri.toString()
 		}
 
@@ -80,6 +80,12 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 		override int getColumn() { 0 } 
 	}
 
+	/** 
+	 * Creates an instance of model class from URI.
+	 * 
+	 * @param uri identifying a class
+	 * @return new instance
+	 */
 	def createModelProviderFactory(URI uri) {
 		var String spec = uri.path().trim()
 		if (spec.startsWith("/")) {
@@ -114,7 +120,7 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 		res.contents += (it as ModitModel).loadContent(res)
 	}
 
-
+	/** Wrapping of Model-class instance. */
 	static class ClassResource extends ResourceImpl {
 		
 		val ModitResourceFactory context
@@ -142,8 +148,6 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 			// code inspire from load(InputStream, option)
 			val notification = setLoaded(true);
 			isLoading = true;
-
-
 			try { //
 				if (instance !== null) {
 					errors?.clear
@@ -152,7 +156,6 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 				}	
 			} catch (InvocationTargetException e) {
 				getErrors() += new ClassDiagnostic(uri, "Illegal instantiation", e.getCause())
-//			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
 			} catch (Exception e) {
 				getErrors() += new ClassDiagnostic(uri, "Illegal instantiation", e)
 			} finally {
@@ -174,10 +177,9 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	 * @return EMF URI
 	 */
 	static def toUri(String pluginId, Class<? extends ModitModel> clazz) {
-		pluginId.toUri(clazz, DEFAULT_EXTENSION)
+		pluginId.toUri(clazz.name)
 	}
-	
-	
+
 	/**
 	 * Provides URI for class in a plugin using custom extension.
 	 * 
@@ -187,7 +189,7 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	 * @return EMF URI
 	 */
 	static def toUri(String pluginId, Class<?> clazz, String ext) {
-		URI.createPlatformPluginURI(pluginId.toPluginPath(clazz, ext), true)
+		pluginId.toUri(clazz.name, ext)
 	}
 	
 	/**
@@ -198,10 +200,9 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	 * @return EMF URI path
 	 */
 	static def toPluginPath(String pluginId, Class<? extends ModitModel> clazz) {
-		pluginId.toPluginPath(clazz, DEFAULT_EXTENSION)
+		pluginId.toPluginPath(clazz.name)
 	}
 
-	
 	/**
 	 * Provides path segment for URI of class in a plugin with custom extension.
 	 * 
@@ -211,6 +212,57 @@ class ModitResourceFactory extends ResourceFactoryImpl {
 	 * @return EMF URI path
 	 */
 	static def toPluginPath(String pluginId, Class<?> clazz, String ext) {
-		pluginId + "/" + clazz.name + "." + ext
+		pluginId.toPluginPath(clazz.name, ext)
 	}
+	
+	//
+	//
+	
+	/**
+	 * Provides Modit URI for class in a plugin.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @return EMF URI
+	 */
+	static def toUri(String pluginId, String classname) {
+		pluginId.toUri(classname, DEFAULT_EXTENSION)
+	}
+	
+	/**
+	 * Provides URI for class in a plugin using custom extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @param ext extension to use
+	 * @return EMF URI
+	 */
+	static def toUri(String pluginId, String classname, String ext) {
+		URI.createPlatformPluginURI(pluginId.toPluginPath(classname, ext), true)
+	}
+	
+	/**
+	 * Provides path segment for URI of class in a plugin with modit extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @return EMF URI path
+	 */
+	static def toPluginPath(String pluginId, String classname) {
+		pluginId.toPluginPath(classname, DEFAULT_EXTENSION)
+	}
+
+	/**
+	 * Provides path segment for URI of class in a plugin with custom extension.
+	 * 
+	 * @param pluginId containing class
+	 * @param clazz to identify
+	 * @param ext extension to use
+	 * @return EMF URI path
+	 */
+	static def toPluginPath(String pluginId, String classname, String ext) {
+		pluginId + "/" + classname + "." + ext
+	}
+	
+	
 }

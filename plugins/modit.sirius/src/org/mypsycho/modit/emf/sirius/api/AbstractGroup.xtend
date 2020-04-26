@@ -37,7 +37,7 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	 * 
 	 * @param descriptorPackages used by Sirius
 	 */
-	new (Iterable<? extends EPackage> descriptorPackages) {
+	new(Iterable<? extends EPackage> descriptorPackages) {
 		super(descriptorPackages)
 	}
 		
@@ -46,14 +46,14 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	 * 
 	 * @param descriptorPackages used by Sirius
 	 */
-	new (EPackage... descriptorPackages) {
-		super(descriptorPackages)
+	new(EPackage... descriptorPackages) {
+		this(descriptorPackages as Iterable<EPackage>)
 	}
 	
 	/**
 	 * Construction of model using default Sirius package.
 	 */
-	new () { }
+	new() { /* required by other constructor existence */ }
 	
 	var String iplExpression
 	def getItemProviderLabel() {
@@ -71,16 +71,6 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	 */
 	def Collection<? extends EPackage> getBusinessPackages() {
 		businessPackages
-	}
-	
-	
-	override protected initExtras(ResourceSet it) {
-		// System colors are: blue,chocolate,green,orange,purple,red,yellow
-		// With shade : dark_ , <>, light_
-		// And: black,white
-		eObject(Environment, "environment:/viewpoint#/")
-			.systemColors.entries
-			.forEach[ extras.put(name, it) ]
 	}
 	
 	/**
@@ -119,18 +109,7 @@ abstract class AbstractGroup extends SiriusModelProvider {
 		
 		SiriusDesigns.encode(eClass)
 	}
-	
-	/**
-	 * Get value from extras using key.
-	 * 
-	 * @param <T> expected type
-	 * @param type expected
-	 * @param key of value
-	 * @return value
-	 */
-	def <T> T extraRef(Class<T> type, String key) {
-		extras.get(key) as T
-	}
+
 
 	
 }

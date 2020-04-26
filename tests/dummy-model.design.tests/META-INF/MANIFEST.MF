@@ -7,6 +7,4 @@ Fragment-Host: org.mypsycho.emf.modit.dummy-model.design
 Automatic-Module-Name: org.mypsycho.emf.modit.dummy-model.design.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.xtend.lib,
- org.eclipse.xtend.lib.macro,
- org.junit
+Require-Bundle: org.junit

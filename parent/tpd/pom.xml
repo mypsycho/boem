@@ -40,12 +40,7 @@
 							<artifacts>
 								<!-- For TPD, classifier is prefixed by '/' to enable relative include -->
 								<!-- No '..' path is allowed -->
-								<artifact>
-									<file>public.tpd</file>
-									<type>tpd</type>
-									<classifier>/public</classifier>
-								</artifact>
-
+								
 								<artifact>
 									<file>runtime.tpd</file>
 									<type>tpd</type>

@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.mypsycho.emf.modit.sirius" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.mypsycho.emf.modit.sirius" id="componentization" name="%component.extensionName"/>
+      </appinfo>
+      <documentation>
+         This extension point is used to register Sirius viewpoints from model class.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="siriusGroup"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="siriusGroup">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A fully qualified name of the Java class extending &lt;samp&gt;org.mypsycho.modit.emf.sirius.SiriusModelProvider
+&lt;/samp&gt;.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.mypsycho.modit.emf.sirius.SiriusModelProvider:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.5
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         &lt;extension point=&quot;org.mypsycho.emf.modit.sirius.componentization&quot;&gt;
+  &lt;siriusGroup class=&quot;org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign&quot;/&gt;
+&lt;/extension&gt;
+
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         The value of the class attribute must represent a class 
+that implements &lt;samp&gt;org.mypsycho.modit.emf.sirius.SiriusModelProvider&lt;/samp&gt;.
+&lt;p&gt;
+For an easier description, it is preferred to extend 
+&lt;samp&gt;org.mypsycho.modit.emf.sirius.api.AbstractGroup&lt;/samp&gt; class.
+&lt;/p&gt;
+&lt;p&gt;
+Note that using model from class, org.eclipse.sirius.componentization is not possible 
+because of Sirius Activator lifecycle.
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2020 Nicolas PERANSIN
+&lt;p&gt;
+This program and the accompanying materials
+are made available under the terms of the Eclipse Public License 2.0
+which accompanies this distribution, and is available at
+&lt;a href=&quot;https://www.eclipse.org/legal/epl-2.0&quot;&gt;https://www.eclipse.org/legal/epl-v20.html&lt;/a&gt;/
+&lt;/p&gt;
+&lt;p&gt;
+SPDX-License-Identifier: EPL-2.0
+&lt;/p&gt;
+      </documentation>
+   </annotation>
+
+</schema>

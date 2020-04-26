@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.dw.dummyworld.design;
 
-import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -25,22 +24,15 @@ public class DwDesignActivator extends AbstractUIPlugin {
     // The shared instance
     private static DwDesignActivator instance;
 
-    private IDisposable vpReference; 
-
     @Override
     public void start(BundleContext context) throws Exception {
       super.start(context);
       instance = this;
-	  // vpReference = MisActivator.getInstance().registerGroups(PLUGIN_ID, DummyWorldDesign.class);
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
     	instance = null;
-		if (vpReference != null) {
-			vpReference.dispose();
-			vpReference = null; 
-		}
 		super.stop(context);
     }
 
