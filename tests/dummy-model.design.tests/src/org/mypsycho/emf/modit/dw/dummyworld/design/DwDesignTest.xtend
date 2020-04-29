@@ -13,11 +13,11 @@ import org.mypsycho.modit.emf.sirius.tool.SiriusReverseIt
  * @author nperansin
  */
 // Plugin-test: Sirius needs a lot dependencies to load odesign.
-class DesignTest {
+class DwDesignTest {
 
 	// Specific
 	protected static val TEST_PATH = Paths.get("target/test-run")
-		.resolve(DesignTest.simpleName).toAbsolutePath
+		.resolve(DwDesignTest.simpleName).toAbsolutePath
 
     	// Derived
 	protected static val CLASS_NAME = DummyWorldDesign.name

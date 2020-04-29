@@ -50,9 +50,7 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> {
 		this.factory = parent.factory
 	
 		contentType = type
-		creationTasks.add[
-			label = dLabel
-		]
+		creationTasks.add[ label = dLabel ] // xtend fails to infere '+=' .
 	}
 	
 	/**

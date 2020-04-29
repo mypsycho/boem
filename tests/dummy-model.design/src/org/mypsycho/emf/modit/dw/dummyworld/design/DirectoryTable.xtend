@@ -12,16 +12,17 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.dw.dummyworld.design
 
-import java.util.concurrent.atomic.AtomicBoolean
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.sirius.table.metamodel.table.DColumn
 import org.eclipse.sirius.table.metamodel.table.description.EditionTableDescription
+import org.mypsycho.emf.modit.dw.dummyworld.Company
 import org.mypsycho.emf.modit.dw.dummyworld.Contact
 import org.mypsycho.emf.modit.dw.dummyworld.Directory
-import org.mypsycho.emf.modit.dw.dummyworld.DwFactory
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
+import org.mypsycho.emf.modit.dw.dummyworld.Person
 import org.mypsycho.modit.emf.sirius.api.AbstractEditionTable
 import org.mypsycho.modit.emf.sirius.api.AbstractGroup
+import org.mypsycho.modit.emf.sirius.api.SiriusDesigns
 
 /**
  * Create a table of contact location.
@@ -35,9 +36,9 @@ class DirectoryTable extends AbstractEditionTable {
 	
 	static val PKG = DwPackage.eINSTANCE
 
-	static val LINE_GROUPS = #[ // header   -> add.title -> add.task
-		'Companies' -> 'Company' -> [ DwFactory it | createCompany ],
-		'People' -> 'Person' -> [ DwFactory it | createPerson ]
+	static val GROUP_LINES = #[ // header   -> add.title -> add.task
+		'Companies' -> Company -> [ PKG.dwFactory.createCompany ],
+		'People' -> Person -> [ PKG.dwFactory.createPerson ]
 	]
 	
 	new(AbstractGroup context) {
@@ -45,63 +46,51 @@ class DirectoryTable extends AbstractEditionTable {
 	}
 	
 	override initContent(EditionTableDescription it) {
+		ownedCreateLine += "subDir".createLine(Directory.simpleName + ' at root') [ root, element, container |
+			(root as Directory).directories += PKG.dwFactory.createDirectory
+		]
 		
 		ownedLineMappings += "subDir".line [
 			domainClass = Directory
 			semanticCandidatesExpression = PKG.directory_Directories
 			headerLabelExpression = context.expression[ (it as Directory).name ] // could be localized
-			reusedSubLines += "subDir".lineRef
 			
-			reusedSubLines += LINE_GROUPS.map[ key.value.lineRef ]
+			create += "subDir".createLine("Sub-" + Directory.simpleName) [ root, element, container |
+				(element as Directory).directories += PKG.dwFactory.createDirectory
+			]
+			
+			reusedSubLines += "subDir".lineRef
+			reusedSubLines += GROUP_LINES.map[ (key.value.simpleName + "Group").lineRef ]
 		]
 		
 		
-		val first = new AtomicBoolean(true) // create contact line once
-		LINE_GROUPS.forEach[ descr |
+		GROUP_LINES.forEach[ descr |
 			val title = descr.key.key
-			val creationTitle = descr.key.value
+			val type = descr.key.value
 			val doCreate = descr.value
 			
-			ownedLineMappings += creationTitle.line [
+			ownedLineMappings += (type.simpleName + "Group").line [
 				domainClass = Directory
-				semanticCandidatesExpression = PKG.directory_Directories
+				semanticCandidatesExpression = SiriusDesigns.IDENTITY
 				headerLabelExpression = title // could be localized
 				
-				if (first.get) {
-					ownedSubLines += "contact".line [
-						name = creationTitle
-						domainClass = Contact
-						semanticCandidatesExpression = PKG.directory_Contacts
-						headerLabelExpression = context.itemProviderLabel
-					]
-					first.set(false)
-				} else {
-					reusedSubLines += "contact".lineRef
-				}
+				ownedSubLines += type.simpleName.line [
+					domainClass = type
+					semanticCandidatesExpression = PKG.directory_Contacts
+					headerLabelExpression = context.itemProviderLabel
+				]
 				
-				addLineCreation(creationTitle, "contact") [
-					root, element, container |
-					(root as Directory).contacts += doCreate.apply(PKG.dwFactory)
+				create += type.simpleName.createLine(type.simpleName) [ root, element, container |
+					(element as Directory).contacts += doCreate.apply(element)
 				]
 			]
 		]
 		
 		
 		// expression should be out of loop
-		val columnLabel = context.expression(params(EditArg.lineSemantic, EditArg.column))
+		val cellLabel = context.expression(params(EditArg.lineSemantic, EditArg.column))
 			[ EObject it, DColumn col |
 				if (it instanceof Contact) locations.findFirst[ name == col.label ]?.value
-			]
-		val cellEditable = context.expression(EditArg.lineSemantic.name)[ it instanceof Contact ]
-		val cellEdit = context.expression(params(EditArg.lineSemantic, EditArg.column, EDIT_VALUE)) [
-				Contact it, DColumn col, String value |
-				
-				(locations.findFirst[ name == col.label ] ?: {
-					val newLoc = PKG.dwFactory.createLocation
-					newLoc.name = col.label
-					locations += newLoc
-					newLoc
-				}).value = value
 			]
 		
 		
@@ -111,11 +100,20 @@ class DirectoryTable extends AbstractEditionTable {
 
 				feature = PKG.contact_Locations // any valid property but is useless in all examples.
 				headerLabelExpression = locationId
-				labelExpression = columnLabel
+				labelExpression = cellLabel
 				
-				canEdit = cellEditable
-				directEdit = createLabelEdit[ browseExpression = cellEdit ]
+				canEdit = [ it instanceof Contact ]
+				directEdit = [ Contact it, String value |
+				
+					(locations.findFirst[ name == locationId ] ?: {
+						val newLoc = PKG.dwFactory.createLocation
+						newLoc.name = locationId
+						locations += newLoc
+						newLoc
+					}).value = value
+				]	
 			]
+
 		]
 		
 

@@ -12,11 +12,13 @@
  *******************************************************************************/
  package org.mypsycho.modit.emf.sirius.api
 
+import java.util.Objects
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.sirius.table.metamodel.table.description.EditionTableDescription
 import org.eclipse.sirius.table.metamodel.table.description.FeatureColumnMapping
-import java.util.Objects
+import org.eclipse.xtext.xbase.lib.Functions.Function1
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure2
 
 /**
  * Adaptation of Sirius model into Java and EClass reflections API
@@ -27,7 +29,7 @@ import java.util.Objects
 abstract class AbstractEditionTable extends AbstractTable<EditionTableDescription> {
 
 	/**
-	 * Create a factory for a diagram description
+	 * Create a factory for a diagram description.
 	 * 
 	 * @param parent of diagram
 	 */
@@ -53,6 +55,26 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 	}
 
 	
+	protected def setCanEdit(FeatureColumnMapping it, Function1<? extends EObject, Boolean> predicat) {
+		canEdit = context.expression(predicat) // use self
+	}
 	
+	/**
+	 * Defines the operation to edit a cell.
+	 * <p>
+	 * As Edition Table does not provide columns information, only line is provided.
+	 * </p>
+	 * 
+	 * @param it column to edit
+	 * @param operation on (line element, value)
+	 */
+	def void setDirectEdit(FeatureColumnMapping it, Procedure2<? extends EObject, String> operation) {
+		directEdit = createLabelEdit[
+			browseExpression = context.expression(params(EditArg.lineSemantic, EDIT_VALUE), 
+				operation
+			)
+		]
+	}
 	
+
 }

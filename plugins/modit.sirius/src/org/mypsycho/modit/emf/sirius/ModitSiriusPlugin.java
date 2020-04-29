@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.business.api.componentization.ViewpointFileCollector;
 import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
+import org.eclipse.sirius.common.tools.api.interpreter.IConverter;
 import org.eclipse.sirius.viewpoint.description.Group;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
 import org.mypsycho.modit.emf.sirius.internal.DesignFactory;
@@ -36,6 +37,12 @@ import org.osgi.framework.BundleContext;
  */
 public class ModitSiriusPlugin extends Plugin {
 
+	
+	@SuppressWarnings("restriction") // discourage with Sirius
+	static final IConverter DEFAULT_CONVERTER = 
+			new org.eclipse.sirius.common.tools.internal.interpreter.DefaultConverter();
+
+			
 	/** The plug-in ID */
 	public static final String PLUGIN_ID = "org.mypsycho.emf.modit.sirius";
 

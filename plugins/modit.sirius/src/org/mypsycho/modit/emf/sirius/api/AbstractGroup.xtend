@@ -17,8 +17,6 @@ import java.util.Collection
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.sirius.viewpoint.description.Environment
 import org.eclipse.sirius.viewpoint.description.UserFixedColor
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider
 
@@ -58,7 +56,9 @@ abstract class AbstractGroup extends SiriusModelProvider {
 	var String iplExpression
 	def getItemProviderLabel() {
 		if (iplExpression === null) {
-			iplExpression = expression[ EObject it | SiriusDesigns.getItemProvider(it).getText(it) ]
+			iplExpression = expression[ EObject it | 
+				SiriusDesigns.getItemProvider(it).getText(it)
+			]
 		}
 		iplExpression
 	}

@@ -15,11 +15,13 @@
 import java.util.Objects
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
+import org.eclipse.sirius.table.metamodel.table.description.BackgroundStyleDescription
 import org.eclipse.sirius.table.metamodel.table.description.CreateLineTool
 import org.eclipse.sirius.table.metamodel.table.description.LabelEditTool
 import org.eclipse.sirius.table.metamodel.table.description.LineMapping
 import org.eclipse.sirius.table.metamodel.table.description.TableDescription
 import org.eclipse.sirius.table.metamodel.table.description.TableVariable
+import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.tool.ChangeContext
 import org.eclipse.sirius.viewpoint.description.tool.EditMaskVariables
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
@@ -34,7 +36,7 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 
 	/** Namespaces for identification */
 	enum Ns { // namespace for identication
-		line, column
+		line, column, create
 	}
 
 	enum EditArg {
@@ -43,7 +45,8 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		/** DLine of the current DCell: table.DLine */line, 
 		/** semantic target of line */lineSemantic, 
 		/** DColumn of the current DCell: table.DColumn */column, 
-		/** semantic target of column */columnSemantic
+		/** semantic target of column */columnSemantic, // only used by cross table
+		/** feature of column */ element // only used by feature table
 	}
 
 	
@@ -109,6 +112,11 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		LineMapping.createAs(Ns.line.id(id)) [
 			name = id
 			initializer.apply(it)
+
+			defaultBackground = BackgroundStyleDescription.create [ // null is grey
+				backgroundColor = SystemColor.extraRef("color:white")
+			]
+			
 		]
  	}
 
@@ -129,20 +137,13 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 			firstModelOperation = ChangeContext.create(operation)
 		]
 	}
+
 	
-	def createLabelEdit(Procedure3<EObject, EObject, Object> operation) {
-		createLabelEdit[
-			browseExpression = context.expression(
-				params(EditArg.line, EditArg.column, EDIT_VALUE), 
-				operation
-			)
-		]
-	}
-	
-	def addLineCreation(LineMapping it, String toolLabel, String createdLine, 
+	def createLine(String createdLine, String toolLabel, 
 		(CreateLineTool)=>void init, Procedure3<EObject, EObject, EObject> action
 	) {
-		create += CreateLineTool.create[
+		CreateLineTool.create[
+			name = Ns.create.id(createdLine)
 			label = toolLabel
 			mapping = createdLine.lineRef
 			variables += CreateMappingArg.values.map[ descr |
@@ -157,10 +158,10 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		]
 	}
 
-	def addLineCreation(LineMapping it, String toolLabel, String createdLine, 
+	def createLine(String createdLine, String toolLabel, 
 		Procedure3<EObject, EObject, EObject> action
 	) {
-		addLineCreation(toolLabel, createdLine, null, action)
+		createdLine.createLine(toolLabel, null, action)
 	}
 
 

@@ -215,8 +215,8 @@ class «mainClass.name» extends SiriusModelProvider {
 
 « // initExtras must be performed AFTER model exploration
 IF !implicitExtras.empty || !explicitExtras.empty
-»	override initExtras(ResourceSet it) {
-		super.initExtras(it)
+»	override initExtras() {
+		super.initExtras
 		
 		«templateExtras»
 	}
@@ -234,16 +234,16 @@ ENDIF // extras
 		// Xtend
 		override templateExplicitExtras() {
 			val colors = container.source.systemColorsPalette.entries
-			if (explicitExtras.keySet.toList.equals(colors)) {
+			if (explicitExtras.keySet.equals(colors.toSet)) {
 				return "" // no named element
 			}
 '''extras.putAll(#{ // Named elements
 «
 FOR ext : explicitExtras.entrySet
-	// ignore SystemColors as they are already provided in template.
-	.filter[ !colors.contains(key) ]
-	.toList.sortBy[ value ]
-SEPARATOR ",\n" // cannot include comma in template: improper for last value
+		// ignore SystemColors as they are already provided in template.
+		.filter[ !colors.contains(key) ]
+		.toList.sortBy[ value ]
+	SEPARATOR ",\n" // cannot include comma in template: improper for last value.
 »	«ext.value.toJava» -> «ext.key.templateAlias»«
 ENDFOR
 »
@@ -258,8 +258,8 @@ ENDFOR
 	
 		// Xtend
 		override templateSimpleContent(EObject it) {
-			// As assemble is performed by SiriusModelProvider
-			// Code from #templateInnerCreate
+			// As assembling is performed by SiriusModelProvider,
+			// use the code from #templateInnerCreate.
 '''
 «
 FOR c : innerContent SEPARATOR statementSeparator 

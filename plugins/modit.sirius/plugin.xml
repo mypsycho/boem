@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.mypsycho.emf.modit.sirius.componentization" name="%component.extensionName" schema="schema/org.mypsycho.emf.modit.sirius.componentization.exsd"/>
 
-	<extension point="org.eclipse.emf.ecore.extension_parser">
-		<parser
-			class="org.mypsycho.modit.emf.sirius.internal.DesignFactory"
-			type="modit_sirius" />
-	</extension>
+  <extension-point id="org.mypsycho.emf.modit.sirius.componentization" name="%component.extensionName" schema="schema/org.mypsycho.emf.modit.sirius.componentization.exsd"/>
 
-	<extension point="org.eclipse.sirius.externalJavaAction">
-		<javaActions
-			actionClass="org.mypsycho.modit.emf.sirius.SiriusModelProviderService"
-			id="org.mypsycho.emf.modit.sirius.service" />
-	</extension>
+  <extension point="org.eclipse.emf.ecore.extension_parser">
+    <parser class="org.mypsycho.modit.emf.sirius.internal.DesignFactory" type="modit_sirius" />
+  </extension>
 
-   <extension point="org.eclipse.sirius.componentization">
-      <component
-            class="org.mypsycho.modit.emf.sirius.ModitSiriusPlugin"
-            id="org.mypsycho.modit.emf.sirius"
-            name="org.mypsycho.modit.emf.sirius" />
-   </extension>
+  <extension point="org.eclipse.sirius.componentization">
+    <component
+         class="org.mypsycho.modit.emf.sirius.ModitSiriusPlugin"
+         id="org.mypsycho.modit.emf.sirius"
+         name="org.mypsycho.modit.emf.sirius" />
+  </extension>
+
+  <extension point="org.eclipse.sirius.common.expressionInterpreter" id="modit.sirius" >
+    <expressionInterpreterProvider
+        interpreterProviderClass="org.mypsycho.modit.emf.sirius.SiriusModelProviderService$Provider">
+    </expressionInterpreterProvider>
+  </extension>
 
 
 </plugin>

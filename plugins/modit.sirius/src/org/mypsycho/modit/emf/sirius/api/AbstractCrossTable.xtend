@@ -15,6 +15,8 @@
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.sirius.table.metamodel.table.description.CrossTableDescription
 import org.eclipse.sirius.table.metamodel.table.description.ElementColumnMapping
+import org.eclipse.sirius.table.metamodel.table.description.IntersectionMapping
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
 
 /**
  * Adaptation of Sirius model into Java and EClass reflections API
@@ -33,7 +35,6 @@ abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
 		super(CrossTableDescription, parent, dLabel, dClass)
 	}
 	
-	
 	/**
 	 * Sets the domain class of a description.
 	 * <p>
@@ -47,4 +48,14 @@ abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
 		domainClass = context.asDomainClass(type)
 	}
 	
+	def void setDirectEdit(IntersectionMapping it, Procedure3<? extends EObject, ? extends EObject, String> operation) {
+		directEdit = createLabelEdit[
+			browseExpression = context.expression(
+				params(EditArg.lineSemantic, EditArg.columnSemantic, EDIT_VALUE), 
+				operation
+			)
+		]
+	}
+	
+
 }

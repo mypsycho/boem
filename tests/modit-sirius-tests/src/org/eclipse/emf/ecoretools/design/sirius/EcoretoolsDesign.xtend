@@ -188,8 +188,8 @@ class EcoretoolsDesign extends SiriusModelProvider {
 		extensions += new EcoretoolsViewExtension(this).createContent
 	}
 
-	override initExtras(ResourceSet it) {
-		super.initExtras(it)
+	override initExtras() {
+		super.initExtras
 		
 		extras.putAll(#{ // anonymous resources
 			"$0" -> eObject(Environment, "environment:/viewpoint#/")

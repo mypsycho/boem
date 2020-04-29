@@ -39,8 +39,7 @@ class SiriusDesigns {
 	 * @return item provider
 	 */
 	static def getItemProvider(EObject it) {
-		DiagramUIPlugin.plugin.itemProvidersAdapterFactory
-			.adapt(it, IItemLabelProvider) as IItemLabelProvider
+		DiagramUIPlugin.plugin.itemProvidersAdapterFactory.adapt(it, IItemLabelProvider) as IItemLabelProvider
 	}
 	
 	/**

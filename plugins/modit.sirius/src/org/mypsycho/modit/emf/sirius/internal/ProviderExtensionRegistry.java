@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -35,7 +36,6 @@ import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
 import org.mypsycho.modit.emf.sirius.ModitSiriusPlugin;
 import org.mypsycho.modit.emf.sirius.SiriusModelProvider;
-import org.mypsycho.modit.emf.sirius.SiriusModelProviderService;
 
 /**
  *
@@ -265,7 +265,7 @@ public class ProviderExtensionRegistry implements IRegistryEventListener {
 	 * @return registered provider (may be null)
 	 * @throws IndexOutOfBoundsException if id does match any existing id
 	 */
-	public SiriusModelProviderService.Callback getProvider(int id) {
+	public IntFunction<Object> getProvider(int id) {
 		return serviceProviders.get(id).getCallback();
 	}
 	
@@ -280,7 +280,7 @@ public class ProviderExtensionRegistry implements IRegistryEventListener {
 	 * @return registered provider (may be null)
 	 * @throws IndexOutOfBoundsException if id does match any existing id
 	 */
-	public SiriusModelProviderService.Callback getProvider(String classname) {
+	public IntFunction<Object> getProvider(String classname) {
 		return implsCache.get(classname).getCallback();
 	}
 
