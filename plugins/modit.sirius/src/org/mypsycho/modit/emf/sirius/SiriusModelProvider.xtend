@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.sirius.properties.PropertiesPackage
 import org.eclipse.sirius.properties.ext.widgets.reference.propertiesextwidgetsreference.PropertiesExtWidgetsReferencePackage
 import org.eclipse.sirius.viewpoint.description.DescriptionPackage
@@ -39,7 +38,7 @@ import org.mypsycho.modit.emf.ModitModel
 import static extension org.eclipse.xtend.lib.annotations.AccessorType.*
 
 /**
- * Class to provide model for Eclipse Sirius to interprete.
+ * Class to provide model for Eclipse Sirius to interpret.
  * 
  * @author nperansin
  */
@@ -164,7 +163,7 @@ abstract class SiriusModelProvider implements ModitModel {
 	 * By default, it only contains colors.
 	 * </p>
 	 * 
-	 * @param it resourse set
+	 * @param it resource set
 	 */
 	protected def void initExtras() {
 		// System colors are: blue,chocolate,green,orange,purple,red,yellow
@@ -176,7 +175,7 @@ abstract class SiriusModelProvider implements ModitModel {
 	}
 	
 	/**
-	 * Get an object from the resourceset of resource using it URI.
+	 * Get an object from the resource set of resource using it URI.
 	 * 
 	 * @param <T> expected type
 	 * @param uri of value
@@ -279,7 +278,7 @@ abstract class SiriusModelProvider implements ModitModel {
 		val methodId = expressions.size
 		expressions += callable
 				
-		SiriusModelProviderService.toExpression(this, methodId, signature.toInvokeParams(size))
+		SiriusModelInterpreter.toExpression(this, methodId, signature.toInvokeParams(size))
 	}
 	
 

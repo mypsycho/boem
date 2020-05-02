@@ -1,4 +1,14 @@
 /**
+ * Copyright (c) 2020 Nicolas PERANSIN.
+ * This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
  */
 package org.mypsycho.emf.modit.dw.dummyworld.provider;
 
@@ -8,28 +18,26 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.mypsycho.emf.modit.dw.dummyworld.Detailed;
+
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 
 /**
- * This is the item provider adapter for a {@link org.mypsycho.emf.modit.dw.dummyworld.Detailed} object.
+ * This is the item provider adapter for a {@link org.mypsycho.emf.modit.dw.dummyworld.Subscription} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class DetailedItemProvider 
-	extends WObjectItemProvider {
+public class SubscriptionItemProvider extends PurchaseItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DetailedItemProvider(AdapterFactory adapterFactory) {
+	public SubscriptionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -44,65 +52,42 @@ public class DetailedItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDescriptionPropertyDescriptor(object);
-			addHintsPropertyDescriptor(object);
+			addActivityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Description feature.
+	 * This adds a property descriptor for the Activity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDescriptionPropertyDescriptor(Object object) {
+	protected void addActivityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Detailed_description_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.DETAILED__DESCRIPTION,
-				 true,
-				 true,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 getString("_UI_CommentsPropertyCategory"), //$NON-NLS-1$
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Hints feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addHintsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Detailed_hints_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_hints_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.DETAILED__HINTS,
+				 getString("_UI_Subscription_activity_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Subscription_activity_feature", "_UI_Subscription_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.SUBSCRIPTION__ACTIVITY,
 				 true,
 				 false,
 				 true,
 				 null,
-				 getString("_UI_CommentsPropertyCategory"), //$NON-NLS-1$
+				 null,
 				 null));
 	}
 
 	/**
-	 * This returns Detailed.gif.
+	 * This returns Subscription.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Detailed")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Subscription")); //$NON-NLS-1$
 	}
 
 	/**
@@ -113,11 +98,9 @@ public class DetailedItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = crop(((Detailed)object).getDescription());
-		return label == null || label.length() == 0 ?
-			getString("_UI_Detailed_type") : //$NON-NLS-1$
-			getString("_UI_Detailed_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return getString("_UI_Subscription_type"); //$NON-NLS-1$
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -129,12 +112,6 @@ public class DetailedItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(Detailed.class)) {
-			case DwPackage.DETAILED__DESCRIPTION:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 

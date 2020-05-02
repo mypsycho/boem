@@ -137,7 +137,7 @@ public class GoodItemProvider extends DetailedItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Good)object).getDescription();
+		String label = crop(((Good)object).getDescription());
 		return label == null || label.length() == 0 ?
 			getString("_UI_Good_type") : //$NON-NLS-1$
 			getString("_UI_Good_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$

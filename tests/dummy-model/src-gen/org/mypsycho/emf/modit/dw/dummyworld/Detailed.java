@@ -27,6 +27,9 @@ public interface Detailed extends WObject {
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Short text on worth to notice informal element.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getDetailed_Description()

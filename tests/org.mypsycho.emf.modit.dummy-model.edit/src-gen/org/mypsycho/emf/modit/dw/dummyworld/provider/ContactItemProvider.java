@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.mypsycho.emf.modit.dw.dummyworld.Contact;
+import org.mypsycho.emf.modit.dw.dummyworld.DwFactory;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 
 /**
@@ -46,8 +48,6 @@ public class ContactItemProvider
 
 			addDescriptionPropertyDescriptor(object);
 			addHintsPropertyDescriptor(object);
-			addLocationsPropertyDescriptor(object);
-			addOwnsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -67,7 +67,7 @@ public class ContactItemProvider
 				 getString("_UI_PropertyDescriptor_description", "_UI_Detailed_description_feature", "_UI_Detailed_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.DETAILED__DESCRIPTION,
 				 true,
-				 false,
+				 true,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 getString("_UI_CommentsPropertyCategory"), //$NON-NLS-1$
@@ -97,47 +97,34 @@ public class ContactItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Locations feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLocationsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Contact_locations_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_locations_feature", "_UI_Contact_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.CONTACT__LOCATIONS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(DwPackage.Literals.CONTACT__LOCATIONS);
+			childrenFeatures.add(DwPackage.Literals.CONTACT__OWNS);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This adds a property descriptor for the Owns feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addOwnsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Contact_owns_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Contact_owns_feature", "_UI_Contact_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 DwPackage.Literals.CONTACT__OWNS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -148,7 +135,7 @@ public class ContactItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Contact)object).getDescription();
+		String label = crop(((Contact)object).getDescription());
 		return label == null || label.length() == 0 ?
 			getString("_UI_Contact_type") : //$NON-NLS-1$
 			getString("_UI_Contact_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
@@ -169,6 +156,10 @@ public class ContactItemProvider
 			case DwPackage.CONTACT__DESCRIPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case DwPackage.CONTACT__LOCATIONS:
+			case DwPackage.CONTACT__OWNS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -183,6 +174,21 @@ public class ContactItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DwPackage.Literals.CONTACT__LOCATIONS,
+				 DwFactory.eINSTANCE.createLocation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DwPackage.Literals.CONTACT__OWNS,
+				 DwFactory.eINSTANCE.createGood()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DwPackage.Literals.CONTACT__OWNS,
+				 DwFactory.eINSTANCE.createSubscription()));
 	}
 
 }

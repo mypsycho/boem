@@ -4,6 +4,7 @@ package org.mypsycho.emf.modit.dw.dummyworld;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -643,13 +644,22 @@ public interface DwPackage extends EPackage {
 	int JOB__TEAM = TITLED_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOB__TYPE = TITLED_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Job</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOB_FEATURE_COUNT = TITLED_FEATURE_COUNT + 4;
+	int JOB_FEATURE_COUNT = TITLED_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -805,13 +815,22 @@ public interface DwPackage extends EPackage {
 	int SERVICE__PARENT = OFFER__PARENT;
 
 	/**
+	 * The feature id for the '<em><b>Activities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__ACTIVITIES = OFFER_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_FEATURE_COUNT = OFFER_FEATURE_COUNT + 0;
+	int SERVICE_FEATURE_COUNT = OFFER_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -978,13 +997,22 @@ public interface DwPackage extends EPackage {
 	int GOOD_OPERATION_COUNT = DETAILED_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__NAME = TITLED__NAME;
+	int ACTIVITY__DESCRIPTION = DETAILED__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Hints</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__HINTS = DETAILED__HINTS;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -993,16 +1021,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__PARENT = TITLED_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Offer</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__OFFER = TITLED_FEATURE_COUNT + 1;
+	int ACTIVITY__PARENT = DETAILED_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Supported By</b></em>' reference.
@@ -1011,7 +1030,16 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__SUPPORTED_BY = TITLED_FEATURE_COUNT + 2;
+	int ACTIVITY__SUPPORTED_BY = DETAILED_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Customer</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__CUSTOMER = DETAILED_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Activity</em>' class.
@@ -1020,7 +1048,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
+	int ACTIVITY_FEATURE_COUNT = DETAILED_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -1029,16 +1057,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY___GET_PARENT = TITLED___GET_PARENT;
-
-	/**
-	 * The operation id for the '<em>Get Offer</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_OFFER = TITLED_OPERATION_COUNT + 0;
+	int ACTIVITY___GET_PARENT = DETAILED___GET_PARENT;
 
 	/**
 	 * The number of operations of the '<em>Activity</em>' class.
@@ -1047,7 +1066,7 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY_OPERATION_COUNT = TITLED_OPERATION_COUNT + 1;
+	int ACTIVITY_OPERATION_COUNT = DETAILED_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1140,13 +1159,22 @@ public interface DwPackage extends EPackage {
 	int LOCATION__PARENT = TITLED_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__TYPE = TITLED_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_FEATURE_COUNT = TITLED_FEATURE_COUNT + 2;
+	int LOCATION_FEATURE_COUNT = TITLED_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -1165,6 +1193,83 @@ public interface DwPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOCATION_OPERATION_COUNT = TITLED_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.SubscriptionImpl <em>Subscription</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.SubscriptionImpl
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getSubscription()
+	 * @generated
+	 */
+	int SUBSCRIPTION = 16;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBSCRIPTION__PARENT = PURCHASE__PARENT;
+
+	/**
+	 * The feature id for the '<em><b>Activity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBSCRIPTION__ACTIVITY = PURCHASE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Subscription</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBSCRIPTION_FEATURE_COUNT = PURCHASE_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Offer</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBSCRIPTION___GET_OFFER = PURCHASE___GET_OFFER;
+
+	/**
+	 * The number of operations of the '<em>Subscription</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBSCRIPTION_OPERATION_COUNT = PURCHASE_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.LocationType <em>Location Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.LocationType
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getLocationType()
+	 * @generated
+	 */
+	int LOCATION_TYPE = 17;
+
+	/**
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.dw.dummyworld.JobType <em>Job Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.JobType
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getJobType()
+	 * @generated
+	 */
+	int JOB_TYPE = 18;
 
 
 	/**
@@ -1338,15 +1443,15 @@ public interface DwPackage extends EPackage {
 	EClass getActivity();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer <em>Offer</em>}'.
+	 * Returns the meta object for the container reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Offer</em>'.
-	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getOffer()
+	 * @return the meta object for the container reference '<em>Parent</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getParent()
 	 * @see #getActivity()
 	 * @generated
 	 */
-	EReference getActivity_Offer();
+	EReference getActivity_Parent();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getSupportedBy <em>Supported By</em>}'.
@@ -1358,6 +1463,17 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getActivity_SupportedBy();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Activity#getCustomer <em>Customer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Customer</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Activity#getCustomer()
+	 * @see #getActivity()
+	 * @generated
+	 */
+	EReference getActivity_Customer();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Titled <em>Titled</em>}'.
@@ -1411,6 +1527,58 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLocation_Parent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.dw.dummyworld.Location#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Location#getType()
+	 * @see #getLocation()
+	 * @generated
+	 */
+	EAttribute getLocation_Type();
+
+	/**
+	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Subscription <em>Subscription</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Subscription</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Subscription
+	 * @generated
+	 */
+	EClass getSubscription();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.mypsycho.emf.modit.dw.dummyworld.Subscription#getActivity <em>Activity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Activity</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Subscription#getActivity()
+	 * @see #getSubscription()
+	 * @generated
+	 */
+	EReference getSubscription_Activity();
+
+	/**
+	 * Returns the meta object for enum '{@link org.mypsycho.emf.modit.dw.dummyworld.LocationType <em>Location Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Location Type</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.LocationType
+	 * @generated
+	 */
+	EEnum getLocationType();
+
+	/**
+	 * Returns the meta object for enum '{@link org.mypsycho.emf.modit.dw.dummyworld.JobType <em>Job Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Job Type</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.JobType
+	 * @generated
+	 */
+	EEnum getJobType();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Offer <em>Offer</em>}'.
@@ -1499,6 +1667,17 @@ public interface DwPackage extends EPackage {
 	EReference getJob_Team();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Job#getType()
+	 * @see #getJob()
+	 * @generated
+	 */
+	EAttribute getJob_Type();
+
+	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Product <em>Product</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1517,6 +1696,17 @@ public interface DwPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getService();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.mypsycho.emf.modit.dw.dummyworld.Service#getActivities <em>Activities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Activities</em>'.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.Service#getActivities()
+	 * @see #getService()
+	 * @generated
+	 */
+	EReference getService_Activities();
 
 	/**
 	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.dw.dummyworld.Good <em>Good</em>}'.
@@ -1808,12 +1998,12 @@ public interface DwPackage extends EPackage {
 		EClass ACTIVITY = eINSTANCE.getActivity();
 
 		/**
-		 * The meta object literal for the '<em><b>Offer</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ACTIVITY__OFFER = eINSTANCE.getActivity_Offer();
+		EReference ACTIVITY__PARENT = eINSTANCE.getActivity_Parent();
 
 		/**
 		 * The meta object literal for the '<em><b>Supported By</b></em>' reference feature.
@@ -1822,6 +2012,14 @@ public interface DwPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ACTIVITY__SUPPORTED_BY = eINSTANCE.getActivity_SupportedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Customer</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIVITY__CUSTOMER = eINSTANCE.getActivity_Customer();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.TitledImpl <em>Titled</em>}' class.
@@ -1866,6 +2064,52 @@ public interface DwPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LOCATION__PARENT = eINSTANCE.getLocation_Parent();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCATION__TYPE = eINSTANCE.getLocation_Type();
+
+		/**
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.SubscriptionImpl <em>Subscription</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.SubscriptionImpl
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getSubscription()
+		 * @generated
+		 */
+		EClass SUBSCRIPTION = eINSTANCE.getSubscription();
+
+		/**
+		 * The meta object literal for the '<em><b>Activity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUBSCRIPTION__ACTIVITY = eINSTANCE.getSubscription_Activity();
+
+		/**
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.LocationType <em>Location Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.LocationType
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getLocationType()
+		 * @generated
+		 */
+		EEnum LOCATION_TYPE = eINSTANCE.getLocationType();
+
+		/**
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.JobType <em>Job Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.JobType
+		 * @see org.mypsycho.emf.modit.dw.dummyworld.impl.DwPackageImpl#getJobType()
+		 * @generated
+		 */
+		EEnum JOB_TYPE = eINSTANCE.getJobType();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.OfferImpl <em>Offer</em>}' class.
@@ -1936,6 +2180,14 @@ public interface DwPackage extends EPackage {
 		EReference JOB__TEAM = eINSTANCE.getJob_Team();
 
 		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute JOB__TYPE = eINSTANCE.getJob_Type();
+
+		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.ProductImpl <em>Product</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1954,6 +2206,14 @@ public interface DwPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SERVICE = eINSTANCE.getService();
+
+		/**
+		 * The meta object literal for the '<em><b>Activities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SERVICE__ACTIVITIES = eINSTANCE.getService_Activities();
 
 		/**
 		 * The meta object literal for the '{@link org.mypsycho.emf.modit.dw.dummyworld.impl.GoodImpl <em>Good</em>}' class.

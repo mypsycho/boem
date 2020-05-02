@@ -1,24 +1,318 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" name="DummyWorldDesign" version="12.0.0.2017041100">
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/table/description/1.1.0" xmlns:properties="http://www.eclipse.org/sirius/properties/1.0.0" xmlns:properties-ext-widgets-reference="http://www.eclipse.org/sirius/properties/1.0.0/ext/widgets/reference" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" name="DummyWorldDesign" version="12.0.0.2017041100">
   <ownedViewpoints name="DummyWorld" modelFileExtension="*.dw">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="CompanyDiagram" label="Organization chart" domainClass="dummyworld.Company">
       <metamodel href="https://github.com/mypsycho/modit/tests/dummy-world/1.0#/"/>
       <defaultLayer name="Default">
         <edgeMappings sourceMapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='CompanyDiagram']/@defaultLayer/@containerMappings[name='']" targetMapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='CompanyDiagram']/@defaultLayer/@containerMappings[name='']" targetFinderExpression="feature:team">
-          <style lineStyle="dash" sourceArrow="InputArrow" targetArrow="NoDecoration"/>
+          <style lineStyle="dash" sourceArrow="InputArrow" targetArrow="NoDecoration">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+          </style>
         </edgeMappings>
         <containerMappings semanticCandidatesExpression="feature:employees" domainClass="dummyworld.Job" childrenPresentation="List">
-          <subNodeMappings semanticCandidatesExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 0, Sequence{})" domainClass="dummyworld.Service">
-            <style xsi:type="style:SquareDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 1, Sequence{})" sizeComputationExpression="2">
+          <subNodeMappings semanticCandidatesExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:0:self" domainClass="dummyworld.Service">
+            <style xsi:type="style:SquareDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:1:self" sizeComputationExpression="2">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#/0/@systemColors/@entries[name='gray']"/>
             </style>
           </subNodeMappings>
-          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="aql:self.moditResInvoke(org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign, 1, Sequence{})">
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="10" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:1:self">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
             <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#/0/@systemColors/@entries[name='light_gray']"/>
           </style>
         </containerMappings>
       </defaultLayer>
     </ownedRepresentations>
-    <ownedJavaExtensions/>
+    <ownedRepresentations xsi:type="description_2:EditionTableDescription" name="DirectoryTable" label="Directory" domainClass="dummyworld.Directory">
+      <metamodel href="https://github.com/mypsycho/modit/tests/dummy-world/1.0#/"/>
+      <ownedLineMappings name="subDir" reusedSubLines="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir'] //@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='CompanyGroup'] //@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='PersonGroup']" reusedInMappings="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir']" domainClass="dummyworld.Directory" semanticCandidatesExpression="feature:directories" headerLabelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:3:self">
+        <defaultBackground>
+          <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+        </defaultBackground>
+        <create name="create:DirectoryTable.subdir" label="Sub-Directory" mapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir']">
+          <variables name="root"/>
+          <variables name="element"/>
+          <variables name="container"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:4:root,element,container"/>
+        </create>
+      </ownedLineMappings>
+      <ownedLineMappings name="CompanyGroup" reusedInMappings="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir']" domainClass="dummyworld.Directory" semanticCandidatesExpression="var:self" headerLabelExpression="Companies">
+        <defaultBackground>
+          <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+        </defaultBackground>
+        <ownedSubLines name="Company" domainClass="dummyworld.Company" semanticCandidatesExpression="feature:contacts" headerLabelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:1:self">
+          <defaultBackground>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+          </defaultBackground>
+        </ownedSubLines>
+        <create name="create:DirectoryTable.company" label="Company" mapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='CompanyGroup']/@ownedSubLines[name='Company']">
+          <variables name="root"/>
+          <variables name="element"/>
+          <variables name="container"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:5:root,element,container"/>
+        </create>
+      </ownedLineMappings>
+      <ownedLineMappings name="PersonGroup" reusedInMappings="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir']" domainClass="dummyworld.Directory" semanticCandidatesExpression="var:self" headerLabelExpression="People">
+        <defaultBackground>
+          <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+        </defaultBackground>
+        <ownedSubLines name="Person" domainClass="dummyworld.Person" semanticCandidatesExpression="feature:contacts" headerLabelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:1:self">
+          <defaultBackground>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+          </defaultBackground>
+        </ownedSubLines>
+        <create name="create:DirectoryTable.person" label="Person" mapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='PersonGroup']/@ownedSubLines[name='Person']">
+          <variables name="root"/>
+          <variables name="element"/>
+          <variables name="container"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:6:root,element,container"/>
+        </create>
+      </ownedLineMappings>
+      <ownedCreateLine name="create:DirectoryTable.subdir" label="Directory at root" mapping="//@ownedViewpoints[name='DummyWorld']/@ownedRepresentations[name='DirectoryTable']/@ownedLineMappings[name='subDir']">
+        <variables name="root"/>
+        <variables name="element"/>
+        <variables name="container"/>
+        <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:7:root,element,container"/>
+      </ownedCreateLine>
+      <ownedColumnMappings name="Mail" headerLabelExpression="Mail" canEdit="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:8:self" featureName="locations" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:2:lineSemantic,column">
+        <directEdit>
+          <variables name="table"/>
+          <variables name="root"/>
+          <variables name="line"/>
+          <variables name="lineSemantic"/>
+          <variables name="column"/>
+          <variables name="columnSemantic"/>
+          <variables name="element"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:9:lineSemantic,arg0"/>
+          <mask mask="{0}"/>
+        </directEdit>
+      </ownedColumnMappings>
+      <ownedColumnMappings name="Phone" headerLabelExpression="Phone" canEdit="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:10:self" featureName="locations" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:2:lineSemantic,column">
+        <directEdit>
+          <variables name="table"/>
+          <variables name="root"/>
+          <variables name="line"/>
+          <variables name="lineSemantic"/>
+          <variables name="column"/>
+          <variables name="columnSemantic"/>
+          <variables name="element"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:11:lineSemantic,arg0"/>
+          <mask mask="{0}"/>
+        </directEdit>
+      </ownedColumnMappings>
+      <ownedColumnMappings name="Address" headerLabelExpression="Address" canEdit="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:12:self" featureName="locations" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:2:lineSemantic,column">
+        <directEdit>
+          <variables name="table"/>
+          <variables name="root"/>
+          <variables name="line"/>
+          <variables name="lineSemantic"/>
+          <variables name="column"/>
+          <variables name="columnSemantic"/>
+          <variables name="element"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:13:lineSemantic,arg0"/>
+          <mask mask="{0}"/>
+        </directEdit>
+      </ownedColumnMappings>
+      <ownedColumnMappings name="Web site" headerLabelExpression="Web site" canEdit="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:14:self" featureName="locations" labelExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:2:lineSemantic,column">
+        <directEdit>
+          <variables name="table"/>
+          <variables name="root"/>
+          <variables name="line"/>
+          <variables name="lineSemantic"/>
+          <variables name="column"/>
+          <variables name="columnSemantic"/>
+          <variables name="element"/>
+          <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:15:lineSemantic,arg0"/>
+          <mask mask="{0}"/>
+        </directEdit>
+      </ownedColumnMappings>
+    </ownedRepresentations>
   </ownedViewpoints>
+  <extensions xsi:type="properties:ViewExtensionDescription" name="Default">
+    <metamodels href="https://github.com/mypsycho/modit/tests/dummy-world/1.0#/"/>
+    <categories name="category:.default">
+      <pages name="World" labelExpression="cst:World" semanticCandidateExpression="aql:input.getAllSemanticElements()" preconditionExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:16:self" groups="//@extensions.0/@categories.0/@groups.1 //@extensions.0/@categories.0/@groups.0"/>
+      <pages name="Comments" labelExpression="cst:Comments" semanticCandidateExpression="aql:input.getAllSemanticElements()" preconditionExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:17:self" groups="//@extensions.0/@categories.0/@groups.2" indented="true"/>
+      <groups name="DummyWorldSuppProps" label="Debug">
+        <controls xsi:type="properties:LabelDescription" name="DummyWorldSuppLabel" labelExpression="aql:'Type'" valueExpression="aql:self" displayExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:18:self"/>
+      </groups>
+      <groups name="World_Default" labelExpression="" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:DynamicMappingForDescription" name="World_Default" iterator="eStructuralFeature" iterableExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:19:self" forceRefresh="true">
+          <ifs name="then:.listdescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EAttribute) and eStructuralFeature.many">
+            <widget xsi:type="properties:ListDescription" name="ListDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)" displayExpression="var:value">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.radiodescription" predicateExpression="aql:eStructuralFeature.eType.oclIsKindOf(ecore::EEnum)  and not(eStructuralFeature.many)  and eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals->size() &lt;= 4">
+            <widget xsi:type="properties:RadioDescription" name="RadioDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum) .getEEnumLiteralByLiteral(self.eGet(eStructuralFeature.name).toString())" candidatesExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals" candidateDisplayExpression="aql:candidate.name" numberOfColumns="2">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue.instance)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.selectdescription" predicateExpression="aql:eStructuralFeature.eType.oclIsKindOf(ecore::EEnum)  and not(eStructuralFeature.many)  and eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals->size() > 4">
+            <widget xsi:type="properties:SelectDescription" name="SelectDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum) .getEEnumLiteralByLiteral(self.eGet(eStructuralFeature.name).toString())" candidatesExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals" candidateDisplayExpression="aql:candidate.name">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue.instance)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.extreferencedescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EReference) and eStructuralFeature.eType != ecore::EStringToStringMapEntry">
+            <widget xsi:type="properties-ext-widgets-reference:ExtReferenceDescription" name="ExtReferenceDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" referenceNameExpression="aql:eStructuralFeature.name">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.checkboxdescription" predicateExpression="aql:input.emfEditServices(self).needsCheckboxWidget(eStructuralFeature)">
+            <widget xsi:type="properties:CheckboxDescription" name="CheckboxDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature) " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.textdescription" predicateExpression="aql:input.emfEditServices(self).needsTextWidget(eStructuralFeature)  &#x9;and not input.emfEditServices(self).isMultiline(eStructuralFeature)">
+            <widget xsi:type="properties:TextDescription" name="TextDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.textareadescription" predicateExpression="aql:input.emfEditServices(self).needsTextWidget(eStructuralFeature)  &#x9;and input.emfEditServices(self).isMultiline(eStructuralFeature)">
+            <widget xsi:type="properties:TextAreaDescription" name="TextAreaDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+            </widget>
+          </ifs>
+          <ifs name="then:.listdescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EReference) and eStructuralFeature.eType = ecore::EStringToStringMapEntry">
+            <widget xsi:type="properties:ListDescription" name="ListDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)" displayExpression="aql:value.key + '=' + value.value">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+        </controls>
+        <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+      </groups>
+      <groups name="Comments_Default" labelExpression="" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:DynamicMappingForDescription" name="Comments_Default" iterator="eStructuralFeature" iterableExpression="modit:org.mypsycho.emf.modit.dw.dummyworld.design.DummyWorldDesign:20:self" forceRefresh="true">
+          <ifs name="then:.listdescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EAttribute) and eStructuralFeature.many">
+            <widget xsi:type="properties:ListDescription" name="ListDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)" displayExpression="var:value">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.radiodescription" predicateExpression="aql:eStructuralFeature.eType.oclIsKindOf(ecore::EEnum)  and not(eStructuralFeature.many)  and eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals->size() &lt;= 4">
+            <widget xsi:type="properties:RadioDescription" name="RadioDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum) .getEEnumLiteralByLiteral(self.eGet(eStructuralFeature.name).toString())" candidatesExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals" candidateDisplayExpression="aql:candidate.name" numberOfColumns="2">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue.instance)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.selectdescription" predicateExpression="aql:eStructuralFeature.eType.oclIsKindOf(ecore::EEnum)  and not(eStructuralFeature.many)  and eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals->size() > 4">
+            <widget xsi:type="properties:SelectDescription" name="SelectDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum) .getEEnumLiteralByLiteral(self.eGet(eStructuralFeature.name).toString())" candidatesExpression="aql:eStructuralFeature.eType.oclAsType(ecore::EEnum).eLiterals" candidateDisplayExpression="aql:candidate.name">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue.instance)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.extreferencedescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EReference) and eStructuralFeature.eType != ecore::EStringToStringMapEntry">
+            <widget xsi:type="properties-ext-widgets-reference:ExtReferenceDescription" name="ExtReferenceDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" referenceNameExpression="aql:eStructuralFeature.name">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.checkboxdescription" predicateExpression="aql:input.emfEditServices(self).needsCheckboxWidget(eStructuralFeature)">
+            <widget xsi:type="properties:CheckboxDescription" name="CheckboxDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature) " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.textdescription" predicateExpression="aql:input.emfEditServices(self).needsTextWidget(eStructuralFeature)  &#x9;and not input.emfEditServices(self).isMultiline(eStructuralFeature)">
+            <widget xsi:type="properties:TextDescription" name="TextDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+          <ifs name="then:.textareadescription" predicateExpression="aql:input.emfEditServices(self).needsTextWidget(eStructuralFeature)  &#x9;and input.emfEditServices(self).isMultiline(eStructuralFeature)">
+            <widget xsi:type="properties:TextAreaDescription" name="TextAreaDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:input.emfEditServices(self).setValue(eStructuralFeature, newValue)"/>
+              </initialOperation>
+            </widget>
+          </ifs>
+          <ifs name="then:.listdescription" predicateExpression="aql:eStructuralFeature.oclIsKindOf(ecore::EReference) and eStructuralFeature.eType = ecore::EStringToStringMapEntry">
+            <widget xsi:type="properties:ListDescription" name="ListDescription:eStructuralFeature" labelExpression="aql:input.emfEditServices(self).getText(eStructuralFeature)  + ':' " helpExpression="aql:input.emfEditServices(self).getDescription(eStructuralFeature)" isEnabledExpression="aql:eStructuralFeature.changeable" valueExpression="aql:self.eGet(eStructuralFeature.name)" displayExpression="aql:value.key + '=' + value.value">
+              <conditionalStyles preconditionExpression="aql:eStructuralFeature.lowerBound == 1">
+                <style>
+                  <labelFontFormat>bold</labelFontFormat>
+                </style>
+              </conditionalStyles>
+            </widget>
+          </ifs>
+        </controls>
+        <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+      </groups>
+    </categories>
+  </extensions>
 </description:Group>

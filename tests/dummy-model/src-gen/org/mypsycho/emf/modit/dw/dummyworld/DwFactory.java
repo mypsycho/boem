@@ -76,6 +76,15 @@ public interface DwFactory extends EFactory {
 	Location createLocation();
 
 	/**
+	 * Returns a new object of class '<em>Subscription</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Subscription</em>'.
+	 * @generated
+	 */
+	Subscription createSubscription();
+
+	/**
 	 * Returns a new object of class '<em>Job</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

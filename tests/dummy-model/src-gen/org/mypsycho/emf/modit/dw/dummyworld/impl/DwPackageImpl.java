@@ -4,6 +4,7 @@ package org.mypsycho.emf.modit.dw.dummyworld.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -20,13 +21,16 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwFactory;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 import org.mypsycho.emf.modit.dw.dummyworld.Good;
 import org.mypsycho.emf.modit.dw.dummyworld.Job;
+import org.mypsycho.emf.modit.dw.dummyworld.JobType;
 import org.mypsycho.emf.modit.dw.dummyworld.Location;
+import org.mypsycho.emf.modit.dw.dummyworld.LocationType;
 import org.mypsycho.emf.modit.dw.dummyworld.Named;
 import org.mypsycho.emf.modit.dw.dummyworld.Offer;
 import org.mypsycho.emf.modit.dw.dummyworld.Person;
 import org.mypsycho.emf.modit.dw.dummyworld.Product;
 import org.mypsycho.emf.modit.dw.dummyworld.Purchase;
 import org.mypsycho.emf.modit.dw.dummyworld.Service;
+import org.mypsycho.emf.modit.dw.dummyworld.Subscription;
 import org.mypsycho.emf.modit.dw.dummyworld.Titled;
 import org.mypsycho.emf.modit.dw.dummyworld.WObject;
 
@@ -92,6 +96,27 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	private EClass locationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass subscriptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum locationTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum jobTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -379,7 +404,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getActivity_Offer() {
+	public EReference getActivity_Parent() {
 		return (EReference)activityEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -391,6 +416,16 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	@Override
 	public EReference getActivity_SupportedBy() {
 		return (EReference)activityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getActivity_Customer() {
+		return (EReference)activityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -441,6 +476,56 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	@Override
 	public EReference getLocation_Parent() {
 		return (EReference)locationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLocation_Type() {
+		return (EAttribute)locationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSubscription() {
+		return subscriptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSubscription_Activity() {
+		return (EReference)subscriptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getLocationType() {
+		return locationTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getJobType() {
+		return jobTypeEEnum;
 	}
 
 	/**
@@ -529,6 +614,16 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getJob_Type() {
+		return (EAttribute)jobEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getProduct() {
 		return productEClass;
 	}
@@ -541,6 +636,16 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 	@Override
 	public EClass getService() {
 		return serviceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getService_Activities() {
+		return (EReference)serviceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -722,6 +827,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		createEAttribute(jobEClass, JOB__SINCE);
 		createEReference(jobEClass, JOB__PARENT);
 		createEReference(jobEClass, JOB__TEAM);
+		createEAttribute(jobEClass, JOB__TYPE);
 
 		offerEClass = createEClass(OFFER);
 		createEAttribute(offerEClass, OFFER__PRICE);
@@ -730,6 +836,7 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		productEClass = createEClass(PRODUCT);
 
 		serviceEClass = createEClass(SERVICE);
+		createEReference(serviceEClass, SERVICE__ACTIVITIES);
 
 		purchaseEClass = createEClass(PURCHASE);
 		createEReference(purchaseEClass, PURCHASE__PARENT);
@@ -741,8 +848,9 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		createEAttribute(goodEClass, GOOD__COST);
 
 		activityEClass = createEClass(ACTIVITY);
-		createEReference(activityEClass, ACTIVITY__OFFER);
+		createEReference(activityEClass, ACTIVITY__PARENT);
 		createEReference(activityEClass, ACTIVITY__SUPPORTED_BY);
+		createEReference(activityEClass, ACTIVITY__CUSTOMER);
 
 		directoryEClass = createEClass(DIRECTORY);
 		createEReference(directoryEClass, DIRECTORY__CONTACTS);
@@ -752,6 +860,14 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		locationEClass = createEClass(LOCATION);
 		createEAttribute(locationEClass, LOCATION__VALUE);
 		createEReference(locationEClass, LOCATION__PARENT);
+		createEAttribute(locationEClass, LOCATION__TYPE);
+
+		subscriptionEClass = createEClass(SUBSCRIPTION);
+		createEReference(subscriptionEClass, SUBSCRIPTION__ACTIVITY);
+
+		// Create enums
+		locationTypeEEnum = createEEnum(LOCATION_TYPE);
+		jobTypeEEnum = createEEnum(JOB_TYPE);
 	}
 
 	/**
@@ -800,11 +916,11 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		serviceEClass.getESuperTypes().add(this.getOffer());
 		goodEClass.getESuperTypes().add(this.getDetailed());
 		goodEClass.getESuperTypes().add(this.getPurchase());
-		activityEClass.getESuperTypes().add(this.getTitled());
-		activityEClass.getESuperTypes().add(this.getPurchase());
+		activityEClass.getESuperTypes().add(this.getDetailed());
 		directoryEClass.getESuperTypes().add(this.getTitled());
 		locationEClass.getESuperTypes().add(this.getTitled());
 		locationEClass.getESuperTypes().add(this.getWObject());
+		subscriptionEClass.getESuperTypes().add(this.getPurchase());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(wObjectEClass, WObject.class, "WObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -836,10 +952,11 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		getCompany_Offers().getEKeys().add(this.getTitled_Name());
 
 		initEClass(jobEClass, Job.class, "Job", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getJob_Employee(), this.getPerson(), null, "employee", null, 1, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getJob_Employee(), this.getPerson(), null, "employee", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getJob_Since(), theEcorePackage.getEDate(), "since", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getJob_Parent(), this.getCompany(), this.getCompany_Employees(), "parent", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getJob_Team(), this.getJob(), null, "team", null, 0, -1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getJob_Type(), this.getJobType(), "type", null, 0, 1, Job.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(offerEClass, Offer.class, "Offer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getOffer_Price(), theEcorePackage.getEBigDecimal(), "price", null, 0, 1, Offer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -848,9 +965,10 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getService_Activities(), this.getActivity(), this.getActivity_Parent(), "activities", null, 0, -1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(purchaseEClass, Purchase.class, "Purchase", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getPurchase_Parent(), this.getContact(), this.getContact_Owns(), "parent", null, 0, 1, Purchase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getPurchase_Parent(), this.getContact(), this.getContact_Owns(), "parent", null, 1, 1, Purchase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEOperation(getPurchase__GetOffer(), this.getOffer(), "getOffer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -860,8 +978,9 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEAttribute(getGood_Cost(), theEcorePackage.getEBigDecimal(), "cost", null, 0, -1, Good.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getActivity_Offer(), this.getService(), null, "offer", null, 1, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getActivity_Parent(), this.getService(), this.getService_Activities(), "parent", null, 1, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getActivity_SupportedBy(), this.getJob(), null, "supportedBy", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getActivity_Customer(), this.getSubscription(), this.getSubscription_Activity(), "customer", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(directoryEClass, Directory.class, "Directory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getDirectory_Contacts(), this.getContact(), this.getContact_Parent(), "contacts", null, 0, -1, Directory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -872,6 +991,23 @@ public class DwPackageImpl extends EPackageImpl implements DwPackage {
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getLocation_Value(), ecorePackage.getEString(), "value", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLocation_Parent(), this.getContact(), this.getContact_Locations(), "parent", null, 1, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLocation_Type(), this.getLocationType(), "type", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(subscriptionEClass, Subscription.class, "Subscription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSubscription_Activity(), this.getActivity(), this.getActivity_Customer(), "activity", null, 0, 1, Subscription.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		// Initialize enums and add enum literals
+		initEEnum(locationTypeEEnum, LocationType.class, "LocationType"); //$NON-NLS-1$
+		addEEnumLiteral(locationTypeEEnum, LocationType.OTHER);
+		addEEnumLiteral(locationTypeEEnum, LocationType.URL);
+		addEEnumLiteral(locationTypeEEnum, LocationType.PHONE);
+		addEEnumLiteral(locationTypeEEnum, LocationType.ADDRESS);
+		addEEnumLiteral(locationTypeEEnum, LocationType.GPS);
+
+		initEEnum(jobTypeEEnum, JobType.class, "JobType"); //$NON-NLS-1$
+		addEEnumLiteral(jobTypeEEnum, JobType.INTERNAL);
+		addEEnumLiteral(jobTypeEEnum, JobType.TEMPORARY);
+		addEEnumLiteral(jobTypeEEnum, JobType.PARTNER);
 
 		// Create resource
 		createResource(eNS_URI);

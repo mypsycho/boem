@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getSince <em>Since</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getParent <em>Parent</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getTeam <em>Team</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getJob()
@@ -36,7 +37,7 @@ public interface Job extends Titled {
 	 * @return the value of the '<em>Employee</em>' reference.
 	 * @see #setEmployee(Person)
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getJob_Employee()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	Person getEmployee();
@@ -116,5 +117,30 @@ public interface Job extends Titled {
 	 * @generated
 	 */
 	EList<Job> getTeam();
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link org.mypsycho.emf.modit.dw.dummyworld.JobType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' attribute.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.JobType
+	 * @see #setType(JobType)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getJob_Type()
+	 * @model
+	 * @generated
+	 */
+	JobType getType();
+
+	/**
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Job#getType <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' attribute.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.JobType
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(JobType value);
 
 } // Job

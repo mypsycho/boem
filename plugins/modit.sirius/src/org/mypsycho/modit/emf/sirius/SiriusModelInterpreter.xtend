@@ -27,13 +27,17 @@ import org.eclipse.sirius.ecore.extender.business.api.accessor.MetamodelDescript
 import org.eclipse.sirius.ecore.extender.business.api.accessor.ModelAccessor
 
 /**
- * Provide a intepreter to Sirius as Sirius expects existing file to 
+ * Provide a interpreter to memory model.
+ * <p>
+ * Aql cannot be used with java extension as the Sirius engine checks the model 
+ * physically (why ??) to register project in classpath of extensions.
+ * </p> 
  */
-class SiriusModelProviderService implements IInterpreter {
+class SiriusModelInterpreter implements IInterpreter {
 	
 	static class Provider implements IInterpreterProvider {
 				
-		override createInterpreter() { new SiriusModelProviderService() }
+		override createInterpreter() { new SiriusModelInterpreter() }
 		
 		override provides(String it) { applicable }
 	}
@@ -105,7 +109,9 @@ class SiriusModelProviderService implements IInterpreter {
 			]
 		
 		try {
-			evaluate(resId.key, methodId.key, values)
+			val result = evaluate(resId.key, methodId.key, values) // AQL handle collection but not iterable provided by xtend.
+			(if (result instanceof Iterable) if (!(result instanceof Collection)) result.toList) ?: result
+			
 		} catch (ClassCastException cce) {
 			throw new EvaluationException("Type mismatch", cce)
 		}

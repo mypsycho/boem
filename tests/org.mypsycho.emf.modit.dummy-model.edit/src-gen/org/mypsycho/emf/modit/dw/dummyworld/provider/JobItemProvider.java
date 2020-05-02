@@ -48,6 +48,7 @@ public class JobItemProvider extends TitledItemProvider {
 			addEmployeePropertyDescriptor(object);
 			addSincePropertyDescriptor(object);
 			addTeamPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -119,6 +120,28 @@ public class JobItemProvider extends TitledItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Job_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Job_type_feature", "_UI_Job_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.JOB__TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Job.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -155,7 +178,9 @@ public class JobItemProvider extends TitledItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Job.class)) {
+			case DwPackage.JOB__EMPLOYEE:
 			case DwPackage.JOB__SINCE:
+			case DwPackage.JOB__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

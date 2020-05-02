@@ -12,35 +12,41 @@
  *******************************************************************************/
 package org.mypsycho.emf.modit.dw.dummyworld.design
 
-import org.eclipse.sirius.properties.Category
-import org.eclipse.sirius.properties.ViewExtensionDescription
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.sirius.properties.GroupDescription
+import org.eclipse.sirius.properties.LabelDescription
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.Viewpoint
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
 import org.mypsycho.modit.emf.sirius.api.AbstractGroup
-import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.sirius.properties.PageDescription
-import org.eclipse.sirius.properties.GroupDescription
-import org.eclipse.sirius.properties.LabelDescription
-import org.eclipse.emf.ecore.EClass
+import org.mypsycho.modit.emf.sirius.api.DefaultPropertiesExtension
+import org.mypsycho.modit.emf.sirius.api.FeaturePaging
 
 /**
- *
+ * Demo of simple 
+ * 
+ * 
  * @author nperansin
  */
 class DummyWorldDesign extends AbstractGroup {
 	
-	new () {
-		businessPackages += DwPackage.eINSTANCE
-	}
+	static val PKG = DwPackage.eINSTANCE
 	
-	override protected initExtras() {
-		super.initExtras
-		
-		extras.put("default_properties", Group.eObject("platform:/plugin/org.eclipse.sirius.properties.defaultrules/model/properties.odesign#/").extensions.head)
-			// /@extensions.0/@categories.0/@pages.0"/>
-		
+	new () {
+		businessPackages += PKG
 	}
+		
+	enum Tab { World, Comments }
+	val static PAGING = new FeaturePaging(Tab.World,
+		 #{
+			 // 1rst is default; use null to hide.
+			PKG.detailed_Description -> Tab.Comments,
+			PKG.detailed_Hints -> Tab.Comments
+		} 
+		+ PKG.eAllContents.filter(EStructuralFeature)
+			.filter[name == "parent"].toInvertedMap[ null ]
+	)
 	
 	override protected initContent(Group it) {
 		ownedViewpoints += Viewpoint.create[
@@ -50,24 +56,34 @@ class DummyWorldDesign extends AbstractGroup {
 			ownedRepresentations += new DirectoryTable(this).createContent
 		]
 		
-		extensions += ViewExtensionDescription.create[
-			name = "DummyWorldPropsExtension"
-			metamodels += businessPackages
-			categories += Category.create[
-				name = "DummyWorldPropsCategory"
-				groups += GroupDescription.create[
-					name = "DummyWorldSuppProps"
-					extends = ViewExtensionDescription.extraRef("default_properties").categories.head.groups.head
-					controls += LabelDescription.create[
-						name = "DummyWorldSuppLabel"
-						labelExpression = "aql:'Type'"
-						valueExpression = "aql:self"
-						displayExpression = expression[ eClass.name ]
+		extensions += new DefaultPropertiesExtension(this, Tab.values) {
+			
+			override isApplicable(EObject value, Object pageId) {
+				PAGING.isApplicable(value, pageId)
+			}
+			
+			override isApplicable(EObject value, EStructuralFeature feature, Object pageId) {
+				PAGING.isApplicable(value, feature, pageId)
+			}
+				
+			override createSpecificGroups() {
+				#[
+					Tab.World -> GroupDescription.create[
+						name = "DummyWorldSuppProps"
+						label = "Debug"
+						
+						controls += LabelDescription.create[
+							name = "DummyWorldSuppLabel"
+							labelExpression = "aql:'Type'"
+							valueExpression = "aql:self"
+							displayExpression = expression[ eClass.name ]
+						]
 					]
 				]
-				
-			]
-		]
+			}
+			
+		}.createContent
+
 	}
 	
 }

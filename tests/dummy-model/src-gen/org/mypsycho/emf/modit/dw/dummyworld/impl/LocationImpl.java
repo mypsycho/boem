@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.mypsycho.emf.modit.dw.dummyworld.Contact;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 import org.mypsycho.emf.modit.dw.dummyworld.Location;
+import org.mypsycho.emf.modit.dw.dummyworld.LocationType;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +26,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Location;
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.LocationImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,6 +51,26 @@ public class LocationImpl extends TitledImpl implements Location {
 	 * @ordered
 	 */
 	protected String value = VALUE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocationType TYPE_EDEFAULT = LocationType.OTHER;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocationType type = TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,6 +163,29 @@ public class LocationImpl extends TitledImpl implements Location {
 	 * @generated
 	 */
 	@Override
+	public LocationType getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(LocationType newType) {
+		LocationType oldType = type;
+		type = newType == null ? TYPE_EDEFAULT : newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.LOCATION__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DwPackage.LOCATION__PARENT:
@@ -191,6 +236,8 @@ public class LocationImpl extends TitledImpl implements Location {
 				return getValue();
 			case DwPackage.LOCATION__PARENT:
 				return getParent();
+			case DwPackage.LOCATION__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -208,6 +255,9 @@ public class LocationImpl extends TitledImpl implements Location {
 				return;
 			case DwPackage.LOCATION__PARENT:
 				setParent((Contact)newValue);
+				return;
+			case DwPackage.LOCATION__TYPE:
+				setType((LocationType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -227,6 +277,9 @@ public class LocationImpl extends TitledImpl implements Location {
 			case DwPackage.LOCATION__PARENT:
 				setParent((Contact)null);
 				return;
+			case DwPackage.LOCATION__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -243,6 +296,8 @@ public class LocationImpl extends TitledImpl implements Location {
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			case DwPackage.LOCATION__PARENT:
 				return getParent() != null;
+			case DwPackage.LOCATION__TYPE:
+				return type != TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -259,6 +314,8 @@ public class LocationImpl extends TitledImpl implements Location {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
+		result.append(", type: "); //$NON-NLS-1$
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}

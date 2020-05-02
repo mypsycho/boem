@@ -17,9 +17,35 @@
 
   <extension point="org.eclipse.sirius.common.expressionInterpreter" id="modit.sirius" >
     <expressionInterpreterProvider
-        interpreterProviderClass="org.mypsycho.modit.emf.sirius.SiriusModelProviderService$Provider">
+        interpreterProviderClass="org.mypsycho.modit.emf.sirius.SiriusConstantInterpreter$Provider">
+    </expressionInterpreterProvider>
+    <expressionInterpreterProvider
+        interpreterProviderClass="org.mypsycho.modit.emf.sirius.SiriusModelInterpreter$Provider">
     </expressionInterpreterProvider>
   </extension>
-
-
+<!--
+  <extension
+         point="org.eclipse.sirius.externalJavaAction">
+      <javaActions
+            actionClass="org.eclipse.emf.ecoretools.design.ui.action.CreateDynamicInstanceAction"
+            id="org.eclipse.emf.ecoretools.design.action.createDynamicInstanceActionID">
+      </javaActions>
+      <javaActions
+            actionClass="org.eclipse.emf.ecoretools.design.ui.action.GenerateAllAction"
+            id="org.eclipse.emf.ecoretools.design.action.generateAllID">
+      </javaActions>
+      <javaActions
+            actionClass="org.eclipse.emf.ecoretools.design.ui.action.OpenConfirmationDialogAction"
+            id="org.eclipse.emf.ecoretools.design.action.openConfirmationDialogID">
+      </javaActions>
+      <javaActions
+            actionClass="org.eclipse.emf.ecoretools.design.ui.action.OpenFileInEditorAction"
+            id="org.eclipse.emf.ecoretools.design.action.openFileInEditorID">
+      </javaActions>
+      <javaActions
+            actionClass="org.eclipse.emf.ecoretools.design.ui.action.OpenSelectModelElementAction"
+            id="org.eclipse.emf.ecoretools.design.action.openSelectModelElementID">
+      </javaActions>
+   </extension>
+   -->
 </plugin>

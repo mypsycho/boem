@@ -34,7 +34,7 @@ public interface Purchase extends EObject {
 	 * @see #setParent(Contact)
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getPurchase_Parent()
 	 * @see org.mypsycho.emf.modit.dw.dummyworld.Contact#getOwns
-	 * @model opposite="owns" transient="false"
+	 * @model opposite="owns" required="true" transient="false"
 	 * @generated
 	 */
 	Contact getParent();

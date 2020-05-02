@@ -46,6 +46,7 @@ public class LocationItemProvider extends TitledItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addValuePropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -64,6 +65,28 @@ public class LocationItemProvider extends TitledItemProvider {
 				 getString("_UI_Location_value_feature"), //$NON-NLS-1$
 				 getString("_UI_PropertyDescriptor_description", "_UI_Location_value_feature", "_UI_Location_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				 DwPackage.Literals.LOCATION__VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Location_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Location_type_feature", "_UI_Location_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DwPackage.Literals.LOCATION__TYPE,
 				 true,
 				 false,
 				 false,
@@ -110,6 +133,7 @@ public class LocationItemProvider extends TitledItemProvider {
 
 		switch (notification.getFeatureID(Location.class)) {
 			case DwPackage.LOCATION__VALUE:
+			case DwPackage.LOCATION__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

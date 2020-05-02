@@ -19,6 +19,7 @@ package org.mypsycho.emf.modit.dw.dummyworld;
  * <ul>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Location#getValue <em>Value</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Location#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.Location#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getLocation()
@@ -79,5 +80,30 @@ public interface Location extends Titled, WObject {
 	 * @generated
 	 */
 	void setParent(Contact value);
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link org.mypsycho.emf.modit.dw.dummyworld.LocationType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' attribute.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.LocationType
+	 * @see #setType(LocationType)
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.DwPackage#getLocation_Type()
+	 * @model
+	 * @generated
+	 */
+	LocationType getType();
+
+	/**
+	 * Sets the value of the '{@link org.mypsycho.emf.modit.dw.dummyworld.Location#getType <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' attribute.
+	 * @see org.mypsycho.emf.modit.dw.dummyworld.LocationType
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(LocationType value);
 
 } // Location

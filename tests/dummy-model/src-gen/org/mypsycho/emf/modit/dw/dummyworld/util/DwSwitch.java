@@ -180,9 +180,7 @@ public class DwSwitch<T> extends Switch<T> {
 			case DwPackage.ACTIVITY: {
 				Activity activity = (Activity)theEObject;
 				T result = caseActivity(activity);
-				if (result == null) result = caseTitled(activity);
-				if (result == null) result = casePurchase(activity);
-				if (result == null) result = caseNamed(activity);
+				if (result == null) result = caseDetailed(activity);
 				if (result == null) result = caseWObject(activity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -202,6 +200,13 @@ public class DwSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTitled(location);
 				if (result == null) result = caseNamed(location);
 				if (result == null) result = caseWObject(location);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DwPackage.SUBSCRIPTION: {
+				Subscription subscription = (Subscription)theEObject;
+				T result = caseSubscription(subscription);
+				if (result == null) result = casePurchase(subscription);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -326,6 +331,21 @@ public class DwSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLocation(Location object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Subscription</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Subscription</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSubscription(Subscription object) {
 		return null;
 	}
 

@@ -226,6 +226,29 @@ public class DwItemProviderAdapterFactory extends DwAdapterFactory implements Co
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.mypsycho.emf.modit.dw.dummyworld.Subscription} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SubscriptionItemProvider subscriptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.mypsycho.emf.modit.dw.dummyworld.Subscription}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSubscriptionAdapter() {
+		if (subscriptionItemProvider == null) {
+			subscriptionItemProvider = new SubscriptionItemProvider(this);
+		}
+
+		return subscriptionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.mypsycho.emf.modit.dw.dummyworld.Job} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -507,6 +530,7 @@ public class DwItemProviderAdapterFactory extends DwAdapterFactory implements Co
 		if (activityItemProvider != null) activityItemProvider.dispose();
 		if (directoryItemProvider != null) directoryItemProvider.dispose();
 		if (locationItemProvider != null) locationItemProvider.dispose();
+		if (subscriptionItemProvider != null) subscriptionItemProvider.dispose();
 	}
 
 }

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.mypsycho.emf.modit.dw.dummyworld.Company;
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage;
 import org.mypsycho.emf.modit.dw.dummyworld.Job;
+import org.mypsycho.emf.modit.dw.dummyworld.JobType;
 import org.mypsycho.emf.modit.dw.dummyworld.Person;
 
 /**
@@ -33,6 +34,7 @@ import org.mypsycho.emf.modit.dw.dummyworld.Person;
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getSince <em>Since</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getTeam <em>Team</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.dw.dummyworld.impl.JobImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +79,26 @@ public class JobImpl extends TitledImpl implements Job {
 	 * @ordered
 	 */
 	protected EList<Job> team;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final JobType TYPE_EDEFAULT = JobType.INTERNAL;
+
+	/**
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected JobType type = TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -222,6 +244,29 @@ public class JobImpl extends TitledImpl implements Job {
 	 * @generated
 	 */
 	@Override
+	public JobType getType() {
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(JobType newType) {
+		JobType oldType = type;
+		type = newType == null ? TYPE_EDEFAULT : newType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DwPackage.JOB__TYPE, oldType, type));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DwPackage.JOB__PARENT:
@@ -277,6 +322,8 @@ public class JobImpl extends TitledImpl implements Job {
 				return getParent();
 			case DwPackage.JOB__TEAM:
 				return getTeam();
+			case DwPackage.JOB__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -303,6 +350,9 @@ public class JobImpl extends TitledImpl implements Job {
 				getTeam().clear();
 				getTeam().addAll((Collection<? extends Job>)newValue);
 				return;
+			case DwPackage.JOB__TYPE:
+				setType((JobType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -327,6 +377,9 @@ public class JobImpl extends TitledImpl implements Job {
 			case DwPackage.JOB__TEAM:
 				getTeam().clear();
 				return;
+			case DwPackage.JOB__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -347,6 +400,8 @@ public class JobImpl extends TitledImpl implements Job {
 				return getParent() != null;
 			case DwPackage.JOB__TEAM:
 				return team != null && !team.isEmpty();
+			case DwPackage.JOB__TYPE:
+				return type != TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -363,6 +418,8 @@ public class JobImpl extends TitledImpl implements Job {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (since: "); //$NON-NLS-1$
 		result.append(since);
+		result.append(", type: "); //$NON-NLS-1$
+		result.append(type);
 		result.append(')');
 		return result.toString();
 	}
