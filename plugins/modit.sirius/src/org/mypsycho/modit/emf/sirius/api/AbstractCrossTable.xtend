@@ -48,13 +48,18 @@ abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
 		domainClass = context.asDomainClass(type)
 	}
 	
-	def void setDirectEdit(IntersectionMapping it, Procedure3<? extends EObject, ? extends EObject, String> operation) {
+	def void setDirectEdit(IntersectionMapping it, String operation) {
 		directEdit = createLabelEdit[
-			browseExpression = context.expression(
-				params(EditArg.lineSemantic, EditArg.columnSemantic, EDIT_VALUE), 
-				operation
-			)
+			browseExpression = operation
 		]
+	}
+
+	def void setDirectEdit(IntersectionMapping it, Procedure3<? extends EObject, ? extends EObject, String> operation) {
+		directEdit = context.expression(
+			params(EditArg.lineSemantic, EditArg.columnSemantic, EDIT_VALUE), 
+			operation
+		)
+		
 	}
 	
 

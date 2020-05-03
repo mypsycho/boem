@@ -15,7 +15,6 @@ package org.mypsycho.emf.modit.dw.dummyworld.design
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.sirius.properties.GroupDescription
-import org.eclipse.sirius.properties.LabelDescription
 import org.eclipse.sirius.viewpoint.description.Group
 import org.eclipse.sirius.viewpoint.description.Viewpoint
 import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
@@ -58,11 +57,11 @@ class DummyWorldDesign extends AbstractGroup {
 		
 		extensions += new DefaultPropertiesExtension(this, Tab.values) {
 			
-			override isApplicable(EObject value, Object pageId) {
+			override isPageApplicable(EObject value, Object pageId) {
 				PAGING.isApplicable(value, pageId)
 			}
 			
-			override isApplicable(EObject value, EStructuralFeature feature, Object pageId) {
+			override isFeatureApplicable(EObject value, EStructuralFeature feature, Object pageId) {
 				PAGING.isApplicable(value, feature, pageId)
 			}
 				
@@ -72,12 +71,16 @@ class DummyWorldDesign extends AbstractGroup {
 						name = "DummyWorldSuppProps"
 						label = "Debug"
 						
-						controls += LabelDescription.create[
-							name = "DummyWorldSuppLabel"
-							labelExpression = "aql:'Type'"
-							valueExpression = "aql:self"
-							displayExpression = expression[ eClass.name ]
-						]
+//						controls += LabelDescription.create[
+//							name = "DummyWorldSuppLabel"
+//							labelExpression = "aql:'Type'"
+//							valueExpression = "aql:self"
+//							displayExpression = expression[ eClass.name ]
+//						]
+						
+	
+
+						
 					]
 				]
 			}

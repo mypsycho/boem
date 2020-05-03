@@ -139,29 +139,37 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	}
 
 	
-	def createLine(String createdLine, String toolLabel, 
-		(CreateLineTool)=>void init, Procedure3<EObject, EObject, EObject> action
+	def createLine(String line, String toolLabel, 
+		(CreateLineTool)=>void init, String action
 	) {
 		CreateLineTool.create[
-			name = Ns.create.id(createdLine)
+			name = Ns.create.id(line)
 			label = toolLabel
-			mapping = createdLine.lineRef
+			mapping = line.lineRef
 			variables += CreateMappingArg.values.map[ descr |
 				TableVariable.create[
 					name = descr.name
 				]
 			]
 			firstModelOperation = ChangeContext.create[
-				browseExpression = context.expression(CREATE_MAPPING_ARGS, action)
+				browseExpression = action
 			]
 			init?.apply(it)
 		]
 	}
 
-	def createLine(String createdLine, String toolLabel, 
+	def createLine(String line, String toolLabel, 
+		(CreateLineTool)=>void init, Procedure3<EObject, EObject, EObject> action
+	) {
+		line.createLine(toolLabel, init, 
+			context.expression(CREATE_MAPPING_ARGS, action)
+		)
+	}
+
+	def createLine(String line, String toolLabel, 
 		Procedure3<EObject, EObject, EObject> action
 	) {
-		createdLine.createLine(toolLabel, null, action)
+		line.createLine(toolLabel, null, action)
 	}
 
 
