@@ -12,11 +12,15 @@
  *******************************************************************************/
 package org.mypsycho.modit.emf.sirius.api
 
+import java.text.SimpleDateFormat
 import java.util.ArrayList
+import java.util.Date
 import java.util.List
+import java.util.Locale
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.emf.ecore.impl.EFactoryImpl
 import org.eclipse.sirius.properties.Category
 import org.eclipse.sirius.properties.CheckboxDescription
 import org.eclipse.sirius.properties.GroupDescription
@@ -41,7 +45,8 @@ import static extension org.mypsycho.modit.emf.sirius.api.SiriusDesigns.*
  */
 class DefaultPropertiesExtension extends AbstractPropertySet {
 
-	
+	/** @see EFactoryImpl#EDATE_FORMATS  */ 
+	static val DEFAULT_DATE_FORMAT = "yyyy-MM-dd"
 	protected val List<Object> tabNames = new ArrayList
 	
 		
@@ -150,89 +155,122 @@ class DefaultPropertiesExtension extends AbstractPropertySet {
 		]
 	}
 	
-	enum WidgetCase { line, text, bool, alternative, choice, list, map, reference } // map ?
+	enum WidgetCase { line, text, date, bool, alternative, choice, list, map, reference } // map ?
 	def createDefaultWidgets(String iValue, String iFeat) {
 		val valEmfEdit = '''input.emfEditServices(«iValue»)'''
 		
 		val valueGetter = '''aql:«iValue».eGet(«iFeat».name)'''
 		val valueSetter = '''aql:«valEmfEdit».setValue(«iFeat», newValue)'''
+		
+		// AQL can only operate at Ecore level, 
+		// everything must be bring to meta definition
+		val enumValue = '''
+			«iFeat».eType.oclAsType(ecore::EEnum)
+			.getEEnumLiteralByLiteral(«iValue».eGet(«iFeat».name).toString())'''.trimAql
 		val enumSetter = '''aql:«valEmfEdit».setValue(«iFeat», newValue.instance)'''
+		val enumCandidates = '''aql:«iFeat».eType.oclAsType(ecore::EEnum).eLiterals'''
+		val enumDisplay = "aql:candidate.name"
 	
+	
+		val dateFeature = '''«iFeat».eType = ecore::EDate'''
+		val mapAttribute = '''«iFeat».eType = ecore::EStringToStringMapEntry'''
 		// TODO add default actions for lists and maps, handle date
 		#{
 			WidgetCase.line -> '''
-			aql:«valEmfEdit».needsTextWidget(«iFeat») 
-				and not «valEmfEdit».isMultiline(«iFeat»)'''.trimAql
+			«valEmfEdit».needsTextWidget(«iFeat»)
+			and not «valEmfEdit».isMultiline(«iFeat»)
+			and not («dateFeature»)'''.trimAql // dont know why '()' are needed now
 				.then(TextDescription.create [
-					initWidget(iFeat)
-					valueExpression = valueGetter
-					operation = valueSetter				
-				]),
-			WidgetCase.text -> '''
-			aql:«valEmfEdit».needsTextWidget(«iFeat») 
-				and «valEmfEdit».isMultiline(«iFeat»)'''.trimAql
-				.then(TextAreaDescription.create [
 					initWidget(iFeat)
 					valueExpression = valueGetter
 					operation = valueSetter
 				]),
+			WidgetCase.text -> '''
+			«valEmfEdit».needsTextWidget(«iFeat») 
+			and «valEmfEdit».isMultiline(«iFeat»)
+			and not («dateFeature»)'''.trimAql
+				.then(TextAreaDescription.create [
+					initWidget(iFeat)
+					valueExpression = valueGetter
+					lineCount = 8
+					operation = valueSetter
+				]),
+			WidgetCase.date -> '''
+			«valEmfEdit».needsTextWidget(«iFeat») 
+			and («dateFeature»)'''.trimAql
+				.then(TextDescription.create [
+					initWidget(iFeat)
+					// assume we are still on aql
+					helpExpression = helpExpression + ''' + ' («DEFAULT_DATE_FORMAT»)' '''
+					
+					valueExpression = context.expression(params(iValue, iFeat)) [
+						EObject it, EStructuralFeature feat |
+						val result = eGet(feat) as Date
+						if (result === null) "" // text field needs WISIWYG (or think it as conflict)
+						else new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.ENGLISH)
+							.format(result)
+					]
+					
+					// Emf and sirius cannot handle empty date on their own
+					operation = '''
+						«valEmfEdit».setValue(«iFeat», 
+							if (newValue.size() = 0) 
+							then null 
+							else newValue endif)'''.trimAql
+				]),
 			
-			WidgetCase.bool -> '''
-			aql:«valEmfEdit».needsCheckboxWidget(«iFeat»)'''.trimAql // boolean
+			WidgetCase.bool -> 
+			'''«valEmfEdit».needsCheckboxWidget(«iFeat»)'''.trimAql // boolean
 				.then(CheckboxDescription.create [
 					initWidget(iFeat)
 					valueExpression = valueGetter
 					operation = valueSetter
 				]),
 			WidgetCase.alternative -> '''
-			aql:«iFeat».eType.oclIsKindOf(ecore::EEnum) 
+			«iFeat».eType.oclIsKindOf(ecore::EEnum) 
 			and not(«iFeat».many) 
 			and «iFeat».eType.oclAsType(ecore::EEnum).eLiterals->size() <= 4'''.trimAql
 				.then(RadioDescription.create [
 					initWidget(iFeat)
+	
+					valueExpression = enumValue
+					candidatesExpression = enumCandidates
+					candidateDisplayExpression = enumDisplay
 					operation = enumSetter
 	
-					// AQL can only operate at Ecore level, 
-					// everything must be bring to meta definition
-					valueExpression = '''
-						aql:«iFeat».eType.oclAsType(ecore::EEnum)
-						.getEEnumLiteralByLiteral(«iValue».eGet(«iFeat».name).toString())'''.trimAql
-					candidatesExpression = '''aql:«iFeat».eType.oclAsType(ecore::EEnum).eLiterals'''
-					candidateDisplayExpression = "aql:candidate.name"
-	
-					numberOfColumns = 2 // Tradeoff: there is a issue with horizontal scroll.
+					//numberOfColumns = 2 // Tradeoff: there is a issue with horizontal scroll.
 				]),
 			WidgetCase.choice -> '''
-			aql:«iFeat».eType.oclIsKindOf(ecore::EEnum) 
+			«iFeat».eType.oclIsKindOf(ecore::EEnum) 
 			and not(«iFeat».many) 
 			and «iFeat».eType.oclAsType(ecore::EEnum).eLiterals->size() > 4'''.trimAql
 				.then(SelectDescription.create [
 					initWidget(iFeat)
+					
+					valueExpression = enumValue
+					candidatesExpression = enumCandidates
+					candidateDisplayExpression = enumDisplay
 					operation = enumSetter
-	
-					// Duplication of radio
-					valueExpression = '''
-						aql:«iFeat».eType.oclAsType(ecore::EEnum)
-						.getEEnumLiteralByLiteral(«iValue».eGet(«iFeat».name).toString())'''.trimAql
-					candidatesExpression = '''aql:«iFeat».eType.oclAsType(ecore::EEnum).eLiterals'''
-					candidateDisplayExpression = "aql:candidate.name"
 				]),
-			WidgetCase.list -> 
-				'''aql:«iFeat».oclIsKindOf(ecore::EAttribute) and «iFeat».many'''.trimAql
+			WidgetCase.list -> '''
+			«iFeat».oclIsKindOf(ecore::EAttribute) 
+			and «iFeat».many'''.trimAql
 				.then(ListDescription.create [
 					initWidget(iFeat)
 					valueExpression = valueGetter
 					displayExpression = "var:value"
 				]),
-			WidgetCase.map -> 
-				'''aql:«iFeat».oclIsKindOf(ecore::EReference) and «iFeat».eType = ecore::EStringToStringMapEntry'''.trimAql
+			WidgetCase.map -> '''
+			«iFeat».oclIsKindOf(ecore::EReference) 
+			and «mapAttribute»'''.trimAql
 				.then(ListDescription.create [
 					initWidget(iFeat)
 					valueExpression = valueGetter
 					displayExpression = "aql:value.key + '=' + value.value"
 				]),
-			WidgetCase.reference -> 
-				'''aql:«iFeat».oclIsKindOf(ecore::EReference) and «iFeat».eType != ecore::EStringToStringMapEntry'''.trimAql
+			WidgetCase.reference -> '''
+			«iFeat».oclIsKindOf(ecore::EReference) 
+			and «iFeat».eType != ecore::EStringToStringMapEntry'''.trimAql
 				.then(ExtReferenceDescription.create [
 					initWidget("eStructuralFeature")
 					referenceNameExpression = '''aql:«iFeat».name'''	// in Sirius 

@@ -77,7 +77,6 @@ class SiriusDesigns {
 	static def String encode(EReference it) {
 		'''feature:«name»'''
 	}
-
 	
 	/**
 	 * Remove all return carriages from an expression.
@@ -88,11 +87,9 @@ class SiriusDesigns {
 	 * @param text but '\n' is 'space'
 	 */
 	static def String trimAql(CharSequence text) {
-		text.toString.replaceAll("\\R", " ") // 
+		val result = text.toString.replaceAll("\\R", " ") // 
+		if (result.startsWith("aql:")) result else "aql:" + result
 	}
-
-
-
 
 	/**
 	 * Find a value in a reference based on reference key.
