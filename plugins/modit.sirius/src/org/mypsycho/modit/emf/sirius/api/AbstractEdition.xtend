@@ -50,8 +50,15 @@ abstract class AbstractEdition {
 	 * 
 	 * @return alias
 	 */
-	protected def getContentAlias() {
-		getClass().simpleName
+	protected def getContentAlias() {		
+		if (!class.anonymousClass) class.simpleName
+		else {
+			var fullname = class.name
+			fullname.substring(
+				fullname.lastIndexOf(".") + 1, 
+				fullname.lastIndexOf("$")
+			)
+		}
 	}
 
 	/**
