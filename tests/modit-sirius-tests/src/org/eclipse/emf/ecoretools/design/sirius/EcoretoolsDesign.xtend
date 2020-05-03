@@ -194,8 +194,6 @@ class EcoretoolsDesign extends SiriusModelProvider {
 		extras.putAll(#{ // anonymous resources
 			"$0" -> eObject(Environment, "environment:/viewpoint#/")
 		})
-		extras.putAll(#{ // Named elements
-		})
 	}
 
 	def context() { this }
