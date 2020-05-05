@@ -25,6 +25,7 @@ import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.tool.ChangeContext
 import org.eclipse.sirius.viewpoint.description.tool.EditMaskVariables
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
+import org.eclipse.sirius.table.metamodel.table.description.DeleteLineTool
 
 /**
  * Class adapting Sirius model into Java and EClass reflection s
@@ -92,7 +93,7 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	def void setDomainClass(LineMapping it, Class<? extends EObject> type) {
 		domainClass = context.asDomainClass(type)
 	}
-
+	
 	/**
 	 * Sets the candidate expression of a description.
 	 * <p>
@@ -105,6 +106,26 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 
 	def void setSemanticCandidatesExpression(LineMapping it, EReference ref) {
 		semanticCandidatesExpression = SiriusDesigns.encode(ref)
+	}
+
+	def void noDelete(LineMapping it) {
+		delete = DeleteLineTool.create[
+			name = "del:" + mapping.name // no change it will be triggered.
+			precondition = SiriusDesigns.NEVER
+		]
+	}
+	
+	def void setVirtual(LineMapping it, String headerExpression) {
+		val owner = eContainer
+		
+		domainClass = 
+			if (owner instanceof LineMapping) owner.domainClass
+			else if (owner instanceof TableDescription) owner.domainClass
+			else SiriusDesigns.ANY_TYPE // should not happen, log ?
+		
+		semanticCandidatesExpression = SiriusDesigns.IDENTITY
+		noDelete // delete would apply on directory element.
+		headerLabelExpression = headerExpression // could be localized
 	}
 
 	protected def line(String id, (LineMapping)=>void initializer) {

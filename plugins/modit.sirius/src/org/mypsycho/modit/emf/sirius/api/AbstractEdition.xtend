@@ -31,6 +31,13 @@ abstract class AbstractEdition {
 	/** Factory of Sirius elements */
 	protected val extension EModIt factory
 
+	/**
+	 * Alias root for the identified elements.
+	 * <p>
+	 * Default implementation is based on class name.
+	 * </p>
+	 */
+	protected var String contentAlias
 
 	/**
 	 * Create a factory for a diagram description
@@ -40,25 +47,15 @@ abstract class AbstractEdition {
 	new(AbstractGroup parent) {
 		this.context = parent
 		this.factory = parent.factory
-	}
-	
-	/**
-	 * Returns alias for the created descriptor.
-	 * <p>
-	 * Default implementation is based on class name.
-	 * </p>
-	 * 
-	 * @return alias
-	 */
-	protected def getContentAlias() {		
-		if (!class.anonymousClass) class.simpleName
-		else {
-			var fullname = class.name
-			fullname.substring(
-				fullname.lastIndexOf(".") + 1, 
-				fullname.lastIndexOf("$")
-			)
-		}
+				
+		contentAlias = if (!class.anonymousClass) class.simpleName
+			else {
+				var fullname = class.name
+				fullname.substring(
+					fullname.lastIndexOf(".") + 1, 
+					fullname.lastIndexOf("$")
+				)
+			}
 	}
 
 	/**

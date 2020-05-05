@@ -22,7 +22,8 @@ import org.mypsycho.emf.modit.dw.dummyworld.DwPackage
 import org.mypsycho.emf.modit.dw.dummyworld.Person
 import org.mypsycho.modit.emf.sirius.api.AbstractEditionTable
 import org.mypsycho.modit.emf.sirius.api.AbstractGroup
-import org.mypsycho.modit.emf.sirius.api.SiriusDesigns
+
+import static extension org.mypsycho.modit.emf.sirius.api.SiriusDesigns.*
 
 /**
  * Create a table of contact location.
@@ -70,16 +71,14 @@ class DirectoryTable extends AbstractEditionTable {
 			val doCreate = descr.value
 			
 			ownedLineMappings += (type.simpleName + "Group").line [
-				domainClass = Directory
-				semanticCandidatesExpression = SiriusDesigns.IDENTITY
-				headerLabelExpression = title // could be localized
+				virtual = title.constant
 				
 				ownedSubLines += type.simpleName.line [
 					domainClass = type
 					semanticCandidatesExpression = PKG.directory_Contacts
 					headerLabelExpression = context.itemProviderLabel
 				]
-				
+								
 				create += type.simpleName.createLine(type.simpleName) [ root, element, container |
 					(element as Directory).contacts += doCreate.apply(element)
 				]

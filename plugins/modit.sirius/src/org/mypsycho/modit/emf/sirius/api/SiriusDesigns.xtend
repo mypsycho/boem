@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider
 import org.eclipse.sirius.diagram.ui.provider.DiagramUIPlugin
 import org.eclipse.sirius.viewpoint.description.IdentifiedElement
 import org.mypsycho.modit.emf.sirius.SiriusConstantInterpreter
+import org.eclipse.emf.ecore.EcorePackage
 
 /**
  * Convenient method and constants for Sirius design creation.
@@ -34,6 +35,11 @@ class SiriusDesigns {
 
 	/** Expression for return semantic container */
 	public static val ALWAYS = "aql:true"
+
+	/** Expression for return semantic container */
+	public static val NEVER = "aql:false"
+
+	public static val ANY_TYPE = encode(EcorePackage.eINSTANCE.EObject)
 
 	/**
 	 * Create a constant of the value.
