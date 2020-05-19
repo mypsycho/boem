@@ -1,4 +1,4 @@
-package org.mypsycho.emf.modit.eef;
+package org.mypsycho.emf.modit.eef.widget;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;

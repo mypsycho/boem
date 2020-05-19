@@ -1,6 +1,17 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.impl;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -10,7 +21,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import org.mypsycho.emf.modit.eef.EefExtNative.*;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,24 +29,24 @@ import org.mypsycho.emf.modit.eef.EefExtNative.*;
  * <!-- end-user-doc -->
  * @generated
  */
-public class EefExtNativeFactoryImpl extends EFactoryImpl implements EefExtNativeFactory {
+public class EefNativeFactoryImpl extends EFactoryImpl implements EefNativeFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static EefExtNativeFactory init() {
+	public static EefNativeFactory init() {
 		try {
-			EefExtNativeFactory theEefExtNativeFactory = (EefExtNativeFactory)EPackage.Registry.INSTANCE.getEFactory(EefExtNativePackage.eNS_URI);
-			if (theEefExtNativeFactory != null) {
-				return theEefExtNativeFactory;
+			EefNativeFactory theEefNativeFactory = (EefNativeFactory)EPackage.Registry.INSTANCE.getEFactory(EefNativePackage.eNS_URI);
+			if (theEefNativeFactory != null) {
+				return theEefNativeFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new EefExtNativeFactoryImpl();
+		return new EefNativeFactoryImpl();
 	}
 
 	/**
@@ -44,7 +55,7 @@ public class EefExtNativeFactoryImpl extends EFactoryImpl implements EefExtNativ
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EefExtNativeFactoryImpl() {
+	public EefNativeFactoryImpl() {
 		super();
 	}
 
@@ -56,9 +67,9 @@ public class EefExtNativeFactoryImpl extends EFactoryImpl implements EefExtNativ
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION: return createEEFNativeWidgetDescription();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_STYLE: return createEEFNativeWidgetStyle();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE: return createEEFNativeWidgetConditionalStyle();
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION: return createEEFNativeWidgetDescription();
+			case EefNativePackage.EEF_NATIVE_WIDGET_STYLE: return createEEFNativeWidgetStyle();
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE: return createEEFNativeWidgetConditionalStyle();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -103,8 +114,8 @@ public class EefExtNativeFactoryImpl extends EFactoryImpl implements EefExtNativ
 	 * @generated
 	 */
 	@Override
-	public EefExtNativePackage getEefExtNativePackage() {
-		return (EefExtNativePackage)getEPackage();
+	public EefNativePackage getEefNativePackage() {
+		return (EefNativePackage)getEPackage();
 	}
 
 	/**
@@ -114,8 +125,8 @@ public class EefExtNativeFactoryImpl extends EFactoryImpl implements EefExtNativ
 	 * @generated
 	 */
 	@Deprecated
-	public static EefExtNativePackage getPackage() {
-		return EefExtNativePackage.eINSTANCE;
+	public static EefNativePackage getPackage() {
+		return EefNativePackage.eINSTANCE;
 	}
 
-} //EefExtNativeFactoryImpl
+} //EefNativeFactoryImpl

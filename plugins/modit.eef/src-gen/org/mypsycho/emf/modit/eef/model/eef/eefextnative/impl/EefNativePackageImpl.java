@@ -1,6 +1,17 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.impl;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl;
 
 import org.eclipse.eef.EefPackage;
 
@@ -12,11 +23,19 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativeFactory;
-import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
+import org.eclipse.sirius.properties.PropertiesPackage;
+
+import org.eclipse.sirius.viewpoint.ViewpointPackage;
+
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativeFactory;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage;
+
+import org.mypsycho.emf.modit.eef.model.properties.propertynative.PropNativePackage;
+
+import org.mypsycho.emf.modit.eef.model.properties.propertynative.impl.PropNativePackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +43,7 @@ import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativePackage {
+public class EefNativePackageImpl extends EPackageImpl implements EefNativePackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -57,12 +76,12 @@ public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativ
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage#eNS_URI
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private EefExtNativePackageImpl() {
-		super(eNS_URI, EefExtNativeFactory.eINSTANCE);
+	private EefNativePackageImpl() {
+		super(eNS_URI, EefNativeFactory.eINSTANCE);
 	}
 
 	/**
@@ -75,7 +94,7 @@ public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativ
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>This method is used to initialize {@link EefExtNativePackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link EefNativePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -84,31 +103,39 @@ public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativ
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static EefExtNativePackage init() {
-		if (isInited) return (EefExtNativePackage)EPackage.Registry.INSTANCE.getEPackage(EefExtNativePackage.eNS_URI);
+	public static EefNativePackage init() {
+		if (isInited) return (EefNativePackage)EPackage.Registry.INSTANCE.getEPackage(EefNativePackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredEefExtNativePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		EefExtNativePackageImpl theEefExtNativePackage = registeredEefExtNativePackage instanceof EefExtNativePackageImpl ? (EefExtNativePackageImpl)registeredEefExtNativePackage : new EefExtNativePackageImpl();
+		Object registeredEefNativePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		EefNativePackageImpl theEefNativePackage = registeredEefNativePackage instanceof EefNativePackageImpl ? (EefNativePackageImpl)registeredEefNativePackage : new EefNativePackageImpl();
 
 		isInited = true;
 
 		// Initialize simple dependencies
 		EcorePackage.eINSTANCE.eClass();
 		EefPackage.eINSTANCE.eClass();
+		PropertiesPackage.eINSTANCE.eClass();
+		ViewpointPackage.eINSTANCE.eClass();
+
+		// Obtain or create and register interdependencies
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PropNativePackage.eNS_URI);
+		PropNativePackageImpl thePropNativePackage = (PropNativePackageImpl)(registeredPackage instanceof PropNativePackageImpl ? registeredPackage : PropNativePackage.eINSTANCE);
 
 		// Create package meta-data objects
-		theEefExtNativePackage.createPackageContents();
+		theEefNativePackage.createPackageContents();
+		thePropNativePackage.createPackageContents();
 
 		// Initialize created meta-data
-		theEefExtNativePackage.initializePackageContents();
+		theEefNativePackage.initializePackageContents();
+		thePropNativePackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theEefExtNativePackage.freeze();
+		theEefNativePackage.freeze();
 
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(EefExtNativePackage.eNS_URI, theEefExtNativePackage);
-		return theEefExtNativePackage;
+		EPackage.Registry.INSTANCE.put(EefNativePackage.eNS_URI, theEefNativePackage);
+		return theEefNativePackage;
 	}
 
 	/**
@@ -237,8 +264,8 @@ public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativ
 	 * @generated
 	 */
 	@Override
-	public EefExtNativeFactory getEefExtNativeFactory() {
-		return (EefExtNativeFactory)getEFactoryInstance();
+	public EefNativeFactory getEefNativeFactory() {
+		return (EefNativeFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -327,9 +354,6 @@ public class EefExtNativePackageImpl extends EPackageImpl implements EefExtNativ
 
 		initEClass(eefNativeWidgetConditionalStyleEClass, EEFNativeWidgetConditionalStyle.class, "EEFNativeWidgetConditionalStyle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getEEFNativeWidgetConditionalStyle_Style(), this.getEEFNativeWidgetStyle(), null, "style", null, 0, 1, EEFNativeWidgetConditionalStyle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		// Create resource
-		createResource(eNS_URI);
 	}
 
-} //EefExtNativePackageImpl
+} //EefNativePackageImpl

@@ -1,6 +1,17 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.impl;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl;
 
 import java.util.Collection;
 
@@ -24,10 +35,10 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,13 +48,13 @@ import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getValueExpression <em>Value Expression</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getEditExpression <em>Edit Expression</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getProperties <em>Properties</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getStyle <em>Style</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getConditionalStyles <em>Conditional Styles</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getPluginId <em>Plugin Id</em>}</li>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl#getClassName <em>Class Name</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getValueExpression <em>Value Expression</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getEditExpression <em>Edit Expression</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getProperties <em>Properties</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getStyle <em>Style</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getConditionalStyles <em>Conditional Styles</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getPluginId <em>Plugin Id</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl#getClassName <em>Class Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -175,7 +186,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return EefExtNativePackage.Literals.EEF_NATIVE_WIDGET_DESCRIPTION;
+		return EefNativePackage.Literals.EEF_NATIVE_WIDGET_DESCRIPTION;
 	}
 
 	/**
@@ -198,7 +209,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		String oldValueExpression = valueExpression;
 		valueExpression = newValueExpression;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION, oldValueExpression, valueExpression));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION, oldValueExpression, valueExpression));
 	}
 
 	/**
@@ -221,7 +232,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		String oldEditExpression = editExpression;
 		editExpression = newEditExpression;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION, oldEditExpression, editExpression));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION, oldEditExpression, editExpression));
 	}
 
 	/**
@@ -232,7 +243,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public EMap<String, String> getProperties() {
 		if (properties == null) {
-			properties = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES);
+			properties = new EcoreEMap<String,String>(EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY, EStringToStringMapEntryImpl.class, this, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES);
 		}
 		return properties;
 	}
@@ -256,7 +267,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		EEFNativeWidgetStyle oldStyle = style;
 		style = newStyle;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, oldStyle, newStyle);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, oldStyle, newStyle);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -272,14 +283,14 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		if (newStyle != style) {
 			NotificationChain msgs = null;
 			if (style != null)
-				msgs = ((InternalEObject)style).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, null, msgs);
+				msgs = ((InternalEObject)style).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, null, msgs);
 			if (newStyle != null)
-				msgs = ((InternalEObject)newStyle).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, null, msgs);
+				msgs = ((InternalEObject)newStyle).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, null, msgs);
 			msgs = basicSetStyle(newStyle, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, newStyle, newStyle));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE, newStyle, newStyle));
 	}
 
 	/**
@@ -290,7 +301,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public EList<EEFNativeWidgetConditionalStyle> getConditionalStyles() {
 		if (conditionalStyles == null) {
-			conditionalStyles = new EObjectContainmentEList<EEFNativeWidgetConditionalStyle>(EEFNativeWidgetConditionalStyle.class, this, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES);
+			conditionalStyles = new EObjectContainmentEList<EEFNativeWidgetConditionalStyle>(EEFNativeWidgetConditionalStyle.class, this, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES);
 		}
 		return conditionalStyles;
 	}
@@ -315,7 +326,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		String oldPluginId = pluginId;
 		pluginId = newPluginId;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID, oldPluginId, pluginId));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID, oldPluginId, pluginId));
 	}
 
 	/**
@@ -338,7 +349,7 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 		String oldClassName = className;
 		className = newClassName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME, oldClassName, className));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME, oldClassName, className));
 	}
 
 	/**
@@ -349,11 +360,11 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
 				return basicSetStyle(null, msgs);
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
 				return ((InternalEList<?>)getConditionalStyles()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -367,20 +378,20 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
 				return getValueExpression();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
 				return getEditExpression();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
 				if (coreType) return getProperties();
 				else return getProperties().map();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
 				return getStyle();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
 				return getConditionalStyles();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
 				return getPluginId();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
 				return getClassName();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -395,26 +406,26 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
 				setValueExpression((String)newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
 				setEditExpression((String)newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
 				((EStructuralFeature.Setting)getProperties()).set(newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
 				setStyle((EEFNativeWidgetStyle)newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
 				getConditionalStyles().clear();
 				getConditionalStyles().addAll((Collection<? extends EEFNativeWidgetConditionalStyle>)newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
 				setPluginId((String)newValue);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
 				setClassName((String)newValue);
 				return;
 		}
@@ -429,25 +440,25 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
 				setValueExpression(VALUE_EXPRESSION_EDEFAULT);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
 				setEditExpression(EDIT_EXPRESSION_EDEFAULT);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
 				getProperties().clear();
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
 				setStyle((EEFNativeWidgetStyle)null);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
 				getConditionalStyles().clear();
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
 				setPluginId(PLUGIN_ID_EDEFAULT);
 				return;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
 				setClassName(CLASS_NAME_EDEFAULT);
 				return;
 		}
@@ -462,19 +473,19 @@ public class EEFNativeWidgetDescriptionImpl extends EEFWidgetDescriptionImpl imp
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__VALUE_EXPRESSION:
 				return VALUE_EXPRESSION_EDEFAULT == null ? valueExpression != null : !VALUE_EXPRESSION_EDEFAULT.equals(valueExpression);
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__EDIT_EXPRESSION:
 				return EDIT_EXPRESSION_EDEFAULT == null ? editExpression != null : !EDIT_EXPRESSION_EDEFAULT.equals(editExpression);
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PROPERTIES:
 				return properties != null && !properties.isEmpty();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__STYLE:
 				return style != null;
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CONDITIONAL_STYLES:
 				return conditionalStyles != null && !conditionalStyles.isEmpty();
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__PLUGIN_ID:
 				return PLUGIN_ID_EDEFAULT == null ? pluginId != null : !PLUGIN_ID_EDEFAULT.equals(pluginId);
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME:
 				return CLASS_NAME_EDEFAULT == null ? className != null : !CLASS_NAME_EDEFAULT.equals(className);
 		}
 		return super.eIsSet(featureID);

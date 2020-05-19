@@ -2,24 +2,76 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated EefExtNative -->
       <package
-            uri="http://www.mypsycho.org/eclipse/eef/ext/native"
-            class="org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage"
+            uri="http://www.mypsycho.org/eclipse/sirius/properties/ext/native/1.0.0"
+            class="org.mypsycho.emf.modit.eef.model.properties.propertynative.PropNativePackage"
             genModel="model/EefExtNative.genmodel"/>
    </extension>
 
-
-  <extension
-         point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated EefExtNative -->
+      <package
+            uri="http://www.mypsycho.org/eclipse/eef/ext/native/1.0.0"
+            class="org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage"
+            genModel="model/EefExtNative.genmodel"/>
+   </extension>
+ 
+   <extension point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
       <descriptor
             id=   "org.mypsycho.emf.modit.eef.EEFNativeWidgetLifecycleManager"
-            class="org.mypsycho.emf.modit.eef.EEFNativeWidgetLifecycleManagerProvider"
-            description="Native widget description"
-            label="Native SWT">
-      </descriptor>
+            class="org.mypsycho.emf.modit.eef.widget.EEFNativeWidgetLifecycleManagerProvider"
+            label="%propertynative.label"
+            description="%propertynative.description"
+      />
+   </extension>
+
+   <extension point="org.eclipse.sirius.properties.core.descriptionConverter">
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.eefconverter"
+            class="org.mypsycho.emf.modit.eef.transform.NativeConverters$WidgetDescription"
+            label="%propertynative.converter.label"
+            description="%propertynative.converter.description"
+      />
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.eefconverter"
+            class="org.mypsycho.emf.modit.eef.transform.NativeConverters$WidgetStyle"
+            label="%propertynative.converter.label"
+            description="%propertynative.converter.description"
+      />
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.eefconverter"
+            class="org.mypsycho.emf.modit.eef.transform.NativeConverters$WidgetConditionalStyle"
+            label="%propertynative.converter.label"
+            description="%propertynative.converter.description"
+      />
+   </extension>
+
+   <extension point="org.eclipse.sirius.properties.core.descriptionPreprocessor">
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.preprocessor"
+            class="org.mypsycho.emf.modit.eef.transform.NativePreprocessors$WidgetDescription"
+            label="%propertynative.preprocessor.label"
+            description="%propertynative.preprocessor.description"
+      />
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.preprocessor"
+            class="org.mypsycho.emf.modit.eef.transform.NativePreprocessors$WidgetStyle"
+            label="%propertynative.preprocessor.label"
+            description="%propertynative.preprocessor.description"
+      />
+      <descriptor
+            id=   "org.mypsycho.emf.modit.eef.propertynative.preprocessor"
+            class="org.mypsycho.emf.modit.eef.transform.NativePreprocessors$WidgetConditionalStyle"
+            label="%propertynative.preprocessor.label"
+            description="%propertynative.preprocessor.description"
+      />
    </extension>
 
 
+
 </plugin>
+
+

@@ -1,4 +1,4 @@
-package org.mypsycho.emf.modit.eef;
+package org.mypsycho.emf.modit.eef.widget;
 
 import org.eclipse.eef.ide.ui.api.widgets.EEFStyleHelper.IEEFTextStyleCallback;
 import org.eclipse.eef.ide.ui.internal.widgets.styles.EEFColor;

@@ -1,13 +1,24 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.util;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.util;
 
 import org.eclipse.eef.EEFConditionalStyle;
 import org.eclipse.eef.EEFControlDescription;
 import org.eclipse.eef.EEFTextStyle;
 import org.eclipse.eef.EEFWidgetDescription;
-
 import org.eclipse.eef.EEFWidgetStyle;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -15,24 +26,24 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.mypsycho.emf.modit.eef.EefExtNative.*;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.*;
 
 /**
  * <!-- begin-user-doc -->
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage
+ * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage
  * @generated
  */
-public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
+public class EefNativeAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static EefExtNativePackage modelPackage;
+	protected static EefNativePackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -40,9 +51,9 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EefExtNativeAdapterFactory() {
+	public EefNativeAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = EefExtNativePackage.eINSTANCE;
+			modelPackage = EefNativePackage.eINSTANCE;
 		}
 	}
 
@@ -71,8 +82,8 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EefExtNativeSwitch<Adapter> modelSwitch =
-		new EefExtNativeSwitch<Adapter>() {
+	protected EefNativeSwitch<Adapter> modelSwitch =
+		new EefNativeSwitch<Adapter>() {
 			@Override
 			public Adapter caseEEFNativeWidgetDescription(EEFNativeWidgetDescription object) {
 				return createEEFNativeWidgetDescriptionAdapter();
@@ -126,13 +137,13 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription <em>EEF Native Widget Description</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription <em>EEF Native Widget Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription
 	 * @generated
 	 */
 	public Adapter createEEFNativeWidgetDescriptionAdapter() {
@@ -140,13 +151,13 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle <em>EEF Native Widget Style</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle <em>EEF Native Widget Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle
 	 * @generated
 	 */
 	public Adapter createEEFNativeWidgetStyleAdapter() {
@@ -154,13 +165,13 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle <em>EEF Native Widget Conditional Style</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle <em>EEF Native Widget Conditional Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle
 	 * @generated
 	 */
 	public Adapter createEEFNativeWidgetConditionalStyleAdapter() {
@@ -249,4 +260,4 @@ public class EefExtNativeAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //EefExtNativeAdapterFactory
+} //EefNativeAdapterFactory

@@ -1,4 +1,4 @@
-package org.mypsycho.emf.modit.eef;
+package org.mypsycho.emf.modit.eef.widget;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +22,9 @@ import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.mypsycho.emf.modit.eef.EEFNativeWidget.ModelListener;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.widget.EEFNativeWidget.ModelListener;
 import org.osgi.framework.Bundle;
 
 /**

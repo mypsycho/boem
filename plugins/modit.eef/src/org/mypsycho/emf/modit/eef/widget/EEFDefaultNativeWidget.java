@@ -1,4 +1,4 @@
-package org.mypsycho.emf.modit.eef;
+package org.mypsycho.emf.modit.eef.widget;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -18,7 +18,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
 
 /**
  *

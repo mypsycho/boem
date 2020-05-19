@@ -1,19 +1,30 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.util;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.util;
+
+import java.util.List;
 
 import org.eclipse.eef.EEFConditionalStyle;
 import org.eclipse.eef.EEFControlDescription;
 import org.eclipse.eef.EEFTextStyle;
 import org.eclipse.eef.EEFWidgetDescription;
-
 import org.eclipse.eef.EEFWidgetStyle;
+
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 
-import org.eclipse.emf.ecore.util.Switch;
-
-import org.mypsycho.emf.modit.eef.EefExtNative.*;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,17 +36,17 @@ import org.mypsycho.emf.modit.eef.EefExtNative.*;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage
+ * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage
  * @generated
  */
-public class EefExtNativeSwitch<T> extends Switch<T> {
+public class EefNativeSwitch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static EefExtNativePackage modelPackage;
+	protected static EefNativePackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -43,23 +54,10 @@ public class EefExtNativeSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EefExtNativeSwitch() {
+	public EefNativeSwitch() {
 		if (modelPackage == null) {
-			modelPackage = EefExtNativePackage.eINSTANCE;
+			modelPackage = EefNativePackage.eINSTANCE;
 		}
-	}
-
-	/**
-	 * Checks whether this is a switch for the given package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param ePackage the package in question.
-	 * @return whether this is a switch for the given package.
-	 * @generated
-	 */
-	@Override
-	protected boolean isSwitchFor(EPackage ePackage) {
-		return ePackage == modelPackage;
 	}
 
 	/**
@@ -69,10 +67,40 @@ public class EefExtNativeSwitch<T> extends Switch<T> {
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
-	@Override
+	public T doSwitch(EObject theEObject) {
+		return doSwitch(theEObject.eClass(), theEObject);
+	}
+
+	/**
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the first non-null result returned by a <code>caseXXX</code> call.
+	 * @generated
+	 */
+	protected T doSwitch(EClass theEClass, EObject theEObject) {
+		if (theEClass.eContainer() == modelPackage) {
+			return doSwitch(theEClass.getClassifierID(), theEObject);
+		}
+		else {
+			List<EClass> eSuperTypes = theEClass.getESuperTypes();
+			return
+				eSuperTypes.isEmpty() ?
+					defaultCase(theEObject) :
+					doSwitch(eSuperTypes.get(0), theEObject);
+		}
+	}
+
+	/**
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the first non-null result returned by a <code>caseXXX</code> call.
+	 * @generated
+	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION: {
+			case EefNativePackage.EEF_NATIVE_WIDGET_DESCRIPTION: {
 				EEFNativeWidgetDescription eefNativeWidgetDescription = (EEFNativeWidgetDescription)theEObject;
 				T result = caseEEFNativeWidgetDescription(eefNativeWidgetDescription);
 				if (result == null) result = caseEEFWidgetDescription(eefNativeWidgetDescription);
@@ -80,7 +108,7 @@ public class EefExtNativeSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_STYLE: {
+			case EefNativePackage.EEF_NATIVE_WIDGET_STYLE: {
 				EEFNativeWidgetStyle eefNativeWidgetStyle = (EEFNativeWidgetStyle)theEObject;
 				T result = caseEEFNativeWidgetStyle(eefNativeWidgetStyle);
 				if (result == null) result = caseEEFTextStyle(eefNativeWidgetStyle);
@@ -88,7 +116,7 @@ public class EefExtNativeSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE: {
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE: {
 				EEFNativeWidgetConditionalStyle eefNativeWidgetConditionalStyle = (EEFNativeWidgetConditionalStyle)theEObject;
 				T result = caseEEFNativeWidgetConditionalStyle(eefNativeWidgetConditionalStyle);
 				if (result == null) result = caseEEFConditionalStyle(eefNativeWidgetConditionalStyle);
@@ -230,9 +258,8 @@ public class EefExtNativeSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
-	@Override
 	public T defaultCase(EObject object) {
 		return null;
 	}
 
-} //EefExtNativeSwitch
+} //EefNativeSwitch

@@ -1,4 +1,4 @@
-package org.mypsycho.emf.modit.eef;
+package org.mypsycho.emf.modit.eef.widget;
 
 import org.eclipse.eef.EEFControlDescription;
 import org.eclipse.eef.core.api.EditingContextAdapter;
@@ -6,7 +6,7 @@ import org.eclipse.eef.ide.ui.api.widgets.IEEFLifecycleManager;
 import org.eclipse.eef.ide.ui.api.widgets.IEEFLifecycleManagerProvider;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription;
 
 public class EEFNativeWidgetLifecycleManagerProvider implements IEEFLifecycleManagerProvider {
 

@@ -1,6 +1,17 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative.impl;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl;
 
 import org.eclipse.eef.impl.EEFConditionalStyleImpl;
 
@@ -12,9 +23,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle;
-import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
+import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +35,7 @@ import org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetConditionalStyleImpl#getStyle <em>Style</em>}</li>
+ *   <li>{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetConditionalStyleImpl#getStyle <em>Style</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,7 +67,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return EefExtNativePackage.Literals.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE;
+		return EefNativePackage.Literals.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE;
 	}
 
 	/**
@@ -78,7 +89,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 		EEFNativeWidgetStyle oldStyle = style;
 		style = newStyle;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, oldStyle, newStyle);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, oldStyle, newStyle);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -94,14 +105,14 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 		if (newStyle != style) {
 			NotificationChain msgs = null;
 			if (style != null)
-				msgs = ((InternalEObject)style).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, null, msgs);
+				msgs = ((InternalEObject)style).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, null, msgs);
 			if (newStyle != null)
-				msgs = ((InternalEObject)newStyle).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, null, msgs);
+				msgs = ((InternalEObject)newStyle).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, null, msgs);
 			msgs = basicSetStyle(newStyle, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, newStyle, newStyle));
+			eNotify(new ENotificationImpl(this, Notification.SET, EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE, newStyle, newStyle));
 	}
 
 	/**
@@ -112,7 +123,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
 				return basicSetStyle(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -126,7 +137,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
 				return getStyle();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -140,7 +151,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
 				setStyle((EEFNativeWidgetStyle)newValue);
 				return;
 		}
@@ -155,7 +166,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
 				setStyle((EEFNativeWidgetStyle)null);
 				return;
 		}
@@ -170,7 +181,7 @@ public class EEFNativeWidgetConditionalStyleImpl extends EEFConditionalStyleImpl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case EefExtNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
+			case EefNativePackage.EEF_NATIVE_WIDGET_CONDITIONAL_STYLE__STYLE:
 				return style != null;
 		}
 		return super.eIsSet(featureID);

@@ -1,6 +1,17 @@
 /**
+ *  * Copyright (c) 2020 Nicolas PERANSIN.
+ *  * This program and the accompanying materials
+ *  * are made available under the terms of the Eclipse Public License 2.0
+ *  * which accompanies this distribution, and is available at
+ *  * https://www.eclipse.org/legal/epl-2.0/
+ *  *
+ *  * SPDX-License-Identifier: EPL-2.0
+ *  *
+ *  * Contributors:
+ *  *    Nicolas PERANSIN - initial API and implementation
+ * 
  */
-package org.mypsycho.emf.modit.eef.EefExtNative;
+package org.mypsycho.emf.modit.eef.model.eef.eefextnative;
 
 import org.eclipse.eef.EefPackage;
 
@@ -20,18 +31,18 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see org.mypsycho.emf.modit.eef.EefExtNative.EefExtNativeFactory
+ * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EefNativeFactory
  * @model kind="package"
  * @generated
  */
-public interface EefExtNativePackage extends EPackage {
+public interface EefNativePackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "EefExtNative"; //$NON-NLS-1$
+	String eNAME = "eefextnative"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI.
@@ -39,7 +50,7 @@ public interface EefExtNativePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://www.mypsycho.org/eclipse/eef/ext/native"; //$NON-NLS-1$
+	String eNS_URI = "http://www.mypsycho.org/eclipse/eef/ext/native/1.0.0"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name.
@@ -55,14 +66,14 @@ public interface EefExtNativePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	EefExtNativePackage eINSTANCE = org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl.init();
+	EefNativePackage eINSTANCE = org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl <em>EEF Native Widget Description</em>}' class.
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl <em>EEF Native Widget Description</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetDescription()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	int EEF_NATIVE_WIDGET_DESCRIPTION = 0;
@@ -185,11 +196,11 @@ public interface EefExtNativePackage extends EPackage {
 	int EEF_NATIVE_WIDGET_DESCRIPTION_FEATURE_COUNT = EefPackage.EEF_WIDGET_DESCRIPTION_FEATURE_COUNT + 7;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetStyleImpl <em>EEF Native Widget Style</em>}' class.
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetStyleImpl <em>EEF Native Widget Style</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetStyleImpl
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetStyle()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetStyleImpl
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetStyle()
 	 * @generated
 	 */
 	int EEF_NATIVE_WIDGET_STYLE = 1;
@@ -303,11 +314,11 @@ public interface EefExtNativePackage extends EPackage {
 	int EEF_NATIVE_WIDGET_STYLE_FEATURE_COUNT = EefPackage.EEF_TEXT_STYLE_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetConditionalStyleImpl <em>EEF Native Widget Conditional Style</em>}' class.
+	 * The meta object id for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetConditionalStyleImpl <em>EEF Native Widget Conditional Style</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetConditionalStyleImpl
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetConditionalStyle()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetConditionalStyleImpl
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetConditionalStyle()
 	 * @generated
 	 */
 	int EEF_NATIVE_WIDGET_CONDITIONAL_STYLE = 2;
@@ -341,129 +352,129 @@ public interface EefExtNativePackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription <em>EEF Native Widget Description</em>}'.
+	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription <em>EEF Native Widget Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>EEF Native Widget Description</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription
 	 * @generated
 	 */
 	EClass getEEFNativeWidgetDescription();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getValueExpression <em>Value Expression</em>}'.
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getValueExpression <em>Value Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value Expression</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getValueExpression()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getValueExpression()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EAttribute getEEFNativeWidgetDescription_ValueExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getEditExpression <em>Edit Expression</em>}'.
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getEditExpression <em>Edit Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Edit Expression</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getEditExpression()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getEditExpression()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EAttribute getEEFNativeWidgetDescription_EditExpression();
 
 	/**
-	 * Returns the meta object for the map '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the map '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Properties</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getProperties()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getProperties()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EReference getEEFNativeWidgetDescription_Properties();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getStyle <em>Style</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getStyle <em>Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Style</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getStyle()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getStyle()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EReference getEEFNativeWidgetDescription_Style();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getConditionalStyles <em>Conditional Styles</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getConditionalStyles <em>Conditional Styles</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Conditional Styles</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getConditionalStyles()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getConditionalStyles()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EReference getEEFNativeWidgetDescription_ConditionalStyles();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getPluginId <em>Plugin Id</em>}'.
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getPluginId <em>Plugin Id</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Plugin Id</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getPluginId()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getPluginId()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EAttribute getEEFNativeWidgetDescription_PluginId();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getClassName <em>Class Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getClassName <em>Class Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Class Name</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetDescription#getClassName()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription#getClassName()
 	 * @see #getEEFNativeWidgetDescription()
 	 * @generated
 	 */
 	EAttribute getEEFNativeWidgetDescription_ClassName();
 
 	/**
-	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle <em>EEF Native Widget Style</em>}'.
+	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle <em>EEF Native Widget Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>EEF Native Widget Style</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle
 	 * @generated
 	 */
 	EClass getEEFNativeWidgetStyle();
 
 	/**
-	 * Returns the meta object for the map '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the map '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Properties</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetStyle#getProperties()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle#getProperties()
 	 * @see #getEEFNativeWidgetStyle()
 	 * @generated
 	 */
 	EReference getEEFNativeWidgetStyle_Properties();
 
 	/**
-	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle <em>EEF Native Widget Conditional Style</em>}'.
+	 * Returns the meta object for class '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle <em>EEF Native Widget Conditional Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>EEF Native Widget Conditional Style</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle
 	 * @generated
 	 */
 	EClass getEEFNativeWidgetConditionalStyle();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle#getStyle <em>Style</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle#getStyle <em>Style</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Style</em>'.
-	 * @see org.mypsycho.emf.modit.eef.EefExtNative.EEFNativeWidgetConditionalStyle#getStyle()
+	 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetConditionalStyle#getStyle()
 	 * @see #getEEFNativeWidgetConditionalStyle()
 	 * @generated
 	 */
@@ -476,7 +487,7 @@ public interface EefExtNativePackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	EefExtNativeFactory getEefExtNativeFactory();
+	EefNativeFactory getEefNativeFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -492,11 +503,11 @@ public interface EefExtNativePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl <em>EEF Native Widget Description</em>}' class.
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl <em>EEF Native Widget Description</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetDescriptionImpl
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetDescription()
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetDescriptionImpl
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetDescription()
 		 * @generated
 		 */
 		EClass EEF_NATIVE_WIDGET_DESCRIPTION = eINSTANCE.getEEFNativeWidgetDescription();
@@ -558,11 +569,11 @@ public interface EefExtNativePackage extends EPackage {
 		EAttribute EEF_NATIVE_WIDGET_DESCRIPTION__CLASS_NAME = eINSTANCE.getEEFNativeWidgetDescription_ClassName();
 
 		/**
-		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetStyleImpl <em>EEF Native Widget Style</em>}' class.
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetStyleImpl <em>EEF Native Widget Style</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetStyleImpl
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetStyle()
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetStyleImpl
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetStyle()
 		 * @generated
 		 */
 		EClass EEF_NATIVE_WIDGET_STYLE = eINSTANCE.getEEFNativeWidgetStyle();
@@ -576,11 +587,11 @@ public interface EefExtNativePackage extends EPackage {
 		EReference EEF_NATIVE_WIDGET_STYLE__PROPERTIES = eINSTANCE.getEEFNativeWidgetStyle_Properties();
 
 		/**
-		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetConditionalStyleImpl <em>EEF Native Widget Conditional Style</em>}' class.
+		 * The meta object literal for the '{@link org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetConditionalStyleImpl <em>EEF Native Widget Conditional Style</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EEFNativeWidgetConditionalStyleImpl
-		 * @see org.mypsycho.emf.modit.eef.EefExtNative.impl.EefExtNativePackageImpl#getEEFNativeWidgetConditionalStyle()
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EEFNativeWidgetConditionalStyleImpl
+		 * @see org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl.EefNativePackageImpl#getEEFNativeWidgetConditionalStyle()
 		 * @generated
 		 */
 		EClass EEF_NATIVE_WIDGET_CONDITIONAL_STYLE = eINSTANCE.getEEFNativeWidgetConditionalStyle();
@@ -595,4 +606,4 @@ public interface EefExtNativePackage extends EPackage {
 
 	}
 
-} //EefExtNativePackage
+} //EefNativePackage
