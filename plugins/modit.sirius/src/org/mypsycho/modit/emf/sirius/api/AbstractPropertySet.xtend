@@ -160,7 +160,7 @@ abstract class AbstractPropertySet extends AbstractEdition {
 		collect.eachOn("self", conditions)
 	}
 	
-	def then(String condition, WidgetDescription editor) {
+	def when(String condition, WidgetDescription editor) {
 		DynamicMappingIfDescription.create [
 			name = Ns.then.id(editor.eClass.name) // no need for unicity ??
 			predicateExpression = condition
@@ -168,14 +168,14 @@ abstract class AbstractPropertySet extends AbstractEdition {
 		]
 	}
 	
-	def <T extends WidgetDescription> then(Class<T> type, String condition, (T)=>void init) {
-		condition.then(type.create [
+	def <T extends WidgetDescription> when(Class<T> type, String condition, (T)=>void init) {
+		condition.when(type.create [
 			init.apply(it)
 		])
 	}
 	
 	def <T extends WidgetDescription> always(Class<T> type, (T)=>void init) {
-		type.then(ALWAYS, init)
+		type.when(ALWAYS, init)
 	}
 	
 	def void setOperation(WidgetDescription it, ModelOperation value) {

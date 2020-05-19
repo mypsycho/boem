@@ -237,7 +237,7 @@ class DefaultPropertiesExtension extends AbstractPropertySet {
 			and «iFeat».eType != ecore::EStringToStringMapEntry'''
 			
 		].toMap([ key ]) [
-			value.trimAql.then(createDefaultWidgets(key, iValue, iFeat))
+			value.trimAql.when(createDefaultWidgets(key, iValue, iFeat))
 		]
 
 	}
@@ -319,18 +319,30 @@ class DefaultPropertiesExtension extends AbstractPropertySet {
 					initWidget(iFeat)
 					valueExpression = valueGetter
 					displayExpression = '''var:value'''
+					// TODO 
+					// add create 
+					// edit 
+					// move up/down
+					// delete
 				]
 			
 			case map: ListDescription.create [
 					initWidget(iFeat)
 					valueExpression = valueGetter
-					displayExpression = '''aql:value.key + '=' + value.value'''
+					displayExpression = '''aql:value.key + ' = ' + value.value'''
+					// TODO create a dialog using EStringToString
+					// Create: check the key is not defined.
+					// Modify: the key is not editable.
+					// no move up or down 
 				]
 				
 			case reference1, case referenceN:
 				ExtReferenceDescription.create [
 					initWidget(iFeat)
-					referenceNameExpression = '''aql:«iFeat».name'''	// in Sirius 
+					referenceNameExpression = '''aql:«iFeat».name''' // in Sirius 
+					// default dialog is disappointing
+					// Create wrapper of org.eclipse.sirius.common.ui.tools.api.selection.EObjectSelectionWizard
+					// but the user must choose 
 				]
 				
 			default : throw new UnsupportedOperationException()
