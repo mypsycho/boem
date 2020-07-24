@@ -27,11 +27,11 @@ Using such syntax helps to:
 
  * Speed up the creation of tests,
  * Improve the readability of the tests,
- * Improve maintainability when the tested metamodel changes
- * Ease the creation of inter-connected models
+ * Improve maintainability when the tested meta-model changes
+ * Ease the creation of interconnected models
 
 It has been created and used in industrial projects to ease the creation input for JUnit 
-tests on the metamodel and business rules.
+tests on the meta-model and business rules.
 
 == Content
 
@@ -47,16 +47,16 @@ It comes with various features:
  ** Using plugin URI ending with '.modit', you can target class creating EMF models.
  
  * EMF Sirius integration to write Sirius model in textual mode and lambda in XTend 
- (avoiding uncompiled queries).
+ (avoiding text|not-compiled queries).
  ** SiriusReverseIt can generated classes from an existing ODesign.
 
- * EMF enrichment where user can associate properties and lambda to metamodel and 
+ * EMF enrichment where user can associate properties and lambda to meta-model and 
  providing pseudo multi-inheritance for EObject.
  
- * i18n classes to use xtend template instead of properties syntax.
+ * i18n classes to use Xtend template instead of properties syntax.
 
-Read link:https://mypsycho.github.io/ModIt/[documentation] and use an version of update 
-site on https://dl.bintray.com/mypsycho/modit-update-site/p2/[Bintray].
+Read link:https://mypsycho.github.io/ModIt/[documentation] and pick a version of Update 
+Site on https://dl.bintray.com/mypsycho/modit-update-site/p2/[Bintray].
  
 
 == Contributing
