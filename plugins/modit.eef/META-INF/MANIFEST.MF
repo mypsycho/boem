@@ -21,13 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.sirius.properties.core,
  org.eclipse.sirius.ui.properties.ext.widgets.reference
 Eclipse-LazyStart: true
-Export-Package: org.mypsycho.emf.modit.eef.model.eef.eefextnative,
- org.mypsycho.emf.modit.eef.model.eef.eefextnative.impl,
- org.mypsycho.emf.modit.eef.model.eef.eefextnative.util,
- org.mypsycho.emf.modit.eef.model.properties.propertynative,
- org.mypsycho.emf.modit.eef.model.properties.propertynative.impl,
- org.mypsycho.emf.modit.eef.model.properties.propertynative.util
-Bundle-Activator: org.mypsycho.emf.modit.eef.widget.EEFNativeActivator
+Export-Package: org.mypsycho.emf.modit.eef.widget
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.mypsycho.emf.modit.eef

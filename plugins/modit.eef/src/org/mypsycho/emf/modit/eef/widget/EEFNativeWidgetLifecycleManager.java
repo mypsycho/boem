@@ -2,273 +2,292 @@ package org.mypsycho.emf.modit.eef.widget;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.eef.EEFControlDescription;
+import org.eclipse.eef.EEFCustomExpression;
+import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.EEFWidgetDescription;
-import org.eclipse.eef.EefPackage;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
-import org.eclipse.eef.core.api.EEFExpressionUtils;
 import org.eclipse.eef.core.api.EditingContextAdapter;
-import org.eclipse.eef.core.api.controllers.AbstractEEFWidgetController;
-import org.eclipse.eef.core.api.controllers.IEEFWidgetController;
+import org.eclipse.eef.core.api.controllers.AbstractEEFCustomWidgetController;
 import org.eclipse.eef.core.api.utils.EvalFactory;
 import org.eclipse.eef.ide.ui.api.widgets.AbstractEEFWidgetLifecycleManager;
 import org.eclipse.eef.ide.ui.api.widgets.EEFStyleHelper;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.eef.ide.ui.api.widgets.IEEFLifecycleManager;
+import org.eclipse.eef.ide.ui.api.widgets.IEEFLifecycleManagerProvider;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetDescription;
-import org.mypsycho.emf.modit.eef.model.eef.eefextnative.EEFNativeWidgetStyle;
-import org.mypsycho.emf.modit.eef.widget.EEFNativeWidget.ModelListener;
 import org.osgi.framework.Bundle;
 
 /**
+ * Lifecycle Manager for EEF custom widget using Eclipse classloader.
  *
  * @author nperansin
  */
 public class EEFNativeWidgetLifecycleManager extends AbstractEEFWidgetLifecycleManager {
+    
 
-	
-	public static int VALIDATION_HORIZONTAL_INDENT = VALIDATION_MARKER_OFFSET;
-	
-	private EEFNativeWidgetDescription description;
-	
-	private Controller controller;
-	
-	private Control widget;
-	
-	/**
-	 * Used to make the SelectionListener reentrant, to avoid infinite loops when we need to revert the UI state on
-	 * error (as reverting the UI re-triggers the SelectionListener).
-	 */
-	private AtomicBoolean updateInProgress = new AtomicBoolean(false);
+    /**
+     * Return the custom expression with specified ID in the description
+     *
+     * @param descr EEF custom widget description
+     * @param id ID of the expression to retrieve
+     * @return the custom expression
+     */
+    protected static String getCustomExpression(EEFCustomWidgetDescription descr, String id) {
+        return descr.getCustomExpressions().stream()
+            .filter(param -> id.equals(param.getIdentifier()))
+            .map(EEFCustomExpression::getCustomExpression).findFirst().orElse(null);
+    }
 
-	
-	/**
-	 * 
-	 * <p>
-	 * 
-	 * </p>
-	 *
-	 * @param variableManager
-	 * @param interpreter
-	 * @param editingContextAdapter
-	 */
-	public EEFNativeWidgetLifecycleManager(EEFNativeWidgetDescription description,
-			IVariableManager variableManager, IInterpreter interpreter,
-			EditingContextAdapter editingContextAdapter) {
-		super(variableManager, interpreter, editingContextAdapter);
-		this.description = description;
-		
-	}
+    /**
+     * Provider of EEFNativeWidgetLifecycleManager.
+     * <p>
+     * Detect EEFCustomWidgetDescription with required properties.
+     * </p>
+     */
+    public static class Provider implements IEEFLifecycleManagerProvider {
+       
+        @Override
+        public boolean canHandle(EEFControlDescription it) {
+            if (!(it instanceof EEFCustomWidgetDescription)) {
+                return false;
+            }
+            EEFCustomWidgetDescription descr = (EEFCustomWidgetDescription) it;
 
-	protected static void logError(String message, Throwable cause) {
-		EEFNativeActivator.logError(message, cause);
-	}
-	
-	@Override
-	protected void createMainControl(Composite parent, IEEFFormContainer formContainer) {
-		
-		EEFNativeWidget impl;
-		
-		try {
-			Bundle bundle = Platform.getBundle(description.getPluginId());
-			if (bundle == null) {
-				logError("Bundle " + description.getPluginId() + " does not exist", null);				
-				return;
-			}
-			Class<?> widgetClass = bundle.loadClass(description.getClassName());
-			impl = (EEFNativeWidget) widgetClass.newInstance();
-			
-		} catch (ClassCastException e) {
-			logError(description.getClassName() + " does not implement " 
-					+ EEFNativeWidget.class.getName(), e);
-			return;
-		} catch (ClassNotFoundException e) {
-			logError(description.getClassName() + " cannot be found", e);
-			return;
-		} catch (InstantiationException | IllegalAccessException e) {
-			logError(description.getClassName() + " cannot be instantiated", e);
-			return;
-		}
+            return getCustomExpression(descr, EEFNativeWidget.CLASS_PARAM) != null
+                && getCustomExpression(descr, EEFNativeWidget.BUNDLE_PARAM) != null;
+        }
 
-		impl.init(variableManager, interpreter);
-		
-		widget = impl.createControl(parent, formContainer);
-		
-		// create a widget using parent + container.getWidgetFactory()
-		
-		// 
-		// container.getWidgetFactory().paintBordersFor(parent);
-		// Finish by creating a controller containing widget reference.
-		
-		// AbstractEEFWidgetController is not connected to lifecycle but with a callback.
-		
-		controller = new Controller(impl);
-	}
+        @Override
+        public IEEFLifecycleManager getLifecycleManager(EEFControlDescription controlDescription,
+                IVariableManager variableManager, IInterpreter interpreter,
+                EditingContextAdapter editingContextAdapter) {
+            /* invocation is protected by #canHandle */
+            return new EEFNativeWidgetLifecycleManager(EEFCustomWidgetDescription.class.cast(controlDescription),
+                variableManager, interpreter, editingContextAdapter);
+        }
+    }
+    
+    /**
+     * The number of pixels of the additional gap necessary to draw the validation
+     * marker.
+     */
+    protected static final int VALIDATION_HORIZONTAL_INDENT = VALIDATION_MARKER_OFFSET;
 
-	@Override
-	protected IEEFWidgetController getController() {
-		return controller;
-	}
-	
-	@Override
-	protected Control getValidationControl() {
-		// main widget
-		return null;
-	}
+    private EEFCustomWidgetDescription description;
 
-	@Override
-	protected EEFWidgetDescription getWidgetDescription() {
-		return description;
-	}
+    private Controller controller;
 
-	@Override
-	protected void setEnabled(boolean enable) {
-		controller.implementation.setEnabled(enable);
-	}
+    private Control widget;
 
-	
-	@Override
-	public void aboutToBeShown() {
-		super.aboutToBeShown();
+    /**
+     * Constructor used by EefCustomLifecycleManagerProvider.
+     *
+     * @param description to instantiate
+     * @param variableManager from EEF
+     * @param interpreter to evaluate expression
+     * @param editingContextAdapter to access editing domain
+     */
+    public EEFNativeWidgetLifecycleManager(EEFCustomWidgetDescription description,
+            IVariableManager variableManager, IInterpreter interpreter,
+            EditingContextAdapter editingContextAdapter) {
+        super(variableManager, interpreter, editingContextAdapter);
+        this.description = description;
+    }
 
-		controller.listener = controller.implementation
-				.startEditing(value -> editValue(false, value));
-		
-		controller.newValueConsumer = value -> controller.listener.setValue(value);
+    /**
+     * Log an error
+     *
+     * @param message Error message
+     * @param cause Original cause
+     */
+    protected static void logError(String message, Throwable cause) {
+        EEFNativeActivator.logError(message, cause);
+    }
 
-		// addListener on widget.
-		// Prefer listener with a delayed update
-		//    - ignoring refresh (!container.isRenderingInProgress() && !updateInProgress.get())
-		//    - mark as changed (dirty)
-		//    - store change
-		
-		// on lost focus
-		//    - if lockedByOtherInProgress.get() && !container.isRenderingInProgress() && isDirty
-		//    update(value)
-		
-		// for text listen on key \n
-		
-		// add controller callback to update widget on new content.
-		//    this callback must be used when controller receive a refresh order.
-		//    the callback update the style.
-		
-		// impl refresh in controller : must call evaluation when callback is available.
-		
-		
-		// update(value) in controller! -> 
-		//   - using editingContextAdapter.performModelChange
-		//   - put value into "newValue" variable map
-		//   - EvalFactory.of(interpreter, variables).logIfBlank(eAttribute).call(editExpression)
-		
-	}
-	
-	/**
-	 * Set the style.
-	 */
-	private void setStyle() {
-		EEFStyleHelper styleHelper = new EEFStyleHelper(interpreter, variableManager);
-		controller.listener.setStyle((EEFNativeWidgetStyle) styleHelper.getWidgetStyle(description));
-	}
-	
-	private void editValue(boolean force, Object value) {
-		boolean shouldUpdateWhileRendering = !container.isRenderingInProgress() || force;
-		if (!widget.isDisposed() 
-				&& shouldUpdateWhileRendering 
-				// && isDirty 
-				&& updateInProgress.compareAndSet(false, true)
-				) {
-			try {
-				IStatus result = controller.updateValue(value);
-				
-				if (result != null && result.getSeverity() == IStatus.ERROR) {
-					logError(result.getMessage(), result.getException());
-					// Restore widget will last value
-					controller.valueForwarder.accept(controller.referenceValue);
-				} else {
-					// save value 
-					controller.referenceValue = value; 
-					// maybe useless if refresh callback controller
-					refresh();
-				}
-				// isDirty = false;
-				setStyle();
-			} finally {
-				updateInProgress.set(false);
-			}
-		}
-	}
-	
-	@Override
-	public void aboutToBeHidden() {
-		// remove listener
-		// remove refreshCallback
-		controller.implementation.stopEditing();
-		controller.newValueConsumer = null;
-		
-		super.aboutToBeHidden();
-	}
-	
-	private class Controller extends AbstractEEFWidgetController {
-		
-		EEFNativeWidget implementation;
-		
-		Consumer<Object> newValueConsumer;
-		
-		final Consumer<Object> valueForwarder = value -> {
-			referenceValue = value;
-			newValueConsumer.accept(value);
-			setStyle();
-		};
-		
-		// Not null when shown
-		ModelListener listener;
-		
-		Object referenceValue = null;
-		
-		public Controller(EEFNativeWidget impl) {
-			super(EEFNativeWidgetLifecycleManager.this.variableManager, 
-					EEFNativeWidgetLifecycleManager.this.interpreter, 
-					EEFNativeWidgetLifecycleManager.this.editingContextAdapter);
-			implementation = impl;
-		}
+    @Override
+    protected void createMainControl(Composite parent, IEEFFormContainer formContainer) {
 
-		@Override
-		protected EEFWidgetDescription getDescription() {
-			return description;
-		}
-		
-		 
-		@Override
-		public void refresh() {
-			super.refresh();
+        /** Implementation of native widget */
+        EEFNativeWidget impl;
 
-			if (newValueConsumer != null) {
-				// Writing content into widget
-				newEval().call(description.getValueExpression(), valueForwarder);
-			}
-		}
-		
+        String bundleName = EEFNativeWidgetLifecycleManager.getCustomExpression(description,
+            EEFNativeWidget.BUNDLE_PARAM);
+        Bundle bundle = Platform.getBundle(bundleName);
+        if (bundle == null) {
+            logError("Bundle " + bundleName + " does not exist", null);
+            return;
+        }
+        String classname = EEFNativeWidgetLifecycleManager.getCustomExpression(description,
+            EEFNativeWidget.CLASS_PARAM);
 
-		public IStatus updateValue(final Object value) {
-			return this.editingContextAdapter.performModelChange(() -> {
-				String editExpression = description.getEditExpression();
-				EAttribute eAttribute = EefPackage.Literals.EEF_TEXT_DESCRIPTION__EDIT_EXPRESSION;
+        try {
+            Class<?> widgetClass = bundle.loadClass(classname);
+            impl = EEFNativeWidget.class.cast(widgetClass.newInstance());
 
-				Map<String, Object> variables = new HashMap<String, Object>();
-				variables.putAll(this.variableManager.getVariables());
-				variables.put(EEFExpressionUtils.EEFText.NEW_VALUE, value);
+        } catch (ClassNotFoundException e) {
+            logError(classname + " cannot be found", e);
+            return;
+        } catch (InstantiationException | IllegalAccessException e) {
+            logError(classname + " cannot be instantiated", e);
+            return;
+        } catch (ClassCastException e) {
+            logError(classname + " does not implement " + EEFNativeWidget.class.getName(), e);
+            return;
+        }
 
-				EvalFactory.of(this.interpreter, variables).logIfBlank(eAttribute).call(editExpression);
-			});
-		}
-		
-	}
+        widget = impl.createControl(parent, formContainer);
 
+        // create a widget using parent + container.getWidgetFactory()
+        // To paint the borders, use paintBordersFor(parent) on widgetFactory
+        // Finish by creating a controller containing widget reference.
+
+        // AbstractEEFWidgetController is not connected to life-cycle but with a callback.
+
+        controller = new Controller(impl);
+    }
+
+    @Override
+    protected Controller getController() {
+        return controller;
+    }
+
+    @Override
+    protected Control getValidationControl() {
+        return widget;
+    }
+
+    @Override
+    protected EEFWidgetDescription getWidgetDescription() {
+        return description;
+    }
+
+    @Override
+    protected EEFStyleHelper getEEFStyleHelper() {
+        // This looks like a bug: missing sub-case of CustomWidgetDescription
+        return new EEFCustomStyleHelper(interpreter, variableManager);
+    }
+
+    @Override
+    protected void setEnabled(boolean enable) {
+        getController().getImplementation().setEnabled(enable);
+    }
+
+    @Override
+    public void aboutToBeShown() {
+        super.aboutToBeShown();
+        getController().getImplementation().activate(controller);
+    }
+
+    @Override
+    public void aboutToBeHidden() {
+        // remove listener
+        // remove refreshCallback
+        getController().getImplementation().desactivate();
+
+        super.aboutToBeHidden();
+    }
+
+    private class Controller extends AbstractEEFCustomWidgetController
+            implements EEFNativeWidget.ContextProvider {
+
+        /* reflective */
+        private EEFNativeWidget implementation;
+
+        /**
+         * Default constructor.
+         *
+         * @param impl to control
+         */
+        public Controller(EEFNativeWidget impl) {
+            super(EEFNativeWidgetLifecycleManager.this.description,
+                EEFNativeWidgetLifecycleManager.this.variableManager,
+                EEFNativeWidgetLifecycleManager.this.interpreter,
+                EEFNativeWidgetLifecycleManager.this.editingContextAdapter);
+            implementation = impl;
+        }
+
+        /**
+         * Returns the implementation.
+         *
+         * @return the implementation
+         */
+        private EEFNativeWidget getImplementation() {
+            return implementation;
+        }
+
+        @Override
+        protected EEFCustomWidgetDescription getDescription() {
+            return description;
+        }
+
+        @Override
+        public void refresh() {
+            // called by AbstractEEFWidgetLifecycleManager refresh
+            super.refresh(); // label
+
+            implementation.refresh(this);
+        }
+
+        @Override
+        public Object getValue(String id) {
+            Optional<String> param = getCustomExpression(id);
+            return param.isPresent()
+                ? newEval().evaluate(param.get())
+                : null;
+        }
+
+        @Override
+        public EObject getTarget() {
+            return EObject.class.cast(getWidgetSemanticElement());
+        }
+
+        @Override
+        public String getParam(String id) {
+            return getCustomExpression(id).orElse(null);
+        }
+
+        @Override
+        public void perform(Runnable it) {
+            editingContextAdapter.performModelChange(it);
+        }
+
+        @Override
+        public <R> R perform(Supplier<R> it) {
+            AtomicReference<R> result = new AtomicReference<>();
+            editingContextAdapter.performModelChange(() -> result.set(it.get()));
+            return result.get();
+        }
+
+        @Override
+        public void execute(String id, Map<? extends String, ?> vars) {
+            // for value or operation, we only have 1 API.
+            String onClickExpression = getCustomExpression(id).get();
+
+            Map<String, Object> context;
+            if (vars == null || vars.isEmpty()) {
+                context = variableManager.getVariables();
+            } else {
+                context = new HashMap<>();
+                context.putAll(variableManager.getVariables());
+                context.putAll(vars);
+            }
+
+            EvalFactory.of(interpreter, context).call(onClickExpression);
+        }
+
+        @Override
+        public boolean isInRefresh() {
+            return container.isRenderingInProgress();
+        }
+
+    }
 }
