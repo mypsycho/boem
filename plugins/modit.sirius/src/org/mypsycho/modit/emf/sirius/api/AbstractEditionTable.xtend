@@ -37,12 +37,11 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 		super(EditionTableDescription, parent, dLabel, dClass)
 	}
 
-
-	def void setFeature(FeatureColumnMapping it, EStructuralFeature feat) {
+	protected def void setFeature(FeatureColumnMapping it, EStructuralFeature feat) {
 		featureName = feat.name
 	}
 	
-	def column(String id, (FeatureColumnMapping)=>void initializer) {
+	protected def column(String id, (FeatureColumnMapping)=>void initializer) {
 		Objects.requireNonNull(initializer)
 		FeatureColumnMapping.createAs(Ns.column.id(id)) [ 
 			name = id
@@ -53,7 +52,6 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 	protected def columnRef(String id) {
 		FeatureColumnMapping.ref(Ns.column.id(id))
 	}
-
 	
 	protected def setCanEdit(FeatureColumnMapping it, Function1<? extends EObject, Boolean> predicat) {
 		canEdit = context.expression(predicat) // use self
@@ -68,7 +66,7 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 	 * @param it column to edit
 	 * @param operation on (line element, value)
 	 */
-	def void setDirectEdit(FeatureColumnMapping it, String operation) {
+	protected def void setDirectEdit(FeatureColumnMapping it, String operation) {
 		directEdit = createLabelEdit[
 			browseExpression = operation
 		]
@@ -83,9 +81,8 @@ abstract class AbstractEditionTable extends AbstractTable<EditionTableDescriptio
 	 * @param it column to edit
 	 * @param operation on (line element, value)
 	 */
-	def void setDirectEdit(FeatureColumnMapping it, Procedure2<? extends EObject, String> operation) {
+	protected def void setDirectEdit(FeatureColumnMapping it, Procedure2<? extends EObject, String> operation) {
 		directEdit = context.expression(params(EditArg.lineSemantic, EDIT_VALUE), operation)
 	}
 	
-
 }

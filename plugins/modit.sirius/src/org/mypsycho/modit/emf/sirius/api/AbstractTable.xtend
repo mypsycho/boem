@@ -13,10 +13,12 @@
  package org.mypsycho.modit.emf.sirius.api
 
 import java.util.Objects
+import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.sirius.table.metamodel.table.description.BackgroundStyleDescription
 import org.eclipse.sirius.table.metamodel.table.description.CreateLineTool
+import org.eclipse.sirius.table.metamodel.table.description.DeleteLineTool
 import org.eclipse.sirius.table.metamodel.table.description.LabelEditTool
 import org.eclipse.sirius.table.metamodel.table.description.LineMapping
 import org.eclipse.sirius.table.metamodel.table.description.TableDescription
@@ -24,8 +26,8 @@ import org.eclipse.sirius.table.metamodel.table.description.TableVariable
 import org.eclipse.sirius.viewpoint.description.SystemColor
 import org.eclipse.sirius.viewpoint.description.tool.ChangeContext
 import org.eclipse.sirius.viewpoint.description.tool.EditMaskVariables
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure2
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
-import org.eclipse.sirius.table.metamodel.table.description.DeleteLineTool
 
 /**
  * Class adapting Sirius model into Java and EClass reflection s
@@ -49,6 +51,11 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		/** semantic target of column */columnSemantic, // only used by cross table
 		/** feature of column */ element // only used by feature table
 	}
+	
+	static val LINE_DELETE_ARGS = #[ 
+	     EditArg.element, // line semantic
+	     EditArg.root // table semantic
+	]
 
 	
 	/** Value return by field edit */
@@ -93,6 +100,20 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	def void setDomainClass(LineMapping it, Class<? extends EObject> type) {
 		domainClass = context.asDomainClass(type)
 	}
+	
+	   
+    /**
+     * Sets the domain class of a description.
+     * <p>
+     * EClass is resolved using businessPackages of AbstractGroup.
+     * </p>
+     * 
+     * @param it description to define
+     * @param type of the description
+     */
+    def void setDomainClass(LineMapping it, EClass type) {
+        domainClass = SiriusDesigns.encode(type)
+    }
 	
 	/**
 	 * Sets the candidate expression of a description.
@@ -144,34 +165,67 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 	protected def lineRef(String id) {
 		LineMapping.ref(Ns.line.id(id))
 	}
-
 	
 	def createLabelEdit((ChangeContext)=>void operation) {
 		 LabelEditTool.create [
 			// Built-in variables, 
-			// required to handle scope in interperter
+			// required to handle scope in interpreter
 			// (seems like a dirty hack)
-			EditArg.values.forEach[ arg |
-				variables += TableVariable.create[ name = arg.name ]
-			]
+			variables += EditArg.values.toToolVariables
 			mask = EditMaskVariables.create[ mask = "{0}" ]
 			firstModelOperation = ChangeContext.create(operation)
 		]
 	}
-
 	
-	def createLine(String line, String toolLabel, 
-		(CreateLineTool)=>void init, String action
+    /**
+     * Set Delete tool of a line.
+     * 
+     * @param it to Delete
+     * @param toolLabel
+     * @param init of tool
+     * @param action of delete
+     */
+    def setDelete(LineMapping it, String action) {
+        val toolName = name + ":delete"
+        delete = DeleteLineTool.create [
+            name = toolName
+            label = "Delete"
+            variables += LINE_DELETE_ARGS.toToolVariables
+            firstModelOperation = ChangeContext.create[
+                browseExpression = action
+            ]
+        ]
+    }
+
+    
+    /**
+     * Set Delete tool of a line.
+     * 
+     * @param it to Dele
+     * @param toolLabel
+     * @param init of tool
+     * @param action(root target, line target, line view)
+     */
+    def setDelete(LineMapping it, Procedure2<EObject, EObject> action) {
+        delete = context.expression(LINE_DELETE_ARGS.params, action)
+    }
+	
+    /**
+     * Creates a creation tool for a line.
+     * 
+     * @param line id
+     * @param toolLabel
+     * @param init of tool
+     * @param action(root target, line target, line view)
+     */
+	def createLine(String line, String toolLabel, String action, 
+	    (CreateLineTool)=>void init
 	) {
 		CreateLineTool.create[
 			name = Ns.create.id(line)
 			label = toolLabel
 			mapping = line.lineRef
-			variables += CreateMappingArg.values.map[ descr |
-				TableVariable.create[
-					name = descr.name
-				]
-			]
+			variables += CreateMappingArg.values.toToolVariables
 			firstModelOperation = ChangeContext.create[
 				browseExpression = action
 			]
@@ -179,20 +233,37 @@ abstract class AbstractTable<T extends TableDescription> extends AbstractReprese
 		]
 	}
 
-	def createLine(String line, String toolLabel, 
-		(CreateLineTool)=>void init, Procedure3<EObject, EObject, EObject> action
+    /**
+     * Creates a creation tool for a line.
+     * 
+     * @param line id
+     * @param toolLabel
+     * @param init of tool
+     * @param action(root target, line target, line view)
+     */
+    def createLine(String line, String toolLabel, 
+		Procedure3<EObject, EObject, EObject> action, 
+		(CreateLineTool)=>void init
 	) {
-		line.createLine(toolLabel, init, 
-			context.expression(CREATE_MAPPING_ARGS, action)
-		)
+		line.createLine(toolLabel, context.expression(CREATE_MAPPING_ARGS, action), init)
 	}
 
-	def createLine(String line, String toolLabel, 
-		Procedure3<EObject, EObject, EObject> action
+    /**
+     * Creates a creation tool for a line.
+     * 
+     * @param line id
+     * @param toolLabel
+     * @param action(root target, line target, line view)
+     */
+	def createLine(String line, String toolLabel, Procedure3<EObject, EObject, EObject> action
 	) {
-		line.createLine(toolLabel, null, action)
+		line.createLine(toolLabel, action, null)
 	}
-
-
+	
+	def toToolVariables(Enum<?>... names) {
+	    names.map[ descr |
+            TableVariable.create[ name = descr.name ]
+        ]
+	}
 	
 }
