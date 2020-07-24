@@ -38,17 +38,14 @@ class SiriusConstantInterpreter implements IInterpreter {
 		override createInterpreter() { new SiriusConstantInterpreter() }
 		
 		override provides(String it) { applicable }
+		
 	}
 		
 	static val String PROTOCOL = "cst:"
 	
-	static def isApplicable(String it) {
-		startsWith(PROTOCOL)
-	}
+	static def isApplicable(String it) { startsWith(PROTOCOL) }
 	
-	static def String toExpression(String value) {
-		PROTOCOL + value
-	}
+	static def String toExpression(String value) { PROTOCOL + value }
 	
 	// maybe this is useless
 	val Map<String, Object> variables = new HashMap(5)
@@ -71,28 +68,17 @@ class SiriusConstantInterpreter implements IInterpreter {
 
 	override getVariables() { variables }
 	
-	override setVariable(String name, Object value) {
-		variables.put(name, value)
-	}
+	override setVariable(String name, Object value) { variables.put(name, value) }
 	
-	override unSetVariable(String name) {
-		variables.remove(name)
-	}
+	override unSetVariable(String name) { variables.remove(name) }
 	
-	override clearVariables() {
-		variables.clear
-	}
-	
+	override clearVariables() { variables.clear }
 	
 	override supportsValidation() { false }
 	
-	override validateExpression(IInterpreterContext context, String it) { 
-		Collections.emptyList
-	}
+	override validateExpression(IInterpreterContext context, String it) { Collections.emptyList }
 	
-	override dispose() {
-		clearVariables
-	}
+	override dispose() { clearVariables }
 
 	override setProperty(Object key, Object value) { /* unused */ }
 	
@@ -108,5 +94,4 @@ class SiriusConstantInterpreter implements IInterpreter {
 
  	override activateMetamodels(Collection<MetamodelDescriptor> metamodels) { /* unused */ }
 
-	
 }
