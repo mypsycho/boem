@@ -194,6 +194,9 @@
 			<requirement name="org.pitest.pitclipse.feature.feature.group" />
  -->
  			
+ 			<repository url="http://findbugs.cs.umd.edu/eclipse" />
+ 			<requirement name="edu.umd.cs.findbugs.plugin.eclipse.feature.group" />
+ 			
 			<repository url="https://checkstyle.github.io/eclipse-cs/update" />
 			<requirement name="net.sf.eclipsecs.feature.group" />
 		
