@@ -46,23 +46,32 @@ class CompanyDiagram extends AbstractDiagram {
 	}
 	
 	override initContent(Layer it) {
-		
 		containerMappings += ContainerMapping.createAs("node:company_Employees") [
 			semanticCandidatesExpression = PKG.company_Employees
 			childrenPresentation = ContainerLayout.LIST
 			
-			style = FlatContainerStyleDescription.createStyle
+
+			style = FlatContainerStyleDescription.createStyle [
+				labelExpression = expression[ Job it | 
+					'''«
+					IF employee !== null
+					»«employee.firstname?:""» «employee.lastname?:""»«
+					ENDIF
+					» («name»)'''.toString
+				]
+			]
 			
 			subNodeMappings += NodeMapping.create[
 				domainClass = Service	
 			
 				// Cross Reference fails !!
 				// associated elements will always be wrong !!!
-				semanticCandidatesExpression = context.expression[ Job it |
-					SessionManager.INSTANCE.getSession(it)
-						.semanticCrossReferencer.getNonNavigableInverseReferences(it)
-						.filter[ EStructuralFeature == PKG.activity_SupportedBy ]
-						.map[ EObject as Activity ]
+				semanticCandidatesExpression = expression[ Job it |
+					SessionManager.INSTANCE
+						.getSession(it)
+						.semanticCrossReferencer
+						.getInverseReferences(it, PKG.activity_SupportedBy, true)
+						.filter(Activity)
 						.toSet
 				]
 				
