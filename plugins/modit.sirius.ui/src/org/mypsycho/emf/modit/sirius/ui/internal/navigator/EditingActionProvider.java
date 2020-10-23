@@ -153,8 +153,13 @@ public class EditingActionProvider extends CommonActionProvider {
 
     
 	/**
-	 * !!! Why is not in EcoreUtil already: every projects use it.
+	 * Returns the ancestor matching provided type.
+	 * 
+	 * @param it to look into
+	 * @param type of expected ancestor
+	 * @return first matching ancestor or null
 	 */
+    // Why is it not in EcoreUtil already ?: every projects use it.
 	@SuppressWarnings("unchecked")
 	static <T> T eContainer(EObject it, Class<T> type) {
 		EObject result = it.eContainer();

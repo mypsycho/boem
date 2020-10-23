@@ -12,11 +12,13 @@
  *******************************************************************************/
  package org.mypsycho.modit.emf.sirius.api
 
+import java.util.Objects
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.sirius.table.metamodel.table.description.CrossTableDescription
 import org.eclipse.sirius.table.metamodel.table.description.ElementColumnMapping
 import org.eclipse.sirius.table.metamodel.table.description.IntersectionMapping
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure3
+import org.eclipse.sirius.table.metamodel.table.description.DeleteColumnTool
 
 /**
  * Adaptation of Sirius model into Java and EClass reflections API
@@ -48,19 +50,48 @@ abstract class AbstractCrossTable extends AbstractTable<CrossTableDescription> {
 		domainClass = context.asDomainClass(type)
 	}
 	
+	/**
+	 * Sets edit operation for provided mapping.
+	 * 
+	 * @param it containing mapping
+	 * @param operation to perform
+	 */
 	def void setDirectEdit(IntersectionMapping it, String operation) {
 		directEdit = createLabelEdit[
 			browseExpression = operation
 		]
 	}
 
+	/**
+	 * Sets edit operation for provided mapping.
+	 * 
+	 * @param it containing mapping
+	 * @param operation (lineSemantic,columnSemantic,value) to perform
+	 */
 	def void setDirectEdit(IntersectionMapping it, Procedure3<? extends EObject, ? extends EObject, String> operation) {
 		directEdit = context.expression(
 			params(EditArg.lineSemantic, EditArg.columnSemantic, EDIT_VALUE), 
 			operation
 		)
-		
 	}
 	
+	/**
+	 * Creates a column with provided id.
+	 * 
+	 * @param id of column
+	 * @param domain class of column value
+	 * @param initializer of column
+	 */
+	protected def column(String id, Class<? extends EObject> domain, (ElementColumnMapping)=>void initializer) {
+        Objects.requireNonNull(initializer)
+        ElementColumnMapping.createAs(Ns.column.id(id)) [ 
+            name = id
+            domainClass = domain.asDomainClass
+            delete = DeleteColumnTool.create[
+                precondition = "aql:false"
+            ]
+            initializer.apply(it)
+        ]
+    }
 
 }

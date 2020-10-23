@@ -15,9 +15,13 @@
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.sirius.viewpoint.description.JavaExtension
 import org.eclipse.sirius.viewpoint.description.RepresentationDescription
 import org.eclipse.sirius.viewpoint.description.SystemColor
+import org.eclipse.sirius.viewpoint.description.Viewpoint
 import org.eclipse.sirius.viewpoint.description.style.BasicLabelStyleDescription
+import org.eclipse.sirius.viewpoint.description.tool.SetValue
 
 /**
  * Adaptation of Sirius model into Java and EClass reflections API
@@ -32,7 +36,7 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> exten
 	protected val List<(T)=>void> creationTasks = new ArrayList(5)
 
 	/**
-	 * Create a factory for a representation description.
+	 * Creates a factory for a representation description.
 	 * 
 	 * @param parent context of representation
 	 */
@@ -76,7 +80,10 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> exten
 	 */
 	def void initContent(T it)
 	
-
+    protected def void addService(EObject it, Class<?> service) {
+        (eContainer() as Viewpoint).ownedJavaExtensions += 
+            JavaExtension.create[ qualifiedClassName = service.name ]
+    }
 
 	/**
 	 * Creates a Style with common default values.
@@ -106,7 +113,7 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> exten
 	}
 	
 	/**
-	 * Initialize a Style with common default values.
+	 * Initializes a Style with common default values.
 	 * 
 	 * @param <T> type of style
 	 * @param type of Style
@@ -120,5 +127,34 @@ abstract class AbstractRepresentation<T extends RepresentationDescription> exten
 		labelExpression = context.itemProviderLabel
 	}
 	
+	/**
+	 * Creates a Set operation for provided feature.
+	 * 
+	 * @param feature to set
+	 * @param expression of value
+	 * @return a new SetValue
+	 */
+	protected def SetValue setter(EStructuralFeature feature, String expression) {
+		SetValue.create[
+			featureName = feature.name
+			valueExpression = expression
+		]
+	}
+
+	
+	/**
+	 * Creates a Set operation for provided feature.
+	 * 
+	 * @param feature to set
+	 * @param expression of value
+	 * @return a new SetValue
+	 */
+	protected def <T> SetValue setter(EStructuralFeature feature, 
+			Functions.Function1<? extends EObject, ?>  expr) {
+		SetValue.create[
+			featureName = feature.name
+			valueExpression = expression(expr)
+		]
+	}
 
 }
