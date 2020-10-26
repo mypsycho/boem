@@ -64,18 +64,6 @@ class EcoretoolsTest {
     def void writeSiriusODesign() {
     	val rs = new ResourceSetImpl()
     	
-//    	// plugin test is required: Sirius drags indirect dependencies.
-//    	rs.resourceFactoryRegistry.extensionToFactoryMap.put("odesign", 
-//    		new ResourceFactoryImpl() // replace 
-//    		// org.eclipse.sirius.viewpoint.description.util.DescriptionResourceFactoryImpl
-//    	)
-//    	
-//    	rs.URIConverter.URIMap.put(
-//    		URI.createURI("environment:/viewpoint"),
-//    		URI.createPlatformPluginURI(SiriusPlugin.ID + "/model/Environment.odesign", true)
-//    	)
-//    	
-		// new ResourceSetImpl().resourceFactoryRegistry.extensionToFactoryMap
         val res = rs.createResource(URI.createFileURI(TEST_DIR.resolve("description/ecoretools.odesign").toString))
         
         new EcoretoolsDesign().loadContent(res).head
@@ -97,18 +85,6 @@ class EcoretoolsTest {
     def void writeModelODesign() {
     	val rs = new ResourceSetImpl()
     	
-//    	// plugin test is required: Sirius drags indirect dependencies.
-//    	rs.resourceFactoryRegistry.extensionToFactoryMap.put("odesign", 
-//    		new ResourceFactoryImpl() // replace 
-//    		// org.eclipse.sirius.viewpoint.description.util.DescriptionResourceFactoryImpl
-//    	)
-//    	
-//    	rs.URIConverter.URIMap.put(
-//    		URI.createURI("environment:/viewpoint"),
-//    		URI.createPlatformPluginURI(SiriusPlugin.ID + "/model/Environment.odesign", true)
-//    	)
-//    	
-		// new ResourceSetImpl().resourceFactoryRegistry.extensionToFactoryMap
         val res = rs.createResource(URI.createFileURI(TEST_DIR.resolve("description/ecoretools_plain.odesign").toString))
         
         new org.eclipse.emf.ecoretools.design.modit.EcoretoolsDesign().loadContent(res).head
